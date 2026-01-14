@@ -459,6 +459,7 @@
     }
   }
 </style>
+<script src="star-sync.js"></script>
 </head>
 <body>
 
@@ -813,8 +814,56 @@ document.getElementById("prev").addEventListener("click", prev);
 document.getElementById("shuffle").addEventListener("click", reshuffle);
 document.getElementById("reset").addEventListener("click", resetAll);
 
-setProgress(0, SITUACIONES.length);
+// Inicialización con sincronización
+cargarProgresoGuardado();
+setProgress(idx, SITUACIONES.length);
 render();
+
+
+// ============================================================
+// SINCRONIZACIÓN CON SERVIDOR
+// ============================================================
+const HABILIDAD_KEY = 'atencion-desconexion';
+
+// Guardar progreso cuando cambia
+function guardarProgresoActual() {
+  const datos = {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: {...dificultad}
+  };
+  guardarProgresoHabilidad(HABILIDAD_KEY, datos);
+}
+
+// Cargar progreso guardado al iniciar
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    // Restaurar posición si existe
+    if (saved.completadas && saved.completadas > 0) {
+      idx = Math.min(saved.completadas - 1, SITUACIONES.length - 1);
+    }
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) {
+      Object.assign(dificultad, saved.dificultad);
+    }
+  }
+}
+
+// Interceptar cambios para guardar
+const originalSetProgress = setProgress;
+setProgress = function(i, total) {
+  originalSetProgress(i, total);
+  guardarProgresoActual();
+};
+
+// Cargar al iniciar
+cargarProgresoGuardado();
+render();
+
 </script>
 </body>
 </html>
