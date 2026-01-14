@@ -809,19 +809,14 @@ function resetAll() {
   render(); 
 }
 
+
 document.getElementById("next").addEventListener("click", next);
 document.getElementById("prev").addEventListener("click", prev);
 document.getElementById("shuffle").addEventListener("click", reshuffle);
 document.getElementById("reset").addEventListener("click", resetAll);
 
-// Inicialización con sincronización
-cargarProgresoGuardado();
-setProgress(idx, SITUACIONES.length);
-render();
-
-
 // ============================================================
-// SINCRONIZACIÓN CON SERVIDOR
+// SINCRONIZACIÓN CON SERVIDOR  
 // ============================================================
 const HABILIDAD_KEY = 'trabajo-equipo';
 
@@ -834,17 +829,16 @@ function guardarProgresoActual() {
     porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
     dificultad: {...dificultad}
   };
-  guardarProgresoHabilidad(HABILIDAD_KEY, datos);
+  if (typeof guardarProgresoHabilidad === 'function') {
+    guardarProgresoHabilidad(HABILIDAD_KEY, datos);
+  }
 }
 
 // Cargar progreso guardado al iniciar
 function cargarProgresoGuardado() {
+  if (typeof cargarProgresoHabilidad !== 'function') return;
   const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
   if (saved) {
-    // Restaurar posición si existe
-    if (saved.completadas && saved.completadas > 0) {
-      idx = Math.min(saved.completadas - 1, SITUACIONES.length - 1);
-    }
     if (saved.puntos) puntos = saved.puntos;
     if (saved.intentos) intentos = saved.intentos;
     if (saved.dificultad) {
@@ -853,17 +847,17 @@ function cargarProgresoGuardado() {
   }
 }
 
-// Interceptar cambios para guardar
-const originalSetProgress = setProgress;
+// Interceptar setProgress para guardar automáticamente
+const _originalSetProgress = setProgress;
 setProgress = function(i, total) {
-  originalSetProgress(i, total);
+  _originalSetProgress(i, total);
   guardarProgresoActual();
 };
 
-// Cargar al iniciar
+// Inicialización
 cargarProgresoGuardado();
+setProgress(0, SITUACIONES.length);
 render();
-
 </script>
 </body>
 </html>
