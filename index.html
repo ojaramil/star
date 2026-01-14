@@ -623,6 +623,13 @@
       color: #ef4444;
     }
 
+    #starid-no-account,
+    #starid-has-account {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     /* Recover Input */
     .starid-recover {
       display: none;
@@ -663,16 +670,28 @@
   <!-- Barra STARID -->
   <div class="starid-bar">
     <span class="starid-label">🔑 Tu STARID:</span>
-    <span class="starid-value" id="starid-display">Generando...</span>
+    <span class="starid-value" id="starid-display">Sin cuenta</span>
     <span class="starid-status" id="starid-status"></span>
-    <button class="starid-btn" id="starid-copy" title="Copiar ID">📋 Copiar</button>
-    <button class="starid-btn" id="starid-recover-btn">🔄 Recuperar</button>
+
+    <!-- Botones cuando NO hay cuenta -->
+    <div id="starid-no-account">
+      <button class="starid-btn sync" id="starid-create-btn">➕ Crear cuenta</button>
+      <button class="starid-btn" id="starid-recover-btn">🔄 Recuperar</button>
+    </div>
+
+    <!-- Botones cuando SÍ hay cuenta -->
+    <div id="starid-has-account" style="display:none;">
+      <button class="starid-btn" id="starid-copy" title="Copiar ID">📋 Copiar</button>
+    </div>
+
+    <!-- Form de recuperar -->
     <div class="starid-recover" id="starid-recover-form">
       <input type="text" id="starid-input" placeholder="STAR-XXXX-XXXX" maxlength="14">
       <button class="starid-btn sync" id="starid-recover-submit">Recuperar</button>
       <button class="starid-btn" id="starid-recover-cancel">✕</button>
     </div>
   </div>
+
 
   <!-- Navegación -->
   <nav class="nav">
@@ -1278,7 +1297,13 @@
       return 'STAR-' + part1 + '-' + part2;
     }
 
-    // Inicializar STARID
+    // Mostrar UI según si hay cuenta o no
+    function updateUI(hasAccount) {
+      document.getElementById('starid-no-account').style.display = hasAccount ? 'none' : 'flex';
+      document.getElementById('starid-has-account').style.display = hasAccount ? 'flex' : 'none';
+    }
+
+    // Inicializar STARID - SOLO carga si existe, NO crea automáticamente
     async function initStarId() {
       const display = document.getElementById('starid-display');
       const status = document.getElementById('starid-status');
@@ -1289,34 +1314,49 @@
       if (savedId) {
         currentStarId = savedId;
         display.textContent = savedId;
-        status.textContent = '✓ Guardado localmente';
+        status.textContent = '✓ Guardado';
         status.className = 'starid-status synced';
+        updateUI(true);
 
         // Intentar sincronizar con servidor
         syncWithServer();
       } else {
-        // Intentar registrar con servidor
-        try {
-          status.textContent = 'Conectando...';
-          const data = await callAPI({ action: 'register' });
+        // NO hay cuenta - mostrar botones para crear/recuperar
+        display.textContent = 'Sin cuenta';
+        status.textContent = '';
+        updateUI(false);
+      }
+    }
 
-          if (data.success && data.starid) {
-            currentStarId = data.starid;
-            localStorage.setItem('star-id', data.starid);
-            display.textContent = data.starid;
-            status.textContent = '✓ Sincronizado';
-            status.className = 'starid-status synced';
-          } else {
-            throw new Error('No se pudo registrar');
-          }
-        } catch (err) {
-          // Fallback: generar ID local
-          currentStarId = generateLocalStarId();
-          localStorage.setItem('star-id', currentStarId);
-          display.textContent = currentStarId;
-          status.textContent = '⚠ Solo local';
-          status.className = 'starid-status';
+    // Crear cuenta nueva (solo cuando el usuario hace clic)
+    async function createAccount() {
+      const display = document.getElementById('starid-display');
+      const status = document.getElementById('starid-status');
+
+      try {
+        status.textContent = 'Creando...';
+        const data = await callAPI({ action: 'register' });
+
+        if (data.success && data.starid) {
+          currentStarId = data.starid;
+          localStorage.setItem('star-id', data.starid);
+          display.textContent = data.starid;
+          status.textContent = '✓ Cuenta creada';
+          status.className = 'starid-status synced';
+          updateUI(true);
+          alert('¡Cuenta creada! Tu STARID es: ' + data.starid + '\n\nGuárdalo para recuperar tu progreso.');
+        } else {
+          throw new Error('No se pudo crear');
         }
+      } catch (err) {
+        // Fallback: generar ID local
+        currentStarId = generateLocalStarId();
+        localStorage.setItem('star-id', currentStarId);
+        display.textContent = currentStarId;
+        status.textContent = '⚠ Solo local';
+        status.className = 'starid-status';
+        updateUI(true);
+        alert('Cuenta creada localmente: ' + currentStarId + '\n\n(Sin conexión al servidor)');
       }
     }
 
@@ -1371,6 +1411,7 @@
 
           status.textContent = '✓ Cuenta recuperada';
           status.className = 'starid-status synced';
+          updateUI(true);
 
           alert('¡Cuenta recuperada exitosamente!');
           return true;
@@ -1399,14 +1440,18 @@
     // Event listeners para STARID
     document.getElementById('starid-copy').addEventListener('click', copyStarId);
 
+    // Botón Crear cuenta
+    document.getElementById('starid-create-btn').addEventListener('click', createAccount);
+
+    // Botón Recuperar - mostrar form
     document.getElementById('starid-recover-btn').addEventListener('click', () => {
       document.getElementById('starid-recover-form').classList.add('show');
-      document.getElementById('starid-recover-btn').style.display = 'none';
+      document.getElementById('starid-no-account').style.display = 'none';
     });
 
     document.getElementById('starid-recover-cancel').addEventListener('click', () => {
       document.getElementById('starid-recover-form').classList.remove('show');
-      document.getElementById('starid-recover-btn').style.display = '';
+      document.getElementById('starid-no-account').style.display = 'flex';
       document.getElementById('starid-input').value = '';
     });
 
@@ -1415,7 +1460,6 @@
       const success = await recoverAccount(input);
       if (success) {
         document.getElementById('starid-recover-form').classList.remove('show');
-        document.getElementById('starid-recover-btn').style.display = '';
         document.getElementById('starid-input').value = '';
       }
     });
