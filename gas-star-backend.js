@@ -99,8 +99,7 @@ function registerUser() {
     // Guardar usuario
     usersSheet.appendRow([starid, now, now, 'Web']);
 
-    // Crear hoja de progreso para este usuario
-    createProgressSheet(ss, starid);
+    // NO crear hoja de progreso aquí - se creará cuando se guarde progreso real
 
     return {
         success: true,
