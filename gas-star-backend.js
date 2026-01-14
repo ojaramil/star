@@ -46,7 +46,7 @@ function handleRequest(e) {
 
         switch (action) {
             case 'register':
-                result = registerUser();
+                result = registerUser(params.name, params.email);
                 break;
             case 'recover':
                 result = recoverUser(params.starid);
@@ -82,28 +82,31 @@ function handleRequest(e) {
 // GESTIÓN DE USUARIOS
 // ============================================================
 
-function registerUser() {
+function registerUser(name, email) {
     const ss = SpreadsheetApp.openById(SHEET_ID);
     let usersSheet = ss.getSheetByName('Usuarios');
 
     // Crear hoja si no existe
     if (!usersSheet) {
         usersSheet = ss.insertSheet('Usuarios');
-        usersSheet.appendRow(['STARID', 'FechaCreacion', 'UltimoAcceso', 'Dispositivo']);
+        usersSheet.appendRow(['STARID', 'Nombre', 'Email', 'FechaCreacion', 'UltimoAcceso']);
+        // Formatear encabezado
+        usersSheet.getRange(1, 1, 1, 5).setBackground('#0d47a1').setFontColor('#ffffff').setFontWeight('bold');
     }
 
     // Generar STARID único (formato: STAR-XXXX-XXXX)
     const starid = generateStarId();
     const now = new Date().toISOString();
 
-    // Guardar usuario
-    usersSheet.appendRow([starid, now, now, 'Web']);
+    // Guardar usuario con nombre y email
+    usersSheet.appendRow([starid, name || 'Sin nombre', email || 'Sin email', now, now]);
 
     // NO crear hoja de progreso aquí - se creará cuando se guarde progreso real
 
     return {
         success: true,
         starid: starid,
+        name: name,
         message: 'Usuario registrado exitosamente'
     };
 }

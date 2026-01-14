@@ -684,6 +684,14 @@
       <button class="starid-btn" id="starid-copy" title="Copiar ID">📋 Copiar</button>
     </div>
 
+    <!-- Form de crear cuenta -->
+    <div class="starid-recover" id="starid-create-form">
+      <input type="text" id="starid-name" placeholder="Tu nombre" maxlength="50">
+      <input type="email" id="starid-email" placeholder="tu@email.com" maxlength="100">
+      <button class="starid-btn sync" id="starid-create-submit">Crear</button>
+      <button class="starid-btn" id="starid-create-cancel">✕</button>
+    </div>
+
     <!-- Form de recuperar -->
     <div class="starid-recover" id="starid-recover-form">
       <input type="text" id="starid-input" placeholder="STAR-XXXX-XXXX" maxlength="14">
@@ -1329,22 +1337,24 @@
     }
 
     // Crear cuenta nueva (solo cuando el usuario hace clic)
-    async function createAccount() {
+    async function createAccount(name, email) {
       const display = document.getElementById('starid-display');
       const status = document.getElementById('starid-status');
 
       try {
         status.textContent = 'Creando...';
-        const data = await callAPI({ action: 'register' });
+        const data = await callAPI({ action: 'register', name: name, email: email });
 
         if (data.success && data.starid) {
           currentStarId = data.starid;
           localStorage.setItem('star-id', data.starid);
+          localStorage.setItem('star-name', name);
+          localStorage.setItem('star-email', email);
           display.textContent = data.starid;
           status.textContent = '✓ Cuenta creada';
           status.className = 'starid-status synced';
           updateUI(true);
-          alert('¡Cuenta creada! Tu STARID es: ' + data.starid + '\n\nGuárdalo para recuperar tu progreso.');
+          alert('¡Bienvenido/a ' + name + '!\n\nTu STARID es: ' + data.starid + '\n\nGuárdalo para recuperar tu progreso.');
         } else {
           throw new Error('No se pudo crear');
         }
@@ -1352,6 +1362,8 @@
         // Fallback: generar ID local
         currentStarId = generateLocalStarId();
         localStorage.setItem('star-id', currentStarId);
+        localStorage.setItem('star-name', name);
+        localStorage.setItem('star-email', email);
         display.textContent = currentStarId;
         status.textContent = '⚠ Solo local';
         status.className = 'starid-status';
@@ -1440,8 +1452,39 @@
     // Event listeners para STARID
     document.getElementById('starid-copy').addEventListener('click', copyStarId);
 
-    // Botón Crear cuenta
-    document.getElementById('starid-create-btn').addEventListener('click', createAccount);
+    // Botón Crear cuenta - mostrar form
+    document.getElementById('starid-create-btn').addEventListener('click', () => {
+      document.getElementById('starid-create-form').classList.add('show');
+      document.getElementById('starid-no-account').style.display = 'none';
+    });
+
+    // Cancelar crear cuenta
+    document.getElementById('starid-create-cancel').addEventListener('click', () => {
+      document.getElementById('starid-create-form').classList.remove('show');
+      document.getElementById('starid-no-account').style.display = 'flex';
+      document.getElementById('starid-name').value = '';
+      document.getElementById('starid-email').value = '';
+    });
+
+    // Submit crear cuenta
+    document.getElementById('starid-create-submit').addEventListener('click', async () => {
+      const name = document.getElementById('starid-name').value.trim();
+      const email = document.getElementById('starid-email').value.trim();
+
+      if (!name) {
+        alert('Por favor ingresa tu nombre');
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        alert('Por favor ingresa un correo electrónico válido');
+        return;
+      }
+
+      await createAccount(name, email);
+      document.getElementById('starid-create-form').classList.remove('show');
+      document.getElementById('starid-name').value = '';
+      document.getElementById('starid-email').value = '';
+    });
 
     // Botón Recuperar - mostrar form
     document.getElementById('starid-recover-btn').addEventListener('click', () => {
