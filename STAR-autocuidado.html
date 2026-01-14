@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Autocuidado y Salud</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ef4444;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #ef4444cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #ef4444cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(253, 227, 227);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(253, 227, 227);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🏠</span>
+      <span>Vida Independiente</span>
+    </span>
+    <h1>🛁 Autocuidado y Salud</h1>
+    <p>Higiene, alimentación, sueño, medicación y ejercicio</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Sueño y descanso
+  {q:"Has dormido poco toda la semana y te sientes agotado.", good:"Revisas tu rutina nocturna, ajustas horario y priorizas dormir lo suficiente.", bad:"Tomas más café para aguantar sin cambiar hábitos."},
+  {q:"Te cuesta conciliar el sueño por las noches.", good:"Creas rutina relajante antes de dormir y evitas pantallas.", bad:"Te quedas en el teléfono hasta muy tarde."},
+  {q:"Te despiertas cansado aunque hayas dormido horas.", good:"Evalúas la calidad de tu sueño y consultas si es necesario.", bad:"Asumes que es normal y no investigas la causa."},
+  {q:"Tienes sueño durante el día.", good:"Evalúas si necesitas una siesta corta o mejorar tu sueño nocturno.", bad:"Tomas estimulantes para mantenerte despierto."},
+  {q:"Tu horario de sueño está desorganizado.", good:"Estableces horario fijo para dormir y despertar.", bad:"Duermes y despiertas a horas diferentes cada día."},
+  {q:"El ruido te impide dormir bien.", good:"Usas tapones para oídos o máquina de ruido blanco.", bad:"Intentas dormir con el ruido sin buscar soluciones."},
+  {q:"La luz te molesta para dormir.", good:"Usas cortinas blackout o antifaz para dormir.", bad:"Duermes con luz sin considerar su impacto."},
+  {q:"Tienes pesadillas frecuentes.", good:"Analizas posibles causas y buscas ayuda si persisten.", bad:"Las ignoras esperando que desaparezcan solas."},
+  {q:"Te quedas dormido en lugares inapropiados.", good:"Evalúas si necesitas más sueño nocturno o ayuda médica.", bad:"Lo normalizas sin buscar la causa."},
+  {q:"Usas la cama para actividades que no son dormir.", good:"Reservas la cama solo para dormir y descansar.", bad:"Trabajas, comes y ves TV en la cama."},
+
+  // 11-20 Alimentación saludable
+  {q:"Comes comida chatarra frecuentemente.", good:"Planificas comidas saludables y reduces gradualmente la comida procesada.", bad:"Sigues comiendo mal porque es más fácil."},
+  {q:"Te saltas comidas por estar ocupado.", good:"Planificas comidas y snacks saludables para días ocupados.", bad:"Comes cualquier cosa rápida cuando tienes hambre."},
+  {q:"No tomas suficiente agua.", good:"Estableces recordatorios y llevas botella de agua contigo.", bad:"Solo tomas agua cuando tienes mucha sed."},
+  {q:"Comes por estrés o aburrimiento.", good:"Identificas triggers emocionales y buscas alternativas saludables.", bad:"Comes sin control cuando te sientes mal."},
+  {q:"No sabes si tu dieta es balanceada.", good:"Te educas sobre nutrición o consultas a un profesional.", bad:"Comes sin considerar el balance nutricional."},
+  {q:"Tienes antojos constantes de azúcar.", good:"Evalúas tu dieta general y buscas alternativas más saludables.", bad:"Satisfaces todos los antojos sin control."},
+  {q:"Comes muy rápido sin masticar bien.", good:"Practicas comer despacio, masticar bien y disfrutar la comida.", bad:"Sigues comiendo rápido sin prestar atención."},
+  {q:"No desayunas regularmente.", good:"Preparas desayunos simples y estableces rutina matutina.", bad:"Sales sin desayunar y comes mal el resto del día."},
+  {q:"Tienes problemas digestivos frecuentes.", good:"Analizas qué alimentos te afectan y consultas si es necesario.", bad:"Ignoras los síntomas y sigues comiendo igual."},
+  {q:"Dependes mucho de la cafeína.", good:"Reduces gradualmente y buscas fuentes naturales de energía.", bad:"Aumentas el consumo cuando te sientes cansado."},
+
+  // 21-30 Ejercicio y movimiento
+  {q:"Llevas días sin hacer ejercicio.", good:"Planificas actividad física que disfrutes y sea sostenible.", bad:"Te sientes culpable pero no tomas acción."},
+  {q:"Pasas muchas horas sentado.", good:"Estableces recordatorios para levantarte y moverte regularmente.", bad:"Permaneces sentado por horas sin pausas."},
+  {q:"Te duele la espalda por mala postura.", good:"Corriges tu postura y haces ejercicios de estiramiento.", bad:"Ignoras el dolor y mantienes la mala postura."},
+  {q:"No tienes tiempo para ir al gimnasio.", good:"Encuentras formas de ejercitarte en casa o caminar más.", bad:"Usas la falta de tiempo como excusa para no moverte."},
+  {q:"Te lesionaste haciendo ejercicio.", good:"Descansas apropiadamente y buscas ayuda médica si es necesario.", bad:"Sigues ejercitándote ignorando la lesión."},
+  {q:"Odias hacer ejercicio.", good:"Experimentas con diferentes actividades hasta encontrar algo que disfrutes.", bad:"No haces nada porque no te gusta el ejercicio tradicional."},
+  {q:"Te sientes muy cansado para ejercitarte.", good:"Empiezas con actividad ligera como caminar.", bad:"Usas el cansancio como excusa para no moverte."},
+  {q:"No sabes qué ejercicio hacer.", good:"Investigas opciones apropiadas para tu nivel y objetivos.", bad:"No haces nada por no saber qué hacer."},
+  {q:"Te aburres haciendo el mismo ejercicio.", good:"Varías tu rutina con diferentes actividades.", bad:"Dejas de ejercitarte por aburrimiento."},
+  {q:"Sientes dolor muscular después del ejercicio.", good:"Distingues entre dolor normal y lesión, ajustas intensidad.", bad:"Dejas de ejercitarte por miedo al dolor."},
+
+  // 31-40 Salud mental y emocional
+  {q:"Te sientes estresado constantemente.", good:"Identificas fuentes de estrés y desarrollas estrategias de manejo.", bad:"Ignoras el estrés hasta que te abruma."},
+  {q:"Tienes pensamientos negativos frecuentes.", good:"Practicas técnicas de reestructuración cognitiva o buscas ayuda.", bad:"Te hundes en los pensamientos negativos."},
+  {q:"Te sientes solo o aislado.", good:"Buscas conexiones sociales saludables y actividades grupales.", bad:"Te aíslas más y no buscas compañía."},
+  {q:"Tienes cambios de humor frecuentes.", good:"Observas patrones y buscas ayuda profesional si es necesario.", bad:"Ignoras los cambios y afectas tus relaciones."},
+  {q:"Te sientes abrumado por tus responsabilidades.", good:"Priorizas tareas, delegas cuando es posible y pides ayuda.", bad:"Intentas hacer todo sin pedir apoyo."},
+  {q:"Tienes dificultad para relajarte.", good:"Aprendes técnicas de relajación como meditación o respiración.", bad:"Mantienes tensión constante sin buscar alivio."},
+  {q:"Te criticas duramente a ti mismo.", good:"Practicas autocompasión y hablas contigo como a un amigo.", bad:"Continúas con autocrítica destructiva."},
+  {q:"Evitas situaciones que te generan ansiedad.", good:"Enfrentas gradualmente tus miedos con apoyo si es necesario.", bad:"Evitas cada vez más situaciones limitando tu vida."},
+  {q:"No tienes tiempo para ti mismo.", good:"Programas tiempo personal como prioridad no negociable.", bad:"Sacrificas tu tiempo personal por otras obligaciones."},
+  {q:"Te sientes desconectado de tus emociones.", good:"Practicas mindfulness y buscas ayuda para reconectar.", bad:"Ignoras tus emociones y vives en automático."},
+
+  // 41-50 Higiene y cuidado personal
+  {q:"Descuidas tu higiene personal cuando estás deprimido.", good:"Estableces rutina mínima de higiene como acto de autocuidado.", bad:"Dejas de cuidarte cuando te sientes mal."},
+  {q:"No tienes rutina de cuidado de la piel.", good:"Estableces rutina básica apropiada para tu tipo de piel.", bad:"Ignoras el cuidado de tu piel hasta que hay problemas."},
+  {q:"Descuidas tu salud dental.", good:"Estableces rutina de cepillado, hilo dental y visitas regulares.", bad:"Solo cuidas tus dientes cuando duelen."},
+  {q:"Tu ropa está siempre arrugada o sucia.", good:"Organizas rutina de lavado y cuidado de ropa.", bad:"Usas ropa sucia o arrugada sin importarte."},
+  {q:"No te cortas el cabello regularmente.", good:"Programas citas regulares para mantener tu cabello.", bad:"Dejas que crezca sin control hasta que es incómodo."},
+  {q:"Tienes mal aliento frecuentemente.", good:"Mejoras higiene oral y consultas si el problema persiste.", bad:"Ignoras el problema afectando tus relaciones."},
+  {q:"Tus uñas están siempre sucias o largas.", good:"Mantienes uñas limpias y cortadas apropiadamente.", bad:"Ignoras el cuidado de tus uñas."},
+  {q:"Usas la misma ropa varios días.", good:"Cambias ropa diariamente y lavas regularmente.", bad:"Usas ropa sucia por pereza o desorganización."},
+  {q:"No usas protector solar.", good:"Incorporas protector solar en tu rutina diaria.", bad:"Expones tu piel al sol sin protección."},
+  {q:"Descuidas el cuidado de tus pies.", good:"Mantienes pies limpios, secos y uñas cortadas.", bad:"Ignoras tus pies hasta que hay problemas."},
+
+  // 51-60 Prevención y chequeos médicos
+  {q:"No has ido al médico en años.", good:"Programas chequeo médico general y exámenes preventivos.", bad:"Evitas al médico hasta tener síntomas graves."},
+  {q:"Ignoras síntomas persistentes.", good:"Consultas médico cuando síntomas persisten o empeoran.", bad:"Esperas que los síntomas desaparezcan solos."},
+  {q:"No te haces exámenes preventivos.", good:"Te informas sobre exámenes apropiados para tu edad y los programas.", bad:"Solo vas al médico cuando estás enfermo."},
+  {q:"Tienes historial familiar de enfermedades.", good:"Te informas sobre riesgos y tomas medidas preventivas.", bad:"Ignoras el historial familiar sin tomar precauciones."},
+  {q:"No actualizas tus vacunas.", good:"Mantienes esquema de vacunación actualizado.", bad:"No sabes qué vacunas necesitas o cuándo."},
+  {q:"Tomas medicamentos sin supervisión médica.", good:"Consultas médico antes de tomar medicamentos nuevos.", bad:"Te automedicas sin conocimiento profesional."},
+  {q:"No tienes seguro médico.", good:"Investigas opciones de seguro o clínicas de bajo costo.", bad:"Arriesgas tu salud financiera sin cobertura."},
+  {q:"Ignoras la salud mental como parte de la salud general.", good:"Consideras terapia o apoyo psicológico como cuidado preventivo.", bad:"Solo buscas ayuda en crisis severas."},
+  {q:"No sabes tu historial médico.", good:"Organizas y mantienes registro de tu historial médico.", bad:"No tienes información sobre tu salud pasada."},
+  {q:"Evitas tratamientos por miedo o costo.", good:"Buscas información, segundas opiniones y opciones de financiamiento.", bad:"Evitas tratamiento necesario por miedo."},
+
+  // 61-70 Manejo del estrés
+  {q:"El trabajo te estresa constantemente.", good:"Desarrollas estrategias de manejo del estrés laboral y estableces límites.", bad:"Llevas el estrés laboral a casa sin manejarlo."},
+  {q:"No sabes cómo relajarte.", good:"Experimentas con diferentes técnicas hasta encontrar lo que funciona.", bad:"Mantienes tensión constante sin buscar alivio."},
+  {q:"Usas alcohol o sustancias para relajarte.", good:"Buscas alternativas saludables de relajación y ayuda si es necesario.", bad:"Dependes de sustancias para manejar el estrés."},
+  {q:"Te sientes culpable por descansar.", good:"Reconoces que el descanso es necesario para tu bienestar.", bad:"Te obligas a estar productivo constantemente."},
+  {q:"El estrés afecta tu sueño.", good:"Desarrollas rutina de relajación nocturna y manejas estrés durante el día.", bad:"Llevas preocupaciones a la cama."},
+  {q:"Te estresas por cosas fuera de tu control.", good:"Practicas aceptación y enfocas energía en lo que sí puedes controlar.", bad:"Te angustias por cosas que no puedes cambiar."},
+  {q:"No tienes válvulas de escape para el estrés.", good:"Desarrollas actividades que te ayuden a liberar tensión.", bad:"Acumulas estrés sin formas saludables de liberarlo."},
+  {q:"El estrés afecta tu digestión.", good:"Conectas estrés con síntomas físicos y trabajas en ambos.", bad:"Tratas síntomas sin abordar la causa del estrés."},
+  {q:"Te estresas por el futuro constantemente.", good:"Practicas mindfulness y planificación realista.", bad:"Vives en ansiedad constante por lo que podría pasar."},
+  {q:"El estrés afecta tus relaciones.", good:"Comunicas tu estrés y trabajas en manejarlo para no afectar otros.", bad:"Descargas tu estrés en las personas cercanas."},
+
+  // 71-80 Límites y autocuidado emocional
+  {q:"Siempre dices sí a todo lo que te piden.", good:"Aprendes a decir no y estableces límites saludables.", bad:"Te sobrecargas aceptando todo por no decepcionar."},
+  {q:"Te sientes culpable por cuidarte.", good:"Reconoces que cuidarte te permite cuidar mejor a otros.", bad:"Sacrificas tu bienestar por culpa."},
+  {q:"No pides ayuda cuando la necesitas.", good:"Reconoces cuándo necesitas apoyo y lo pides sin vergüenza.", bad:"Luchas solo hasta el agotamiento."},
+  {q:"Permites que otros te traten mal.", good:"Estableces límites claros sobre cómo quieres ser tratado.", bad:"Aceptas maltrato para evitar conflictos."},
+  {q:"Te comparas constantemente con otros.", good:"Practicas gratitud por tu propia vida y logros.", bad:"Vives en comparación constante sintiéndote inferior."},
+  {q:"No tienes tiempo para hobbies o diversión.", good:"Programas tiempo para actividades que disfrutas.", bad:"Vives solo para obligaciones sin diversión."},
+  {q:"Te sientes responsable por las emociones de otros.", good:"Reconoces que cada persona es responsable de sus emociones.", bad:"Cargas con problemas emocionales ajenos."},
+  {q:"No expresas tus necesidades.", good:"Comunicas tus necesidades clara y directamente.", bad:"Esperas que otros adivinen lo que necesitas."},
+  {q:"Te sacrificas constantemente por otros.", good:"Balanceas cuidar a otros con cuidarte a ti mismo.", bad:"Te olvidas completamente de ti por cuidar otros."},
+  {q:"No celebras tus logros.", good:"Reconoces y celebras tus éxitos, grandes y pequeños.", bad:"Minimizas tus logros y pasas al siguiente desafío."},
+
+  // 81-90 Autocuidado en crisis
+  {q:"Estás pasando por una crisis personal.", good:"Buscas apoyo profesional y de seres queridos, priorizas lo básico.", bad:"Intentas manejar todo solo sin pedir ayuda."},
+  {q:"Te sientes abrumado y no sabes por dónde empezar.", good:"Empiezas con lo más básico: dormir, comer, respirar.", bad:"Te paralizas sin hacer nada por el abrumamiento."},
+  {q:"Tienes pensamientos de autolesión.", good:"Buscas ayuda profesional inmediata y contactas líneas de crisis.", bad:"Guardas estos pensamientos sin buscar ayuda."},
+  {q:"Estás en duelo por una pérdida.", good:"Permites el proceso de duelo y buscas apoyo apropiado.", bad:"Intentas 'superarlo' rápido sin procesar la pérdida."},
+  {q:"Una crisis afecta tu capacidad de funcionar.", good:"Reduces expectativas, pides ayuda y enfocas en supervivencia.", bad:"Te exiges funcionar normalmente durante la crisis."},
+  {q:"Te sientes desconectado de todo.", good:"Buscas ayuda profesional y conexiones humanas básicas.", bad:"Te aíslas más profundamente."},
+  {q:"Estás en una situación de abuso.", good:"Buscas ayuda de profesionales y organizaciones especializadas.", bad:"Minimizas la situación o la mantienes en secreto."},
+  {q:"Tienes una crisis de salud mental.", good:"Reconoces que es una emergencia médica y buscas ayuda inmediata.", bad:"Intentas manejarlo solo como si fuera debilidad."},
+  {q:"Estás en riesgo de perder cosas importantes.", good:"Priorizas tu bienestar sobre posesiones o estatus.", bad:"Sacrificas tu salud por mantener apariencias."},
+  {q:"Sientes que no puedes más.", good:"Reconoces tus límites y buscas ayuda profesional.", bad:"Te obligas a seguir hasta el colapso total."},
+
+  // 91-100 Autocuidado a largo plazo
+  {q:"Quieres desarrollar mejores hábitos de autocuidado.", good:"Empiezas con cambios pequeños y sostenibles, construyes gradualmente.", bad:"Intentas cambiar todo de una vez y te abrumas."},
+  {q:"Tu autocuidado es inconsistente.", good:"Identificas obstáculos y creas sistemas que faciliten la consistencia.", bad:"Te criticas por ser inconsistente sin cambiar el enfoque."},
+  {q:"No sabes qué tipo de autocuidado necesitas.", good:"Experimentas con diferentes formas y observas qué te funciona.", bad:"No haces nada porque no sabes qué hacer."},
+  {q:"El autocuidado te parece egoísta.", good:"Reconoces que cuidarte te permite ser mejor para otros.", bad:"Sacrificas tu bienestar por culpa."},
+  {q:"No tienes dinero para autocuidado costoso.", good:"Encuentras formas gratuitas o baratas de cuidarte.", bad:"Usas la falta de dinero como excusa para no cuidarte."},
+  {q:"Tu familia no entiende tu necesidad de autocuidado.", good:"Educas sobre la importancia y estableces límites necesarios.", bad:"Abandonas el autocuidado por presión familiar."},
+  {q:"Te sientes culpable por gastar tiempo en ti.", good:"Reconoces que el tiempo personal es inversión, no gasto.", bad:"Sacrificas tu tiempo personal por culpa."},
+  {q:"Tu autocuidado depende del estado de ánimo.", good:"Creas rutinas que funcionen independientemente de cómo te sientes.", bad:"Solo te cuidas cuando te sientes bien."},
+  {q:"No ves resultados inmediatos del autocuidado.", good:"Entiendes que el autocuidado es inversión a largo plazo.", bad:"Abandonas porque no ves cambios inmediatos."},
+  {q:"Quieres inspirar a otros a cuidarse.", good:"Das ejemplo con tu propio autocuidado consistente.", bad:"Predicas autocuidado sin practicarlo tú mismo."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Identificación de Emociones</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #f59e0b;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #f59e0bcc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #f59e0bcc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(254, 240, 218);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(254, 240, 218);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>❤️</span>
+      <span>Regulación Emocional</span>
+    </span>
+    <h1>🎯 Identificación de Emociones</h1>
+    <p>Reconocer propias y ajenas, nombrar emociones básicas y complejas</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Señales físicas de emociones
+  {q:"Notas tu pecho tenso y respiración rápida antes de una llamada importante.", good:"Nombras la emoción como ansiedad y eliges una estrategia para prepararte antes de llamar.", bad:"Ignoras la sensación y te obligas a llamar sin reconocerla."},
+  {q:"Sientes un nudo en el estómago al recibir un mensaje.", good:"Reconoces que es nerviosismo o preocupación y te preguntas por qué.", bad:"Ignoras la sensación y sigues con tu día."},
+  {q:"Tus hombros están tensos y tu mandíbula apretada.", good:"Identificas que estás estresado o enojado y buscas la causa.", bad:"Sigues así sin darte cuenta de tu estado emocional."},
+  {q:"Sientes calor en tu cara y orejas.", good:"Reconoces que puede ser vergüenza o enojo y lo nombras.", bad:"No conectas la sensación física con una emoción."},
+  {q:"Tu corazón late rápido sin razón física aparente.", good:"Identificas que puede ser ansiedad o emoción y exploras qué la causa.", bad:"Te asustas por el síntoma sin reconocer la emoción."},
+  {q:"Sientes pesadez en tu cuerpo y falta de energía.", good:"Reconoces que puede ser tristeza o agotamiento emocional.", bad:"Solo piensas que estás cansado físicamente."},
+  {q:"Tienes ganas de llorar sin saber por qué.", good:"Reconoces que hay una emoción que necesita salir y la exploras.", bad:"Reprimes las lágrimas sin identificar qué sientes."},
+  {q:"Sientes mariposas en el estómago.", good:"Identificas si es emoción positiva, nervios o ansiedad.", bad:"Ignoras la sensación sin nombrarla."},
+  {q:"Tus manos sudan y tiemblan.", good:"Reconoces que es ansiedad o nerviosismo y lo nombras.", bad:"Solo te preocupas por el síntoma físico."},
+  {q:"Sientes opresión en el pecho.", good:"Identificas si es tristeza, ansiedad o miedo y lo nombras.", bad:"Te alarmas sin reconocer la emoción detrás."},
+
+  // 11-20 Cambios en el comportamiento
+  {q:"Notas que estás evitando a alguien.", good:"Te preguntas qué emoción te hace evitarlo y la identificas.", bad:"Sigues evitando sin reconocer por qué."},
+  {q:"Te das cuenta de que estás comiendo más de lo normal.", good:"Reconoces que puede ser ansiedad, aburrimiento o tristeza.", bad:"Solo comes sin conectar con la emoción."},
+  {q:"Estás más irritable de lo usual.", good:"Identificas que hay una emoción subyacente como frustración o cansancio.", bad:"Solo reaccionas sin reconocer tu estado emocional."},
+  {q:"No puedes concentrarte en nada.", good:"Reconoces que una emoción te está distrayendo y la identificas.", bad:"Te frustras sin identificar la causa emocional."},
+  {q:"Estás durmiendo mucho más o mucho menos.", good:"Identificas qué emoción está afectando tu sueño.", bad:"Solo ajustas el sueño sin explorar la emoción."},
+  {q:"Te encuentras procrastinando todo.", good:"Reconoces la emoción detrás: miedo, ansiedad o desmotivación.", bad:"Te criticas sin identificar la emoción."},
+  {q:"Estás hablando más rápido de lo normal.", good:"Identificas si es nerviosismo, emoción o ansiedad.", bad:"No notas el cambio en tu comportamiento."},
+  {q:"Te retiras socialmente sin razón clara.", good:"Exploras qué emoción te hace aislarte y la nombras.", bad:"Te aíslas sin reconocer la emoción detrás."},
+  {q:"Estás más sensible a las críticas.", good:"Reconoces que puede ser inseguridad o vulnerabilidad emocional.", bad:"Solo reaccionas sin identificar tu estado."},
+  {q:"No disfrutas cosas que antes te gustaban.", good:"Identificas que puede ser tristeza, depresión o agotamiento.", bad:"Sigues sin disfrutar sin reconocer la emoción."},
+
+  // 21-30 Pensamientos y emociones
+  {q:"Tienes pensamientos negativos repetitivos.", good:"Reconoces que reflejan una emoción como miedo o tristeza.", bad:"Te enganchas en los pensamientos sin identificar la emoción."},
+  {q:"No puedes dejar de pensar en algo.", good:"Identificas qué emoción está alimentando la rumiación.", bad:"Sigues rumiando sin reconocer la emoción base."},
+  {q:"Te sientes vacío por dentro.", good:"Nombras esa sensación como desconexión emocional o tristeza.", bad:"Ignoras la sensación sin explorarla."},
+  {q:"Tienes pensamientos de que todo saldrá mal.", good:"Reconoces que es ansiedad o miedo y lo nombras.", bad:"Crees los pensamientos sin identificar la emoción."},
+  {q:"Te criticas constantemente.", good:"Identificas la emoción detrás: vergüenza, inseguridad o tristeza.", bad:"Sigues criticándote sin reconocer la emoción."},
+  {q:"Sientes que no eres suficiente.", good:"Nombras esta emoción como inseguridad o baja autoestima.", bad:"Aceptas el sentimiento como verdad sin cuestionarlo."},
+  {q:"Tienes pensamientos de huir de todo.", good:"Reconoces que es abrumamiento o ansiedad y lo nombras.", bad:"Consideras huir sin identificar la emoción."},
+  {q:"Te sientes confundido sobre lo que sientes.", good:"Reconoces la confusión misma como una emoción válida.", bad:"Te frustras por no saber qué sientes."},
+  {q:"Piensas que nadie te entiende.", good:"Identificas si es soledad, tristeza o frustración.", bad:"Te aíslas más sin reconocer la emoción."},
+  {q:"Sientes que todo es demasiado.", good:"Nombras esto como abrumamiento o sobrecarga emocional.", bad:"Sigues adelante sin reconocer tu límite emocional."},
+
+  // 31-40 Emociones en relaciones
+  {q:"Sientes incomodidad con alguien sin saber por qué.", good:"Exploras qué emoción causa la incomodidad y la nombras.", bad:"Evitas a la persona sin identificar la emoción."},
+  {q:"Te sientes celoso de un amigo.", good:"Reconoces y nombras los celos sin juzgarte.", bad:"Niegas los celos o actúas desde ellos sin reconocerlos."},
+  {q:"Alguien te hace sentir pequeño.", good:"Identificas si es vergüenza, inseguridad o enojo.", bad:"Solo te sientes mal sin nombrar la emoción."},
+  {q:"Sientes resentimiento hacia alguien.", good:"Reconoces el resentimiento y exploras su origen.", bad:"Actúas desde el resentimiento sin reconocerlo."},
+  {q:"Te sientes abandonado cuando alguien no responde.", good:"Identificas si es ansiedad, miedo al rechazo o inseguridad.", bad:"Reaccionas sin reconocer la emoción detrás."},
+  {q:"Alguien te hace sentir culpable.", good:"Identificas si es culpa real o manipulación emocional.", bad:"Sientes culpa sin cuestionar su origen."},
+  {q:"Te sientes invisible en un grupo.", good:"Nombras esto como soledad o necesidad de conexión.", bad:"Te retiras sin identificar la emoción."},
+  {q:"Sientes envidia de alguien.", good:"Reconoces la envidia y exploras qué te dice sobre tus deseos.", bad:"Niegas la envidia o la proyectas en críticas."},
+  {q:"Alguien te decepciona.", good:"Identificas si es tristeza, enojo o desilusión.", bad:"Solo reaccionas sin nombrar la emoción específica."},
+  {q:"Te sientes sofocado en una relación.", good:"Reconoces que necesitas espacio y lo comunicas.", bad:"Te distancias sin identificar ni comunicar la emoción."},
+
+  // 41-50 Emociones mixtas
+  {q:"Sientes felicidad y tristeza al mismo tiempo.", good:"Reconoces que ambas emociones pueden coexistir y las nombras.", bad:"Te confundes y niegas una de las emociones."},
+  {q:"Estás emocionado pero también ansioso.", good:"Identificas ambas emociones como válidas y las nombras.", bad:"Solo te enfocas en la ansiedad ignorando la emoción."},
+  {q:"Sientes alivio pero también culpa.", good:"Reconoces ambas emociones y exploras su origen.", bad:"Te juzgas por sentir alivio."},
+  {q:"Estás enojado pero también triste.", good:"Identificas que el enojo puede estar protegiendo la tristeza.", bad:"Solo expresas el enojo sin reconocer la tristeza."},
+  {q:"Sientes amor pero también frustración.", good:"Reconoces que ambas emociones son válidas en relaciones.", bad:"Piensas que no puedes amar si estás frustrado."},
+  {q:"Estás orgulloso pero también inseguro.", good:"Identificas ambas emociones sin que una invalide la otra.", bad:"Dejas que la inseguridad anule el orgullo."},
+  {q:"Sientes esperanza pero también miedo.", good:"Reconoces ambas emociones como parte del proceso de cambio.", bad:"Dejas que el miedo elimine la esperanza."},
+  {q:"Estás agradecido pero también resentido.", good:"Identificas la complejidad emocional y la exploras.", bad:"Te juzgas por sentir resentimiento."},
+  {q:"Sientes paz pero también inquietud.", good:"Reconoces que la transición puede traer emociones mixtas.", bad:"Piensas que algo está mal por no sentir solo paz."},
+  {q:"Estás contento pero también nostálgico.", good:"Identificas ambas emociones como parte de los cambios.", bad:"Dejas que la nostalgia arruine tu contento."},
+
+  // 51-60 Intensidad emocional
+  {q:"Sientes una emoción muy intensa.", good:"Reconoces la intensidad, la nombras y te das espacio para sentirla.", bad:"Te asustas de la intensidad y la reprimes."},
+  {q:"Una emoción te abruma completamente.", good:"Identificas que estás abrumado y pides ayuda o espacio.", bad:"Actúas desde el abrumamiento sin reconocerlo."},
+  {q:"Sientes una emoción que parece desproporcionada.", good:"Reconoces que puede estar conectada a algo más profundo.", bad:"Te juzgas por sentir 'demasiado'."},
+  {q:"Una emoción aparece de la nada.", good:"Reconoces que las emociones pueden tener triggers inconscientes.", bad:"Ignoras la emoción por no entender su origen."},
+  {q:"Sientes múltiples emociones a la vez.", good:"Reconoces cada una sin intentar simplificar.", bad:"Te confundes y no identificas ninguna claramente."},
+  {q:"Una emoción dura más de lo esperado.", good:"Reconoces que algunas emociones necesitan más tiempo.", bad:"Te frustras por no 'superarla' rápido."},
+  {q:"Sientes una emoción que no quieres sentir.", good:"Reconoces que todas las emociones son válidas.", bad:"Reprimes la emoción por juzgarla como mala."},
+  {q:"Una emoción te paraliza.", good:"Identificas la parálisis como respuesta emocional y pides ayuda.", bad:"Te quedas paralizado sin reconocer la emoción."},
+  {q:"Sientes una emoción que no puedes nombrar.", good:"Describes la sensación lo mejor que puedes.", bad:"Te frustras por no poder nombrarla exactamente."},
+  {q:"Una emoción cambia rápidamente.", good:"Reconoces la fluidez emocional como normal.", bad:"Te confundes por los cambios rápidos."},
+
+  // 61-70 Emociones y necesidades
+  {q:"Sientes irritación constante.", good:"Identificas qué necesidad no está siendo satisfecha.", bad:"Solo estás irritable sin explorar la causa."},
+  {q:"Te sientes inquieto sin razón.", good:"Reconoces que la inquietud señala una necesidad no atendida.", bad:"Ignoras la inquietud sin explorarla."},
+  {q:"Sientes vacío emocional.", good:"Identificas qué necesidad emocional no estás cubriendo.", bad:"Intentas llenar el vacío sin identificar la necesidad."},
+  {q:"Te sientes desconectado de todo.", good:"Reconoces que necesitas reconexión contigo mismo.", bad:"Sigues desconectado sin identificar la necesidad."},
+  {q:"Sientes desesperación.", good:"Identificas qué necesitas urgentemente y pides ayuda.", bad:"Actúas desde la desesperación sin reconocerla."},
+  {q:"Te sientes insatisfecho constantemente.", good:"Exploras qué necesidad profunda no está satisfecha.", bad:"Buscas satisfacción externa sin identificar la necesidad."},
+  {q:"Sientes anhelo de algo.", good:"Identificas qué necesidad representa ese anhelo.", bad:"Ignoras el anhelo sin explorar qué significa."},
+  {q:"Te sientes incompleto.", good:"Reconoces qué parte de ti necesita atención.", bad:"Buscas completarte en otros sin identificar la necesidad."},
+  {q:"Sientes urgencia sin saber de qué.", good:"Identificas qué necesidad está pidiendo atención urgente.", bad:"Actúas impulsivamente sin reconocer la necesidad."},
+  {q:"Te sientes agotado emocionalmente.", good:"Reconoces que necesitas descanso y cuidado emocional.", bad:"Sigues exigiéndote sin reconocer el agotamiento."},
+
+  // 71-80 Emociones difíciles
+  {q:"Sientes vergüenza profunda.", good:"Reconoces la vergüenza, la nombras y te tratas con compasión.", bad:"Te hundes en la vergüenza sin reconocerla."},
+  {q:"Experimentas culpa intensa.", good:"Identificas si es culpa real o tóxica y actúas en consecuencia.", bad:"Te castigas sin identificar el tipo de culpa."},
+  {q:"Sientes miedo paralizante.", good:"Reconoces el miedo, lo nombras y evalúas si es real o percibido.", bad:"Te paralizas sin identificar qué temes."},
+  {q:"Experimentas rabia intensa.", good:"Reconoces la rabia, identificas qué la causa y la expresas sanamente.", bad:"Explotas o reprimes sin reconocer la rabia."},
+  {q:"Sientes desesperanza.", good:"Identificas la desesperanza y pides ayuda profesional.", bad:"Te hundes en la desesperanza sin reconocerla."},
+  {q:"Experimentas pánico.", good:"Reconoces el pánico, lo nombras y usas técnicas de regulación.", bad:"El pánico te controla sin que lo reconozcas."},
+  {q:"Sientes dolor emocional intenso.", good:"Reconoces el dolor, lo validas y buscas apoyo.", bad:"Niegas el dolor o lo minimizas."},
+  {q:"Experimentas terror.", good:"Identificas el terror, evalúas el peligro real y actúas apropiadamente.", bad:"Te paralizas sin reconocer ni evaluar el terror."},
+  {q:"Sientes humillación.", good:"Reconoces la humillación y te proteges con compasión.", bad:"Internalizas la humillación sin reconocerla."},
+  {q:"Experimentas rechazo.", good:"Identificas el dolor del rechazo y lo procesas sanamente.", bad:"Niegas el dolor o lo proyectas en enojo."},
+
+  // 81-90 Emociones positivas
+  {q:"Sientes alegría genuina.", good:"Reconoces y saboreas la alegría plenamente.", bad:"Minimizas la alegría esperando que algo malo pase."},
+  {q:"Experimentas gratitud profunda.", good:"Identificas la gratitud y la expresas.", bad:"Pasas por alto la gratitud sin reconocerla."},
+  {q:"Sientes amor.", good:"Reconoces el amor y lo expresas apropiadamente.", bad:"Tienes miedo del amor y lo reprimes."},
+  {q:"Experimentas orgullo por un logro.", good:"Identificas el orgullo y lo celebras sin arrogancia.", bad:"Minimizas tu logro sin reconocer el orgullo."},
+  {q:"Sientes paz interior.", good:"Reconoces la paz y te permites disfrutarla.", bad:"Desconfías de la paz y la saboteas."},
+  {q:"Experimentas entusiasmo.", good:"Identificas el entusiasmo y lo canalizas productivamente.", bad:"Reprimes el entusiasmo por miedo al juicio."},
+  {q:"Sientes esperanza.", good:"Reconoces la esperanza y la nutres.", bad:"Desconfías de la esperanza por miedo a decepciones."},
+  {q:"Experimentas satisfacción.", good:"Identificas la satisfacción y la saboreas.", bad:"Pasas inmediatamente a la siguiente meta sin reconocerla."},
+  {q:"Sientes conexión con alguien.", good:"Reconoces la conexión y la valoras.", bad:"Tienes miedo de la conexión y te distancias."},
+  {q:"Experimentas serenidad.", good:"Identificas la serenidad y te permites estar en ella.", bad:"Llenas la serenidad con actividad por incomodidad."},
+
+  // 91-100 Conciencia emocional avanzada
+  {q:"Notas un patrón en tus emociones.", good:"Identificas el patrón y exploras qué lo causa.", bad:"Sigues el patrón sin reconocerlo."},
+  {q:"Sientes una emoción antes de que sea consciente.", good:"Reconoces las señales tempranas y nombras la emoción emergente.", bad:"La emoción te sorprende sin haberla visto venir."},
+  {q:"Identificas una emoción secundaria.", good:"Reconoces la emoción primaria debajo de la secundaria.", bad:"Solo reaccionas a la emoción superficial."},
+  {q:"Notas cómo una emoción afecta tu cuerpo.", good:"Identificas la conexión mente-cuerpo y la usas como información.", bad:"Separas las sensaciones físicas de las emociones."},
+  {q:"Reconoces una emoción que has estado evitando.", good:"Nombras la emoción evitada y te permites sentirla.", bad:"Sigues evitándola sin reconocer que lo haces."},
+  {q:"Identificas cómo tus emociones afectan tus decisiones.", good:"Reconoces la influencia emocional y decides conscientemente.", bad:"Tomas decisiones sin reconocer el componente emocional."},
+  {q:"Notas una emoción que no coincide con la situación.", good:"Identificas que puede estar conectada a experiencias pasadas.", bad:"Te confundes sin explorar el origen de la emoción."},
+  {q:"Reconoces una emoción en su etapa inicial.", good:"Nombras la emoción temprano y eliges cómo responder.", bad:"Dejas que la emoción crezca sin reconocerla."},
+  {q:"Identificas cómo expresas cada emoción.", good:"Reconoces tus patrones de expresión emocional.", bad:"Expresas emociones sin conciencia de cómo lo haces."},
+  {q:"Notas cómo tus emociones cambian tu perspectiva.", good:"Reconoces que las emociones colorean tu percepción.", bad:"Crees que tu perspectiva es objetiva sin reconocer la influencia emocional."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Gestión Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ef4444;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #ef4444cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #ef4444cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(253, 227, 227);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(253, 227, 227);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🏠</span>
+      <span>Vida Independiente</span>
+    </span>
+    <h1>💳 Gestión Financiera</h1>
+    <p>Presupuestos, banca, compras, ahorro e impuestos</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Presupuesto básico
+  {q:"Recibes tu salario y ves varios gastos pendientes.", good:"Actualizas el presupuesto, separas dinero para cuentas y ahorro antes de gastar en ocio.", bad:"Compras impulsivamente y confías en cubrir las cuentas después."},
+  {q:"Tus gastos superan tus ingresos este mes.", good:"Analizas dónde recortar, priorizas lo esencial y ajustas el presupuesto.", bad:"Usas tarjeta de crédito sin plan de pago."},
+  {q:"Tienes dinero extra este mes.", good:"Decides conscientemente entre ahorrar, invertir o gastar responsablemente.", bad:"Gastas todo el dinero extra impulsivamente."},
+  {q:"No sabes en qué gastas tu dinero.", good:"Registras todos tus gastos por una semana para identificar patrones.", bad:"Sigues gastando sin control ni registro."},
+  {q:"Tus cuentas llegan todas al mismo tiempo.", good:"Planificas el pago de cuentas distribuyendo fechas o ahorrando para esa semana.", bad:"Te estresas cada mes con las mismas cuentas."},
+  {q:"Quieres comprar algo caro.", good:"Ahorras específicamente para esa compra y evalúas si realmente lo necesitas.", bad:"Lo compras a crédito sin planificar el pago."},
+  {q:"Tus ingresos son irregulares.", good:"Calculas un promedio mensual y presupuestas conservadoramente.", bad:"Gastas según el mejor mes y sufres en los malos."},
+  {q:"No tienes idea de cuánto gastas en comida.", good:"Registras gastos de comida por un mes y estableces un presupuesto.", bad:"Sigues gastando sin control en alimentación."},
+  {q:"Quieres mejorar tu situación financiera.", good:"Educas sobre finanzas personales y creas un plan de acción.", bad:"Esperas que mejore sin hacer cambios."},
+  {q:"Tus amigos gastan más que tú.", good:"Mantienes tu presupuesto y propones actividades dentro de tus posibilidades.", bad:"Gastas más de lo que puedes para seguir al grupo."},
+
+  // 11-20 Ahorro
+  {q:"Quieres empezar a ahorrar pero no sabes cómo.", good:"Empiezas con una cantidad pequeña automática y la aumentas gradualmente.", bad:"Esperas tener mucho dinero para empezar a ahorrar."},
+  {q:"Siempre gastas todo tu salario.", good:"Automatizas el ahorro para que se descuente antes de que puedas gastarlo.", bad:"Intentas ahorrar lo que sobre al final del mes."},
+  {q:"Tienes una meta de ahorro específica.", good:"Calculas cuánto ahorrar mensualmente y automatizas el proceso.", bad:"Ahorras cantidades aleatorias sin plan."},
+  {q:"Tu ahorro no crece lo suficiente.", good:"Revisas tus gastos, aumentas el ahorro o buscas mejores rendimientos.", bad:"Te frustras pero no cambias tu estrategia."},
+  {q:"Tienes tentación de usar tus ahorros.", good:"Mantienes los ahorros en cuenta separada y recuerdas tu objetivo.", bad:"Usas los ahorros para gastos no planeados."},
+  {q:"No sabes cuánto deberías ahorrar.", good:"Investigas recomendaciones y empiezas con 10-20% de tus ingresos.", bad:"No ahorras porque no sabes la cantidad 'correcta'."},
+  {q:"Quieres ahorrar para emergencias.", good:"Estableces meta de 3-6 meses de gastos y ahorras consistentemente.", bad:"No tienes fondo de emergencia y cada imprevisto es crisis."},
+  {q:"Tus ahorros están en cuenta que no genera interés.", good:"Investigas opciones de ahorro que generen rendimientos.", bad:"Mantienes todo en cuenta corriente sin rendimientos."},
+  {q:"Quieres ahorrar para vacaciones.", good:"Calculas el costo total y ahorras mensualmente hasta la fecha.", bad:"Esperas tener dinero cuando llegue el momento de viajar."},
+  {q:"Tu pareja gasta los ahorros familiares.", good:"Hablas sobre metas financieras y establecen reglas para los ahorros.", bad:"Te enojas pero no establecen acuerdos claros."},
+
+  // 21-30 Deudas
+  {q:"Tienes múltiples deudas de tarjetas de crédito.", good:"Listas todas las deudas, priorizas por interés y creas plan de pago.", bad:"Pagas el mínimo de todas sin estrategia."},
+  {q:"Solo puedes pagar el mínimo de tu tarjeta.", good:"Buscas formas de aumentar ingresos o reducir gastos para pagar más.", bad:"Te conformas con pagar solo el mínimo siempre."},
+  {q:"Te ofrecen consolidar tus deudas.", good:"Analizas si realmente te conviene y lees todos los términos.", bad:"Aceptas sin analizar si es mejor opción."},
+  {q:"Debes dinero a un amigo.", good:"Estableces plan de pago claro y cumples religiosamente.", bad:"Evitas el tema y dañas la amistad."},
+  {q:"Tu deuda está creciendo cada mes.", good:"Dejas de usar crédito y enfocas en pagar más del mínimo.", bad:"Sigues usando crédito mientras intentas pagar."},
+  {q:"Te ofrecen un préstamo personal.", good:"Analizas si realmente lo necesitas, tasas de interés y capacidad de pago.", bad:"Lo tomas sin analizar si puedes pagarlo."},
+  {q:"Estás atrasado en pagos.", good:"Contactas a los acreedores, explicas tu situación y negocias plan de pago.", bad:"Ignoras las llamadas y dejas que se acumule."},
+  {q:"Quieres salir de deudas rápidamente.", good:"Creas presupuesto estricto, aumentas ingresos y pagas agresivamente.", bad:"Buscas soluciones mágicas sin cambiar hábitos."},
+  {q:"Te cobran intereses muy altos.", good:"Buscas opciones de refinanciamiento o transferencia a menor tasa.", bad:"Sigues pagando intereses altos sin buscar alternativas."},
+  {q:"Tu historial crediticio está dañado.", good:"Pagas puntualmente, reduces deudas y monitoreas tu reporte crediticio.", bad:"Ignoras tu historial crediticio."},
+
+  // 31-40 Inversiones
+  {q:"Quieres empezar a invertir.", good:"Te educas sobre inversiones básicas y empiezas con montos pequeños.", bad:"Inviertes sin conocimiento en lo que te recomiendan."},
+  {q:"Alguien te ofrece una inversión 'garantizada'.", good:"Investigas a fondo, verificas regulaciones y consultas expertos.", bad:"Inviertes porque promete altos rendimientos."},
+  {q:"Tus inversiones están perdiendo valor.", good:"Mantienes la calma, revisas tu estrategia a largo plazo y no vendes por pánico.", bad:"Vendes todo por miedo a perder más."},
+  {q:"No sabes dónde invertir tu dinero.", good:"Investigas opciones básicas como fondos indexados y diversificas.", bad:"Dejas todo en cuenta de ahorros por miedo."},
+  {q:"Quieres invertir en acciones individuales.", good:"Investigas las empresas, diversificas y solo inviertes lo que puedes perder.", bad:"Compras acciones por rumores o consejos casuales."},
+  {q:"Te ofrecen invertir en criptomonedas.", good:"Investigas profundamente, entiendes los riesgos y solo inviertes dinero que puedes perder.", bad:"Inviertes por FOMO sin entender los riesgos."},
+  {q:"Quieres invertir para tu jubilación.", good:"Empiezas temprano, aprovechas cuentas con beneficios fiscales y diversificas.", bad:"Piensas que es muy temprano y no empiezas."},
+  {q:"Tus inversiones no dan los rendimientos esperados.", good:"Revisas tu estrategia, ajustas expectativas y mantienes disciplina.", bad:"Cambias constantemente de estrategia por impaciencia."},
+  {q:"Alguien te pide dinero para su negocio.", good:"Analizas como inversión formal con contratos y solo arriesgas lo que puedes perder.", bad:"Prestas dinero informalmente esperando ganancias."},
+  {q:"Quieres invertir en bienes raíces.", good:"Investigas el mercado, analizas números y consideras todos los costos.", bad:"Compras propiedad sin analizar rentabilidad real."},
+
+  // 41-50 Seguros y protección
+  {q:"Te ofrecen un seguro de vida.", good:"Analizas si lo necesitas, comparas opciones y lees términos cuidadosamente.", bad:"Compras el seguro más barato sin analizar cobertura."},
+  {q:"Tu seguro de auto está por vencer.", good:"Comparas opciones, revisas coberturas y negocias mejores tarifas.", bad:"Renuevas automáticamente sin comparar."},
+  {q:"No tienes seguro médico.", good:"Investigas opciones disponibles y priorizas tener cobertura básica.", bad:"Arriesgas tu salud financiera sin seguro."},
+  {q:"Necesitas hacer una reclamación de seguro.", good:"Documentas todo, sigues el proceso correctamente y das seguimiento.", bad:"Asumes que el seguro no pagará y no reclamas."},
+  {q:"Te ofrecen seguro para todo lo que compras.", good:"Evalúas si realmente necesitas cada seguro según el valor del objeto.", bad:"Compras todos los seguros por miedo o los rechazas todos."},
+  {q:"Tu seguro aumentó de precio.", good:"Comparas con otras opciones y negocias o cambias si conviene.", bad:"Pagas el aumento sin cuestionar o buscar alternativas."},
+  {q:"No entiendes tu póliza de seguro.", good:"Lees cuidadosamente, preguntas al agente y aclaras todas las dudas.", bad:"Firmas sin entender qué cubre y qué no."},
+  {q:"Tienes un accidente y necesitas usar el seguro.", good:"Reportas inmediatamente, sigues procedimientos y documentas todo.", bad:"Demoras el reporte y no sigues los procedimientos."},
+  {q:"Te ofrecen seguro de desempleo.", good:"Evalúas tu estabilidad laboral y si el costo justifica la protección.", bad:"Lo rechazas porque 'nunca te va a pasar'."},
+  {q:"Quieres proteger tu patrimonio.", good:"Diversificas riesgos con seguros apropiados y estructuras legales.", bad:"No proteges tu patrimonio hasta que es demasiado tarde."},
+
+  // 51-60 Planificación financiera
+  {q:"Quieres comprar una casa.", good:"Ahorras para enganche, mejoras tu crédito y analizas tu capacidad de pago.", bad:"Buscas casa sin tener finanzas preparadas."},
+  {q:"Planeas tener hijos.", good:"Calculas costos adicionales y ajustas tu planificación financiera.", bad:"No consideras el impacto financiero de tener hijos."},
+  {q:"Quieres cambiar de carrera.", good:"Planificas la transición financiera y ahorras para el período de cambio.", bad:"Cambias sin considerar el impacto económico."},
+  {q:"Te acercas a la jubilación.", good:"Calculas cuánto necesitas, maximizas ahorros y planificas ingresos futuros.", bad:"No planificas para la jubilación hasta que es tarde."},
+  {q:"Quieres emprender un negocio.", good:"Creas plan financiero, separas finanzas personales y tienes capital de emergencia.", bad:"Usas todos tus ahorros sin plan financiero."},
+  {q:"Tus ingresos aumentaron significativamente.", good:"Aumentas ahorros e inversiones antes de aumentar gastos.", bad:"Aumentas tu estilo de vida proporcionalmente."},
+  {q:"Enfrentas una crisis financiera.", good:"Priorizas gastos esenciales, buscas ayuda y creas plan de recuperación.", bad:"Entras en pánico y tomas decisiones impulsivas."},
+  {q:"Quieres ayudar financieramente a tu familia.", good:"Evalúas tu capacidad, estableces límites y no comprometes tu estabilidad.", bad:"Das dinero que no tienes comprometiendo tu futuro."},
+  {q:"Recibes una herencia.", good:"Planificas cómo usar el dinero sabiamente para mejorar tu situación a largo plazo.", bad:"Gastas la herencia impulsivamente."},
+  {q:"Quieres educar financieramente a tus hijos.", good:"Les enseñas con ejemplo, les das responsabilidades apropiadas y educas sobre dinero.", bad:"No hablas de dinero con ellos hasta que son adultos."},
+
+  // 61-70 Gastos inteligentes
+  {q:"Necesitas comprar un auto.", good:"Investigas opciones, comparas precios, consideras usado vs nuevo y financiamiento.", bad:"Compras el primer auto que te gusta sin investigar."},
+  {q:"Quieres renovar tu casa.", good:"Presupuestas el proyecto, comparas cotizaciones y financias apropiadamente.", bad:"Empiezas sin presupuesto claro y gastas más de lo planeado."},
+  {q:"Necesitas electrodomésticos nuevos.", good:"Investigas eficiencia energética, comparas precios y consideras durabilidad.", bad:"Compras lo más barato sin considerar calidad o eficiencia."},
+  {q:"Planeas unas vacaciones.", good:"Presupuestas todos los gastos, comparas opciones y ahorras específicamente.", bad:"Reservas sin presupuesto claro y gastas con tarjeta."},
+  {q:"Necesitas ropa nueva.", good:"Haces inventario de lo que tienes, compras calidad sobre cantidad.", bad:"Compras impulsivamente sin planificar tu guardarropa."},
+  {q:"Quieres la última tecnología.", good:"Evalúas si realmente necesitas actualizar y si justifica el costo.", bad:"Compras cada nueva versión sin considerar necesidad real."},
+  {q:"Tienes que hacer reparaciones en casa.", good:"Obtienes múltiples cotizaciones, verificas referencias y presupuestas.", bad:"Contratas al primero que encuentras sin comparar."},
+  {q:"Quieres comer fuera más seguido.", good:"Presupuestas para restaurantes y balanceas con comida casera.", bad:"Comes fuera impulsivamente sin considerar el costo acumulado."},
+  {q:"Necesitas servicios profesionales.", good:"Investigas opciones, verificas credenciales y comparas precios.", bad:"Contratas sin investigar calidad o precios."},
+  {q:"Quieres un hobby costoso.", good:"Presupuestas para el hobby y empiezas gradualmente.", bad:"Gastas mucho dinero inicial sin saber si te gustará."},
+
+  // 71-80 Ingresos adicionales
+  {q:"Quieres aumentar tus ingresos.", good:"Identificas habilidades monetizables, buscas oportunidades y te capacitas.", bad:"Esperas que te aumenten el sueldo sin tomar acción."},
+  {q:"Tienes una habilidad que podrías monetizar.", good:"Investigas el mercado, estableces precios justos y empiezas gradualmente.", bad:"No aprovechas tus habilidades por miedo o pereza."},
+  {q:"Te ofrecen trabajo de medio tiempo.", good:"Evalúas si puedes manejarlo, el impacto fiscal y si vale la pena.", bad:"Aceptas sin considerar el impacto en tu vida y finanzas."},
+  {q:"Quieres vender cosas que no usas.", good:"Investigas precios, usas plataformas apropiadas y vendes sistemáticamente.", bad:"Acumulas cosas sin usar sin monetizar."},
+  {q:"Consideras rentar parte de tu casa.", good:"Investigas regulaciones, calculas ingresos netos y evalúas riesgos.", bad:"Rentas sin considerar aspectos legales y fiscales."},
+  {q:"Tienes idea para un negocio.", good:"Investigas el mercado, creas plan de negocios y empiezas pequeño.", bad:"Inviertes mucho dinero sin validar la idea."},
+  {q:"Quieres invertir en educación para ganar más.", good:"Analizas el retorno de inversión y financias tu educación inteligentemente.", bad:"Te endeudas excesivamente por educación sin analizar retorno."},
+  {q:"Te ofrecen comisiones por ventas.", good:"Entiendes la estructura de comisiones y evalúas el potencial realista.", bad:"Asumes que ganarás mucho sin entender el sistema."},
+  {q:"Quieres generar ingresos pasivos.", good:"Investigas opciones reales, entiendes los riesgos y empiezas gradualmente.", bad:"Buscas esquemas de 'dinero fácil' sin trabajo."},
+  {q:"Consideras cambiar de trabajo por mejor salario.", good:"Evalúas el paquete completo, crecimiento y estabilidad, no solo salario.", bad:"Cambias solo por dinero sin considerar otros factores."},
+
+  // 81-90 Situaciones especiales
+  {q:"Te divorcias y debes dividir bienes.", good:"Buscas asesoría legal y financiera, documentas todo y planificas tu nueva situación.", bad:"Peleas por todo sin considerar el costo legal y emocional."},
+  {q:"Tienes un familiar con problemas financieros.", good:"Ofreces ayuda dentro de tus posibilidades sin comprometer tu estabilidad.", bad:"Te endeudas para ayudar o ignoras completamente la situación."},
+  {q:"Ganas la lotería o recibes dinero inesperado.", good:"Planificas cuidadosamente, pagas deudas, ahorras e inviertes sabiamente.", bad:"Gastas todo rápidamente sin planificar."},
+  {q:"Enfrentas una emergencia médica costosa.", good:"Usas tu fondo de emergencia, negocias pagos y busca opciones de financiamiento.", bad:"Entras en pánico y tomas decisiones financieras desesperadas."},
+  {q:"Tu cónyuge maneja mal el dinero.", good:"Hablas abiertamente, establecen metas juntos y buscan ayuda si es necesario.", bad:"Peleas por dinero sin abordar el problema de fondo."},
+  {q:"Tus padres necesitan apoyo financiero.", good:"Evalúas tu capacidad, estableces límites y buscas alternativas de apoyo.", bad:"Das dinero que no tienes por culpa o presión familiar."},
+  {q:"Tienes problemas de adicción que afectan tus finanzas.", good:"Reconoces el problema, buscas ayuda profesional y proteges tus finanzas.", bad:"Niegas el problema mientras destruyes tu estabilidad financiera."},
+  {q:"Tu negocio está perdiendo dinero.", good:"Analizas números objetivamente, buscas soluciones o consideras cerrar.", bad:"Sigues invirtiendo dinero en negocio que no funciona."},
+  {q:"Enfrentas discriminación que afecta tus ingresos.", good:"Documentas todo, buscas asesoría legal y proteges tus derechos.", bad:"Aceptas la situación sin buscar justicia o alternativas."},
+  {q:"Tienes que cuidar a un familiar enfermo.", good:"Planificas el impacto financiero, buscas recursos de apoyo y ajustas presupuesto.", bad:"No consideras el costo financiero del cuidado."},
+
+  // 91-100 Educación financiera avanzada
+  {q:"Quieres enseñar finanzas a otros.", good:"Te educas profundamente, compartes experiencias reales y adaptas a cada persona.", bad:"Das consejos sin tener tus propias finanzas en orden."},
+  {q:"Necesitas asesoría financiera profesional.", good:"Investigas asesores certificados, verificas credenciales y entiendes cómo cobran.", bad:"Contratas al primer asesor sin verificar calificaciones."},
+  {q:"Quieres optimizar tus impuestos.", good:"Te educas sobre deducciones legales o contratas profesional calificado.", bad:"Intentas evadir impuestos o no aprovechas deducciones legales."},
+  {q:"Consideras mudarte por razones financieras.", good:"Analizas todos los costos, beneficios y impacto en tu calidad de vida.", bad:"Te mudas solo por dinero sin considerar otros factores."},
+  {q:"Quieres dejar un legado financiero.", good:"Planificas tu patrimonio, creas testamento y educas a tus herederos.", bad:"No planificas qué pasará con tu dinero cuando mueras."},
+  {q:"Enfrentas inflación alta.", good:"Ajustas tu estrategia, proteges tu dinero y adaptas tu presupuesto.", bad:"Ignoras la inflación y mantienes las mismas estrategias."},
+  {q:"Quieres ser financieramente independiente.", good:"Defines qué significa para ti, creas plan específico y trabajas consistentemente.", bad:"Sueñas con independencia financiera sin plan concreto."},
+  {q:"Tienes éxito financiero.", good:"Mantienes humildad, sigues aprendiendo y ayudas a otros responsablemente.", bad:"Te vuelves arrogante o gastas sin control por tener dinero."},
+  {q:"Cometes un error financiero grande.", good:"Aprendes de la experiencia, ajustas estrategias y no repites el error.", bad:"Te culpas sin aprender o niegas que fue tu error."},
+  {q:"Quieres mejorar tu relación con el dinero.", good:"Reflexionas sobre tus creencias, buscas ayuda si es necesario y trabajas en cambiar patrones.", bad:"Mantienes patrones destructivos sin cuestionar tu relación con el dinero."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

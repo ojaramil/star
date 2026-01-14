@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Paralenguaje (Voz)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #8b5cf6;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #8b5cf6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #8b5cf6cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(238, 231, 254);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(238, 231, 254);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>👁️</span>
+      <span>Comunicación No Verbal</span>
+    </span>
+    <h1>🎵 Paralenguaje (Voz)</h1>
+    <p>Tono, volumen, velocidad, pausas y énfasis vocal</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // CATEGORÍA 1: CONTROL DEL RITMO Y VELOCIDAD (10 situaciones)
+  {q:"En una presentación tu voz comienza a salir muy rápido y aguda por los nervios.", good:"Respiras profundo, reduces el ritmo y añades pausas para enfatizar.", bad:"Aceleras todavía más para terminar cuanto antes."},
+  {q:"Durante una explicación importante, hablas tan rápido que la gente parece confundida.", good:"Te detienes, reconoces que vas muy rápido y repites los puntos clave más lentamente.", bad:"Continúas al mismo ritmo pensando que eventualmente entenderán."},
+  {q:"En una conversación emocional, tu velocidad de habla aumenta por la ansiedad.", good:"Conscientemente reduces el ritmo para transmitir calma y claridad.", bad:"Hablas cada vez más rápido, escalando la tensión de la conversación."},
+  {q:"Durante una llamada telefónica importante, te das cuenta de que hablas muy lento.", good:"Ajustas tu ritmo para ser más dinámico sin perder claridad.", bad:"Continúas hablando lentamente, perdiendo la atención del interlocutor."},
+  {q:"En una reunión, notas que tu ritmo de habla no coincide con la energía del grupo.", good:"Ajustas tu velocidad para sincronizarte con el ritmo del grupo.", bad:"Mantienes tu ritmo sin considerar la dinámica grupal."},
+  {q:"Al dar instrucciones complejas, hablas demasiado rápido.", good:"Reduces la velocidad y pausas después de cada paso importante.", bad:"Continúas rápido y luego te frustras cuando no siguen las instrucciones."},
+  {q:"Durante una discusión, tu ritmo acelerado hace que parezcas agresivo.", good:"Conscientemente reduces el ritmo para sonar más colaborativo.", bad:"Mantienes el ritmo rápido, escalando el conflicto."},
+  {q:"En una presentación técnica, hablas muy lento y pierdes la atención.", good:"Aumentas el ritmo en partes menos complejas y mantienes pausas en lo importante.", bad:"Continúas al mismo ritmo lento durante toda la presentación."},
+  {q:"Durante una conversación casual, tu ritmo formal hace que parezcas distante.", good:"Ajustas a un ritmo más relajado y natural para el contexto.", bad:"Mantienes un ritmo formal que crea distancia social."},
+  {q:"En una negociación, tu ritmo rápido transmite ansiedad.", good:"Adoptas un ritmo pausado que transmite confianza y control.", bad:"Aceleras más por nerviosismo, debilitando tu posición."},
+
+  // CATEGORÍA 2: MANEJO DEL VOLUMEN (10 situaciones)
+  {q:"En una reunión, tu voz es tan baja que la gente se esfuerza por escucharte.", good:"Aumentas conscientemente el volumen y verificas que todos puedan escuchar.", bad:"Continúas hablando bajo, perdiendo participación del grupo."},
+  {q:"Durante una discusión, tu voz se vuelve muy alta y dominante.", good:"Reduces el volumen para crear un ambiente más colaborativo.", bad:"Continúas hablando fuerte, intimidando a otros participantes."},
+  {q:"En una presentación grande, tu voz no llega a toda la audiencia.", good:"Proyectas tu voz apropiadamente y verificas que todos puedan escuchar.", bad:"Continúas con el mismo volumen, perdiendo a parte de la audiencia."},
+  {q:"Durante una conversación íntima, hablas muy fuerte para el contexto.", good:"Ajustas el volumen para crear intimidad apropiada.", bad:"Mantienes un volumen alto que rompe la atmósfera íntima."},
+  {q:"En un ambiente ruidoso, tu voz se pierde entre el ruido de fondo.", good:"Aumentas el volumen apropiadamente o buscas un lugar más tranquilo.", bad:"Continúas hablando al mismo volumen, perdiendo efectividad."},
+  {q:"Durante una llamada, hablas muy bajo y la conexión es mala.", good:"Aumentas el volumen y hablas más claramente para compensar la mala conexión.", bad:"Continúas hablando bajo, creando frustración en la comunicación."},
+  {q:"En una conversación grupal, tu voz alta domina e interrumpe a otros.", good:"Moderas tu volumen para permitir participación equilibrada.", bad:"Continúas hablando fuerte, monopolizando la conversación."},
+  {q:"Durante una presentación emocional, tu volumen no refleja la importancia.", good:"Ajustas el volumen para enfatizar puntos importantes apropiadamente.", bad:"Mantienes un volumen monótono que no transmite la importancia del mensaje."},
+  {q:"En un espacio pequeño, tu voz fuerte incomoda a los presentes.", good:"Reduces el volumen apropiado para el espacio íntimo.", bad:"Continúas hablando fuerte, creando incomodidad en el grupo."},
+  {q:"Durante una conversación telefónica, gritas sin darte cuenta.", good:"Te das cuenta y ajustas inmediatamente a un volumen apropiado.", bad:"Continúas gritando, creando una experiencia desagradable."},
+
+  // CATEGORÍA 3: CONTROL DEL TONO Y ENTONACIÓN (10 situaciones)
+  {q:"Tu tono de voz suena aburrido durante una presentación importante.", good:"Varías la entonación para mantener el interés y enfatizar puntos clave.", bad:"Continúas con el mismo tono monótono durante toda la presentación."},
+  {q:"Durante una conversación seria, tu tono suena demasiado casual.", good:"Ajustas tu tono para reflejar la seriedad apropiada del tema.", bad:"Mantienes un tono casual que minimiza la importancia del asunto."},
+  {q:"En una situación de conflicto, tu tono se vuelve sarcástico.", good:"Cambias a un tono neutral y constructivo para resolver el conflicto.", bad:"Continúas con sarcasmo, escalando la tensión."},
+  {q:"Durante una felicitación, tu tono suena poco sincero.", good:"Ajustas tu tono para transmitir genuina alegría y reconocimiento.", bad:"Continúas con un tono plano que hace dudar de tu sinceridad."},
+  {q:"En una disculpa, tu tono no transmite arrepentimiento real.", good:"Adoptas un tono que refleje genuino remordimiento y responsabilidad.", bad:"Mantienes un tono defensivo que invalida la disculpa."},
+  {q:"Durante una explicación, tu tono condescendiente molesta a tu interlocutor.", good:"Cambias a un tono respetuoso y colaborativo.", bad:"Continúas con un tono superior que daña la relación."},
+  {q:"En una presentación de ventas, tu tono suena desesperado.", good:"Adoptas un tono confiado y consultivo que inspire confianza.", bad:"Continúas con un tono que transmite desesperación y debilita tu propuesta."},
+  {q:"Durante una conversación emocional, tu tono suena frío e insensible.", good:"Ajustas tu tono para mostrar empatía y comprensión.", bad:"Mantienes un tono frío que invalida las emociones del otro."},
+  {q:"En una reunión de equipo, tu tono autoritario inhibe la participación.", good:"Cambias a un tono más inclusivo que invite a la colaboración.", bad:"Continúas con un tono autoritario que silencia al equipo."},
+  {q:"Durante una negociación, tu tono agresivo genera resistencia.", good:"Adoptas un tono firme pero respetuoso que facilite el acuerdo.", bad:"Mantienes un tono agresivo que endurece las posiciones."},
+
+  // CATEGORÍA 4: USO DE PAUSAS Y SILENCIOS (10 situaciones)
+  {q:"Durante una presentación, hablas sin pausas y la audiencia se ve abrumada.", good:"Incorporas pausas estratégicas para permitir procesamiento de la información.", bad:"Continúas hablando sin parar, sobrecargando a la audiencia."},
+  {q:"En una conversación emocional, llenas todos los silencios incómodos.", good:"Permites silencios que den espacio para reflexión y procesamiento emocional.", bad:"Hablas constantemente, no dando espacio para que el otro procese."},
+  {q:"Durante una pregunta difícil, respondes inmediatamente sin pensar.", good:"Tomas una pausa para reflexionar antes de dar una respuesta considerada.", bad:"Respondes impulsivamente sin considerar las implicaciones."},
+  {q:"En una presentación, no das tiempo para que la audiencia asimile puntos importantes.", good:"Haces pausas después de puntos clave para permitir asimilación.", bad:"Continúas rápidamente sin dar tiempo para procesar información importante."},
+  {q:"Durante una discusión, interrumpes constantemente sin dejar espacios.", good:"Creas pausas que permitan participación equilibrada de todos.", bad:"Dominas la conversación sin dar oportunidad a otros de participar."},
+  {q:"En una llamada telefónica, los silencios te ponen nervioso.", good:"Usas pausas estratégicamente y te sientes cómodo con silencios naturales.", bad:"Llenas todos los silencios con palabras innecesarias."},
+  {q:"Durante una explicación compleja, no pausas para verificar comprensión.", good:"Haces pausas regulares para verificar entendimiento antes de continuar.", bad:"Explicas todo de corrido sin verificar si están siguiendo."},
+  {q:"En una situación tensa, hablas constantemente por nerviosismo.", good:"Usas pausas para calmarte y permitir que la tensión se reduzca.", bad:"Hablas sin parar, aumentando la tensión de la situación."},
+  {q:"Durante una entrevista, no das tiempo para que procesen tus respuestas.", good:"Pausas apropiadamente para permitir que evalúen tus respuestas.", bad:"Continúas hablando sin dar tiempo para que procesen la información."},
+  {q:"En una presentación de cierre, terminas abruptamente sin pausa final.", good:"Usas una pausa final efectiva que permita que tu mensaje resuene.", bad:"Terminas rápidamente sin dar impacto a tu conclusión."},
+
+  // CATEGORÍA 5: CLARIDAD Y ARTICULACIÓN (10 situaciones)
+  {q:"Durante una presentación importante, tu pronunciación es poco clara.", good:"Te enfocas en articular claramente cada palabra importante y reduces la velocidad.", bad:"Continúas hablando poco claro, perdiendo efectividad del mensaje."},
+  {q:"En una llamada telefónica, murmurar hace que te pidan repetir constantemente.", good:"Articulas claramente y proyectas tu voz apropiadamente para la llamada.", bad:"Continúas murmurando, creando frustración en la comunicación."},
+  {q:"Durante una explicación técnica, tu dicción poco clara confunde términos importantes.", good:"Articulas especialmente bien los términos técnicos y verificas comprensión.", bad:"Continúas con dicción poco clara, creando malentendidos técnicos."},
+  {q:"En una conversación en otro idioma, tu pronunciación dificulta la comprensión.", good:"Hablas más lentamente y articulas con especial cuidado.", bad:"Continúas al mismo ritmo sin considerar las barreras de idioma."},
+  {q:"Durante una presentación con micrófono, tu articulación se vuelve descuidada.", good:"Mantienes articulación clara a pesar de la amplificación.", bad:"Te relajas con la articulación porque el micrófono amplifica tu voz."},
+  {q:"En un ambiente ruidoso, tu falta de claridad hace que no te entiendan.", good:"Articulas especialmente bien y usas gestos para apoyar la comunicación.", bad:"Hablas más fuerte pero sin mejorar la claridad."},
+  {q:"Durante una conversación importante, comes palabras por nerviosismo.", good:"Te calmas, respiras y te enfocas en pronunciar cada palabra claramente.", bad:"Continúas comiendo palabras, perdiendo credibilidad."},
+  {q:"En una presentación formal, tu articulación casual no es apropiada.", good:"Adoptas una articulación más precisa apropiada para el contexto formal.", bad:"Mantienes articulación casual que no coincide con la formalidad."},
+  {q:"Durante instrucciones de seguridad, tu falta de claridad puede ser peligrosa.", good:"Articulas con extrema claridad y verificas comprensión de cada punto.", bad:"Das instrucciones poco claras que pueden comprometer la seguridad."},
+  {q:"En una grabación, tu articulación poco clara afecta la calidad.", good:"Te enfocas especialmente en articulación clara para la grabación.", bad:"Grabas sin considerar que la articulación debe ser especialmente clara."},
+
+  // CATEGORÍA 6: EXPRESIÓN EMOCIONAL A TRAVÉS DE LA VOZ (10 situaciones)
+  {q:"Durante una felicitación, tu voz no transmite la alegría que sientes.", good:"Permites que tu voz refleje genuinamente tu entusiasmo y alegría.", bad:"Mantienes un tono plano que hace dudar de tu sinceridad."},
+  {q:"En una situación triste, tu voz suena inapropiadamente alegre.", good:"Ajustas tu tono para reflejar empatía y comprensión apropiadas.", bad:"Mantienes un tono alegre que parece insensible a la situación."},
+  {q:"Durante una disculpa, tu voz no transmite arrepentimiento real.", good:"Permites que tu voz refleje genuino remordimiento y responsabilidad.", bad:"Usas un tono que suena más defensivo que arrepentido."},
+  {q:"En una situación de enojo, tu voz se vuelve demasiado agresiva.", good:"Controlas tu voz para expresar firmeza sin agresividad.", bad:"Dejas que el enojo domine tu voz, escalando el conflicto."},
+  {q:"Durante una conversación de apoyo, tu voz suena distante.", good:"Ajustas tu voz para transmitir calidez y cercanía emocional.", bad:"Mantienes un tono frío que no ofrece el apoyo necesario."},
+  {q:"En una presentación apasionada, tu voz no refleja tu entusiasmo.", good:"Permites que tu pasión se refleje apropiadamente en tu voz.", bad:"Mantienes un tono monótono que no transmite tu entusiasmo."},
+  {q:"Durante una conversación seria, tu voz suena demasiado dramática.", good:"Ajustas para ser serio sin caer en dramatismo excesivo.", bad:"Continúas con dramatismo que distrae del mensaje importante."},
+  {q:"En una situación de nerviosismo, tu voz tiembla notablemente.", good:"Usas técnicas de respiración para estabilizar tu voz.", bad:"Permites que el nerviosismo domine tu voz, perdiendo credibilidad."},
+  {q:"Durante una conversación íntima, tu voz no crea la conexión apropiada.", good:"Ajustas tu voz para crear intimidad y conexión emocional.", bad:"Mantienes un tono formal que impide la conexión íntima."},
+  {q:"En una situación de celebración, tu voz no refleja la alegría del momento.", good:"Permites que tu voz exprese la alegría apropiada para la celebración.", bad:"Mantienes un tono neutro que no contribuye a la celebración."},
+
+  // CATEGORÍA 7: ADAPTACIÓN AL CONTEXTO (10 situaciones)
+  {q:"En una reunión formal, usas el mismo tono que en conversaciones casuales.", good:"Adoptas un tono más formal apropiado para el contexto profesional.", bad:"Mantienes un tono casual que no es apropiado para la situación."},
+  {q:"Durante una presentación a niños, tu voz es demasiado seria y formal.", good:"Ajustas tu voz para ser más animada y apropiada para la audiencia joven.", bad:"Mantienes un tono adulto que no conecta con los niños."},
+  {q:"En una conversación con personas mayores, tu tono es demasiado casual.", good:"Adoptas un tono más respetuoso apropiado para la generación.", bad:"Mantienes un tono casual que puede parecer irrespetuoso."},
+  {q:"Durante una llamada de servicio al cliente, tu voz no es profesional.", good:"Adoptas un tono profesional y servicial apropiado para el contexto.", bad:"Usas un tono casual que no transmite profesionalismo."},
+  {q:"En una presentación técnica, tu voz es demasiado emocional.", good:"Ajustas a un tono más neutral y profesional apropiado para contenido técnico.", bad:"Mantienes un tono emocional que distrae del contenido técnico."},
+  {q:"Durante una conversación en un funeral, tu voz no es apropiada.", good:"Adoptas un tono solemne y respetuoso apropiado para la ocasión.", bad:"Usas un tono que no respeta la solemnidad del momento."},
+  {q:"En una negociación internacional, no consideras diferencias culturales.", good:"Ajustas tu estilo vocal considerando las normas culturales apropiadas.", bad:"Usas tu estilo habitual sin considerar sensibilidades culturales."},
+  {q:"Durante una entrevista de trabajo, tu voz es demasiado informal.", good:"Adoptas un tono profesional que demuestre seriedad y competencia.", bad:"Mantienes un tono casual que puede afectar tu candidatura."},
+  {q:"En una presentación de ventas, tu voz no se adapta al cliente.", good:"Ajustas tu estilo vocal según el perfil y preferencias del cliente.", bad:"Usas el mismo estilo vocal para todos los clientes."},
+  {q:"Durante una clase, tu voz no es apropiada para el ambiente educativo.", good:"Adoptas un tono educativo que facilite el aprendizaje.", bad:"Usas un tono que no favorece el ambiente de aprendizaje."},
+
+  // CATEGORÍA 8: MANEJO DE LA RESPIRACIÓN (10 situaciones)
+  {q:"Durante una presentación larga, te quedas sin aire frecuentemente.", good:"Planificas pausas para respirar y usas técnicas de respiración diafragmática.", bad:"Continúas hablando sin control de respiración, perdiendo efectividad."},
+  {q:"En una situación de nerviosismo, tu respiración afecta tu voz.", good:"Usas técnicas de respiración para calmar nervios y estabilizar la voz.", bad:"Permites que la respiración nerviosa afecte negativamente tu comunicación."},
+  {q:"Durante una conversación emocional, tu respiración se vuelve irregular.", good:"Controlas conscientemente tu respiración para mantener estabilidad vocal.", bad:"Dejas que la respiración irregular afecte tu capacidad de comunicar."},
+  {q:"En una presentación importante, hablas hasta quedarte sin aire.", good:"Planificas puntos de respiración y pausas naturales en tu discurso.", bad:"Intentas decir demasiado sin respirar, perdiendo claridad."},
+  {q:"Durante una llamada larga, tu voz se debilita por mala respiración.", good:"Mantienes técnicas de respiración apropiadas durante toda la llamada.", bad:"No controlas la respiración y tu voz se deteriora progresivamente."},
+  {q:"En una situación de estrés, tu respiración superficial afecta tu voz.", good:"Usas respiración profunda para mantener control vocal bajo estrés.", bad:"Permites que el estrés y la respiración superficial debiliten tu voz."},
+  {q:"Durante ejercicio físico mientras hablas, te falta el aire.", good:"Ajustas tu ritmo de habla y respiración según tu actividad física.", bad:"Intentas hablar normalmente sin considerar el esfuerzo físico."},
+  {q:"En una presentación con micrófono, tu respiración se escucha demasiado.", good:"Controlas tu respiración y posición del micrófono para evitar ruidos.", bad:"Respiras directamente en el micrófono, creando distracciones auditivas."},
+  {q:"Durante una conversación larga, tu voz se vuelve ronca.", good:"Tomas descansos vocales y usas técnicas de respiración para proteger tu voz.", bad:"Continúas hablando sin cuidar tu voz, empeorando la ronquera."},
+  {q:"En altitud elevada, tu respiración afecta tu capacidad de hablar.", good:"Ajustas tu ritmo de habla y respiración a las condiciones de altitud.", bad:"Intentas hablar normalmente sin considerar los efectos de la altitud."},
+
+  // CATEGORÍA 9: PROYECCIÓN Y PRESENCIA VOCAL (10 situaciones)
+  {q:"En una presentación grande, tu voz no llega a toda la audiencia.", good:"Proyectas tu voz apropiadamente usando técnicas de respiración y postura.", bad:"Hablas con tu volumen normal, perdiendo a parte de la audiencia."},
+  {q:"Durante una reunión importante, tu voz no transmite autoridad.", good:"Usas técnicas de proyección que transmitan confianza y liderazgo.", bad:"Hablas con una voz débil que no inspira confianza."},
+  {q:"En un ambiente ruidoso, tu voz se pierde entre el ruido.", good:"Proyectas apropiadamente y usas técnicas para cortar a través del ruido.", bad:"Gritas sin técnica, dañando tu voz sin mejorar la comunicación."},
+  {q:"Durante una presentación de ventas, tu voz no es convincente.", good:"Usas proyección y presencia vocal que inspire confianza en tu propuesta.", bad:"Hablas con una voz que no transmite convicción en tu producto."},
+  {q:"En una situación de liderazgo, tu voz no inspira al equipo.", good:"Proyectas una voz que transmita liderazgo y motive al equipo.", bad:"Usas una voz débil que no inspira confianza en tu liderazgo."},
+  {q:"Durante una negociación, tu voz no transmite firmeza.", good:"Proyectas una voz firme que respalde tu posición negociadora.", bad:"Hablas con una voz débil que debilita tu posición."},
+  {q:"En una presentación técnica, tu voz no mantiene la atención.", good:"Usas variación en proyección para mantener el interés de la audiencia.", bad:"Mantienes una proyección monótona que pierde la atención."},
+  {q:"Durante una crisis, tu voz no transmite calma y control.", good:"Proyectas una voz calmada que transmita control de la situación.", bad:"Tu voz refleja pánico, aumentando la ansiedad de otros."},
+  {q:"En una entrevista, tu voz no proyecta profesionalismo.", good:"Usas proyección apropiada que demuestre competencia profesional.", bad:"Hablas con una voz que no transmite seriedad profesional."},
+  {q:"Durante una presentación emocional, tu proyección no es apropiada.", good:"Ajustas tu proyección para ser apropiada al contenido emocional.", bad:"Usas proyección inapropiada que distrae del mensaje emocional."},
+
+  // CATEGORÍA 10: AUTOCONCIENCIA Y MEJORA VOCAL (10 situaciones)
+  {q:"No te das cuenta de que tu voz suena monótona en presentaciones.", good:"Desarrollas autoconciencia vocal y practicas variación en tu entrega.", bad:"Continúas con patrones vocales monótonos sin buscar mejora."},
+  {q:"Tu acento regional afecta la comprensión en contextos profesionales.", good:"Trabajas en claridad sin perder tu identidad, adaptándote al contexto.", bad:"Ignoras el impacto de tu acento en la comunicación profesional."},
+  {q:"No notas cuando tu voz transmite emociones no deseadas.", good:"Desarrollas conciencia de cómo tu voz refleja emociones y la controlas apropiadamente.", bad:"Permites que emociones no deseadas se filtren a través de tu voz."},
+  {q:"Tu voz se deteriora durante el día por mal uso.", good:"Implementas técnicas de cuidado vocal y descansos apropiados.", bad:"Continúas usando tu voz de manera que la daña progresivamente."},
+  {q:"No recibes feedback sobre tu comunicación vocal.", good:"Buscas activamente feedback sobre tu comunicación vocal y trabajas en mejoras.", bad:"Asumes que tu comunicación vocal es efectiva sin buscar feedback."},
+  {q:"Tu nerviosismo siempre afecta tu voz de la misma manera.", good:"Desarrollas estrategias específicas para manejar el impacto del nerviosismo en tu voz.", bad:"Permites que el nerviosismo afecte tu voz sin desarrollar estrategias de manejo."},
+  {q:"No adaptas tu voz a diferentes tecnologías de comunicación.", good:"Ajustas tu técnica vocal según el medio (teléfono, video, micrófono).", bad:"Usas la misma técnica vocal sin considerar las diferencias tecnológicas."},
+  {q:"Tu voz no refleja tu personalidad auténtica.", good:"Trabajas en desarrollar una voz que sea tanto efectiva como auténtica.", bad:"Usas una voz artificial que no refleja quien eres realmente."},
+  {q:"No practicas ni mejoras conscientemente tu comunicación vocal.", good:"Dedicas tiempo regular a practicar y mejorar tus habilidades vocales.", bad:"Asumes que tu voz es fija y no trabajas en su desarrollo."},
+  {q:"No consideras el impacto a largo plazo de tus hábitos vocales.", good:"Desarrollas hábitos vocales saludables que protejan tu voz a largo plazo.", bad:"Usas tu voz sin considerar el impacto acumulativo en tu salud vocal."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

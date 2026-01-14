@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Manejo del Hogar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ef4444;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #ef4444cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #ef4444cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(253, 227, 227);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(253, 227, 227);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🏠</span>
+      <span>Vida Independiente</span>
+    </span>
+    <h1>🧹 Manejo del Hogar</h1>
+    <p>Limpieza, cocina, lavandería y mantenimiento básico</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Limpieza diaria
+  {q:"Después de cocinar notas que la cocina queda desordenada.", good:"Creas una lista breve y limpias en bloques pequeños justo después de comer.", bad:"Lo dejas para luego y se acumula durante varios días."},
+  {q:"Tu cama está sin hacer.", good:"La haces inmediatamente al levantarte como parte de tu rutina matutina.", bad:"La dejas sin hacer todo el día."},
+  {q:"Hay platos sucios en el fregadero.", good:"Los lavas inmediatamente después de comer o los pones en el lavavajillas.", bad:"Los dejas acumular hasta que no tienes platos limpios."},
+  {q:"El baño necesita limpieza.", good:"Dedicas 10 minutos diarios a mantenerlo limpio.", bad:"Lo limpias solo cuando está muy sucio."},
+  {q:"Hay ropa tirada en el suelo.", good:"La recoges inmediatamente y la pones en su lugar.", bad:"La dejas ahí hasta que se acumula mucha."},
+  {q:"Las superficies están polvorientas.", good:"Pasas un paño húmedo regularmente como parte de tu rutina.", bad:"Solo limpias cuando el polvo es muy visible."},
+  {q:"El piso está sucio.", good:"Barres o aspiras regularmente según el tipo de piso.", bad:"Solo limpias cuando está muy sucio."},
+  {q:"Hay basura que sacar.", good:"Sacas la basura regularmente antes de que se llene completamente.", bad:"Esperas hasta que está desbordando."},
+  {q:"Los espejos están manchados.", good:"Los limpias semanalmente con productos apropiados.", bad:"Los dejas manchados hasta que no puedes verte bien."},
+  {q:"Hay desorden general en la sala.", good:"Dedicas 15 minutos diarios a ordenar espacios comunes.", bad:"Dejas que se acumule el desorden."},
+
+  // 11-20 Organización
+  {q:"No encuentras algo que necesitas.", good:"Creas un sistema de organización donde cada cosa tiene su lugar.", bad:"Sigues buscando cosas sin organizar."},
+  {q:"Tu armario está desordenado.", good:"Organizas por categorías, donas lo que no usas y mantienes orden.", bad:"Acumulas ropa sin orden ni criterio."},
+  {q:"Los documentos importantes están dispersos.", good:"Creas un archivo organizado por categorías con carpetas.", bad:"Guardas papeles en cualquier lugar."},
+  {q:"La despensa está desorganizada.", good:"Organizas por categorías, verificas fechas y haces inventario.", bad:"Acumulas comida sin orden ni control."},
+  {q:"Tienes muchas cosas que no usas.", good:"Haces limpieza regular, donas o vendes lo que no necesitas.", bad:"Acumulas cosas 'por si acaso'."},
+  {q:"Los cables y electrónicos están enredados.", good:"Usas organizadores, etiquetas y mantienes cada cable en su lugar.", bad:"Tienes una maraña de cables sin identificar."},
+  {q:"Los productos de limpieza están dispersos.", good:"Los organizas en un lugar específico con fácil acceso.", bad:"Los tienes regados por toda la casa."},
+  {q:"No tienes espacio de almacenamiento.", good:"Optimizas el espacio existente y reduces posesiones innecesarias.", bad:"Acumulas más cosas sin organizar el espacio."},
+  {q:"Tus herramientas están desorganizadas.", good:"Creas un sistema donde cada herramienta tiene su lugar.", bad:"Las tienes regadas y pierdes tiempo buscándolas."},
+  {q:"Los juguetes están por toda la casa.", good:"Estableces lugares específicos y rutinas de recogida.", bad:"Dejas que se acumulen en todos lados."},
+
+  // 21-30 Mantenimiento preventivo
+  {q:"Los filtros del aire acondicionado están sucios.", good:"Los cambias regularmente según las recomendaciones del fabricante.", bad:"Los cambias solo cuando el equipo no funciona bien."},
+  {q:"Las plantas necesitan agua.", good:"Estableces rutina de riego según las necesidades de cada planta.", bad:"Las riegas cuando te acuerdas o cuando están marchitas."},
+  {q:"Hay una gotera pequeña.", good:"La reparas inmediatamente o llamas a un profesional.", bad:"La ignoras hasta que se convierte en problema mayor."},
+  {q:"Los electrodomésticos necesitan limpieza.", good:"Los limpias regularmente según las instrucciones del fabricante.", bad:"Los limpias solo cuando dejan de funcionar bien."},
+  {q:"Las ventanas están sucias.", good:"Las limpias regularmente para mantener buena iluminación.", bad:"Las limpias solo cuando están muy sucias."},
+  {q:"El jardín necesita mantenimiento.", good:"Dedicas tiempo regular a podar, regar y mantener las plantas.", bad:"Solo te ocupas cuando está muy descuidado."},
+  {q:"Los detectores de humo pitan.", good:"Cambias las baterías inmediatamente y los pruebas regularmente.", bad:"Quitas las baterías para que dejen de pitar."},
+  {q:"Hay humedad en alguna pared.", good:"Investigas la causa y la solucionas antes de que empeore.", bad:"La ignoras hasta que aparece moho."},
+  {q:"Los grifos gotean.", good:"Los reparas inmediatamente para evitar desperdicio de agua.", bad:"Los dejas gotear porque 'es solo una gota'."},
+  {q:"Las cerraduras están duras.", good:"Las lubricás y mantienes para que funcionen bien.", bad:"Las fuerzas hasta que se rompen."},
+
+  // 31-40 Compras y abastecimiento
+  {q:"Se te acabó un producto de limpieza.", good:"Mantienes inventario y compras antes de que se acabe completamente.", bad:"Te das cuenta cuando ya no tienes nada."},
+  {q:"Necesitas hacer compras para la casa.", good:"Haces lista organizada por secciones y planificas las compras.", bad:"Vas sin lista y olvidas cosas importantes."},
+  {q:"Hay ofertas en productos que usas.", good:"Compras cantidad razonable de productos no perecederos.", bad:"Compras excesivamente o no aprovechas ofertas útiles."},
+  {q:"Necesitas electrodomésticos nuevos.", good:"Investigas opciones, comparas precios y lees reseñas.", bad:"Compras el primero que ves sin investigar."},
+  {q:"Se te acabó la comida en casa.", good:"Planificas menús semanales y compras según tu plan.", bad:"Compras comida sin planificar y desperdicias."},
+  {q:"Necesitas herramientas para reparaciones.", good:"Inviertes en herramientas básicas de calidad.", bad:"Usas herramientas inadecuadas o pides prestado siempre."},
+  {q:"Los productos de limpieza son caros.", good:"Buscas alternativas caseras efectivas o compras al por mayor.", bad:"Compras lo más barato sin considerar efectividad."},
+  {q:"Necesitas muebles nuevos.", good:"Mides el espacio, defines presupuesto y buscas calidad-precio.", bad:"Compras muebles sin medir o planificar."},
+  {q:"Se dañó algo importante en casa.", good:"Evalúas si reparar o reemplazar según costo-beneficio.", bad:"Reemplazas automáticamente sin considerar reparación."},
+  {q:"Quieres mejorar algo en tu hogar.", good:"Planificas el proyecto, presupuestas y lo haces por etapas.", bad:"Empiezas sin plan y gastas más de lo previsto."},
+
+  // 41-50 Seguridad del hogar
+  {q:"Sales de casa por varios días.", good:"Aseguras puertas, ventanas, cortas agua y pides que revisen la casa.", bad:"Sales sin tomar precauciones de seguridad."},
+  {q:"Hay una ventana que no cierra bien.", good:"La reparas inmediatamente por seguridad.", bad:"La dejas así comprometiendo la seguridad."},
+  {q:"Notas actividad sospechosa en el vecindario.", good:"Estás alerta, reportas si es necesario y mejoras tu seguridad.", bad:"Ignoras las señales de peligro."},
+  {q:"Tus llaves están perdidas.", good:"Cambias las cerraduras inmediatamente por seguridad.", bad:"Esperas encontrar las llaves sin cambiar cerraduras."},
+  {q:"El sistema de alarma no funciona.", good:"Lo reparas inmediatamente o buscas alternativas de seguridad.", bad:"Lo dejas sin funcionar comprometiendo tu seguridad."},
+  {q:"Hay cables eléctricos expuestos.", good:"Los reparas inmediatamente o llamas a un electricista.", bad:"Los dejas expuestos arriesgando accidentes."},
+  {q:"Los extintores están vencidos.", good:"Los recargas o reemplazas inmediatamente.", bad:"Los dejas vencidos sin protección contra incendios."},
+  {q:"Hay escaleras o pisos resbalosos.", good:"Los reparas o pones antideslizantes para prevenir caídas.", bad:"Los dejas peligrosos arriesgando accidentes."},
+  {q:"La iluminación exterior no funciona.", good:"La reparas para mantener seguridad nocturna.", bad:"La dejas sin funcionar comprometiendo la seguridad."},
+  {q:"Alguien desconocido toca la puerta.", good:"Verificas identidad antes de abrir y mantienes precauciones.", bad:"Abres sin verificar quién es."},
+
+  // 51-60 Eficiencia energética
+  {q:"Tu factura de electricidad es muy alta.", good:"Analizas tu consumo, cambias hábitos y mejoras eficiencia.", bad:"Pagas sin cuestionar o cambiar hábitos."},
+  {q:"Hay bombillas fundidas.", good:"Las cambias por LED eficientes inmediatamente.", bad:"Las dejas fundidas o usas bombillas ineficientes."},
+  {q:"El aire acondicionado consume mucho.", good:"Lo usas eficientemente, mantienes temperatura razonable y mejoras aislamiento.", bad:"Lo usas sin control sin considerar el consumo."},
+  {q:"Hay corrientes de aire en casa.", good:"Sellas grietas y mejoras aislamiento para eficiencia.", bad:"Ignoras las corrientes y gastas más energía."},
+  {q:"Los electrodomésticos son muy viejos.", good:"Evalúas reemplazarlos por modelos eficientes.", bad:"Los mantienes aunque consuman excesivamente."},
+  {q:"Dejas luces prendidas innecesariamente.", good:"Creas hábito de apagar luces al salir de habitaciones.", bad:"Dejas luces prendidas por toda la casa."},
+  {q:"El calentador de agua consume mucho.", good:"Ajustas temperatura, aíslas tuberías y usas eficientemente.", bad:"Lo usas sin control del consumo."},
+  {q:"Hay aparatos en standby constantemente.", good:"Los desconectas cuando no los usas para ahorrar energía.", bad:"Los dejas conectados consumiendo energía fantasma."},
+  {q:"La casa está mal aislada.", good:"Mejoras aislamiento en ventanas, puertas y paredes.", bad:"Ignoras el aislamiento y gastas más en climatización."},
+  {q:"Usas mucha agua caliente.", good:"Reduces tiempo de ducha y usas agua fría cuando es posible.", bad:"Usas agua caliente sin considerar el costo."},
+
+  // 61-70 Gestión de residuos
+  {q:"Generas mucha basura.", good:"Reduces, reutilizas y reciclas para minimizar residuos.", bad:"Tiras todo sin considerar alternativas."},
+  {q:"Hay comida que se va a vencer.", good:"Planificas menús para usar todo o congelas lo que puedas.", bad:"Dejas que se venza y la tiras."},
+  {q:"Tienes muchos envases reciclables.", good:"Los limpias, separas y llevas a centros de reciclaje.", bad:"Los tiras con la basura común."},
+  {q:"Hay ropa que ya no usas.", good:"La donas, vendes o reciclas en lugar de tirarla.", bad:"La acumulas o la tiras a la basura."},
+  {q:"Generas residuos orgánicos.", good:"Haces compost o los separas para recolección orgánica.", bad:"Los tiras con basura común."},
+  {q:"Tienes electrónicos viejos.", good:"Los llevas a centros de reciclaje especializado.", bad:"Los tiras a la basura común."},
+  {q:"Usas muchos productos desechables.", good:"Cambias a alternativas reutilizables cuando es posible.", bad:"Sigues usando desechables sin considerar alternativas."},
+  {q:"Hay aceite usado de cocina.", good:"Lo recolectas y llevas a centros de reciclaje apropiados.", bad:"Lo tiras por el drenaje contaminando."},
+  {q:"Tienes medicamentos vencidos.", good:"Los llevas a farmacias o centros de recolección especial.", bad:"Los tiras a la basura común."},
+  {q:"Generas muchos residuos de papel.", good:"Usas ambos lados, reciclas y reduces uso cuando es posible.", bad:"Usas papel sin control y lo tiras."},
+
+  // 71-80 Convivencia
+  {q:"Vives con roommates.", good:"Establecen reglas claras de limpieza, gastos y responsabilidades.", bad:"No establecen acuerdos y surgen conflictos."},
+  {q:"Alguien no hace su parte de la limpieza.", good:"Hablas del tema directamente y buscan solución justa.", bad:"Haces todo tú o dejas que se acumule la suciedad."},
+  {q:"Hay desacuerdos sobre la temperatura.", good:"Negocian temperatura cómoda para todos y usan ropa apropiada.", bad:"Cada uno cambia la temperatura sin consultar."},
+  {q:"Los gastos comunes no están claros.", good:"Dividen gastos equitativamente y llevan registro claro.", bad:"Pagan sin orden y surgen conflictos."},
+  {q:"Hay ruido que molesta a otros.", good:"Respetas horarios de silencio y usas audífonos cuando es necesario.", bad:"Haces ruido sin considerar a otros."},
+  {q:"Alguien usa tus cosas sin permiso.", good:"Estableces límites claros y pides que pregunten antes.", bad:"Te molestas sin comunicar tus límites."},
+  {q:"Hay mascotas en casa.", good:"Establecen reglas claras sobre cuidado, limpieza y responsabilidades.", bad:"No definen responsabilidades y surgen problemas."},
+  {q:"Los horarios de todos son diferentes.", good:"Coordinan uso de espacios comunes y respetan horarios de descanso.", bad:"Cada uno hace lo que quiere sin considerar a otros."},
+  {q:"Hay visitas frecuentes.", good:"Establecen reglas sobre visitas y avisan con anticipación.", bad:"Traen visitas sin avisar ni considerar a otros."},
+  {q:"Alguien se va a mudar.", good:"Planifican la transición, dividen responsabilidades y buscan reemplazo.", bad:"Se va sin planificar dejando problemas a otros."},
+
+  // 81-90 Proyectos de mejora
+  {q:"Quieres pintar una habitación.", good:"Planificas colores, compras materiales de calidad y preparas el espacio.", bad:"Empiezas sin planificar y el resultado es deficiente."},
+  {q:"Necesitas reparar algo.", good:"Evalúas si puedes hacerlo tú o necesitas profesional.", bad:"Intentas reparaciones complejas sin conocimiento."},
+  {q:"Quieres remodelar un espacio.", good:"Planificas diseño, presupuesto y cronograma realista.", bad:"Empiezas sin plan y gastas más de lo previsto."},
+  {q:"Hay que cambiar pisos.", good:"Investigas opciones, comparas precios y planificas la instalación.", bad:"Eliges sin investigar y tienes problemas después."},
+  {q:"Quieres mejorar la iluminación.", good:"Planificas qué tipo de luz necesitas en cada espacio.", bad:"Pones luces sin considerar funcionalidad."},
+  {q:"Necesitas más espacio de almacenamiento.", good:"Optimizas espacio existente antes de agregar muebles.", bad:"Compras muebles sin optimizar lo que tienes."},
+  {q:"Quieres hacer un jardín.", good:"Investigas qué plantas funcionan en tu clima y espacio.", bad:"Plantas sin investigar y las plantas mueren."},
+  {q:"Hay que arreglar plomería.", good:"Aprendes reparaciones básicas pero llamas profesional para lo complejo.", bad:"Intentas todo tú y causas más daños."},
+  {q:"Quieres instalar algo nuevo.", good:"Lees instrucciones, tienes herramientas apropiadas y sigues pasos.", bad:"Intentas instalar sin leer instrucciones."},
+  {q:"Necesitas ayuda para un proyecto.", good:"Pides ayuda a tiempo y ofreces reciprocidad.", bad:"Intentas hacer todo solo aunque necesites ayuda."},
+
+  // 91-100 Situaciones especiales
+  {q:"Hay una emergencia en casa.", good:"Mantienes la calma, tienes números de emergencia y sabes dónde están las llaves de paso.", bad:"Entras en pánico sin saber qué hacer."},
+  {q:"Se va la luz por horas.", good:"Tienes linternas, velas y plan para conservar alimentos.", bad:"No tienes preparación para cortes de luz."},
+  {q:"Hay una inundación menor.", good:"Actúas rápido para minimizar daños y secas todo apropiadamente.", bad:"Dejas que el agua cause más daños."},
+  {q:"Tienes que recibir visitas importantes.", good:"Planificas limpieza profunda y preparas la casa con anticipación.", bad:"Limpias apresuradamente el mismo día."},
+  {q:"Te vas de vacaciones por semanas.", good:"Preparas la casa: cortas agua, desconectas aparatos y pides supervisión.", bad:"Te vas sin preparar la casa."},
+  {q:"Hay plagas en casa.", good:"Identificas el tipo de plaga y usas métodos apropiados de control.", bad:"Ignoras el problema hasta que empeora."},
+  {q:"El clima extremo afecta tu casa.", good:"Tomas precauciones preventivas y tienes plan de emergencia.", bad:"No te preparas para condiciones climáticas extremas."},
+  {q:"Hay un olor extraño persistente.", good:"Investigas la fuente y la eliminas apropiadamente.", bad:"Usas ambientadores sin eliminar la causa."},
+  {q:"Tienes que mudarte.", good:"Planificas con anticipación, organizas y empacas sistemáticamente.", bad:"Dejas todo para último momento y es caótico."},
+  {q:"Quieres hacer tu hogar más acogedor.", good:"Haces cambios graduales considerando funcionalidad y estética.", bad:"Compras decoración impulsivamente sin plan."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

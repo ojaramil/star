@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Estrategias de Acomodo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ec4899;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #ec4899cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #ec4899cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(252, 228, 240);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(252, 228, 240);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🔔</span>
+      <span>Manejo Sensorial</span>
+    </span>
+    <h1>🧰 Estrategias de Acomodo</h1>
+    <p>Kit de supervivencia sensorial, espacios seguros y ajustes</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // CATEGORÍA 1: ESTRATEGIAS AUDITIVAS (10 situaciones)
+  {q:"Sabes que el supermercado en hora pico te sobrecarga.", good:"Eliges un horario tranquilo, llevas lista corta y objetos reguladores.", bad:"Vas en hora pico sin preparación y te quedas hasta agotarte."},
+  {q:"Tienes que trabajar en una oficina muy ruidosa.", good:"Usas auriculares con cancelación de ruido o solicitas un espacio más tranquilo.", bad:"Intentas concentrarte sin protección auditiva y te agota el ruido constante."},
+  {q:"En un restaurante, la música está muy alta para ti.", good:"Pides una mesa alejada de los altavoces o usas tapones discretos.", bad:"Te quedas en una mesa ruidosa y no puedes disfrutar la comida ni la conversación."},
+  {q:"Durante una reunión, hay muchas conversaciones simultáneas.", good:"Te posicionas estratégicamente o pides que hablen de uno en uno.", bad:"Intentas seguir todas las conversaciones y te sientes abrumado."},
+  {q:"En el transporte público hay mucho ruido.", good:"Llevas auriculares o tapones y eliges asientos alejados de las puertas.", bad:"Viajas sin protección auditiva y llegas estresado a tu destino."},
+  {q:"Tu vecino hace ruido durante tus horas de descanso.", good:"Usas máquinas de ruido blanco o hablas con el vecino para encontrar una solución.", bad:"Sufres el ruido sin buscar alternativas y afecta tu sueño."},
+  {q:"En una fiesta, la música está demasiado fuerte.", good:"Te alejas de los altavoces o sales al aire libre periódicamente.", bad:"Te quedas cerca de la música fuerte hasta sentirte sobrecargado."},
+  {q:"Durante una clase, hay ruidos de construcción afuera.", good:"Te sientas lejos de las ventanas o usas tapones discretos.", bad:"Intentas concentrarte sin protección y pierdes información importante."},
+  {q:"En el cine, el volumen te resulta excesivo.", good:"Eliges asientos alejados de los altavoces o llevas tapones especiales.", bad:"Sufres el volumen alto y no puedes disfrutar la película."},
+  {q:"Tu lugar de trabajo tiene un sistema de ventilación ruidoso.", good:"Solicitas cambio de ubicación o usas protección auditiva durante tareas que requieren concentración.", bad:"Trabajas con el ruido constante sin buscar soluciones."},
+
+  // CATEGORÍA 2: ESTRATEGIAS VISUALES (10 situaciones)
+  {q:"Las luces fluorescentes de la oficina te molestan.", good:"Solicitas iluminación alternativa o usas una lámpara de escritorio con luz cálida.", bad:"Trabajas bajo luces molestas sin buscar alternativas."},
+  {q:"En un centro comercial, hay demasiados estímulos visuales.", good:"Planificas rutas específicas, usas lentes de sol y tomas descansos visuales.", bad:"Caminas sin rumbo fijo y te sobrecargas con todos los estímulos."},
+  {q:"Durante una presentación, las diapositivas tienen colores muy brillantes.", good:"Te sientas a una distancia cómoda o ajustas el brillo de tu pantalla si es virtual.", bad:"Miras directamente las diapositivas brillantes sin protección."},
+  {q:"En tu habitación, la luz de la calle entra por la ventana.", good:"Instalas cortinas blackout o usas antifaz para dormir mejor.", bad:"Intentas dormir con la luz molesta sin buscar soluciones."},
+  {q:"El monitor de tu computadora te causa fatiga visual.", good:"Ajustas brillo, contraste y usas filtros de luz azul.", bad:"Trabajas con configuraciones que te cansan la vista."},
+  {q:"En un evento, hay luces intermitentes o estroboscópicas.", good:"Te alejas de las luces o sales del área cuando son muy intensas.", bad:"Te quedas expuesto a las luces intermitentes hasta sentirte mal."},
+  {q:"La pantalla de tu teléfono te molesta en la oscuridad.", good:"Activas el modo nocturno y reduces el brillo automáticamente.", bad:"Usas el teléfono con brillo alto en la oscuridad."},
+  {q:"En una tienda, los espejos y superficies reflectantes te distraen.", good:"Evitas mirar directamente los reflejos y te enfocas en tu objetivo de compra.", bad:"Te distraes constantemente con los reflejos y pierdes concentración."},
+  {q:"Durante el manejo, el sol te encandila.", good:"Usas visera, lentes de sol y ajustas tu posición para minimizar el deslumbramiento.", bad:"Manejas encandilado sin protección adecuada."},
+  {q:"En tu espacio de trabajo hay patrones visuales que te distraen.", good:"Reorganizas tu espacio para minimizar patrones distractores o usas divisores visuales.", bad:"Trabajas rodeado de patrones que constantemente captan tu atención."},
+
+  // CATEGORÍA 3: ESTRATEGIAS TÁCTILES (10 situaciones)
+  {q:"La ropa nueva tiene etiquetas que te irritan.", good:"Cortas todas las etiquetas antes de usar la ropa o compras ropa sin etiquetas.", bad:"Usas la ropa con etiquetas que te molestan todo el día."},
+  {q:"Necesitas usar un uniforme de tela que te resulta incómoda.", good:"Buscas alternativas de tela similar o usas ropa interior que cree una barrera cómoda.", bad:"Usas el uniforme incómodo sin buscar adaptaciones."},
+  {q:"En una reunión, tienes que estrechar muchas manos.", good:"Te preparas mentalmente y tienes un plan para lavarte las manos después.", bad:"Evitas completamente el contacto físico y generas incomodidad social."},
+  {q:"El asiento del transporte público tiene una textura desagradable.", good:"Llevas una manta pequeña o cojín para crear una barrera cómoda.", bad:"Viajas incómodo sin buscar alternativas para mejorar la experiencia."},
+  {q:"Tienes que usar guantes para una actividad pero te molestan.", good:"Pruebas diferentes tipos de guantes hasta encontrar unos cómodos.", bad:"Trabajas sin guantes arriesgando tu seguridad por la incomodidad."},
+  {q:"La temperatura del agua en el gimnasio no es de tu agrado.", good:"Te duchas en casa o buscas horarios cuando puedas ajustar la temperatura.", bad:"Te duchas con agua a temperatura incómoda o evitas ducharte."},
+  {q:"Tienes que manipular materiales con texturas que no toleras.", good:"Usas herramientas o guantes especiales para evitar el contacto directo.", bad:"Manipulas los materiales directamente y te sientes muy incómodo."},
+  {q:"La silla de tu oficina tiene una superficie que te molesta.", good:"Usas un cojín o funda que mejore la textura y comodidad.", bad:"Te sientas en la silla incómoda sin buscar mejoras."},
+  {q:"Necesitas aplicarte crema solar pero no te gusta la sensación.", good:"Pruebas diferentes marcas y texturas hasta encontrar una tolerable.", bad:"Evitas la protección solar por la incomodidad de la textura."},
+  {q:"En una actividad grupal tienes que tocar materiales diversos.", good:"Llevas toallitas húmedas y planificas descansos para limpiar tus manos.", bad:"Participas sin preparación y te sientes muy incómodo durante toda la actividad."},
+
+  // CATEGORÍA 4: ESTRATEGIAS OLFATIVAS (10 situaciones)
+  {q:"En el transporte público hay olores fuertes que te molestan.", good:"Llevas un pañuelo con una fragancia suave o te sientas cerca de ventanas.", bad:"Viajas sin protección y te sientes nauseabundo durante el trayecto."},
+  {q:"Tu compañero de trabajo usa perfume muy fuerte.", good:"Hablas diplomáticamente sobre sensibilidades o solicitas mejor ventilación.", bad:"Sufres el olor fuerte sin comunicar tu malestar."},
+  {q:"En un restaurante, los olores de la cocina te abruman.", good:"Pides una mesa alejada de la cocina o eliges restaurantes con mejor ventilación.", bad:"Comes en lugares con olores que te molestan y no disfrutas la comida."},
+  {q:"Los productos de limpieza de tu oficina tienen olores fuertes.", good:"Solicitas productos sin fragancia o te alejas durante la limpieza.", bad:"Trabajas expuesto a olores químicos que te molestan."},
+  {q:"En una tienda de ropa, los ambientadores te resultan excesivos.", good:"Limitas el tiempo en la tienda o respiras por la boca cuando es necesario.", bad:"Permaneces en la tienda hasta completar todas tus compras sin considerar tu malestar."},
+  {q:"Durante una actividad al aire libre, hay olores de humo o barbacoa.", good:"Te posicionas considerando la dirección del viento o llevas una mascarilla.", bad:"Te quedas en el área con humo sin buscar una posición más cómoda."},
+  {q:"En tu hogar, alguien cocina algo que te genera malestar olfativo.", good:"Abres ventanas, usas ventiladores o te alejas temporalmente de la cocina.", bad:"Permaneces en el área sin ventilación sintiendo malestar."},
+  {q:"En un evento social usan velas aromáticas muy intensas.", good:"Te alejas de las velas o solicitas discretamente que reduzcan la intensidad.", bad:"Te quedas cerca de las velas aromáticas hasta sentirte mal."},
+  {q:"Tu nuevo shampoo tiene una fragancia que no toleras.", good:"Cambias inmediatamente a un producto sin fragancia o más suave.", bad:"Continúas usando el producto que te molesta para no desperdiciarlo."},
+  {q:"En el gimnasio hay olores corporales que te afectan.", good:"Eliges horarios con menos gente o usas una mascarilla durante el ejercicio.", bad:"Ejercitas en condiciones que te generan malestar olfativo."},
+
+  // CATEGORÍA 5: ESTRATEGIAS VESTIBULARES Y DE MOVIMIENTO (10 situaciones)
+  {q:"En un ascensor rápido sientes mareo.", good:"Te apoyas en la pared, respiras profundo y evitas mirar los números cambiando.", bad:"Intentas actuar normal mientras te sientes mareado y ansioso."},
+  {q:"Los columpios o juegos mecánicos te generan malestar.", good:"Evitas estos juegos o los usas por períodos muy cortos con descansos.", bad:"Participas en todos los juegos hasta sentirte muy mal."},
+  {q:"Caminar en superficies irregulares te genera ansiedad.", good:"Usas calzado apropiado y caminas más lento prestando atención al terreno.", bad:"Caminas rápido sin precaución en terrenos que te generan inseguridad."},
+  {q:"En un barco o ferry sientes náuseas por el movimiento.", good:"Te posicionas en el centro del barco, miras el horizonte y llevas medicamento si es necesario.", bad:"Te quedas en cualquier lugar del barco sin tomar precauciones."},
+  {q:"Subir escaleras mecánicas te genera vértigo.", good:"Usas las escaleras normales o te apoyas firmemente en el pasamanos.", bad:"Usas escaleras mecánicas sintiendo vértigo sin buscar alternativas."},
+  {q:"Los movimientos bruscos en el auto te marean.", good:"Solicitas que manejen más suave o te sientas adelante mirando hacia el frente.", bad:"Viajas en el asiento trasero leyendo o mirando el teléfono."},
+  {q:"Hacer ejercicios que involucran girar te desorienta.", good:"Modificas los ejercicios o los haces más lentamente con descansos.", bad:"Realizas todos los ejercicios sin modificaciones hasta sentirte mal."},
+  {q:"En espacios muy altos sientes vértigo.", good:"Te alejas de los bordes, te apoyas en superficies sólidas y evitas mirar hacia abajo.", bad:"Intentas actuar normal cerca de alturas que te generan ansiedad."},
+  {q:"Los cambios rápidos de posición te marean.", good:"Te levantas lentamente y te apoyas hasta que pase la sensación.", bad:"Te levantas rápido ignorando las señales de mareo."},
+  {q:"En un parque de diversiones, las montañas rusas te atraen pero te marean.", good:"Eliges atracciones más suaves o tomas descansos largos entre juegos.", bad:"Subes a todas las atracciones seguidas hasta sentirte muy mal."},
+
+  // CATEGORÍA 6: ESTRATEGIAS PARA ESPACIOS PÚBLICOS (10 situaciones)
+  {q:"El centro comercial en fin de semana está muy concurrido.", good:"Visitas en horarios menos concurridos o planificas rutas específicas con descansos.", bad:"Vas en horario pico sin planificación y te sientes abrumado."},
+  {q:"En el cine, necesitas un asiento específico para estar cómodo.", good:"Compras boletos con anticipación eligiendo asientos que te funcionen mejor.", bad:"Llegas sin reserva y aceptas cualquier asiento disponible."},
+  {q:"En una biblioteca, hay demasiada actividad para concentrarte.", good:"Buscas áreas más tranquilas o usas auriculares con cancelación de ruido.", bad:"Intentas estudiar en el área más ruidosa sin buscar alternativas."},
+  {q:"El supermercado tiene música y anuncios constantes.", good:"Compras en horarios más tranquilos o usas auriculares mientras haces las compras.", bad:"Haces compras largas expuesto a todos los estímulos auditivos."},
+  {q:"En un evento deportivo, el ruido de la multitud te abruma.", good:"Llevas protección auditiva o eliges asientos alejados de las secciones más ruidosas.", bad:"Te sientas en cualquier lugar sin protección auditiva."},
+  {q:"En una feria o festival hay demasiados estímulos sensoriales.", good:"Planificas visitas cortas con descansos frecuentes en áreas más tranquilas.", bad:"Intentas ver todo sin descansos hasta sentirte completamente sobrecargado."},
+  {q:"En el aeropuerto hay mucho ruido y actividad.", good:"Usas auriculares, buscas áreas más tranquilas y planificas tiempo extra para descansos.", bad:"Esperas en las áreas más concurridas sin protección sensorial."},
+  {q:"En una conferencia, el salón tiene iluminación y acústica problemáticas.", good:"Te sientas estratégicamente y llevas herramientas de acomodo como auriculares o lentes.", bad:"Te sientas en cualquier lugar sin considerar tus necesidades sensoriales."},
+  {q:"En un restaurante buffet hay mucha actividad y ruido.", good:"Visitas en horarios menos concurridos o eliges mesas alejadas del área de servicio.", bad:"Comes en horario pico sin considerar el nivel de estimulación del ambiente."},
+  {q:"En una estación de tren hay anuncios constantes y multitudes.", good:"Usas auriculares y te posicionas en áreas menos transitadas mientras esperas.", bad:"Esperas en el área más concurrida sin protección auditiva."},
+
+  // CATEGORÍA 7: ESTRATEGIAS PARA EL HOGAR (10 situaciones)
+  {q:"La iluminación de tu habitación no es la adecuada para relajarte.", good:"Instalas luces regulables o usas lámparas con diferentes intensidades.", bad:"Usas la misma iluminación intensa para todas las actividades."},
+  {q:"Los ruidos de la calle interrumpen tu sueño.", good:"Usas tapones para dormir, máquina de ruido blanco o mejoras el aislamiento.", bad:"Intentas dormir con todos los ruidos externos sin protección."},
+  {q:"La textura de tus sábanas no te resulta cómoda.", good:"Cambias a sábanas de material que te resulte agradable al tacto.", bad:"Duermes en sábanas incómodas porque 'no es tan importante'."},
+  {q:"El olor de productos de limpieza en casa te molesta.", good:"Cambias a productos sin fragancia o ventila bien después de limpiar.", bad:"Usas productos con olores fuertes sin considerar alternativas."},
+  {q:"La temperatura de tu habitación no es la ideal para dormir.", good:"Ajustas la calefacción/aire acondicionado o usas ropa de cama apropiada.", bad:"Duermes con temperatura incómoda sin hacer ajustes."},
+  {q:"Los electrodomésticos de tu cocina hacen ruidos que te molestan.", good:"Los usas en horarios específicos o buscas modelos más silenciosos.", bad:"Los usas sin considerar el impacto del ruido en tu bienestar."},
+  {q:"La distribución de tu espacio de trabajo en casa no es funcional.", good:"Reorganizas el espacio considerando tus necesidades sensoriales y de concentración.", bad:"Trabajas en un espacio que no favorece tu productividad."},
+  {q:"Las cortinas de tu habitación no bloquean suficiente luz.", good:"Instalas cortinas blackout o usas antifaz para mejorar la calidad del sueño.", bad:"Duermes con luz molesta sin buscar soluciones."},
+  {q:"El piso de tu casa tiene una textura que no te gusta caminar descalzo.", good:"Usas pantuflas cómodas o alfombras en las áreas donde más caminas.", bad:"Caminas descalzo en superficies que te resultan desagradables."},
+  {q:"Los olores de cocina se quedan en tu casa por mucho tiempo.", good:"Mejoras la ventilación o usas extractores más eficientes.", bad:"Vives con olores persistentes sin buscar mejoras en la ventilación."},
+
+  // CATEGORÍA 8: ESTRATEGIAS PARA EL TRABAJO (10 situaciones)
+  {q:"Tu escritorio está ubicado en un área muy transitada.", good:"Solicitas cambio de ubicación o usas divisores para crear más privacidad.", bad:"Trabajas constantemente distraído por el tráfico de personas."},
+  {q:"La silla de tu oficina no es ergonómicamente adecuada.", good:"Solicitas una silla mejor o usas cojines y soportes para mejorar la comodidad.", bad:"Trabajas en una silla incómoda que afecta tu postura y concentración."},
+  {q:"En tu oficina hay interrupciones constantes.", good:"Estableces horarios específicos para disponibilidad o usas señales visuales de 'no molestar'.", bad:"Permites interrupciones constantes sin establecer límites."},
+  {q:"La temperatura de tu oficina no es la adecuada.", good:"Usas ropa en capas o solicitas ajustes de temperatura para tu área.", bad:"Trabajas con temperatura incómoda sin buscar soluciones."},
+  {q:"Los compañeros de trabajo hacen ruido que te distrae.", good:"Usas auriculares con cancelación de ruido o solicitas un espacio más tranquilo.", bad:"Intentas concentrarte con distracciones auditivas constantes."},
+  {q:"Tu monitor está mal posicionado y te causa fatiga visual.", good:"Ajustas la altura, distancia y ángulo del monitor para una posición ergonómica.", bad:"Trabajas con el monitor mal posicionado forzando tu postura."},
+  {q:"En tu trabajo usan productos químicos con olores fuertes.", good:"Solicitas mejor ventilación o usas mascarilla cuando sea necesario.", bad:"Trabajas expuesto a olores químicos sin protección."},
+  {q:"Las reuniones en salas sin ventanas te generan claustrofobia.", good:"Solicitas reuniones en espacios con ventanas o tomas descansos frecuentes.", bad:"Participas en reuniones largas en espacios cerrados sin descansos."},
+  {q:"Tu horario de trabajo no se alinea con tus ritmos naturales.", good:"Solicitas flexibilidad horaria o ajustas tus tareas más demandantes a tus horas de mayor energía.", bad:"Trabajas en contra de tus ritmos naturales sin buscar ajustes."},
+  {q:"En tu oficina hay demasiada estimulación visual.", good:"Organizas tu espacio para minimizar distracciones visuales o usas divisores.", bad:"Trabajas rodeado de estímulos visuales que constantemente captan tu atención."},
+
+  // CATEGORÍA 9: ESTRATEGIAS SOCIALES (10 situaciones)
+  {q:"En reuniones sociales, el nivel de ruido te abruma.", good:"Te posicionas en áreas más tranquilas o tomas descansos en espacios silenciosos.", bad:"Te quedas en el área más ruidosa hasta sentirte completamente agotado."},
+  {q:"Los abrazos y contacto físico en saludos te incomodan.", good:"Ofreces alternativas como chocar puños o explicar discretamente tu preferencia.", bad:"Evitas completamente las situaciones sociales por el contacto físico."},
+  {q:"En fiestas, las luces intermitentes te molestan.", good:"Te alejas del área de baile o usas lentes de sol cuando sea apropiado.", bad:"Te quedas en el área con luces molestas hasta sentirte mal."},
+  {q:"Durante conversaciones grupales, te sientes abrumado por múltiples voces.", good:"Te posicionas estratégicamente o sugieres conversaciones más pequeñas.", bad:"Intentas seguir todas las conversaciones simultáneas hasta agotarte."},
+  {q:"En restaurantes, prefieres ciertos tipos de asientos.", good:"Haces reservas especificando tus preferencias o llegas temprano para elegir mesa.", bad:"Aceptas cualquier mesa sin considerar tu comodidad sensorial."},
+  {q:"Los perfumes fuertes en eventos sociales te molestan.", good:"Te posicionas considerando la ventilación o tomas descansos al aire libre.", bad:"Permaneces en espacios con fragancias fuertes sin buscar alivio."},
+  {q:"En actividades grupales, ciertos materiales te resultan desagradables.", good:"Llevas guantes o herramientas alternativas para participar cómodamente.", bad:"Evitas participar completamente por la incomodidad con los materiales."},
+  {q:"Durante eventos largos, necesitas descansos sensoriales.", good:"Planificas descansos regulares en áreas tranquilas o al aire libre.", bad:"Intentas participar en todo el evento sin descansos hasta agotarte."},
+  {q:"En celebraciones, la música está muy alta para conversar.", good:"Buscas espacios más tranquilos para conversar o sugieres bajar el volumen.", bad:"Intentas conversar gritando sobre la música fuerte."},
+  {q:"Los juegos o actividades grupales involucran estímulos que no toleras.", good:"Propones alternativas o participas de manera modificada según tus necesidades.", bad:"Evitas completamente las actividades sociales por los estímulos."},
+
+  // CATEGORÍA 10: ESTRATEGIAS DE AUTORREGULACIÓN (10 situaciones)
+  {q:"Sientes que te estás sobrecargando sensorialmente.", good:"Reconoces las señales tempranas y tomas un descanso en un ambiente tranquilo.", bad:"Ignoras las señales y continúas hasta llegar al punto de colapso."},
+  {q:"Después de un día estimulante, necesitas descompresión.", good:"Planificas tiempo en un ambiente controlado con estímulos mínimos.", bad:"Continúas con actividades estimulantes sin tiempo de recuperación."},
+  {q:"Notas que cierto ambiente te está afectando negativamente.", good:"Te alejas del ambiente problemático y buscas un espacio más cómodo.", bad:"Permaneces en el ambiente molesto hasta que afecte significativamente tu bienestar."},
+  {q:"Tienes que enfrentar una situación sensorialmente desafiante.", good:"Te preparas con herramientas de acomodo y planificas estrategias de manejo.", bad:"Enfrentas la situación sin preparación ni herramientas de apoyo."},
+  {q:"Sientes ansiedad por estímulos sensoriales específicos.", good:"Practicas técnicas de respiración y usas herramientas de regulación sensorial.", bad:"Intentas ignorar la ansiedad sin usar estrategias de manejo."},
+  {q:"Necesitas comunicar tus necesidades sensoriales a otros.", good:"Explicas claramente tus necesidades y propones soluciones colaborativas.", bad:"Sufres en silencio sin comunicar lo que necesitas."},
+  {q:"Tu nivel de tolerancia sensorial está bajo por estrés.", good:"Ajustas tus actividades y ambientes considerando tu estado actual.", bad:"Mantienes la misma exposición sensorial sin considerar tu estado de estrés."},
+  {q:"Experimentas sobrecarga después de múltiples estímulos.", good:"Implementas una rutina de descompresión con actividades calmantes.", bad:"Intentas continuar con actividades normales sin procesar la sobrecarga."},
+  {q:"Necesitas mantener tu regulación sensorial durante todo el día.", good:"Planificas descansos regulares y llevas herramientas de autorregulación.", bad:"Esperas hasta el final del día para atender tus necesidades sensoriales."},
+  {q:"Te das cuenta de que ciertos patrones sensoriales te desregulan.", good:"Identificas los patrones problemáticos y desarrollas estrategias específicas para manejarlos.", bad:"Continúas exponiéndote a patrones que sabes que te afectan negativamente."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

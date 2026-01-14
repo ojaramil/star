@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Inhibición y Autocontrol</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #10b981;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #10b981cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #10b981cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(219, 245, 236);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(219, 245, 236);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🧠</span>
+      <span>Habilidades Ejecutivas</span>
+    </span>
+    <h1>⏸️ Inhibición y Autocontrol</h1>
+    <p>Pensar antes de actuar, resistir impulsos y manejar frustración</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Control de impulsos verbales
+  {q:"Recibes un comentario brusco en redes sobre tu trabajo.", good:"Respiras, esperas antes de responder y decides si contestar con tono calmado.", bad:"Respondes de inmediato con un mensaje impulsivo."},
+  {q:"Alguien dice algo que te molesta en una reunión.", good:"Respiras, procesas tu emoción y respondes con calma.", bad:"Interrumpes inmediatamente con un comentario defensivo."},
+  {q:"Tienes ganas de contar un secreto que te contaron.", good:"Recuerdas tu compromiso de confidencialidad y te callas.", bad:"Lo cuentas porque no puedes guardártelo."},
+  {q:"Quieres corregir a alguien que está equivocado.", good:"Evalúas si es necesario corregir y cómo hacerlo con tacto.", bad:"Lo corriges inmediatamente sin considerar el contexto."},
+  {q:"Alguien te interrumpe mientras hablas.", good:"Pausas, dejas que termine y luego retomas tu punto.", bad:"Subes la voz y hablas por encima de la persona."},
+  {q:"Tienes un chisme jugoso que quieres compartir.", good:"Decides no participar en chismes y cambias de tema.", bad:"Compartes el chisme sin pensar en las consecuencias."},
+  {q:"Quieres decir 'te lo dije' a alguien.", good:"Te contienes y ofreces apoyo en lugar de criticar.", bad:"Se lo dices satisfecho aunque no ayude."},
+  {q:"Alguien hace una pregunta y sabes la respuesta.", good:"Esperas a ver si otros responden antes de intervenir.", bad:"Respondes inmediatamente sin dar espacio a otros."},
+  {q:"Estás en desacuerdo con lo que alguien dice.", good:"Esperas a que termine, procesas y respondes respetuosamente.", bad:"Interrumpes para expresar tu desacuerdo."},
+  {q:"Quieres quejarte de algo.", good:"Evalúas si la queja es constructiva antes de expresarla.", bad:"Te quejas impulsivamente sin filtro."},
+
+  // 11-20 Control de impulsos emocionales
+  {q:"Sientes ganas de llorar en público.", good:"Respiras profundo, te excusas si es necesario y buscas un lugar privado.", bad:"Lloras sin control en medio de la situación."},
+  {q:"Alguien te hace enojar intensamente.", good:"Reconoces tu enojo, respiras y te alejas antes de reaccionar.", bad:"Explotas inmediatamente sin control."},
+  {q:"Sientes ansiedad antes de una presentación.", good:"Usas técnicas de respiración y te preparas mentalmente.", bad:"Dejas que la ansiedad te paralice o te haga huir."},
+  {q:"Quieres reírte en un momento inapropiado.", good:"Te contienes, respiras y mantienes la compostura.", bad:"Te ríes sin poder controlarte."},
+  {q:"Sientes frustración creciendo.", good:"Reconoces la señal y tomas un descanso antes de explotar.", bad:"Sigues hasta que explotas con todo."},
+  {q:"Alguien te provoca intencionalmente.", good:"Reconoces la provocación y eliges no reaccionar.", bad:"Caes en la provocación y reaccionas como esperaban."},
+  {q:"Sientes celos de alguien.", good:"Reconoces el sentimiento, lo procesas y no actúas desde ahí.", bad:"Actúas desde los celos sin reconocerlos."},
+  {q:"Quieres vengarte de alguien que te lastimó.", good:"Procesas el dolor sin actuar impulsivamente en venganza.", bad:"Actúas para vengarte sin pensar en consecuencias."},
+  {q:"Sientes miedo intenso.", good:"Reconoces el miedo, evalúas si es real y actúas racionalmente.", bad:"Dejas que el miedo controle tus acciones."},
+  {q:"Alguien te hace sentir avergonzado.", good:"Respiras, mantienes la compostura y procesas después.", bad:"Reaccionas defensivamente desde la vergüenza."},
+
+  // 21-30 Control de impulsos de compra
+  {q:"Ves algo que quieres comprar impulsivamente.", good:"Esperas 24 horas antes de decidir si realmente lo necesitas.", bad:"Lo compras inmediatamente sin pensar."},
+  {q:"Hay una oferta limitada que te tienta.", good:"Evalúas si realmente lo necesitas más allá de la oferta.", bad:"Compras solo porque está en oferta."},
+  {q:"Todos tienen algo nuevo que tú quieres.", good:"Resistes la presión social y evalúas tu necesidad real.", bad:"Compras para no quedarte atrás."},
+  {q:"Tienes dinero extra disponible.", good:"Consideras tus prioridades financieras antes de gastar.", bad:"Gastas todo el dinero extra impulsivamente."},
+  {q:"Ves publicidad de algo atractivo.", good:"Reconoces la manipulación publicitaria y evalúas objetivamente.", bad:"Te dejas llevar por la publicidad y compras."},
+  {q:"Estás aburrido y quieres comprar algo.", good:"Reconoces que es aburrimiento, no necesidad, y haces otra cosa.", bad:"Compras cosas online para entretenerte."},
+  {q:"Alguien te presiona para comprar algo.", good:"Mantienes tu decisión sin dejarte presionar.", bad:"Compras por presión aunque no quieras."},
+  {q:"Encuentras algo que coleccionas.", good:"Evalúas si cabe en tu presupuesto y espacio antes de comprar.", bad:"Lo compras automáticamente porque coleccionas eso."},
+  {q:"Estás emocionalmente vulnerable y quieres comprar.", good:"Reconoces que es compra emocional y esperas a estar mejor.", bad:"Compras para sentirte mejor temporalmente."},
+  {q:"Hay una venta masiva.", good:"Solo compras lo que tenías planeado comprar.", bad:"Compras muchas cosas solo porque están baratas."},
+
+  // 31-40 Control de impulsos alimenticios
+  {q:"Ves tu comida favorita poco saludable.", good:"Evalúas si cabe en tu plan alimenticio y comes una porción razonable.", bad:"Comes sin control hasta sentirte mal."},
+  {q:"Estás estresado y quieres comer.", good:"Reconoces que es hambre emocional y usas otra estrategia.", bad:"Comes compulsivamente para manejar el estrés."},
+  {q:"Alguien ofrece comida que no planeabas comer.", good:"Agradeces y declinas o aceptas una porción pequeña.", bad:"Comes todo lo que ofrecen sin pensar."},
+  {q:"Tienes antojos intensos.", good:"Esperas 20 minutos, tomas agua y evalúas si persiste.", bad:"Satisfaces el antojo inmediatamente."},
+  {q:"Hay comida gratis disponible.", good:"Tomas solo si tienes hambre y es apropiado.", bad:"Comes solo porque es gratis aunque no tengas hambre."},
+  {q:"Estás aburrido y piensas en comer.", good:"Reconoces que es aburrimiento y haces otra actividad.", bad:"Comes por aburrimiento sin hambre real."},
+  {q:"Ves publicidad de comida.", good:"Reconoces la manipulación y evalúas tu hambre real.", bad:"Ordenas comida inmediatamente por la publicidad."},
+  {q:"Alguien come algo delicioso frente a ti.", good:"Resistes la tentación si no era tu plan.", bad:"Pides lo mismo aunque no lo habías planeado."},
+  {q:"Estás en un buffet.", good:"Sirves porciones razonables y comes conscientemente.", bad:"Te sirves de todo sin control."},
+  {q:"Tienes comida chatarra en casa.", good:"La guardas para ocasiones específicas y te controlas.", bad:"La comes toda en una sentada."},
+
+  // 41-50 Control de impulsos tecnológicos
+  {q:"Recibes una notificación en tu teléfono.", good:"Terminas lo que estás haciendo antes de revisar.", bad:"Revisas inmediatamente interrumpiendo todo."},
+  {q:"Quieres revisar redes sociales durante el trabajo.", good:"Esperas a tu descanso programado.", bad:"Revisas constantemente perdiendo productividad."},
+  {q:"Alguien te envía un mensaje.", good:"Respondes en un momento apropiado, no inmediatamente.", bad:"Dejas todo para responder al instante."},
+  {q:"Quieres ver 'un episodio más' tarde en la noche.", good:"Respetas tu hora de dormir y lo dejas para mañana.", bad:"Ves varios episodios más y no duermes."},
+  {q:"Estás en una conversación pero quieres revisar tu teléfono.", good:"Mantienes atención en la conversación.", bad:"Revisas el teléfono mientras te hablan."},
+  {q:"Recibes un email que puede esperar.", good:"Lo dejas para tu horario de revisar emails.", bad:"Lo abres y respondes inmediatamente."},
+  {q:"Quieres comprar algo online a medianoche.", good:"Guardas el carrito y decides en la mañana.", bad:"Compras impulsivamente de madrugada."},
+  {q:"Ves contenido interesante pero debes trabajar.", good:"Lo guardas para después y continúas trabajando.", bad:"Te pierdes en el contenido por horas."},
+  {q:"Quieres comentar algo controversial online.", good:"Respiras, reflexionas y decides si vale la pena.", bad:"Comentas impulsivamente iniciando conflictos."},
+  {q:"Tu teléfono está cerca mientras estudias.", good:"Lo pones en modo avión o en otra habitación.", bad:"Lo revisas cada pocos minutos."},
+
+  // 51-60 Control en situaciones sociales
+  {q:"Alguien cuenta una historia y quieres contar la tuya.", good:"Escuchas completamente antes de compartir tu experiencia.", bad:"Interrumpes para contar tu historia."},
+  {q:"Quieres irte de una reunión social.", good:"Esperas un momento apropiado y te despides cortésmente.", bad:"Te vas abruptamente sin despedirte."},
+  {q:"Alguien dice algo incorrecto.", good:"Evalúas si es importante corregir y cómo hacerlo con tacto.", bad:"Lo corriges públicamente sin consideración."},
+  {q:"Quieres dominar la conversación.", good:"Te contienes y das espacio a otros para hablar.", bad:"Hablas constantemente sin dejar participar a otros."},
+  {q:"Alguien te cae mal en una reunión.", good:"Mantienes la cortesía profesional a pesar de tus sentimientos.", bad:"Muestras tu antipatía abiertamente."},
+  {q:"Quieres revelar información privada de alguien.", good:"Respetas la privacidad y te callas.", bad:"Compartes la información sin permiso."},
+  {q:"Alguien te provoca en público.", good:"Mantienes la calma y no caes en la provocación.", bad:"Reaccionas creando una escena."},
+  {q:"Quieres criticar a alguien frente a otros.", good:"Guardas el feedback para un momento privado.", bad:"Criticas públicamente sin consideración."},
+  {q:"Sientes atracción por alguien comprometido.", good:"Reconoces el sentimiento pero no actúas sobre él.", bad:"Actúas sobre la atracción sin considerar consecuencias."},
+  {q:"Quieres abandonar una conversación aburrida.", good:"Encuentras una forma cortés de terminar la conversación.", bad:"Te vas o te desconectas obviamente."},
+
+  // 61-70 Control de impulsos físicos
+  {q:"Quieres rascarte en un lugar inapropiado.", good:"Esperas a estar en privado o lo haces discretamente.", bad:"Te rascas sin importar dónde estás."},
+  {q:"Sientes ganas de bostezar en una reunión.", good:"Intentas contenerlo o lo haces discretamente.", bad:"Bostezas abiertamente sin cubrirte."},
+  {q:"Quieres moverte constantemente.", good:"Usas estrategias discretas como mover los pies bajo la mesa.", bad:"Te mueves obviamente distrayendo a todos."},
+  {q:"Tienes ganas de ir al baño pero estás en medio de algo.", good:"Esperas una pausa apropiada para excusarte.", bad:"Te levantas abruptamente interrumpiendo."},
+  {q:"Quieres tocar algo que no debes.", good:"Mantienes tus manos quietas o en tus bolsillos.", bad:"Tocas todo sin control."},
+  {q:"Sientes picazón durante una presentación.", good:"La ignoras o la atiendes muy discretamente.", bad:"Te rascas obviamente distrayendo a todos."},
+  {q:"Quieres estirarte ruidosamente.", good:"Esperas un momento apropiado o lo haces silenciosamente.", bad:"Te estiras con ruidos en medio de la actividad."},
+  {q:"Tienes hipo en un momento silencioso.", good:"Intentas controlarlo o te excusas discretamente.", bad:"No haces nada para controlarlo."},
+  {q:"Quieres quitarte los zapatos incómodos.", good:"Esperas a estar en un lugar apropiado.", bad:"Te los quitas en cualquier lugar público."},
+  {q:"Sientes necesidad de hacer ruido con algo.", good:"Te contienes o encuentras una forma silenciosa de calmarte.", bad:"Haces ruido constantemente molestando a otros."},
+
+  // 71-80 Control en situaciones de estrés
+  {q:"Estás muy estresado y quieres gritar.", good:"Usas técnicas de respiración o te excusas para calmarte.", bad:"Gritas sin control afectando a otros."},
+  {q:"Quieres renunciar impulsivamente.", good:"Respiras, procesas y tomas la decisión con calma.", bad:"Renuncias en el momento sin pensar."},
+  {q:"Sientes pánico y quieres huir.", good:"Usas técnicas de grounding y te quedas manejando la situación.", bad:"Huyes sin explicación."},
+  {q:"Estás abrumado y quieres abandonar todo.", good:"Tomas un descanso pero no abandonas.", bad:"Dejas todo sin terminar nada."},
+  {q:"Quieres enviar un mensaje enojado.", good:"Escribes el mensaje pero esperas antes de enviarlo.", bad:"Envías el mensaje inmediatamente."},
+  {q:"Sientes que vas a explotar.", good:"Te excusas, te alejas y usas estrategias de regulación.", bad:"Explotas en el momento y lugar."},
+  {q:"Quieres tomar una decisión drástica.", good:"Esperas 24-48 horas antes de decidir.", bad:"Tomas la decisión drástica impulsivamente."},
+  {q:"Estás frustrado con alguien.", good:"Procesas tu frustración antes de hablar con la persona.", bad:"Confrontas inmediatamente desde la frustración."},
+  {q:"Quieres romper algo por frustración.", good:"Usas alternativas seguras como almohada o ejercicio.", bad:"Rompes cosas sin control."},
+  {q:"Sientes que no puedes más.", good:"Pides ayuda o tomas un descanso necesario.", bad:"Sigues hasta colapsar completamente."},
+
+  // 81-90 Control de hábitos
+  {q:"Quieres morderte las uñas.", good:"Usas una estrategia alternativa como pelota de estrés.", bad:"Te muerdes las uñas sin control."},
+  {q:"Tienes ganas de fumar/vapear.", good:"Usas estrategias de reemplazo y esperas que pase el impulso.", bad:"Fumas inmediatamente sin resistir."},
+  {q:"Quieres revisar tu ex en redes sociales.", good:"Reconoces el impulso y haces otra actividad.", bad:"Revisas obsesivamente sus redes."},
+  {q:"Sientes ganas de procrastinar.", good:"Usas la regla de 5 minutos y empiezas la tarea.", bad:"Procrastinas sin resistencia."},
+  {q:"Quieres quedarte en cama todo el día.", good:"Te levantas aunque no quieras y sigues tu rutina.", bad:"Te quedas en cama sin control."},
+  {q:"Tienes ganas de beber alcohol.", good:"Evalúas si es apropiado y te controlas en la cantidad.", bad:"Bebes sin control ni consideración."},
+  {q:"Quieres gastar dinero que no tienes.", good:"Revisas tu presupuesto y te contienes.", bad:"Gastas con tarjeta sin pensar en consecuencias."},
+  {q:"Sientes ganas de saltarte tu rutina.", good:"Mantienes al menos lo esencial de tu rutina.", bad:"Abandonas toda tu rutina por un impulso."},
+  {q:"Quieres comer azúcar constantemente.", good:"Estableces límites y te apegas a ellos.", bad:"Comes azúcar sin control todo el día."},
+  {q:"Tienes ganas de quedarte despierto toda la noche.", good:"Respetas tu hora de dormir por tu salud.", bad:"Te quedas despierto sin control."},
+
+  // 91-100 Autocontrol avanzado
+  {q:"Quieres decir algo hiriente en una discusión.", good:"Respiras, reconoces el impulso y eliges palabras constructivas.", bad:"Dices lo más hiriente que se te ocurre."},
+  {q:"Sientes impulso de hacer algo peligroso.", good:"Reconoces el impulso, evalúas riesgos y no actúas.", bad:"Actúas impulsivamente sin considerar peligros."},
+  {q:"Quieres sabotear tu propio progreso.", good:"Reconoces el autosabotaje y eliges apoyarte.", bad:"Te saboteas sin darte cuenta."},
+  {q:"Tienes impulso de contactar a alguien tóxico.", good:"Reconoces el patrón y te contienes.", bad:"Contactas a la persona repitiendo el ciclo."},
+  {q:"Quieres rendirte cuando estás cerca de lograrlo.", good:"Reconoces que es el momento más difícil y persistes.", bad:"Te rindes justo antes de lograrlo."},
+  {q:"Sientes impulso de mentir para evitar consecuencias.", good:"Eliges la honestidad a pesar del impulso.", bad:"Mientes impulsivamente."},
+  {q:"Quieres hacer trampa porque nadie te ve.", good:"Mantienes tu integridad sin importar quién te vea.", bad:"Haces trampa porque puedes."},
+  {q:"Tienes impulso de tomar algo que no es tuyo.", good:"Reconoces el impulso y respetas la propiedad ajena.", bad:"Tomas lo que no es tuyo."},
+  {q:"Quieres romper una promesa importante.", good:"Honras tu compromiso a pesar del impulso.", bad:"Rompes la promesa impulsivamente."},
+  {q:"Sientes impulso de actuar contra tus valores.", good:"Reconoces el conflicto y actúas según tus valores.", bad:"Actúas impulsivamente contra lo que crees."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

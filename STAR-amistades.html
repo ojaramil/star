@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Construcción de Amistades</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #3b82f6;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #3b82f6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #3b82f6cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(226, 236, 254);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(226, 236, 254);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>👥</span>
+      <span>Habilidades Sociales</span>
+    </span>
+    <h1>🤝 Construcción de Amistades</h1>
+    <p>Identificar intereses compartidos, mantener contacto y resolver conflictos</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Inicio de amistades
+  {q:"Una conocida te escribe para saber si quieres estudiar juntos el fin de semana.", good:"Respondes proponiendo horario, preguntas qué temas revisar y confirmas cómo apoyarse mutuamente.", bad:"Contestás con un simple 'vale' y no vuelves a escribir hasta el día anterior."},
+  {q:"Un compañero de clase siempre se sienta cerca de ti.", good:"Inicias una conversación casual, preguntas sobre sus intereses y muestras apertura.", bad:"Lo ignoras completamente y cambias de lugar."},
+  {q:"Alguien te invita a unirte a su grupo de almuerzo.", good:"Aceptas con amabilidad, te presentas al grupo y participas en la conversación.", bad:"Dices que sí pero te quedas en silencio mirando tu teléfono."},
+  {q:"Un vecino nuevo te saluda en el ascensor.", good:"Devuelves el saludo, te presentas brevemente y muestras disposición a conversar.", bad:"Respondes con un gesto mínimo y evitas el contacto visual."},
+  {q:"Alguien comenta que le gusta lo mismo que a ti.", good:"Expresas tu entusiasmo, compartes tu experiencia y propones seguir hablando del tema.", bad:"Dices 'ah, qué bien' y cambias de tema inmediatamente."},
+  {q:"Te agregan a un grupo de WhatsApp de tu edificio.", good:"Te presentas brevemente, lees las normas del grupo y participas cuando es relevante.", bad:"Silencias el grupo y nunca lees ni participas."},
+  {q:"Un compañero te pregunta si quieres ir al cine.", good:"Respondes con claridad, propones opciones de películas y confirmas los detalles.", bad:"Dices 'tal vez' y nunca confirmas ni cancelas."},
+  {q:"Alguien te pide tu número para coordinar un trabajo grupal.", good:"Lo compartes, guardas su contacto y envías un mensaje para confirmar.", bad:"Das un número equivocado o dices que prefieres comunicarte por email."},
+  {q:"Te invitan a una fiesta de cumpleaños de alguien que apenas conoces.", good:"Agradeces la invitación, confirmas asistencia y preguntas si puedes llevar algo.", bad:"Ignoras la invitación o llegas sin avisar."},
+  {q:"Un compañero te pregunta sobre tu fin de semana.", good:"Compartes algo breve e interesante, luego preguntas sobre el suyo.", bad:"Respondes con monosílabos y no muestras interés en su vida."},
+
+  // 11-20 Mantenimiento de amistades
+  {q:"Tu amigo te escribe después de dos semanas sin hablar.", good:"Respondes con calidez, preguntas cómo ha estado y propones ponerse al día.", bad:"Respondes días después con un mensaje frío."},
+  {q:"Recuerdas el cumpleaños de un amigo.", good:"Le envías un mensaje sincero, una llamada o un pequeño detalle.", bad:"No dices nada porque no sabes qué decir."},
+  {q:"Un amigo comparte una buena noticia contigo.", good:"Celebras su logro genuinamente, haces preguntas y muestras entusiasmo.", bad:"Cambias el tema para hablar de ti o minimizas su logro."},
+  {q:"Tu amigo cancela planes a último momento.", good:"Muestras comprensión, preguntas si está bien y propones reagendar.", bad:"Te molestas, lo ignoras por días y no respondes sus mensajes."},
+  {q:"Hace tiempo que no ves a un amigo cercano.", good:"Tomas la iniciativa, propones una fecha específica para reunirse y confirmas.", bad:"Esperas a que él te busque y te quejas de que no te llama."},
+  {q:"Tu amigo está pasando por un momento difícil.", good:"Le ofreces tu apoyo, escuchas sin juzgar y preguntas cómo puedes ayudar.", bad:"Evitas el tema porque no sabes qué decir."},
+  {q:"Un amigo te pide un favor que puedes hacer.", good:"Aceptas con buena actitud, cumples lo prometido y no esperas nada a cambio.", bad:"Aceptas de mala gana y se lo recuerdas constantemente."},
+  {q:"Tu amigo te presenta a sus otros amigos.", good:"Te muestras amigable, haces preguntas para conocerlos y te integras al grupo.", bad:"Te quedas callado y esperas que tu amigo te incluya en todo."},
+  {q:"Tienes un desacuerdo con un amigo.", good:"Hablas del tema con calma, escuchas su perspectiva y buscas una solución.", bad:"Dejas de hablarle sin explicar qué pasó."},
+  {q:"Tu amigo te cuenta algo personal y confidencial.", good:"Escuchas con atención, guardas el secreto y agradeces su confianza.", bad:"Se lo cuentas a otros porque te parece interesante."},
+
+  // 21-30 Profundización de amistades
+  {q:"Un amigo te invita a conocer a su familia.", good:"Aceptas con respeto, te comportas apropiadamente y agradeces la invitación.", bad:"Rechazas porque te da ansiedad o actúas de forma inapropiada."},
+  {q:"Tu amigo te confía un problema serio.", good:"Escuchas sin interrumpir, validas sus emociones y ofreces apoyo concreto.", bad:"Le das consejos no solicitados o minimizas su problema."},
+  {q:"Quieres profundizar una amistad superficial.", good:"Invitas a la persona a una actividad específica, muestras interés genuino y das seguimiento.", bad:"Esperas que la otra persona tome toda la iniciativa."},
+  {q:"Tu amigo te pide tu opinión honesta sobre algo importante.", good:"Eres honesto pero amable, consideras sus sentimientos y ofreces tu perspectiva.", bad:"Le dices lo que quiere oír o eres brutalmente honesto sin tacto."},
+  {q:"Un amigo te invita a un viaje juntos.", good:"Evalúas la propuesta, hablas de expectativas, presupuesto y logística claramente.", bad:"Aceptas sin pensar y luego cancelas o te quejas durante el viaje."},
+  {q:"Tu amigo comparte un interés que no conoces.", good:"Muestras curiosidad, haces preguntas y estás dispuesto a aprender o probarlo.", bad:"Desestimas su interés o finges que te gusta cuando no es así."},
+  {q:"Quieres hablar de algo personal con un amigo.", good:"Eliges un momento apropiado, expresas tus sentimientos claramente y pides su apoyo.", bad:"Sueltas todo de golpe en un momento inapropiado."},
+  {q:"Tu amigo te pide que conozcas a su pareja.", good:"Aceptas con apertura, eres amable y respetuoso con la relación.", bad:"Muestras celos o haces comentarios inapropiados."},
+  {q:"Un amigo te invita a participar en su hobby.", good:"Pruebas la actividad con mente abierta, aunque no sea tu favorita, y aprecias el gesto.", bad:"Rechazas inmediatamente sin considerar la oportunidad de compartir."},
+  {q:"Tu amigo te cuenta que está en terapia.", good:"Normalizas la situación, lo apoyas y respetas su privacidad.", bad:"Reaccionas con sorpresa exagerada o le preguntas detalles invasivos."},
+
+  // 31-40 Resolución de conflictos
+  {q:"Tu amigo llega tarde constantemente a sus citas contigo.", good:"Hablas del tema con calma, explicas cómo te afecta y proponen una solución.", bad:"Dejas de invitarlo sin explicar por qué."},
+  {q:"Un amigo hace un comentario que te molesta.", good:"Le dices cómo te hizo sentir, das oportunidad de disculparse y sigues adelante.", bad:"Guardas el resentimiento y te distancias sin explicar."},
+  {q:"Tu amigo olvida algo importante para ti.", good:"Expresas tu decepción de forma constructiva y evalúas si es un patrón.", bad:"Lo castigas con silencio o comentarios pasivo-agresivos."},
+  {q:"Tienes una discusión acalorada con un amigo.", good:"Tomas un tiempo para calmarte, luego hablas del tema con respeto y buscas entendimiento.", bad:"Dices cosas hirientes en el momento o cortas la amistad impulsivamente."},
+  {q:"Tu amigo no te invita a un evento importante.", good:"Preguntas con curiosidad si hubo un motivo, sin acusar, y escuchas su explicación.", bad:"Asumes lo peor y lo confrontas agresivamente."},
+  {q:"Un amigo te critica frente a otros.", good:"Hablas con él en privado después, explicas cómo te sentiste y estableces límites.", bad:"Lo criticas de vuelta públicamente o terminas la amistad."},
+  {q:"Tu amigo no responde tus mensajes por días.", good:"Le preguntas si está bien, das espacio y no asumes que es personal.", bad:"Lo bombardeas con mensajes o lo eliminas de tus contactos."},
+  {q:"Un amigo rompe una promesa importante.", good:"Expresas tu decepción, escuchas su explicación y evalúas si puedes confiar nuevamente.", bad:"Le guardas rencor y se lo recuerdas en cada oportunidad."},
+  {q:"Tu amigo te pide disculpas por algo que hizo.", good:"Escuchas su disculpa, evalúas su sinceridad y decides si perdonar.", bad:"Aceptas la disculpa pero sigues sacando el tema constantemente."},
+  {q:"Sientes que un amigo te está usando.", good:"Hablas del tema directamente, estableces límites claros y observas si cambia.", bad:"Sigues dando sin decir nada o cortas la amistad abruptamente."},
+
+  // 41-50 Límites y autocuidado
+  {q:"Un amigo te pide dinero prestado frecuentemente.", good:"Estableces límites claros, explicas tu situación y ofreces alternativas de apoyo.", bad:"Prestas siempre aunque te afecte o te niegas de forma grosera."},
+  {q:"Tu amigo te llama a altas horas de la noche.", good:"Estableces horarios apropiados para llamadas, excepto emergencias, y lo comunicas.", bad:"Siempre contestas aunque te moleste o lo ignoras sin explicar."},
+  {q:"Un amigo comparte demasiada información personal muy rápido.", good:"Escuchas con respeto pero estableces límites sobre lo que te sientes cómodo discutiendo.", bad:"Te alejas sin explicar o compartes sus secretos con otros."},
+  {q:"Tu amigo te presiona para hacer algo que no quieres.", good:"Dices no con firmeza pero amabilidad, explicas tu posición y no cedes.", bad:"Cedes por presión y luego te resientes."},
+  {q:"Un amigo critica constantemente tus decisiones.", good:"Estableces límites, explicas que necesitas apoyo no críticas y evalúas la amistad.", bad:"Dejas de compartir cosas importantes o terminas la amistad sin hablar."},
+  {q:"Tu amigo te pide que guardes un secreto que te incomoda.", good:"Explicas tus límites éticos, sugieres que busque ayuda apropiada si es necesario.", bad:"Guardas el secreto aunque te afecte o lo cuentas sin su permiso."},
+  {q:"Un amigo monopoliza las conversaciones hablando solo de sí mismo.", good:"Interrumpes amablemente para compartir también, o hablas del patrón si continúa.", bad:"Dejas de hablar y te conviertes solo en oyente resentido."},
+  {q:"Tu amigo te invita a algo que excede tu presupuesto.", good:"Agradeces pero explicas tu situación, propones alternativas más económicas.", bad:"Gastas más de lo que puedes o inventas excusas."},
+  {q:"Un amigo te pide favores constantemente pero nunca reciproca.", good:"Hablas del desequilibrio, estableces límites y observas si cambia la dinámica.", bad:"Sigues ayudando con resentimiento o cortas la amistad sin explicar."},
+  {q:"Tu amigo te hace sentir culpable cuando no puedes verlo.", good:"Reconoces la manipulación, estableces límites y no cedes a la culpa.", bad:"Cancelas tus planes para complacerlo o te alejas sin explicar."},
+
+  // 51-60 Amistades en diferentes contextos
+  {q:"Un amigo del trabajo quiere ser amigo fuera del trabajo.", good:"Evalúas si quieres esa amistad, estableces límites claros entre ambos contextos.", bad:"Mezclas todo sin límites o rechazas la amistad por completo."},
+  {q:"Tu amigo consigue trabajo en tu empresa.", good:"Lo apoyas en su adaptación, mantienes profesionalismo y separas amistad de trabajo.", bad:"Esperas trato preferencial o te distancias por completo."},
+  {q:"Un amigo de la infancia reaparece después de años.", good:"Te reconectas con apertura, actualizas la relación y ves si hay compatibilidad actual.", bad:"Actúas como si nada hubiera cambiado o lo ignoras."},
+  {q:"Tu amigo se muda a otra ciudad.", good:"Hablan de cómo mantener la amistad, programan videollamadas y visitas cuando sea posible.", bad:"Asumes que la amistad terminó y no haces esfuerzo por mantener contacto."},
+  {q:"Un amigo online quiere conocerte en persona.", good:"Tomas precauciones de seguridad, propones un lugar público y evalúas la situación.", bad:"Aceptas sin precauciones o rechazas porque 'no son amigos reales'."},
+  {q:"Tu amigo empieza una relación y tiene menos tiempo.", good:"Entiendes el cambio, respetas su tiempo y ajustas tus expectativas.", bad:"Te quejas de que cambió o lo presionas para que te priorice."},
+  {q:"Un amigo se une a tu grupo de amigos.", good:"Lo integras, haces presentaciones apropiadas y facilitas su inclusión.", bad:"Sientes que invade tu espacio o lo excluyes sutilmente."},
+  {q:"Tu amigo y tú tienen grupos de amigos muy diferentes.", good:"Respetas sus otras amistades, no compites y mantienes tu relación individual.", bad:"Sientes celos o lo presionas para que elija entre grupos."},
+  {q:"Un amigo te invita a un evento de su cultura.", good:"Aceptas con respeto, haces preguntas apropiadas y participas con mente abierta.", bad:"Rechazas por desconocimiento o haces comentarios inapropiados."},
+  {q:"Tu amigo tiene creencias muy diferentes a las tuyas.", good:"Respetas las diferencias, evitas temas conflictivos si es necesario y enfocas en lo común.", bad:"Intentas convencerlo de cambiar o terminas la amistad por las diferencias."},
+
+  // 61-70 Apoyo emocional
+  {q:"Tu amigo está triste pero dice que no quiere hablar.", good:"Respetas su espacio, le haces saber que estás disponible y verificas después.", bad:"Insistes en que te cuente todo o te ofendes por su rechazo."},
+  {q:"Un amigo te cuenta que tiene ansiedad.", good:"Escuchas sin juzgar, te educas sobre el tema y ofreces apoyo apropiado.", bad:"Le dices que 'no es para tanto' o que 'solo piense positivo'."},
+  {q:"Tu amigo perdió a un ser querido.", good:"Ofreces tu presencia, escuchas cuando quiera hablar y respetas su proceso de duelo.", bad:"Evitas el tema porque te incomoda o le dices que 'ya debería superarlo'."},
+  {q:"Un amigo te dice que está considerando terapia.", good:"Lo apoyas en su decisión, normalizas la salud mental y ofreces ayuda para encontrar recursos.", bad:"Le dices que no la necesita o que es para 'gente loca'."},
+  {q:"Tu amigo está estresado por el trabajo.", good:"Escuchas sus preocupaciones, validas sus sentimientos y ofreces distracciones si las quiere.", bad:"Le dices que todos están estresados o comparas con tus propios problemas."},
+  {q:"Un amigo te dice que se siente solo.", good:"Aumentas el contacto, propones actividades y le recuerdas que valoras su amistad.", bad:"Le dices que salga más o que es su culpa por ser antisocial."},
+  {q:"Tu amigo comparte que tiene baja autoestima.", good:"Refuerzas sus cualidades genuinamente, lo apoyas y sugieres ayuda profesional si es severo.", bad:"Le das cumplidos vacíos o le dices que deje de quejarse."},
+  {q:"Un amigo te dice que está teniendo problemas en su relación.", good:"Escuchas sin tomar partido, apoyas su bienestar y respetas sus decisiones.", bad:"Hablas mal de su pareja o le dices qué hacer."},
+  {q:"Tu amigo menciona que se siente abrumado.", good:"Ofreces ayuda concreta, le ayudas a priorizar o simplemente le das compañía.", bad:"Le das una lista de cosas que debería hacer diferente."},
+  {q:"Un amigo te dice que no se siente valorado.", good:"Le expresas específicamente qué valoras de él y demuestras tu aprecio con acciones.", bad:"Le dices que es su percepción o que es muy sensible."},
+
+  // 71-80 Celebraciones y momentos especiales
+  {q:"Tu amigo logra algo importante.", good:"Organizas una pequeña celebración, le das un detalle significativo o simplemente celebras con entusiasmo.", bad:"No mencionas su logro o lo minimizas."},
+  {q:"Es el cumpleaños de tu amigo.", good:"Planificas con anticipación, le das un regalo pensado o al menos un mensaje sincero.", bad:"Te olvidas completamente o le deseas feliz cumpleaños días después."},
+  {q:"Tu amigo te invita a su graduación.", good:"Asistes si puedes, llegas puntual y celebras su logro genuinamente.", bad:"Cancelas a último momento o no vas sin avisar."},
+  {q:"Un amigo anuncia su compromiso.", good:"Celebras su felicidad, ofreces tu apoyo para la boda y mantienes una actitud positiva.", bad:"Expresas dudas sobre la relación o haces comentarios negativos."},
+  {q:"Tu amigo tiene un bebé.", good:"Ofreces ayuda concreta, respetas su nuevo ritmo de vida y te adaptas a sus necesidades.", bad:"Te quejas de que ya no tiene tiempo para ti."},
+  {q:"Un amigo consigue el trabajo de sus sueños.", good:"Celebras sin envidia, le preguntas sobre su nueva etapa y lo apoyas.", bad:"Sientes celos o minimizas su logro comparándolo con el tuyo."},
+  {q:"Tu amigo se muda a una casa nueva.", good:"Ofreces ayuda con la mudanza, llevas un detalle para el hogar y celebras con él.", bad:"No ofreces ayuda o te quejas de que está muy lejos."},
+  {q:"Un amigo supera una enfermedad.", good:"Celebras su recuperación, respetas su proceso y ofreces apoyo continuo si lo necesita.", bad:"Asumes que todo volvió a la normalidad inmediatamente."},
+  {q:"Tu amigo gana un premio o reconocimiento.", good:"Publicas tu felicitación, asistes a la ceremonia si puedes y celebras su éxito.", bad:"No dices nada porque sientes envidia."},
+  {q:"Un amigo cumple un sueño personal.", good:"Reconoces su esfuerzo, celebras con él y le recuerdas lo orgulloso que estás.", bad:"Cambias el tema o hablas de tus propios sueños."},
+
+  // 81-90 Amistades en crisis
+  {q:"Tu amigo pierde su trabajo.", good:"Ofreces apoyo emocional y práctico, lo ayudas con su búsqueda si puedes y no lo juzgas.", bad:"Le das consejos no solicitados o te alejas porque está negativo."},
+  {q:"Un amigo está pasando por una ruptura.", good:"Escuchas sin juzgar, respetas su proceso y estás disponible cuando te necesite.", bad:"Hablas mal de su ex o le dices que 'ya debería superarlo'."},
+  {q:"Tu amigo tiene problemas económicos.", good:"Ofreces ayuda dentro de tus posibilidades, sin hacerlo sentir mal, y respetas su dignidad.", bad:"Le prestas dinero y se lo recuerdas constantemente."},
+  {q:"Un amigo está en una situación de abuso.", good:"Ofreces apoyo sin juzgar, le das información sobre recursos y respetas su ritmo.", bad:"Lo presionas para que deje la situación o te alejas porque es complicado."},
+  {q:"Tu amigo tiene una adicción.", good:"Expresas tu preocupación con amor, ofreces apoyo para buscar ayuda y estableces límites.", bad:"Lo juzgas, lo abandonas o permites comportamientos destructivos."},
+  {q:"Un amigo está en problemas legales.", good:"Escuchas su versión, ofreces apoyo emocional y ayuda práctica si es apropiado.", bad:"Asumes su culpabilidad y te alejas inmediatamente."},
+  {q:"Tu amigo tiene una crisis de salud mental.", good:"Tomas en serio la situación, ayudas a buscar ayuda profesional y te mantienes presente.", bad:"Minimizas la situación o te alejas porque no sabes qué hacer."},
+  {q:"Un amigo está siendo acosado.", good:"Crees su historia, ofreces apoyo, ayudas a documentar y buscas recursos apropiados.", bad:"Cuestionas su versión o le dices que lo ignore."},
+  {q:"Tu amigo pierde a su mascota.", good:"Reconoces su dolor, ofreces compañía y respetas su duelo.", bad:"Le dices que 'solo era un animal' o que consiga otro."},
+  {q:"Un amigo está en una crisis existencial.", good:"Escuchas sin juzgar, validas sus sentimientos y sugieres apoyo profesional si es necesario.", bad:"Le dices que está exagerando o que todos pasan por eso."},
+
+  // 91-100 Evolución y cierre de amistades
+  {q:"Sientes que una amistad ya no te aporta.", good:"Evalúas la situación, reduces contacto gradualmente o hablas honestamente si es necesario.", bad:"Desapareces sin explicación o sigues en la amistad con resentimiento."},
+  {q:"Un amigo te dice que necesita espacio.", good:"Respetas su petición, no lo presionas y dejas la puerta abierta para el futuro.", bad:"Lo bombardeas con mensajes preguntando qué hiciste mal."},
+  {q:"Tu amigo ha cambiado mucho y ya no conectan.", good:"Aceptas que las personas evolucionan, valoras lo compartido y dejas ir si es necesario.", bad:"Intentas que vuelva a ser como antes o lo criticas por cambiar."},
+  {q:"Una amistad se vuelve tóxica.", good:"Reconoces las señales, estableces límites firmes y te alejas si es necesario.", bad:"Sigues en la amistad por culpa o historia compartida."},
+  {q:"Tu amigo te dice que ya no quiere ser tu amigo.", good:"Respetas su decisión, pides claridad si la necesitas y procesas la pérdida sanamente.", bad:"Lo acosas para que cambie de opinión o hablas mal de él."},
+  {q:"Sientes que das más de lo que recibes en una amistad.", good:"Hablas del desequilibrio, das oportunidad de cambio y tomas decisiones basadas en la respuesta.", bad:"Sigues dando con resentimiento o cortas abruptamente."},
+  {q:"Un amigo te traiciona tu confianza.", good:"Evalúas la gravedad, decides si es perdonable y actúas según tus valores.", bad:"Buscas venganza o perdonas sin establecer consecuencias."},
+  {q:"Tu amigo se va a vivir a otro país.", good:"Celebras su nueva etapa, planifican cómo mantener contacto y aceptas el cambio.", bad:"Te enojas por su decisión o prometes mantener contacto sin hacerlo."},
+  {q:"Una amistad de años se está desvaneciendo naturalmente.", good:"Aceptas que es parte de la vida, valoras los recuerdos y dejas ir sin amargura.", bad:"Fuerzas la amistad o te sientes traicionado por el distanciamiento."},
+  {q:"Quieres terminar una amistad de forma saludable.", good:"Hablas honestamente, explicas tus razones con respeto y cierras el ciclo con madurez.", bad:"Desapareces sin explicación o terminas con drama y acusaciones."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

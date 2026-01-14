@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Trabajo en Equipo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #3b82f6;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #3b82f6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #3b82f6cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(226, 236, 254);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(226, 236, 254);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>👥</span>
+      <span>Habilidades Sociales</span>
+    </span>
+    <h1>🧩 Trabajo en Equipo</h1>
+    <p>Colaborar, dividir tareas, dar feedback y compartir crédito</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Colaboración básica
+  {q:"El líder del equipo pide ideas para repartir tareas de un proyecto grupal.", good:"Ofreces las tareas donde brillas y preguntas qué necesita cada persona para coordinarse.", bad:"Mencionas solo lo que no quieres hacer sin escuchar al resto."},
+  {q:"Un compañero necesita ayuda con algo que sabes hacer.", good:"Ofreces tu ayuda y explicas claramente cómo hacerlo.", bad:"Dices que estás muy ocupado sin considerar ayudar."},
+  {q:"Te asignan trabajar con alguien que no conoces.", good:"Te presentas, preguntas sobre su experiencia y propones cómo colaborar.", bad:"Trabajas solo sin intentar coordinarte."},
+  {q:"Hay diferentes opiniones sobre cómo hacer algo.", good:"Escuchas todas las perspectivas y propones una síntesis o votación.", bad:"Insistes en tu idea sin considerar otras."},
+  {q:"Un compañero comete un error que afecta tu trabajo.", good:"Hablas con él privadamente, explicas el impacto y buscan solución juntos.", bad:"Lo criticas frente a otros o te quejas sin hablar con él."},
+  {q:"Te piden compartir información con el equipo.", good:"Compartes toda la información relevante de forma clara y organizada.", bad:"Guardas información por miedo a perder ventaja."},
+  {q:"Alguien del equipo está atrasado.", good:"Preguntas si necesita ayuda y ofreces apoyo si puedes.", bad:"Te quejas de su retraso sin ofrecer soluciones."},
+  {q:"Debes coordinar una tarea con varios compañeros.", good:"Organizas una reunión, defines roles y estableces fechas de seguimiento.", bad:"Asumes que todos saben qué hacer sin coordinar."},
+  {q:"Un compañero tiene una idea diferente a la tuya.", good:"Escuchas su propuesta, evalúas los méritos y propones combinar ideas.", bad:"Descartas su idea sin considerarla."},
+  {q:"El equipo necesita tomar una decisión rápida.", good:"Facilitas la discusión, resumes opciones y ayudas a decidir.", bad:"Esperas que otros decidan sin participar."},
+
+  // 11-20 Comunicación en equipo
+  {q:"Necesitas dar una actualización al equipo.", good:"Preparas un resumen claro con avances, obstáculos y próximos pasos.", bad:"Das información confusa sin estructura."},
+  {q:"No entiendes algo que explicó un compañero.", good:"Pides aclaración específica y reformulas para confirmar que entendiste.", bad:"Finges que entendiste y luego haces mal el trabajo."},
+  {q:"Debes explicar algo técnico al equipo.", good:"Adaptas tu explicación al nivel de conocimiento de cada persona.", bad:"Usas jerga técnica sin verificar si entienden."},
+  {q:"Hay un malentendido en el equipo.", good:"Facilitas una conversación para aclarar y buscar entendimiento mutuo.", bad:"Dejas que el malentendido crezca sin intervenir."},
+  {q:"Un compañero no responde tus mensajes.", good:"Intentas otro canal de comunicación o preguntas si prefiere otro método.", bad:"Te molestas y dejas de comunicarte."},
+  {q:"Necesitas dar feedback a un compañero.", good:"Lo haces en privado, eres específico y constructivo.", bad:"Das feedback vago o lo haces frente a otros."},
+  {q:"Alguien te da feedback sobre tu trabajo.", good:"Escuchas sin defenderte, haces preguntas y agradeces la retroalimentación.", bad:"Te pones a la defensiva y justificas todo."},
+  {q:"El equipo está en desacuerdo sobre algo.", good:"Facilitas la discusión, buscas puntos en común y propones compromiso.", bad:"Tomas partido sin intentar mediar."},
+  {q:"Necesitas comunicar un problema al equipo.", good:"Presentas el problema claramente y propones posibles soluciones.", bad:"Solo te quejas del problema sin proponer soluciones."},
+  {q:"Un compañero está frustrado.", good:"Escuchas su frustración, validas sus sentimientos y ofreces apoyo.", bad:"Ignoras su frustración o le dices que se calme."},
+
+  // 21-30 Resolución de conflictos
+  {q:"Dos compañeros están en conflicto.", good:"Ofreces mediar, escuchas ambas partes y ayudas a encontrar solución.", bad:"Tomas partido o ignoras el conflicto."},
+  {q:"Alguien critica tu trabajo frente al equipo.", good:"Mantienes la calma, pides hablar en privado y abordas el tema constructivamente.", bad:"Te defiendes agresivamente frente a todos."},
+  {q:"Hay tensión en el equipo por carga de trabajo.", good:"Propones redistribuir tareas y hablar sobre expectativas realistas.", bad:"Te quejas sin proponer soluciones."},
+  {q:"Un compañero no cumple con su parte.", good:"Hablas con él privadamente, entiendes las causas y buscan solución.", bad:"Lo reportas inmediatamente sin hablar con él."},
+  {q:"Sientes que no te escuchan en el equipo.", good:"Pides tiempo específico para exponer tus ideas y las presentas claramente.", bad:"Te retiras y dejas de participar."},
+  {q:"Alguien toma crédito por tu trabajo.", good:"Hablas con esa persona privadamente y luego aclaras la situación apropiadamente.", bad:"Lo acusas públicamente sin hablar primero."},
+  {q:"El equipo está estresado por una fecha límite.", good:"Propones priorizar tareas, redistribuir si es posible y mantener comunicación.", bad:"Entras en pánico y presionas a todos."},
+  {q:"Hay competencia poco saludable en el equipo.", good:"Propones enfocarse en objetivos comunes y celebrar éxitos grupales.", bad:"Participas en la competencia destructiva."},
+  {q:"Un compañero está desmotivado.", good:"Hablas con él, entiendes qué lo desmotiva y ofreces apoyo.", bad:"Ignoras su desmotivación o lo criticas."},
+  {q:"El equipo está dividido en dos bandos.", good:"Facilitas diálogo entre ambos grupos y buscas puntos de unión.", bad:"Te unes a un bando sin intentar unificar."},
+
+  // 31-40 Liderazgo en equipo
+  {q:"Te piden liderar un proyecto.", good:"Defines objetivos claros, asignas roles según fortalezas y estableces comunicación regular.", bad:"Asumes el control sin consultar al equipo."},
+  {q:"El equipo no tiene dirección clara.", good:"Propones definir objetivos juntos y crear un plan de acción.", bad:"Esperas que alguien más tome el liderazgo."},
+  {q:"Necesitas delegar tareas.", good:"Asignas según fortalezas, das contexto claro y estableces seguimiento.", bad:"Delegas todo sin dar instrucciones claras."},
+  {q:"Un miembro del equipo no está participando.", good:"Hablas con él privadamente, entiendes las barreras y lo incluyes activamente.", bad:"Lo ignoras o lo criticas públicamente."},
+  {q:"El equipo está perdiendo el rumbo.", good:"Llamas a una reunión para reevaluar objetivos y realinear esfuerzos.", bad:"Dejas que sigan sin dirección."},
+  {q:"Necesitas motivar al equipo.", good:"Reconoces logros, comunicas la importancia del trabajo y apoyas individualmente.", bad:"Presionas más sin reconocer esfuerzos."},
+  {q:"Hay que tomar una decisión difícil.", good:"Facilitas discusión, consideras todas las opciones y decides con transparencia.", bad:"Tomas la decisión solo sin consultar."},
+  {q:"El equipo está sobrecargado.", good:"Evalúas prioridades, negocias plazos y redistribuyes carga si es posible.", bad:"Exiges que trabajen más horas."},
+  {q:"Un miembro cuestiona tu liderazgo.", good:"Escuchas sus preocupaciones, evalúas si son válidas y ajustas si es necesario.", bad:"Te pones a la defensiva y afirmas tu autoridad."},
+  {q:"El proyecto está en riesgo.", good:"Comunicas la situación claramente, pides ideas y ajustas el plan.", bad:"Ocultas los problemas y esperas que se resuelvan."},
+
+  // 41-50 Apoyo y colaboración
+  {q:"Un compañero está aprendiendo algo nuevo.", good:"Ofreces enseñarle, compartes recursos y tienes paciencia con su proceso.", bad:"Te impacientas y haces su trabajo por él."},
+  {q:"Alguien necesita cobertura porque está enfermo.", good:"Ofreces cubrir lo que puedas y coordinas con otros para el resto.", bad:"Dices que no es tu responsabilidad."},
+  {q:"Un compañero está pasando por un momento difícil.", good:"Ofreces apoyo emocional y ayuda práctica si la necesita.", bad:"Ignoras su situación personal."},
+  {q:"El equipo necesita aprender una nueva herramienta.", good:"Propones capacitación grupal y apoyo mutuo durante el aprendizaje.", bad:"Cada uno aprende por su cuenta sin coordinación."},
+  {q:"Alguien comete el mismo error repetidamente.", good:"Ofreces ayuda para entender la causa y crear un sistema para evitarlo.", bad:"Te frustras y lo criticas cada vez."},
+  {q:"Un compañero tiene una fortaleza que el equipo necesita.", good:"Reconoces su expertise y propones que lidere esa área.", bad:"Intentas hacer todo sin aprovechar sus fortalezas."},
+  {q:"El equipo necesita celebrar un logro.", good:"Organizas un reconocimiento grupal y destacas contribuciones individuales.", bad:"Pasas al siguiente proyecto sin celebrar."},
+  {q:"Alguien está trabajando demasiadas horas.", good:"Expresas preocupación, ofreces ayuda y propones redistribuir carga.", bad:"Aprovechas que trabaja más sin ofrecer apoyo."},
+  {q:"Un compañero tiene una idea innovadora.", good:"La apoyas, ayudas a desarrollarla y la presentas al equipo.", bad:"La descartas porque no es convencional."},
+  {q:"El equipo necesita mejorar un proceso.", good:"Facilitas una sesión de mejora continua con todos los involucrados.", bad:"Cambias el proceso sin consultar a quienes lo usan."},
+
+  // 51-60 Diversidad e inclusión
+  {q:"Un compañero tiene un estilo de trabajo diferente.", good:"Adaptas tu colaboración a su estilo y aprovechas la diversidad.", bad:"Insistes en que trabaje como tú."},
+  {q:"Alguien del equipo habla otro idioma como nativo.", good:"Aprovechas su perspectiva cultural y habilidades lingüísticas.", bad:"Ignoras sus aportes únicos."},
+  {q:"Un compañero tiene una discapacidad.", good:"Te enfocas en sus capacidades y adaptas la colaboración si es necesario.", bad:"Asumes limitaciones sin preguntarle."},
+  {q:"Hay diferentes generaciones en el equipo.", good:"Aprovechas la experiencia de unos y la energía de otros.", bad:"Creas divisiones por edad."},
+  {q:"Un compañero tiene horarios diferentes.", good:"Adaptas la comunicación y reuniones para incluirlo.", bad:"Planificas todo sin considerar su horario."},
+  {q:"Alguien tiene una perspectiva muy diferente.", good:"Valoras la diversidad de pensamiento y la integras en las decisiones.", bad:"Intentas que piense como el resto del equipo."},
+  {q:"Un compañero es introvertido.", good:"Creas espacios para que participe cómodamente y valoras sus aportes.", bad:"Lo presionas para que sea más extrovertido."},
+  {q:"Alguien tiene experiencia en otra industria.", good:"Aprovechas su perspectiva externa para innovar.", bad:"Descartas su experiencia por ser diferente."},
+  {q:"Un compañero prefiere comunicación escrita.", good:"Adaptas tu estilo de comunicación a sus preferencias.", bad:"Insistes en comunicarte solo verbalmente."},
+  {q:"Hay diferentes niveles de experiencia.", good:"Facilitas mentoring entre miembros y aprendizaje mutuo.", bad:"Separas a los experimentados de los novatos."},
+
+  // 61-70 Productividad grupal
+  {q:"El equipo se distrae en las reuniones.", good:"Propones agenda clara, tiempos definidos y facilitas el enfoque.", bad:"Dejas que las reuniones se alarguen sin control."},
+  {q:"Hay demasiadas reuniones.", good:"Evalúas cuáles son necesarias y propones alternativas más eficientes.", bad:"Asistes a todas sin cuestionar su utilidad."},
+  {q:"El equipo pierde tiempo en decisiones menores.", good:"Propones criterios de decisión y delegar decisiones pequeñas.", bad:"Participas en todas las discusiones menores."},
+  {q:"Hay duplicación de esfuerzos.", good:"Identificas las duplicaciones y propones mejor coordinación.", bad:"Sigues duplicando trabajo sin comunicarte."},
+  {q:"El equipo no documenta su trabajo.", good:"Propones sistema de documentación y lo implementas gradualmente.", bad:"Sigues sin documentar y pierdes conocimiento."},
+  {q:"Las tareas no están claras.", good:"Propones definir responsabilidades específicas y criterios de éxito.", bad:"Trabajas sin claridad esperando que otros definan."},
+  {q:"El equipo no aprende de los errores.", good:"Propones sesiones de retrospectiva para extraer aprendizajes.", bad:"Repites los mismos errores sin reflexionar."},
+  {q:"Hay herramientas que podrían mejorar la productividad.", good:"Investigas opciones, propones pruebas piloto y facilitas adopción.", bad:"Sigues con métodos ineficientes por costumbre."},
+  {q:"El equipo no mide su progreso.", good:"Propones métricas relevantes y seguimiento regular.", bad:"Trabajas sin saber si avanzas hacia los objetivos."},
+  {q:"Hay cuellos de botella en el proceso.", good:"Identificas los cuellos de botella y propones soluciones.", bad:"Esperas en los cuellos de botella sin actuar."},
+
+  // 71-80 Adaptabilidad en equipo
+  {q:"Cambian los objetivos del proyecto.", good:"Ayudas al equipo a entender los cambios y adaptar el plan.", bad:"Te resistes al cambio y generas resistencia."},
+  {q:"Llega un nuevo miembro al equipo.", good:"Lo integras, le das contexto y facilitas su adaptación.", bad:"Ignoras al nuevo miembro o lo ves como carga."},
+  {q:"Se va un miembro clave del equipo.", good:"Ayudas a redistribuir su trabajo y documentar su conocimiento.", bad:"Entras en pánico sin buscar soluciones."},
+  {q:"Cambia la metodología de trabajo.", good:"Aprendes la nueva metodología y ayudas a otros a adaptarse.", bad:"Te resistes y sigues con el método anterior."},
+  {q:"El equipo debe trabajar remotamente.", good:"Propones herramientas de colaboración y nuevas rutinas.", bad:"Intentas trabajar igual que presencialmente."},
+  {q:"Hay nuevas tecnologías que adoptar.", good:"Te capacitas y ayudas al equipo en la transición.", bad:"Te resistes a aprender nuevas tecnologías."},
+  {q:"Los plazos se acortan inesperadamente.", good:"Ayudas a repriorizar, eliminar lo no esencial y reorganizar.", bad:"Entras en pánico y presionas a todos."},
+  {q:"El presupuesto se reduce.", good:"Propones alternativas creativas y optimización de recursos.", bad:"Te quejas sin buscar soluciones."},
+  {q:"Cambia el cliente o stakeholder principal.", good:"Ayudas al equipo a entender las nuevas expectativas.", bad:"Sigues trabajando con las expectativas anteriores."},
+  {q:"Hay crisis que afecta al equipo.", good:"Mantienes la calma, apoyas al equipo y buscas soluciones.", bad:"Entras en pánico y desmoralizas al equipo."},
+
+  // 81-90 Desarrollo del equipo
+  {q:"El equipo necesita desarrollar nuevas habilidades.", good:"Identificas necesidades de capacitación y propones plan de desarrollo.", bad:"Esperas que cada uno se capacite solo."},
+  {q:"Hay oportunidad de que alguien crezca profesionalmente.", good:"Apoyas su crecimiento y facilitas oportunidades.", bad:"Ves su crecimiento como competencia."},
+  {q:"El equipo está estancado en su desarrollo.", good:"Propones nuevos desafíos y oportunidades de aprendizaje.", bad:"Mantienes el status quo sin buscar crecimiento."},
+  {q:"Alguien quiere cambiar de rol dentro del equipo.", good:"Evalúas la posibilidad y facilitas la transición si es viable.", bad:"Te opones al cambio por comodidad."},
+  {q:"El equipo necesita feedback externo.", good:"Buscas feedback de clientes, otros equipos o supervisores.", bad:"Trabajas en burbuja sin perspectiva externa."},
+  {q:"Hay oportunidad de innovar.", good:"Facilitas sesiones de brainstorming y experimentación.", bad:"Mantienes las formas tradicionales sin innovar."},
+  {q:"El equipo puede compartir conocimiento con otros.", good:"Organizas presentaciones o documentación para compartir aprendizajes.", bad:"Guardas el conocimiento solo para el equipo."},
+  {q:"Alguien tiene potencial de liderazgo.", good:"Le das oportunidades de liderar y lo mentoras.", bad:"Mantienes todo el liderazgo para ti."},
+  {q:"El equipo puede mejorar sus procesos.", good:"Facilitas sesiones de mejora continua y experimentación.", bad:"Mantienes los procesos sin cuestionar su eficacia."},
+  {q:"Hay oportunidad de reconocimiento externo.", good:"Propones al equipo para premios o reconocimientos.", bad:"No buscas reconocimiento para el trabajo del equipo."},
+
+  // 91-100 Excelencia en equipo
+  {q:"El equipo logra un éxito importante.", good:"Celebras el logro, reconoces contribuciones individuales y extraes aprendizajes.", bad:"Pasas al siguiente proyecto sin celebrar ni reflexionar."},
+  {q:"Otros equipos quieren aprender de ustedes.", good:"Compartes generosamente conocimientos y mejores prácticas.", bad:"Guardas secretos para mantener ventaja."},
+  {q:"El equipo enfrenta un desafío muy difícil.", good:"Mantienes la moral alta, divides el problema y buscas apoyo externo.", bad:"Te desmoralizas y contagias pesimismo."},
+  {q:"Hay oportunidad de liderar un proyecto importante.", good:"Propones al equipo y preparas una propuesta sólida.", bad:"Dejas que otros equipos tomen la oportunidad."},
+  {q:"El equipo puede establecer nuevos estándares.", good:"Trabajas para crear mejores prácticas que otros puedan seguir.", bad:"Te conformas con cumplir los estándares mínimos."},
+  {q:"Alguien del equipo recibe una oferta externa.", good:"Apoyas su decisión y facilitas una transición ordenada.", bad:"Intentas convencerlo de quedarse por conveniencia."},
+  {q:"El equipo tiene la oportunidad de impactar significativamente.", good:"Facilitas que el equipo entienda su impacto y se motive.", bad:"Trabajas sin comunicar la importancia del trabajo."},
+  {q:"Hay recursos adicionales disponibles.", good:"Propones cómo usar los recursos para maximizar el impacto del equipo.", bad:"Usas los recursos sin planificación estratégica."},
+  {q:"El equipo puede influir en decisiones organizacionales.", good:"Preparas propuestas bien fundamentadas y representas al equipo.", bad:"Pierdes la oportunidad de influir por no prepararte."},
+  {q:"Es momento de evaluar el desempeño del equipo.", good:"Facilitas una evaluación honesta, celebras logros y planifica mejoras.", bad:"Evitas la evaluación o solo destacas lo positivo."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

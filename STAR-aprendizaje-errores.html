@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Aprendizaje de Errores Sociales</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #6366f1;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #6366f1cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #6366f1cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(232, 232, 253);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(232, 232, 253);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🧩</span>
+      <span>Pensamiento Crítico Social</span>
+    </span>
+    <h1>📈 Aprendizaje de Errores Sociales</h1>
+    <p>Analizar interacciones, crear manual personal y perdonarse</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Errores en conversaciones
+  {q:"Recuerdas un comentario torpe que hiciste en una reunión pasada.", good:"Reflexionas qué aprendiste, preparas disculpa si aplica y ajustas tu guion futuro.", bad:"Te castigas mentalmente sin extraer aprendizajes."},
+  {q:"Dijiste algo que ofendió a alguien sin querer.", good:"Te disculpas sinceramente, aprendes por qué fue ofensivo y ajustas tu comunicación.", bad:"Te justificas diciendo que no fue tu intención."},
+  {q:"Interrumpiste a alguien importante.", good:"Te disculpas, dejas que termine y aprendes a esperar tu turno.", bad:"Sigues interrumpiendo sin darte cuenta del patrón."},
+  {q:"Hiciste una broma que no fue bien recibida.", good:"Te disculpas, aprendes sobre el contexto apropiado para humor.", bad:"Culpas a otros por no entender tu humor."},
+  {q:"Compartiste información que no debías.", good:"Te disculpas, aprendes sobre confidencialidad y ajustas tu criterio.", bad:"Minimizas el impacto sin aprender sobre privacidad."},
+  {q:"Malinterpretaste lo que alguien dijo.", good:"Aclaras el malentendido, aprendes a pedir clarificación.", bad:"Insistes en tu interpretación sin verificar."},
+  {q:"Hablaste demasiado en una conversación.", good:"Reflexionas sobre balance en conversaciones y practicas escuchar más.", bad:"Sigues dominando conversaciones sin darte cuenta."},
+  {q:"Usaste un tono inapropiado.", good:"Te disculpas, aprendes sobre el impacto de tu tono y lo ajustas.", bad:"Culpas a otros por ser muy sensibles."},
+  {q:"No escuchaste bien y respondiste mal.", good:"Admites que no escuchaste, pides que repitan y mejoras tu atención.", bad:"Finges que escuchaste y sigues respondiendo mal."},
+  {q:"Hiciste una pregunta inapropiada.", good:"Te disculpas, aprendes sobre límites apropiados en preguntas.", bad:"Sigues haciendo preguntas invasivas."},
+
+  // 11-20 Errores sociales en grupos
+  {q:"Llegaste tarde a un evento importante.", good:"Te disculpas, aprendes a calcular mejor el tiempo y sales más temprano.", bad:"Das excusas sin cambiar tus hábitos de puntualidad."},
+  {q:"No trajiste algo que prometiste traer.", good:"Te disculpas, lo consigues rápido si es posible y mejoras tu sistema de recordatorios.", bad:"Actúas como si no fuera importante."},
+  {q:"Monopolizaste la atención en un grupo.", good:"Reconoces el patrón, te disculpas y practicas incluir a otros.", bad:"Sigues siendo el centro de atención sin darte cuenta."},
+  {q:"No participaste nada en una actividad grupal.", good:"Reflexionas por qué no participaste y te comprometes a involucrarte más.", bad:"Sigues siendo pasivo en grupos."},
+  {q:"Criticaste a alguien frente a otros.", good:"Te disculpas privada y públicamente, aprendes a dar feedback en privado.", bad:"Justificas la crítica pública."},
+  {q:"No ayudaste cuando era obvio que debías.", good:"Te disculpas, ofreces ayuda tardía y aprendes a anticipar necesidades.", bad:"Actúas como si no fuera tu responsabilidad."},
+  {q:"Rompiste algo en casa ajena.", good:"Te disculpas, ofreces reponerlo y aprendes a ser más cuidadoso.", bad:"Minimizas el daño o culpas al objeto."},
+  {q:"No seguiste las reglas de un juego o actividad.", good:"Admites el error, aprendes las reglas y las sigues.", bad:"Argumentas que las reglas no son claras."},
+  {q:"Excluiste a alguien sin darte cuenta.", good:"Te disculpas, incluyes a la persona y aprendes a ser más inclusivo.", bad:"Dices que no fue intencional sin cambiar."},
+  {q:"Hiciste ruido en un momento inapropiado.", good:"Te disculpas y aprendes sobre contextos donde se requiere silencio.", bad:"Dices que no sabías sin aprender para el futuro."},
+
+  // 21-30 Errores en el trabajo
+  {q:"Cometiste un error que afectó a tu equipo.", good:"Admites el error, te disculpas, lo corriges y creas sistema para evitarlo.", bad:"Culpas a otros factores sin tomar responsabilidad."},
+  {q:"No cumpliste una fecha límite.", good:"Te disculpas, explicas qué pasó y mejoras tu planificación.", bad:"Das excusas sin cambiar tu gestión del tiempo."},
+  {q:"Enviaste un email a la persona equivocada.", good:"Corriges inmediatamente, te disculpas y verificas destinatarios en el futuro.", bad:"Esperas que nadie se dé cuenta."},
+  {q:"No preparaste bien una presentación.", good:"Admites la falta de preparación, mejoras para la próxima vez.", bad:"Culpas a la falta de tiempo sin mejorar tu preparación."},
+  {q:"Malentendiste una instrucción importante.", good:"Aclaras el malentendido, corriges el trabajo y aprendes a confirmar comprensión.", bad:"Sigues con tu interpretación incorrecta."},
+  {q:"No comunicaste un problema a tiempo.", good:"Reportas inmediatamente, te disculpas y mejoras tu comunicación proactiva.", bad:"Esperas que el problema se resuelva solo."},
+  {q:"Perdiste documentos importantes.", good:"Reportas la pérdida, buscas copias y mejoras tu sistema de organización.", bad:"Intentas ocultarlo hasta que alguien pregunta."},
+  {q:"No seguiste un procedimiento correctamente.", good:"Corriges el error, aprendes el procedimiento correcto y lo sigues.", bad:"Sigues haciendo las cosas a tu manera."},
+  {q:"Ofendiste a un cliente sin querer.", good:"Te disculpas profesionalmente, aprendes sobre sensibilidades culturales.", bad:"Culpas al cliente por ser muy sensible."},
+  {q:"No cumpliste una promesa laboral.", good:"Te disculpas, explicas qué pasó y mejoras tu seguimiento de compromisos.", bad:"Actúas como si no fuera tan importante."},
+
+  // 31-40 Errores en relaciones
+  {q:"Olvidaste el cumpleaños de un amigo cercano.", good:"Te disculpas sinceramente, celebras aunque sea tarde y mejoras tu sistema de recordatorios.", bad:"Actúas como si no fuera importante."},
+  {q:"Cancelaste planes a último momento.", good:"Te disculpas, explicas la situación y mejoras tu planificación.", bad:"Das excusas sin considerar el impacto en el otro."},
+  {q:"No apoyaste a un amigo cuando te necesitaba.", good:"Reconoces tu falta, te disculpas y mejoras tu disponibilidad emocional.", bad:"Justificas por qué no pudiste estar presente."},
+  {q:"Rompiste la confianza de alguien.", good:"Te disculpas profundamente, trabajas en reconstruir confianza y cambias tu comportamiento.", bad:"Minimizas el impacto de romper la confianza."},
+  {q:"Fuiste insensible con alguien que sufría.", good:"Te disculpas, aprendes sobre empatía y mejoras tu respuesta a dolor ajeno.", bad:"Dices que solo intentabas ayudar sin cambiar."},
+  {q:"No defendiste a un amigo cuando lo criticaron.", good:"Te disculpas por no apoyarlo y aprendes a ser mejor aliado.", bad:"Justificas tu silencio sin cambiar."},
+  {q:"Traicionaste un secreto.", good:"Te disculpas profundamente, aprendes sobre confidencialidad y cambias tu comportamiento.", bad:"Minimizas diciendo que no era tan secreto."},
+  {q:"Fuiste egoísta en una situación importante.", good:"Reconoces tu egoísmo, te disculpas y practicas considerar a otros.", bad:"Justificas tu comportamiento sin cambiar."},
+  {q:"No cumpliste un compromiso personal.", good:"Te disculpas, explicas qué pasó y mejoras tu seguimiento de compromisos.", bad:"Das excusas sin mejorar tu confiabilidad."},
+  {q:"Lastimaste los sentimientos de alguien.", good:"Te disculpas sinceramente, validas su dolor y cambias tu comportamiento.", bad:"Dices que no fue tu intención sin cambiar nada."},
+
+  // 41-50 Errores de juicio
+  {q:"Tomaste una decisión basada en información incorrecta.", good:"Admites el error, corriges la decisión y mejoras tu proceso de verificación.", bad:"Insistes en la decisión para no admitir el error."},
+  {q:"Juzgaste mal a una persona.", good:"Reconoces tu prejuicio, te disculpas si es apropiado y trabajas en ser menos prejuicioso.", bad:"Mantienes tu juicio sin reconsiderar."},
+  {q:"Confiaste en alguien que no era confiable.", good:"Aprendes de la experiencia y mejoras tu criterio para confiar.", bad:"Te vuelves desconfiado con todos."},
+  {q:"Subestimaste la dificultad de algo.", good:"Ajustas tus expectativas, pides ayuda y mejoras tu evaluación de tareas.", bad:"Sigues subestimando sin aprender."},
+  {q:"Sobreestimaste tus capacidades.", good:"Reconoces tus límites reales y ajustas tus compromisos.", bad:"Sigues prometiendo más de lo que puedes cumplir."},
+  {q:"No consideraste las consecuencias de una acción.", good:"Analizas qué no consideraste y mejoras tu proceso de toma de decisiones.", bad:"Sigues actuando sin pensar en consecuencias."},
+  {q:"Actuaste impulsivamente y causaste problemas.", good:"Reflexionas sobre el impulso, te disculpas y desarrollas autocontrol.", bad:"Culpas a las circunstancias sin trabajar en autocontrol."},
+  {q:"No pediste ayuda cuando la necesitabas.", good:"Reconoces que pedir ayuda es fortaleza y mejoras en esto.", bad:"Sigues luchando solo por orgullo."},
+  {q:"Asumiste algo sin verificar.", good:"Aprendes a verificar información antes de actuar sobre ella.", bad:"Sigues asumiendo cosas sin verificar."},
+  {q:"No consideraste el impacto en otros.", good:"Desarrollas mayor conciencia sobre cómo tus acciones afectan otros.", bad:"Sigues actuando sin considerar a otros."},
+
+  // 51-60 Aprendizaje de feedback
+  {q:"Alguien te dio feedback negativo que rechazaste.", good:"Reconsideras el feedback, buscas la verdad en él y lo aplicas.", bad:"Mantienes tu posición sin considerar el feedback."},
+  {q:"Te molestaste cuando te corrigieron.", good:"Reflexionas por qué te molestó y aprendes a recibir correcciones.", bad:"Sigues molestándote cada vez que te corrigen."},
+  {q:"Ignoraste consejos que resultaron ser correctos.", good:"Reconoces que el consejo era bueno y mejoras tu apertura a sugerencias.", bad:"Sigues ignorando consejos sin considerar su valor."},
+  {q:"No aplicaste feedback que recibiste.", good:"Revisas por qué no lo aplicaste y creas plan para implementarlo.", bad:"Sigues sin aplicar feedback útil."},
+  {q:"Te pusiste a la defensiva ante una crítica constructiva.", good:"Reflexionas sobre tu reacción defensiva y practicas recibir críticas.", bad:"Sigues poniéndote a la defensiva automáticamente."},
+  {q:"Pediste feedback pero no te gustó lo que escuchaste.", good:"Procesas el feedback objetivamente y extraes lo útil.", bad:"Dejas de pedir feedback para evitar escuchar cosas negativas."},
+  {q:"Malinterpretaste feedback positivo.", good:"Aclaras qué quisieron decir realmente y ajustas tu comprensión.", bad:"Mantienes la interpretación incorrecta."},
+  {q:"No diste las gracias por feedback útil.", good:"Agradeces retroactivamente y reconoces el valor del feedback.", bad:"Das por sentado que otros te den feedback."},
+  {q:"Aplicaste feedback incorrectamente.", good:"Pides aclaración sobre cómo aplicarlo correctamente.", bad:"Sigues aplicándolo mal sin pedir ayuda."},
+  {q:"Te desanimaste por feedback negativo.", good:"Usas el feedback como motivación para mejorar, no como desánimo.", bad:"Dejas de intentar por el feedback negativo."},
+
+  // 61-70 Patrones de errores
+  {q:"Cometes el mismo error social repetidamente.", good:"Identificas el patrón, entiendes por qué ocurre y creas estrategia para cambiarlo.", bad:"Sigues cometiendo el mismo error sin reconocer el patrón."},
+  {q:"Tus errores siguen un patrón específico.", good:"Analizas qué situaciones o emociones disparan el patrón.", bad:"Ves cada error como incidente aislado."},
+  {q:"Otros te señalan un comportamiento problemático.", good:"Escuchas el patrón que otros ven y trabajas en cambiarlo.", bad:"Niegas que sea un patrón real."},
+  {q:"Tus errores ocurren en situaciones similares.", good:"Identificas los triggers y preparas estrategias para esas situaciones.", bad:"No conectas las situaciones con tus errores."},
+  {q:"Cometes errores cuando estás estresado.", good:"Reconoces cómo el estrés afecta tu comportamiento y lo manejas.", bad:"Usas el estrés como excusa sin manejarlo."},
+  {q:"Tus errores afectan siempre a las mismas personas.", good:"Reflexionas sobre esas relaciones y trabajas en mejorarlas.", bad:"Culpas a esas personas por ser problemáticas."},
+  {q:"Repites errores que ya habías identificado.", good:"Analizas por qué no has podido cambiar y buscas apoyo.", bad:"Te frustras sin buscar ayuda para cambiar."},
+  {q:"Tus errores ocurren en contextos específicos.", good:"Preparas estrategias específicas para esos contextos.", bad:"Evitas esos contextos sin aprender a manejarlos."},
+  {q:"Cometes errores similares a los de tu familia.", good:"Reconoces patrones familiares y trabajas conscientemente en cambiarlos.", bad:"Asumes que es inevitable porque es familiar."},
+  {q:"Tus errores tienen consecuencias crecientes.", good:"Reconoces la escalada y buscas ayuda profesional para cambiar.", bad:"Minimizas las consecuencias sin cambiar el comportamiento."},
+
+  // 71-80 Reparación de errores
+  {q:"Tu error dañó una relación importante.", good:"Trabajas activamente en reparar la relación con acciones, no solo palabras.", bad:"Esperas que el tiempo cure la relación sin esfuerzo."},
+  {q:"Tu error tuvo consecuencias profesionales.", good:"Trabajas para demostrar cambio y reconstruir tu reputación profesional.", bad:"Cambias de trabajo para evitar las consecuencias."},
+  {q:"Lastimaste profundamente a alguien.", good:"Das espacio si lo necesita, trabajas en cambiar y demuestras el cambio.", bad:"Presionas para que te perdone sin cambiar realmente."},
+  {q:"Tu error afectó a múltiples personas.", good:"Te disculpas con cada persona afectada y trabajas en reparar cada relación.", bad:"Das una disculpa general sin abordar impactos individuales."},
+  {q:"Tu error tuvo consecuencias legales o formales.", good:"Enfrentas las consecuencias, aprendes y cambias para evitar repetir.", bad:"Buscas formas de evitar consecuencias sin aprender."},
+  {q:"Alguien no acepta tu disculpa.", good:"Respetas su decisión, sigues trabajando en cambiar y das tiempo.", bad:"Insistes en que te perdone o te enojas."},
+  {q:"Tu error se hizo público.", good:"Enfrentas la situación con honestidad y trabajas en reconstruir tu imagen.", bad:"Intentas ocultar o minimizar la situación pública."},
+  {q:"Tu error afectó tu autoestima.", good:"Separas el error de tu valor como persona y trabajas en mejorar.", bad:"Internalizas el error como evidencia de que eres malo."},
+  {q:"El daño de tu error parece irreparable.", good:"Aceptas las consecuencias, aprendes y te comprometes a no repetir.", bad:"Te hundes en culpa sin trabajar en cambiar."},
+  {q:"Tu error decepcionó a alguien importante.", good:"Trabajas para reconstruir su confianza con acciones consistentes.", bad:"Prometes cambiar sin plan concreto de acción."},
+
+  // 81-90 Crecimiento personal
+  {q:"Reconoces un patrón de errores en tu vida.", good:"Buscas ayuda profesional para entender y cambiar patrones profundos.", bad:"Aceptas el patrón como parte de tu personalidad."},
+  {q:"Tus errores reflejan valores que quieres cambiar.", good:"Trabajas conscientemente en desarrollar nuevos valores.", bad:"Mantienes valores problemáticos sin cuestionar."},
+  {q:"Te das cuenta de que repites errores de tus padres.", good:"Trabajas conscientemente en romper ciclos generacionales.", bad:"Asumes que es inevitable repetir patrones familiares."},
+  {q:"Tus errores muestran áreas de crecimiento.", good:"Ves los errores como oportunidades de desarrollo personal.", bad:"Ves los errores solo como fracasos."},
+  {q:"Necesitas cambiar algo fundamental sobre ti.", good:"Te comprometes al trabajo difícil de cambio personal profundo.", bad:"Evitas el cambio porque es demasiado difícil."},
+  {q:"Tus errores afectan tu identidad.", good:"Separas tus acciones de tu identidad y trabajas en mejorar ambas.", bad:"Cambias tu identidad para evitar responsabilidad."},
+  {q:"Reconoces que necesitas ayuda profesional.", good:"Buscas terapia o coaching para trabajar en tus patrones.", bad:"Intentas cambiar solo sin apoyo profesional."},
+  {q:"Tus errores muestran trauma no resuelto.", good:"Buscas ayuda especializada para sanar el trauma subyacente.", bad:"Ignoras la conexión entre trauma y comportamiento."},
+  {q:"Quieres prevenir errores futuros.", good:"Desarrollas sistemas, busca apoyo y trabajas proactivamente.", bad:"Esperas no cometer errores sin cambiar nada."},
+  {q:"Has crecido significativamente de tus errores.", good:"Reconoces tu crecimiento y lo usas para ayudar a otros.", bad:"Minimizas tu crecimiento o te vuelves arrogante."},
+
+  // 91-100 Sabiduría de errores
+  {q:"Alguien comete un error que tú ya cometiste.", good:"Compartes tu experiencia con compasión y sin juzgar.", bad:"Los juzgas duramente porque tú ya aprendiste."},
+  {q:"Ves a otros cometer errores que podrías prevenir.", good:"Ofreces tu perspectiva con humildad y respeto.", bad:"Los criticas por no aprender de tu experiencia."},
+  {q:"Tus errores pasados te dan sabiduría.", good:"Usas tu experiencia para tomar mejores decisiones.", bad:"Te obsesionas con errores pasados sin usar la sabiduría."},
+  {q:"Alguien te pide consejo sobre errores.", good:"Compartes tu experiencia honestamente sin predicar.", bad:"Les das sermones sobre lo que deberían hacer."},
+  {q:"Reconoces errores en otros que no ven.", good:"Compartes tu observación con tacto y amor.", bad:"Los señalas duramente sin compasión."},
+  {q:"Tus errores te enseñaron sobre ti mismo.", good:"Integras el autoconocimiento en tu vida diaria.", bad:"Conoces tus patrones pero no los cambias."},
+  {q:"Puedes prevenir que otros cometan tus errores.", good:"Compartes tu experiencia cuando es apropiado y útil.", bad:"Impones tu experiencia sin que la pidan."},
+  {q:"Tus errores te hicieron más compasivo.", good:"Usas tu compasión ganada para ayudar a otros.", bad:"Te vuelves permisivo con comportamientos dañinos."},
+  {q:"Has aprendido a fallar mejor.", good:"Ves el fracaso como parte del crecimiento y lo manejas con gracia.", bad:"Sigues temiendo al fracaso y evitas riesgos."},
+  {q:"Tus errores te dieron perspectiva sobre la vida.", good:"Usas esa perspectiva para vivir más auténticamente.", bad:"Te vuelves cínico o amargado por tus errores."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

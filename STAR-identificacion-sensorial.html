@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Identificación y Regulación Sensorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ec4899;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #ec4899cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #ec4899cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(252, 228, 240);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(252, 228, 240);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🔔</span>
+      <span>Manejo Sensorial</span>
+    </span>
+    <h1>🎚️ Identificación y Regulación Sensorial</h1>
+    <p>Detectar sobrecarga auditiva, visual, táctil y usar estrategias</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // CATEGORÍA 1: IDENTIFICACIÓN DE SOBRECARGA AUDITIVA (10 situaciones)
+  {q:"En el metro el ruido te resulta abrumador.", good:"Identificas la sobrecarga auditiva y usas auriculares con cancelación o tapones.", bad:"Aguantas el ruido sin apoyos y terminas saturado."},
+  {q:"Durante una fiesta, empiezas a sentirte irritable sin razón aparente.", good:"Reconoces que puede ser sobrecarga auditiva y buscas un espacio más tranquilo.", bad:"Asumes que estás de mal humor y continúas en el ambiente ruidoso."},
+  {q:"En la oficina, te cuesta concentrarte y no sabes por qué.", good:"Identificas los ruidos de fondo como posible causa y buscas soluciones auditivas.", bad:"Asumes que tienes un mal día y no consideras factores ambientales."},
+  {q:"Después de un día en el centro comercial, te sientes agotado.", good:"Reconoces que la estimulación auditiva constante te agotó y planificas descanso.", bad:"No conectas tu cansancio con la exposición a ruidos y continúas con actividades."},
+  {q:"En un restaurante, te sientes ansioso sin motivo claro.", good:"Identificas que el ruido ambiente puede estar causando ansiedad y cambias de ubicación.", bad:"Atribuyes la ansiedad a otros factores sin considerar el ambiente sonoro."},
+  {q:"Durante una reunión, sientes dolor de cabeza progresivo.", good:"Reconoces que puede ser por sobrecarga auditiva y tomas medidas preventivas.", bad:"Asumes que es estrés normal y no consideras factores sensoriales."},
+  {q:"En casa de un amigo, su música te molesta más de lo usual.", good:"Identificas que tu tolerancia auditiva está baja y comunicas tu necesidad.", bad:"Sufres en silencio pensando que deberías tolerarlo."},
+  {q:"En el transporte público, empiezas a sentir náuseas.", good:"Reconoces que puede ser sobrecarga sensorial y tomas medidas de regulación.", bad:"Asumes que es por el movimiento y no consideras el ruido como factor."},
+  {q:"Durante una clase, te distraes constantemente.", good:"Identificas ruidos específicos que te distraen y buscas estrategias de filtrado.", bad:"Te culpas por falta de concentración sin analizar el ambiente."},
+  {q:"En un evento, sientes ganas de irte sin disfrutar.", good:"Reconoces señales de sobrecarga auditiva temprana y tomas descansos.", bad:"Te fuerzas a quedarte ignorando las señales de tu cuerpo."},
+
+  // CATEGORÍA 2: IDENTIFICACIÓN DE SOBRECARGA VISUAL (10 situaciones)
+  {q:"Después de trabajar en la computadora, tienes dolor de cabeza.", good:"Identificas fatiga visual y ajustas iluminación, brillo y tomas descansos.", bad:"Asumes que es estrés normal y continúas trabajando igual."},
+  {q:"En un centro comercial, te sientes mareado y desorientado.", good:"Reconoces sobrecarga visual por exceso de estímulos y buscas áreas más tranquilas.", bad:"Atribuyes el mareo a otras causas sin considerar la estimulación visual."},
+  {q:"Las luces fluorescentes te generan malestar.", good:"Identificas tu sensibilidad a este tipo de iluminación y buscas alternativas.", bad:"Asumes que todos sienten lo mismo y no tomas medidas específicas."},
+  {q:"En una tienda, te sientes abrumado por los colores y patrones.", good:"Reconoces sobrecarga visual y limitas el tiempo de exposición.", bad:"Continúas comprando ignorando las señales de sobrecarga."},
+  {q:"Mientras manejas de noche, las luces te molestan más de lo normal.", good:"Identificas mayor sensibilidad visual nocturna y usas estrategias apropiadas.", bad:"Continúas manejando incómodo sin tomar precauciones adicionales."},
+  {q:"En una presentación, las diapositivas brillantes te causan fatiga.", good:"Reconoces sensibilidad a la luz intensa y ajustas tu posición o protección.", bad:"Sufres la molestia sin buscar maneras de reducir el impacto visual."},
+  {q:"Después de ver televisión, sientes los ojos cansados.", good:"Identificas fatiga visual y ajustas configuraciones de pantalla y distancia.", bad:"Continúas viendo con la misma configuración que te causa molestia."},
+  {q:"En espacios con muchos espejos, te sientes desorientado.", good:"Reconoces tu sensibilidad a reflejos múltiples y evitas mirar directamente.", bad:"Intentas ignorar la desorientación sin modificar tu comportamiento."},
+  {q:"Los patrones geométricos en decoración te distraen mucho.", good:"Identificas tu sensibilidad a patrones visuales complejos y ajustas tu enfoque.", bad:"Te frustras con la distracción sin reconocer la causa sensorial."},
+  {q:"En días muy soleados, te sientes más irritable.", good:"Reconoces tu sensibilidad a la luz intensa y usas protección solar adecuada.", bad:"Atribuyes la irritabilidad a otros factores sin considerar la luz."},
+
+  // CATEGORÍA 3: IDENTIFICACIÓN DE SENSIBILIDADES TÁCTILES (10 situaciones)
+  {q:"Ciertas texturas de ropa te generan ansiedad.", good:"Identificas tus sensibilidades táctiles específicas y eliges ropa apropiada.", bad:"Usas ropa incómoda pensando que deberías acostumbrarte."},
+  {q:"El contacto físico casual te resulta muy intenso.", good:"Reconoces tu sensibilidad táctil y comunicas tus límites de manera apropiada.", bad:"Sufres el contacto incómodo sin comunicar tus necesidades."},
+  {q:"Ciertos materiales te dan 'escalofríos' al tocarlos.", good:"Identificas materiales problemáticos y usas herramientas o guantes cuando sea necesario.", bad:"Te fuerzas a tocar materiales que te generan malestar."},
+  {q:"La temperatura de objetos te afecta más que a otros.", good:"Reconoces tu sensibilidad térmica y tomas precauciones apropiadas.", bad:"Ignoras tu malestar térmico pensando que es normal."},
+  {q:"Las etiquetas de la ropa te molestan intensamente.", good:"Identificas esta sensibilidad específica y cortas etiquetas o compras ropa sin ellas.", bad:"Sufres la molestia de las etiquetas sin buscar soluciones."},
+  {q:"Ciertos jabones o cremas te generan malestar.", good:"Reconoces sensibilidades a texturas o químicos específicos y cambias productos.", bad:"Continúas usando productos que te molestan por costumbre."},
+  {q:"El agua a ciertas temperaturas te resulta intolerable.", good:"Identificas tu rango de temperatura cómodo y ajustas según tus necesidades.", bad:"Te fuerzas a usar agua a temperatura incómoda."},
+  {q:"Las superficies rugosas te generan ansiedad.", good:"Reconoces tu sensibilidad a texturas específicas y usas protección cuando sea necesario.", bad:"Evitas completamente superficies rugosas limitando tus actividades."},
+  {q:"La presión de la ropa ajustada te agobia.", good:"Identificas tu necesidad de ropa holgada y ajustas tu guardarropa.", bad:"Usas ropa ajustada porque 'se ve mejor' ignorando tu malestar."},
+  {q:"Ciertos tipos de papel o cartón te resultan desagradables.", good:"Reconoces esta sensibilidad específica y usas herramientas alternativas.", bad:"Evitas actividades que involucren estos materiales."},
+
+  // CATEGORÍA 4: IDENTIFICACIÓN DE SENSIBILIDADES OLFATIVAS (10 situaciones)
+  {q:"Ciertos perfumes te causan náuseas inmediatas.", good:"Identificas fragancias problemáticas y comunicas tu sensibilidad cuando sea necesario.", bad:"Sufres las náuseas sin identificar la causa específica."},
+  {q:"Los olores de limpieza te generan dolor de cabeza.", good:"Reconoces tu sensibilidad a químicos y buscas productos alternativos.", bad:"Asumes que los dolores de cabeza son por estrés."},
+  {q:"En ciertos restaurantes, los olores te quitan el apetito.", good:"Identificas olores específicos que te afectan y eliges restaurantes apropiados.", bad:"Te fuerzas a comer en lugares con olores que te molestan."},
+  {q:"El olor de gasolina te afecta más que a otros.", good:"Reconoces tu sensibilidad y tomas precauciones en gasolineras.", bad:"Ignoras tu malestar pensando que es normal."},
+  {q:"Ciertos ambientadores te generan ansiedad.", good:"Identificas fragancias artificiales problemáticas y evitas espacios con ellas.", bad:"Permaneces en espacios con fragancias que te alteran."},
+  {q:"Los olores de cocina te abruman fácilmente.", good:"Reconoces tu sensibilidad olfativa y mejoras la ventilación en casa.", bad:"Cocinas sin ventilación adecuada sufriendo la sobrecarga."},
+  {q:"En tiendas con fragancias fuertes, te sientes mal.", good:"Identificas tu límite de tolerancia y limitas el tiempo en estos espacios.", bad:"Permaneces en tiendas con fragancias hasta sentirte muy mal."},
+  {q:"El olor de ciertos materiales te distrae mucho.", good:"Reconoces olores específicos que te afectan y buscas alternativas.", bad:"Trabajas con materiales que te distraen sin buscar opciones."},
+  {q:"Los olores corporales te resultan muy intensos.", good:"Identificas tu alta sensibilidad olfativa y desarrollas estrategias de manejo.", bad:"Evitas espacios públicos por miedo a olores desagradables."},
+  {q:"Ciertos olores te traen recuerdos intensos no deseados.", good:"Reconoces la conexión olfativa-emocional y desarrollas estrategias de regulación.", bad:"Te abrumas con los recuerdos sin entender la conexión sensorial."},
+
+  // CATEGORÍA 5: IDENTIFICACIÓN DE SENSIBILIDADES VESTIBULARES (10 situaciones)
+  {q:"Los movimientos rápidos te generan náuseas.", good:"Identificas tu sensibilidad vestibular y evitas o modificas movimientos bruscos.", bad:"Participas en actividades que te marean sin considerar alternativas."},
+  {q:"En escaleras mecánicas sientes vértigo.", good:"Reconoces tu sensibilidad al movimiento y usas escaleras normales cuando sea posible.", bad:"Usas escaleras mecánicas sufriendo vértigo cada vez."},
+  {q:"Los cambios de altura te generan ansiedad.", good:"Identificas tu sensibilidad a alturas y tomas precauciones apropiadas.", bad:"Te expones a alturas que te generan ansiedad sin preparación."},
+  {q:"En vehículos, ciertos movimientos te marean.", good:"Reconoces patrones de movimiento problemáticos y ajustas tu posición.", bad:"Viajas siempre en posiciones que te generan mareo."},
+  {q:"Los juegos mecánicos te afectan más que a otros.", good:"Identificas tu sensibilidad vestibular y eliges actividades apropiadas.", bad:"Participas en juegos que te marean para no sentirte excluido."},
+  {q:"Caminar en superficies irregulares te genera ansiedad.", good:"Reconoces tu necesidad de estabilidad y usas calzado apropiado.", bad:"Caminas en terrenos difíciles sin considerar tu seguridad."},
+  {q:"Los movimientos de cabeza rápidos te desorientan.", good:"Identificas movimientos problemáticos y los realizas más lentamente.", bad:"Realizas movimientos bruscos ignorando la desorientación."},
+  {q:"En espacios giratorios sientes pánico.", good:"Reconoces tu sensibilidad y evitas o limitas la exposición a estos espacios.", bad:"Te expones a espacios giratorios sufriendo pánico."},
+  {q:"Los cambios de posición rápidos te marean.", good:"Identificas la necesidad de transiciones lentas y las implementas.", bad:"Te levantas rápido ignorando las señales de mareo."},
+  {q:"En barcos o botes sientes malestar intenso.", good:"Reconoces tu sensibilidad al movimiento acuático y tomas precauciones.", bad:"Viajas en barco sin preparación para el mareo."},
+
+  // CATEGORÍA 6: IDENTIFICACIÓN DE PATRONES SENSORIALES (10 situaciones)
+  {q:"Notas que te sientes peor en ciertos horarios del día.", good:"Identificas patrones de sensibilidad relacionados con ritmos circadianos.", bad:"Asumes que son variaciones normales sin buscar patrones."},
+  {q:"Tu tolerancia sensorial cambia según tu nivel de estrés.", good:"Reconoces la conexión entre estrés y sensibilidad sensorial.", bad:"No conectas tu estado emocional con tu tolerancia sensorial."},
+  {q:"Ciertos días eres más sensible sin razón aparente.", good:"Identificas factores como sueño, alimentación o hormonas que afectan tu sensibilidad.", bad:"Te frustras con la variabilidad sin buscar causas."},
+  {q:"En ciertos ambientes te sientes inmediatamente incómodo.", good:"Reconoces combinaciones específicas de estímulos que te afectan.", bad:"Evitas ambientes sin entender qué específicamente te molesta."},
+  {q:"Tu sensibilidad aumenta cuando estás cansado.", good:"Identificas la relación entre fatiga y sensibilidad sensorial.", bad:"No ajustas tu exposición sensorial según tu nivel de energía."},
+  {q:"Notas que ciertos alimentos afectan tu sensibilidad.", good:"Reconoces conexiones entre dieta y procesamiento sensorial.", bad:"No consideras la alimentación como factor en tu bienestar sensorial."},
+  {q:"Tu tolerancia sensorial varía según la estación del año.", good:"Identificas patrones estacionales en tu sensibilidad.", bad:"No conectas cambios estacionales con tu bienestar sensorial."},
+  {q:"Después de ejercicio, tu sensibilidad cambia.", good:"Reconoces cómo la actividad física afecta tu procesamiento sensorial.", bad:"No notas la conexión entre ejercicio y sensibilidad."},
+  {q:"En ciertos lugares siempre te sientes bien.", good:"Identificas características ambientales que favorecen tu bienestar sensorial.", bad:"No analizas qué hace que ciertos espacios te resulten cómodos."},
+  {q:"Tu sensibilidad cambia durante diferentes fases del mes.", good:"Reconoces patrones hormonales que afectan tu procesamiento sensorial.", bad:"No conectas cambios hormonales con variaciones en sensibilidad."},
+
+  // CATEGORÍA 7: ESTRATEGIAS DE REGULACIÓN INMEDIATA (10 situaciones)
+  {q:"Sientes que te estás sobrecargando sensorialmente.", good:"Implementas inmediatamente técnicas de respiración y buscas un espacio tranquilo.", bad:"Intentas ignorar la sobrecarga hasta que se vuelve inmanejable."},
+  {q:"En una situación social, empiezas a sentirte abrumado.", good:"Usas estrategias discretas de autorregulación como respiración profunda.", bad:"Te fuerzas a continuar sin usar técnicas de regulación."},
+  {q:"Durante el trabajo, notas señales de sobrecarga.", good:"Tomas un descanso inmediato y ajustas tu ambiente de trabajo.", bad:"Continúas trabajando ignorando las señales de tu cuerpo."},
+  {q:"En un lugar público, te sientes desregulado.", good:"Usas herramientas de regulación como objetos fidget o técnicas de grounding.", bad:"Sufres la desregulación sin usar estrategias de manejo."},
+  {q:"Después de una exposición sensorial intensa, te sientes agotado.", good:"Implementas inmediatamente rutinas de descompresión sensorial.", bad:"Continúas con actividades normales sin tiempo de recuperación."},
+  {q:"Notas que tu ansiedad está aumentando por estímulos sensoriales.", good:"Usas técnicas de regulación específicas para ansiedad sensorial.", bad:"Intentas manejar la ansiedad sin abordar la causa sensorial."},
+  {q:"En una situación nueva, te sientes sensorialmente vulnerable.", good:"Implementas estrategias preventivas de regulación antes de la sobrecarga.", bad:"Esperas hasta sentirte mal para tomar medidas."},
+  {q:"Durante una actividad, reconoces señales tempranas de malestar.", good:"Ajustas inmediatamente la actividad o tu participación en ella.", bad:"Continúas con la actividad hasta llegar al punto de colapso."},
+  {q:"Te das cuenta de que necesitas estimulación sensorial.", good:"Buscas activamente input sensorial apropiado para regularte.", bad:"Ignoras tu necesidad de estimulación y te sientes desconectado."},
+  {q:"Sientes que tu sistema nervioso está hiperactivado.", good:"Usas técnicas específicas de calmado del sistema nervioso.", bad:"Intentas continuar normalmente con el sistema nervioso alterado."},
+
+  // CATEGORÍA 8: COMUNICACIÓN DE NECESIDADES SENSORIALES (10 situaciones)
+  {q:"Necesitas explicar tus sensibilidades sensoriales a un amigo.", good:"Comunicas claramente tus necesidades y propones soluciones colaborativas.", bad:"Evitas el tema y sufres en silencio durante actividades juntos."},
+  {q:"En el trabajo, necesitas acomodaciones sensoriales.", good:"Explicas profesionalmente tus necesidades y propones soluciones específicas.", bad:"Trabajas incómodo sin comunicar lo que necesitas."},
+  {q:"Tu familia no entiende tus sensibilidades sensoriales.", good:"Educas pacientemente sobre sensibilidad sensorial y das ejemplos concretos.", bad:"Te frustras con su falta de comprensión y evitas explicar."},
+  {q:"En una cita, el lugar elegido no es sensorialmente apropiado.", good:"Comunicas diplomáticamente tus necesidades y sugieres alternativas.", bad:"Sufres la incomodidad sin comunicar tus necesidades."},
+  {q:"Un profesor necesita entender tus necesidades sensoriales.", good:"Explicas cómo las sensibilidades afectan tu aprendizaje y propones soluciones.", bad:"Luchas académicamente sin comunicar factores sensoriales."},
+  {q:"En una actividad grupal, necesitas modificaciones sensoriales.", good:"Comunicas tus necesidades de manera que beneficie a todo el grupo.", bad:"Participas incómodamente sin sugerir mejoras."},
+  {q:"Tu pareja no comprende tus reacciones sensoriales.", good:"Explicas cómo las sensibilidades afectan tu bienestar y relación.", bad:"Tienes conflictos sin abordar la base sensorial de tus reacciones."},
+  {q:"En un evento, necesitas acomodaciones específicas.", good:"Contactas a los organizadores con anticipación para solicitar ajustes.", bad:"Asistes sin preparación y sufres las consecuencias sensoriales."},
+  {q:"Un médico no entiende tus síntomas sensoriales.", good:"Describes específicamente cómo las sensibilidades afectan tu vida diaria.", bad:"Minimizas tus síntomas o no los comunicas claramente."},
+  {q:"Necesitas que otros respeten tus límites sensoriales.", good:"Estableces límites claros y explicas las consecuencias de no respetarlos.", bad:"Permites que otros ignoren tus límites para evitar conflictos."},
+
+  // CATEGORÍA 9: PLANIFICACIÓN SENSORIAL (10 situaciones)
+  {q:"Vas a asistir a un evento que puede ser sensorialmente desafiante.", good:"Planificas estrategias de manejo y llevas herramientas de regulación.", bad:"Asistes sin preparación y esperas poder manejarlo."},
+  {q:"Tienes un día lleno de actividades estimulantes.", good:"Planificas descansos sensoriales entre actividades.", bad:"Programas actividades consecutivas sin considerar la acumulación sensorial."},
+  {q:"Vas a viajar a un lugar con diferentes estímulos sensoriales.", good:"Investigas el destino y planificas estrategias de adaptación sensorial.", bad:"Viajas sin considerar cómo el nuevo ambiente puede afectarte."},
+  {q:"Tienes una semana particularmente estresante por delante.", good:"Ajustas tu exposición sensorial considerando tu mayor vulnerabilidad.", bad:"Mantienes la misma exposición sensorial sin considerar el estrés adicional."},
+  {q:"Vas a mudarte a un nuevo ambiente.", good:"Evalúas las características sensoriales del nuevo espacio y planificas ajustes.", bad:"Te mudas sin considerar cómo el nuevo ambiente puede afectar tu bienestar."},
+  {q:"Tienes una presentación importante en un ambiente desconocido.", good:"Visitas el lugar con anticipación para evaluar factores sensoriales.", bad:"Llegas sin conocer las características sensoriales del espacio."},
+  {q:"Planificas una celebración que debe ser inclusiva sensorialmente.", good:"Consideras las necesidades sensoriales de todos los invitados.", bad:"Planificas solo considerando tus propias preferencias."},
+  {q:"Vas a comenzar un nuevo trabajo.", good:"Evalúas el ambiente sensorial del lugar de trabajo y planificas adaptaciones.", bad:"Comienzas sin considerar cómo el ambiente puede afectar tu desempeño."},
+  {q:"Tienes una cita médica en un hospital.", good:"Te preparas para los estímulos sensoriales típicos de hospitales.", bad:"Vas sin preparación para el ambiente sensorial médico."},
+  {q:"Planificas vacaciones familiares.", good:"Consideras las necesidades sensoriales de toda la familia en la planificación.", bad:"Planificas solo considerando actividades sin pensar en aspectos sensoriales."},
+
+  // CATEGORÍA 10: AUTOCONOCIMIENTO SENSORIAL AVANZADO (10 situaciones)
+  {q:"Notas que tu perfil sensorial está cambiando con la edad.", good:"Ajustas tus estrategias de manejo según los cambios en tu sensibilidad.", bad:"Continúas usando las mismas estrategias sin adaptarte a los cambios."},
+  {q:"Reconoces que tienes tanto hiper como hiposensibilidades.", good:"Desarrollas estrategias específicas para cada tipo de sensibilidad.", bad:"Intentas usar las mismas estrategias para todas tus sensibilidades."},
+  {q:"Te das cuenta de que tu sensibilidad afecta tus relaciones.", good:"Trabajas en comunicar y manejar cómo las sensibilidades impactan tus vínculos.", bad:"Permites que las sensibilidades dañen tus relaciones sin abordar el tema."},
+  {q:"Notas que ciertos medicamentos afectan tu sensibilidad.", good:"Monitoreas y comunicas a tu médico cómo los medicamentos afectan tu procesamiento sensorial.", bad:"No conectas cambios en medicación con variaciones en sensibilidad."},
+  {q:"Reconoces que tu sensibilidad es parte de tu neurodiversidad.", good:"Integras tu perfil sensorial como parte valiosa de tu identidad.", bad:"Ves tus sensibilidades solo como problemas a superar."},
+  {q:"Te das cuenta de que puedes ayudar a otros con sensibilidades similares.", good:"Compartes tu conocimiento y estrategias con otros que pueden beneficiarse.", bad:"Guardas tu conocimiento sin considerar cómo puede ayudar a otros."},
+  {q:"Notas que tu sensibilidad te da ventajas en ciertas situaciones.", good:"Reconoces y aprovechas las fortalezas que vienen con tu perfil sensorial.", bad:"Te enfocas solo en las dificultades sin ver las ventajas."},
+  {q:"Reconoces patrones complejos en tu procesamiento sensorial.", good:"Desarrollas estrategias sofisticadas basadas en tu comprensión profunda.", bad:"Usas estrategias simples sin aprovechar tu autoconocimiento avanzado."},
+  {q:"Te das cuenta de que tu sensibilidad influye en tus decisiones de vida.", good:"Tomas decisiones informadas considerando tu perfil sensorial.", bad:"Tomas decisiones sin considerar cómo afectarán tu bienestar sensorial."},
+  {q:"Reconoces que tu manejo sensorial ha mejorado con el tiempo.", good:"Celebras tu progreso y continúas refinando tus estrategias.", bad:"No reconoces tu crecimiento y subestimas tus habilidades actuales."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

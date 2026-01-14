@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Adaptación Laboral</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #06b6d4;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #06b6d4cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #06b6d4cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(218, 244, 249);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(218, 244, 249);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>💼</span>
+      <span>Entorno Académico y Laboral</span>
+    </span>
+    <h1>🔄 Adaptación Laboral</h1>
+    <p>Cultura organizacional, ajustes razonables y manejo de feedback</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Cambios tecnológicos
+  {q:"La empresa adopta un nuevo software de gestión.", good:"Exploras tutoriales, preguntas dudas y practicas con casos reales para adaptarte.", bad:"Te niegas a usarlo y sigues con el sistema antiguo."},
+  {q:"Tu jefe te pide usar una nueva herramienta de comunicación interna.", good:"Instalas la app, revisas las funciones básicas y pides ayuda si algo no está claro.", bad:"Ignoras el mensaje y sigues usando el correo tradicional."},
+  {q:"Implementan un sistema de fichaje digital que no conoces.", good:"Lees las instrucciones, pruebas el sistema y consultas a RRHH si tienes dudas.", bad:"Te frustras y pides a un compañero que fiche por ti."},
+  {q:"Cambian la plataforma de reuniones virtuales.", good:"Descargas la nueva aplicación, pruebas el audio y video antes de la primera reunión.", bad:"Llegas tarde a la reunión porque no sabías cómo entrar."},
+  {q:"Tu equipo empieza a usar una metodología ágil que desconoces.", good:"Investigas sobre Scrum o Kanban, preguntas en las reuniones y tomas notas.", bad:"Asistes a las reuniones sin entender y no preguntas nada."},
+  {q:"Introducen un nuevo formato de reportes semanales.", good:"Revisas el ejemplo, sigues la plantilla y pides feedback sobre tu primer reporte.", bad:"Envías el reporte en el formato antiguo sin avisar."},
+  {q:"La empresa migra a la nube y debes acceder a archivos de forma diferente.", good:"Aprendes a usar el sistema de carpetas compartidas y guardas los accesos importantes.", bad:"Te quejas de que era más fácil antes y no intentas aprender."},
+  {q:"Implementan un chat corporativo con muchas funciones nuevas.", good:"Exploras las opciones básicas, silencias notificaciones innecesarias y personalizas tu perfil.", bad:"Dejas todas las notificaciones activas y te abrumas con los mensajes."},
+  {q:"Tu departamento adopta una nueva herramienta de gestión de proyectos.", good:"Asistes a la capacitación, practicas con un proyecto pequeño y compartes dudas con el equipo.", bad:"No asistes a la capacitación y luego no sabes cómo actualizar tus tareas."},
+  {q:"Cambian el sistema de solicitud de vacaciones a una app móvil.", good:"Descargas la app, exploras el proceso y haces una solicitud de prueba si es posible.", bad:"Esperas a que alguien te explique paso a paso cada vez que necesitas usarla."},
+
+  // 11-20 Cambios en el equipo
+  {q:"Llega un nuevo jefe con un estilo de liderazgo diferente.", good:"Observas su forma de trabajar, te adaptas a sus expectativas y comunicas tus necesidades.", bad:"Te resistes al cambio y criticas constantemente al jefe anterior."},
+  {q:"Tu compañero de escritorio es reemplazado por alguien nuevo.", good:"Te presentas, ofreces ayuda para que se adapte y estableces límites claros de espacio.", bad:"Ignoras al nuevo compañero y no compartes información útil."},
+  {q:"Reorganizan los equipos y te asignan a un proyecto con personas desconocidas.", good:"Te presentas, preguntas sobre el proyecto y ofreces tus habilidades al equipo.", bad:"Te mantienes callado y esperas que otros tomen todas las decisiones."},
+  {q:"Tu mentor se va de la empresa.", good:"Agradeces su apoyo, mantienes el contacto si es apropiado y buscas nuevas fuentes de aprendizaje.", bad:"Te sientes abandonado y dejas de esforzarte en tu desarrollo."},
+  {q:"Contratan a alguien para un puesto que esperabas obtener.", good:"Aceptas la decisión, te presentas cordialmente y pides feedback para mejorar.", bad:"Te muestras hostil con la nueva persona y te quejas abiertamente."},
+  {q:"Tu equipo se reduce y debes asumir más responsabilidades.", good:"Priorizas tareas, pides claridad sobre expectativas y solicitas recursos si es necesario.", bad:"Te niegas a hacer más trabajo del que hacías antes."},
+  {q:"Llega un becario que necesita supervisión constante.", good:"Dedicas tiempo a enseñarle, estableces check-ins regulares y tienes paciencia.", bad:"Lo ignoras porque no tienes tiempo y dejas que cometa errores."},
+  {q:"Tu compañero más cercano es transferido a otra sucursal.", good:"Mantienes la amistad, te abres a conocer a otros colegas y ajustas tu rutina.", bad:"Te aíslas y te niegas a socializar con otros compañeros."},
+  {q:"Fusionan tu departamento con otro y hay duplicidad de roles.", good:"Colaboras para definir responsabilidades, compartes conocimientos y buscas sinergias.", bad:"Compites agresivamente por mantener tu territorio."},
+  {q:"Asignan un nuevo líder de proyecto que tiene menos experiencia que tú.", good:"Ofreces tu experiencia como apoyo, respetas su autoridad y comunicas constructivamente.", bad:"Cuestionas cada decisión y minas su autoridad frente al equipo."},
+
+  // 21-30 Cambios de espacio físico
+  {q:"Te cambian a un escritorio en otra área de la oficina.", good:"Organizas tu nuevo espacio, te presentas a los nuevos vecinos y ajustas tu rutina.", bad:"Te quejas constantemente y pides volver a tu lugar anterior."},
+  {q:"La empresa se muda a un edificio nuevo más lejos de tu casa.", good:"Exploras nuevas rutas de transporte, ajustas tu horario de salida y buscas aspectos positivos.", bad:"Llegas tarde todos los días y te quejas del cambio."},
+  {q:"Implementan un sistema de escritorios rotativos sin lugares fijos.", good:"Llegas temprano para elegir un buen lugar, guardas tus cosas en un locker y te adaptas.", bad:"Dejas tus cosas en un escritorio reclamándolo como tuyo."},
+  {q:"Renuevan la oficina y cambian la distribución del espacio.", good:"Exploras el nuevo layout, identificas dónde están los recursos y das tiempo a adaptarte.", bad:"Te pierdes constantemente y te niegas a usar el nuevo mapa."},
+  {q:"Te asignan a trabajar en un espacio compartido con más ruido.", good:"Usas auriculares con cancelación de ruido, ajustas tu horario de tareas y comunicas tus necesidades.", bad:"Te distraes constantemente y no cumples con tus plazos."},
+  {q:"Cierran la cocina de la oficina por remodelación.", good:"Traes tu comida preparada, exploras opciones cercanas y te adaptas temporalmente.", bad:"Te saltas comidas y te quejas de hambre todo el día."},
+  {q:"Cambian el horario de acceso al edificio por seguridad.", good:"Ajustas tu hora de llegada, llevas tu credencial siempre y sigues los nuevos protocolos.", bad:"Intentas entrar por puertas no autorizadas y discutes con seguridad."},
+  {q:"Instalan un sistema de iluminación automática que no te gusta.", good:"Solicitas ajustes si es posible, usas una lámpara personal si lo permiten y te adaptas.", bad:"Desactivas el sistema constantemente causando problemas."},
+  {q:"Te asignan un espacio más pequeño tras la reorganización.", good:"Optimizas tu organización, guardas lo innecesario y te enfocas en lo funcional.", bad:"Acumulas cosas en pasillos y te quejas del espacio reducido."},
+  {q:"Implementan una política de oficina sin papel.", good:"Digitalizas tus documentos, usas herramientas digitales y reciclas papeles antiguos.", bad:"Sigues imprimiendo todo y guardas pilas de papel en tu escritorio."},
+
+  // 31-40 Cambios de horario y modalidad
+  {q:"La empresa implementa horario flexible.", good:"Planificas tu horario según tus necesidades, lo comunicas al equipo y cumples las horas requeridas.", bad:"Llegas y sales a cualquier hora sin coordinación con nadie."},
+  {q:"Te piden trabajar desde casa dos días a la semana.", good:"Preparas un espacio de trabajo en casa, pruebas tu conexión y estableces una rutina.", bad:"Trabajas desde la cama sin cámara y con distracciones constantes."},
+  {q:"Cambian tu turno de mañana a tarde.", good:"Ajustas tu rutina de sueño gradualmente, reorganizas tus actividades personales y te adaptas.", bad:"Llegas con sueño todos los días y tu rendimiento baja."},
+  {q:"Implementan una política de trabajo híbrido.", good:"Organizas qué tareas hacer en casa y cuáles en oficina, coordinas con tu equipo y cumples.", bad:"Eliges aleatoriamente sin considerar las necesidades del equipo."},
+  {q:"Extienden el horario de atención al cliente y debes rotar turnos.", good:"Revisas el calendario, te organizas con anticipación y cumples con tu turno asignado.", bad:"Intentas cambiar tu turno constantemente o no te presentas."},
+  {q:"Reducen la jornada laboral pero también el salario.", good:"Ajustas tu presupuesto, aprovechas el tiempo extra para otras actividades y te adaptas.", bad:"Trabajas las mismas horas esperando que te paguen más."},
+  {q:"Te piden asistir a reuniones muy temprano en la mañana.", good:"Ajustas tu hora de dormir, preparas todo la noche anterior y llegas puntual.", bad:"Llegas tarde con excusas y sin preparación."},
+  {q:"Implementan viernes de medio día.", good:"Reorganizas tus tareas para completarlas en menos tiempo y aprovechas la tarde libre.", bad:"Dejas todo para el lunes y no cumples con tus entregas."},
+  {q:"Te ofrecen trabajar 100% remoto.", good:"Evalúas pros y contras, preparas tu espacio de trabajo y estableces límites claros.", bad:"Aceptas sin pensar y luego te sientes aislado y desorganizado."},
+  {q:"Cambian el día de descanso de domingo a lunes.", good:"Ajustas tus planes sociales, informas a tu familia y aprovechas el lunes libre.", bad:"Faltas los domingos porque consideras que es tu día libre tradicional."},
+
+  // 41-50 Cambios en procesos y procedimientos
+  {q:"Modifican el proceso de aprobación de gastos.", good:"Lees el nuevo procedimiento, sigues los pasos y guardas los comprobantes correctamente.", bad:"Envías los gastos como antes y te molestas cuando los rechazan."},
+  {q:"Implementan un nuevo código de vestimenta más formal.", good:"Ajustas tu guardarropa, preguntas si tienes dudas y cumples con la política.", bad:"Sigues vistiendo casual y argumentas que tu trabajo no cambia por la ropa."},
+  {q:"Cambian el proceso de solicitud de permisos.", good:"Aprendes el nuevo sistema, solicitas con anticipación y sigues el protocolo.", bad:"Avisas el mismo día como antes y te sorprendes cuando no te aprueban."},
+  {q:"Introducen evaluaciones de desempeño trimestrales en lugar de anuales.", good:"Preparas evidencias regularmente, solicitas feedback continuo y te adaptas al ritmo.", bad:"Ignoras las evaluaciones hasta el último momento y no tienes nada preparado."},
+  {q:"Cambian el formato de las reuniones de equipo.", good:"Revisas la nueva agenda, preparas tus puntos con anticipación y participas activamente.", bad:"Llegas sin preparación y no entiendes la nueva dinámica."},
+  {q:"Implementan un sistema de tickets para solicitudes de IT.", good:"Aprendes a crear tickets con información completa y haces seguimiento apropiado.", bad:"Sigues llamando directamente a IT y te frustras cuando no te atienden."},
+  {q:"Modifican el proceso de onboarding para nuevos empleados.", good:"Si te toca apoyar, aprendes el nuevo proceso y lo sigues consistentemente.", bad:"Haces el onboarding como siempre lo has hecho ignorando los cambios."},
+  {q:"Cambian la forma de reportar horas trabajadas.", good:"Registras tus horas diariamente en el nuevo sistema y verificas que se guarden correctamente.", bad:"Anotas en papel y pasas todo al final del mes con errores."},
+  {q:"Implementan una política de cero tolerancia a retrasos.", good:"Ajustas tu rutina para llegar 10 minutos antes y tienes planes de contingencia.", bad:"Sigues llegando justo a tiempo y te sorprendes de las consecuencias."},
+  {q:"Cambian el proceso de comunicación de ausencias.", good:"Usas el nuevo canal oficial, notificas con anticipación y sigues el protocolo.", bad:"Envías un mensaje de texto a tu jefe como antes."},
+
+  // 51-60 Cambios en objetivos y prioridades
+  {q:"Tu jefe cambia las prioridades del proyecto a mitad de mes.", good:"Reorganizas tu agenda, clarificar las nuevas prioridades y ajustas tus entregas.", bad:"Sigues trabajando en lo anterior ignorando las nuevas instrucciones."},
+  {q:"La empresa cambia su enfoque estratégico.", good:"Asistes a las reuniones informativas, haces preguntas y alineas tu trabajo al nuevo enfoque.", bad:"Sigues haciendo lo mismo sin considerar la nueva dirección."},
+  {q:"Te asignan un proyecto urgente que no estaba planeado.", good:"Evalúas tu carga actual, negocias plazos si es necesario y reorganizas tus tareas.", bad:"Te niegas porque no estaba en tu plan original."},
+  {q:"Cambian los KPIs con los que te evalúan.", good:"Estudias los nuevos indicadores, ajustas tu forma de trabajar y mides tu progreso.", bad:"Ignoras los nuevos KPIs y te sorprendes en la evaluación."},
+  {q:"Tu rol evoluciona e incluye nuevas responsabilidades.", good:"Identificas qué necesitas aprender, pides capacitación y te preparas para el cambio.", bad:"Te quejas de que no es lo que firmaste en tu contrato."},
+  {q:"Eliminan un proyecto en el que trabajabas hace meses.", good:"Aceptas la decisión, documentas lo aprendido y te enfocas en nuevas asignaciones.", bad:"Te desmotivas y dejas de esforzarte en otros proyectos."},
+  {q:"Te piden enfocarte en calidad en lugar de cantidad.", good:"Ajustas tu ritmo, dedicas más tiempo a revisar y mejoras tus estándares.", bad:"Sigues trabajando rápido sin cuidar los detalles."},
+  {q:"Cambian el público objetivo de tu área.", good:"Investigas sobre el nuevo público, ajustas tu comunicación y aprendes sus necesidades.", bad:"Sigues usando el mismo enfoque sin considerar las diferencias."},
+  {q:"Te piden colaborar más con otros departamentos.", good:"Programas reuniones interdepartamentales, compartes información y construyes relaciones.", bad:"Te mantienes aislado en tu área sin comunicarte con otros."},
+  {q:"La empresa prioriza la innovación sobre la estabilidad.", good:"Propones ideas nuevas, te arriesgas a probar cosas diferentes y aprendes de los errores.", bad:"Te aferras a los procesos tradicionales por miedo al cambio."},
+
+  // 61-70 Cambios en recursos y herramientas
+  {q:"Reducen el presupuesto de tu departamento.", good:"Priorizas gastos esenciales, buscas alternativas económicas y comunicas limitaciones.", bad:"Sigues gastando igual y te sorprendes cuando rechazan tus solicitudes."},
+  {q:"Te quitan acceso a una herramienta que usabas frecuentemente.", good:"Preguntas el motivo, buscas alternativas aprobadas y te adaptas a las nuevas opciones.", bad:"Intentas conseguir acceso por otros medios no autorizados."},
+  {q:"Cambian el proveedor de material de oficina.", good:"Exploras el nuevo catálogo, ajustas tus pedidos y te adaptas a las nuevas opciones.", bad:"Te quejas constantemente de que los productos anteriores eran mejores."},
+  {q:"Implementan restricciones en el uso de internet.", good:"Usas internet solo para trabajo, descargas lo necesario en horarios permitidos y cumples.", bad:"Intentas saltarte los filtros y pierdes tiempo buscando formas de evadirlos."},
+  {q:"Reducen el espacio de almacenamiento en la nube.", good:"Organizas tus archivos, eliminas duplicados y guardas solo lo esencial.", bad:"Sigues subiendo archivos hasta que te bloquean el acceso."},
+  {q:"Cambian el tipo de computadora que te asignan.", good:"Aprendes el nuevo sistema operativo, transfieres tus archivos y te adaptas.", bad:"Te quejas constantemente y pides tu computadora anterior."},
+  {q:"Eliminan el servicio de café gratuito.", good:"Traes tu propio café o te adaptas a las nuevas opciones disponibles.", bad:"Pasas tiempo quejándote y afectas el ambiente laboral."},
+  {q:"Reducen el número de licencias de software disponibles.", good:"Coordinas con tu equipo para compartir acceso, planificas tu uso y te organizas.", bad:"Acaparas una licencia sin considerar las necesidades de otros."},
+  {q:"Cambian el modelo de teléfono corporativo.", good:"Aprendes a usar el nuevo dispositivo, transfieres tus contactos y te adaptas.", bad:"Sigues usando tu teléfono personal para todo y no usas el corporativo."},
+  {q:"Implementan un sistema de reserva de salas de reuniones.", good:"Aprendes a usar el sistema, reservas con anticipación y respetas los horarios.", bad:"Ocupas salas sin reservar y generas conflictos con otros equipos."},
+
+  // 71-80 Cambios en cultura organizacional
+  {q:"La empresa adopta una cultura más informal.", good:"Ajustas tu comunicación gradualmente, mantienes el profesionalismo y observas las nuevas normas.", bad:"Te vuelves demasiado casual y pierdes el respeto de tus colegas."},
+  {q:"Implementan una política de puertas abiertas con la gerencia.", good:"Aprovechas la oportunidad para comunicarte, preparas tus puntos y eres respetuoso.", bad:"Interrumpes constantemente sin considerar la disponibilidad real."},
+  {q:"Promueven una cultura de feedback constante.", good:"Das y recibes feedback constructivamente, lo aplicas y mejoras continuamente.", bad:"Te ofendes con cualquier comentario y evitas dar feedback a otros."},
+  {q:"La empresa se vuelve más diversa e inclusiva.", good:"Aprendes sobre diferentes culturas, respetas las diferencias y te educas continuamente.", bad:"Te resistes al cambio y haces comentarios inapropiados."},
+  {q:"Implementan actividades de team building obligatorias.", good:"Participas con actitud positiva, te integras y aprovechas para conocer a tus colegas.", bad:"Asistes de mala gana, no participas y te quejas todo el tiempo."},
+  {q:"Promueven el equilibrio vida-trabajo más activamente.", good:"Estableces límites saludables, desconectas fuera del horario y cuidas tu bienestar.", bad:"Sigues trabajando excesivamente para demostrar compromiso."},
+  {q:"La empresa adopta prácticas más sostenibles.", good:"Participas en el reciclaje, reduces tu consumo y apoyas las iniciativas verdes.", bad:"Ignoras las políticas ambientales y sigues con tus hábitos anteriores."},
+  {q:"Implementan un código de ética más estricto.", good:"Lees el código, lo sigues rigurosamente y reportas violaciones si las observas.", bad:"Consideras que son exageraciones y no cambias tu comportamiento."},
+  {q:"Promueven la transparencia en la comunicación.", good:"Compartes información apropiadamente, eres honesto y construyes confianza.", bad:"Sigues guardando información y siendo reservado por costumbre."},
+  {q:"La empresa se vuelve más orientada a resultados que a horas.", good:"Te enfocas en cumplir objetivos eficientemente, mides tu productividad y te organizas.", bad:"Sigues midiendo tu valor por las horas que pasas en la oficina."},
+
+  // 81-90 Cambios en beneficios y compensación
+  {q:"Cambian el plan de seguro médico.", good:"Revisas la nueva cobertura, entiendes los cambios y ajustas tus expectativas.", bad:"Asumes que todo es igual y te sorprendes cuando algo no está cubierto."},
+  {q:"Eliminan el bono anual y lo reemplazan por bonos trimestrales.", good:"Ajustas tu presupuesto personal, te enfocas en metas de corto plazo y te adaptas.", bad:"Te desmotivas y dejas de esforzarte porque extrañas el bono grande."},
+  {q:"Reducen los días de vacaciones pero aumentan días de salud mental.", good:"Planificas tus días estratégicamente, aprovechas los días de salud mental y te adaptas.", bad:"Tomas días de enfermedad falsos porque quieres más vacaciones."},
+  {q:"Cambian el horario del almuerzo de 1 hora a 45 minutos.", good:"Organizas tu comida para comer en menos tiempo, aprovechas mejor el tiempo y te adaptas.", bad:"Tomas tu hora completa ignorando la nueva política."},
+  {q:"Eliminan el estacionamiento gratuito.", good:"Exploras opciones de transporte público, compartes auto o ajustas tu presupuesto.", bad:"Estacionas en lugares no autorizados y acumulas multas."},
+  {q:"Cambian el día de pago de fin de mes a mediados de mes.", good:"Ajustas tus pagos automáticos, reorganizas tu presupuesto y te adaptas.", bad:"Tienes problemas financieros por no ajustar tus pagos."},
+  {q:"Implementan un sistema de compensación variable.", good:"Entiendes cómo funciona, te enfocas en los objetivos y trabajas para maximizar tu ingreso.", bad:"Te quejas de la incertidumbre y no te esfuerzas por los bonos."},
+  {q:"Reducen el subsidio de transporte.", good:"Buscas alternativas más económicas, compartes viajes o ajustas tu presupuesto.", bad:"Faltas al trabajo porque consideras que no te alcanza para el transporte."},
+  {q:"Cambian el proveedor del comedor con opciones diferentes.", good:"Pruebas las nuevas opciones, das feedback constructivo y te adaptas.", bad:"Te niegas a comer ahí y gastas más dinero afuera."},
+  {q:"Eliminan el programa de capacitación externa.", good:"Buscas opciones gratuitas online, aprendes de forma autodidacta y compartes conocimiento.", bad:"Dejas de aprender y te estancas profesionalmente."},
+
+  // 91-100 Cambios en liderazgo y dirección
+  {q:"La empresa es adquirida por otra compañía.", good:"Mantienes la calma, te informas sobre los cambios y demuestras tu valor.", bad:"Entras en pánico, buscas otro trabajo inmediatamente sin evaluar la situación."},
+  {q:"Cambia el CEO y la visión de la empresa.", good:"Escuchas la nueva visión, te alineas con los objetivos y te adaptas al cambio.", bad:"Te resistes al cambio y hablas negativamente del nuevo liderazgo."},
+  {q:"Tu departamento cambia de gerente general.", good:"Te presentas profesionalmente, demuestras tu trabajo y construyes una nueva relación.", bad:"Comparas constantemente con el gerente anterior y te resistes."},
+  {q:"Implementan una estructura organizacional más plana.", good:"Asumes más autonomía, tomas decisiones y te adaptas a la menor jerarquía.", bad:"Te sientes perdido sin supervisión constante y no sabes qué hacer."},
+  {q:"Centralizan decisiones que antes eran locales.", good:"Sigues los nuevos procesos de aprobación, te adaptas a los tiempos y planificas con anticipación.", bad:"Tomas decisiones por tu cuenta ignorando la nueva estructura."},
+  {q:"Descentralizan y te dan más autonomía.", good:"Asumes la responsabilidad, tomas decisiones informadas y pides apoyo cuando lo necesitas.", bad:"Te paralizas por miedo a equivocarte y no tomas ninguna decisión."},
+  {q:"Fusionan tu área con otra bajo un nuevo liderazgo.", good:"Colaboras en la integración, compartes conocimientos y construyes relaciones.", bad:"Creas bandos y generas conflictos entre los equipos."},
+  {q:"Tu jefe directo es promovido y llega alguien externo.", good:"Das la bienvenida, ofreces contexto sobre el equipo y construyes una relación profesional.", bad:"Boicoteas al nuevo jefe porque querías la promoción."},
+  {q:"Implementan un modelo de liderazgo rotativo.", good:"Aprovechas la oportunidad para liderar, aprendes de otros líderes y te desarrollas.", bad:"Solo te esfuerzas cuando te toca liderar y no apoyas a otros."},
+  {q:"La empresa cambia de ser familiar a corporativa.", good:"Te adaptas a los nuevos procesos formales, mantienes el profesionalismo y creces con el cambio.", bad:"Extrañas el ambiente familiar y te resistes a la profesionalización."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

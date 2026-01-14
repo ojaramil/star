@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Comunicación Profesional</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #06b6d4;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #06b6d4cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #06b6d4cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(218, 244, 249);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(218, 244, 249);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>💼</span>
+      <span>Entorno Académico y Laboral</span>
+    </span>
+    <h1>📧 Comunicación Profesional</h1>
+    <p>Emails, reuniones, networking y manejo de conflictos</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Correos electrónicos
+  {q:"Necesitas pedir una aclaración por correo a tu supervisor.", good:"Escribes un saludo cordial, das contexto breve y formulas la pregunta con claridad.", bad:"Envías un mensaje corto sin saludo ni detalles."},
+  {q:"Debes reportar un problema por email.", good:"Usas asunto claro, describes el problema, su impacto y propones soluciones.", bad:"Solo describes el problema sin contexto ni propuestas."},
+  {q:"Necesitas solicitar algo urgente por correo.", good:"Marcas la urgencia apropiadamente, explicas por qué es urgente y das fecha límite.", bad:"Marcas todo como urgente sin justificación."},
+  {q:"Debes responder un email con múltiples preguntas.", good:"Respondes cada pregunta numerada o citada para mayor claridad.", bad:"Respondes de forma general sin abordar cada punto."},
+  {q:"Necesitas enviar información a varias personas.", good:"Usas CC y BCC apropiadamente, explicas por qué cada persona está incluida.", bad:"Incluyes a todos en CC sin considerar relevancia."},
+  {q:"Debes dar seguimiento a un email sin respuesta.", good:"Reenvías cortésmente, mencionas la fecha del email original y la importancia.", bad:"Reenvías con mensaje agresivo sobre la falta de respuesta."},
+  {q:"Necesitas comunicar malas noticias por email.", good:"Eres directo pero empático, explicas el contexto y ofreces próximos pasos.", bad:"Das vueltas sin ser claro o eres demasiado brusco."},
+  {q:"Debes corregir un error en un email enviado.", good:"Envías corrección inmediata, te disculpas brevemente y das información correcta.", bad:"Ignoras el error esperando que nadie lo note."},
+  {q:"Necesitas delegar una tarea por correo.", good:"Explicas la tarea claramente, das contexto, fecha límite y criterios de éxito.", bad:"Das instrucciones vagas sin fechas ni expectativas claras."},
+  {q:"Debes agradecer por email.", good:"Eres específico sobre qué agradeces y cómo te ayudó.", bad:"Envías un 'gracias' genérico sin detalles."},
+
+  // 11-20 Reuniones virtuales
+  {q:"Estás en una videollamada y hay problemas técnicos.", good:"Comunicas el problema claramente, propones solución alternativa y mantienes profesionalismo.", bad:"Te frustras visiblemente y no comunicas qué está pasando."},
+  {q:"Debes presentar en una reunión virtual.", good:"Preparas tu presentación, pruebas la tecnología antes y tienes plan B.", bad:"Improvisas y luchas con la tecnología durante la presentación."},
+  {q:"Alguien no puede activar su micrófono.", good:"Sugieres alternativas como chat o llamada telefónica.", bad:"Sigues la reunión sin incluir a esa persona."},
+  {q:"Hay mucho ruido de fondo en la llamada.", good:"Pides cortésmente que silencien micrófonos cuando no hablen.", bad:"Ignoras el ruido y sigues con dificultad."},
+  {q:"Necesitas compartir pantalla.", good:"Preparas lo que vas a mostrar, cierras aplicaciones innecesarias y narras lo que haces.", bad:"Compartes pantalla con desorden y sin preparación."},
+  {q:"La reunión virtual se alarga mucho.", good:"Propones resumir puntos clave y programar seguimiento si es necesario.", bad:"Sigues sin control del tiempo."},
+  {q:"Alguien está claramente multitasking.", good:"Pausas y preguntas si es buen momento o si prefieren reprogramar.", bad:"Sigues hablando aunque no presten atención."},
+  {q:"Necesitas tomar notas en reunión virtual.", good:"Avisas que tomarás notas, las compartes después y pides confirmación.", bad:"Tomas notas sin avisar y no las compartes."},
+  {q:"Hay problemas de conexión intermitentes.", good:"Propones cambiar a llamada telefónica o reprogramar.", bad:"Sigues con mala conexión sin buscar alternativas."},
+  {q:"Debes moderar una reunión virtual.", good:"Estableces reglas claras, manejas turnos de palabra y mantienes el enfoque.", bad:"Dejas que todos hablen sin orden ni control."},
+
+  // 21-30 Presentaciones
+  {q:"Debes hacer una presentación a tu equipo.", good:"Estructuras contenido claramente, usas visuales apropiados y practicas antes.", bad:"Improvisas sin preparación ni estructura."},
+  {q:"Te hacen una pregunta que no sabes responder.", good:"Admites que no sabes, prometes investigar y dar seguimiento.", bad:"Inventas una respuesta o evades la pregunta."},
+  {q:"Tu presentación es interrumpida por preguntas.", good:"Agradeces las preguntas, respondes brevemente y propones tiempo específico para Q&A.", bad:"Te molestas por las interrupciones o pierdes el hilo."},
+  {q:"Debes presentar datos complejos.", good:"Simplificas la información, usas gráficos claros y destacas puntos clave.", bad:"Muestras todos los datos sin filtrar ni explicar."},
+  {q:"Tu audiencia parece aburrida.", good:"Cambias el ritmo, haces preguntas o incluyes ejemplos relevantes.", bad:"Sigues leyendo sin adaptar tu estilo."},
+  {q:"Tienes poco tiempo para presentar.", good:"Priorizas puntos clave, hablas concisamente y ofreces detalles después.", bad:"Intentas decir todo rápidamente sin priorizar."},
+  {q:"Debes presentar malas noticias.", good:"Eres directo pero empático, explicas contexto y enfocas en soluciones.", bad:"Das vueltas o eres demasiado brusco."},
+  {q:"Tu presentación tiene errores técnicos.", good:"Mantienes la calma, tienes plan B y continúas profesionalmente.", bad:"Te frustras y pierdes el control de la situación."},
+  {q:"Debes adaptar tu presentación sobre la marcha.", good:"Identificas qué es más relevante para la audiencia y ajustas.", bad:"Sigues con tu plan original sin adaptar."},
+  {q:"Necesitas que tu audiencia tome acción.", good:"Eres específico sobre qué necesitas, cuándo y por qué es importante.", bad:"Das información sin call-to-action claro."},
+
+  // 31-40 Conversaciones telefónicas
+  {q:"Debes hacer una llamada importante.", good:"Preparas puntos clave, eliges momento apropiado y confirmas disponibilidad.", bad:"Llamas sin preparación en cualquier momento."},
+  {q:"Recibes una llamada inesperada.", good:"Confirmas si es buen momento, escuchas activamente y tomas notas.", bad:"Atiendes distraído mientras haces otras cosas."},
+  {q:"La conexión telefónica es mala.", good:"Propones cambiar de ubicación, usar otro teléfono o reprogramar.", bad:"Sigues con mala conexión sin buscar soluciones."},
+  {q:"Debes dar información compleja por teléfono.", good:"Hablas despacio, confirmas comprensión y ofreces enviar resumen por escrito.", bad:"Das toda la información rápidamente sin confirmar."},
+  {q:"La llamada se alarga más de lo planeado.", good:"Resumes puntos clave y propones continuar en otro momento si es necesario.", bad:"Sigues sin control del tiempo."},
+  {q:"Debes hacer una llamada difícil.", good:"Preparas lo que dirás, eliges momento apropiado y mantienes tono profesional.", bad:"Evitas la llamada o la haces sin preparación."},
+  {q:"Alguien está molesto en la llamada.", good:"Escuchas sin interrumpir, validas sus sentimientos y buscas solución.", bad:"Te pones a la defensiva o cuelgas."},
+  {q:"Necesitas tomar notas durante la llamada.", good:"Avisas que tomarás notas, las organizas y confirmas puntos importantes.", bad:"Intentas recordar todo sin tomar notas."},
+  {q:"Debes transferir una llamada.", good:"Explicas a la persona por qué la transfieres y das contexto a quien recibe.", bad:"Transfieres sin explicación ni contexto."},
+  {q:"La llamada es interrumpida.", good:"Llamas de vuelta inmediatamente y retomas donde quedaron.", bad:"Esperas que la otra persona llame de vuelta."},
+
+  // 41-50 Comunicación escrita formal
+  {q:"Debes escribir un reporte.", good:"Estructuras con introducción, desarrollo y conclusiones claras.", bad:"Escribes sin estructura ni organización lógica."},
+  {q:"Necesitas documentar un proceso.", good:"Describes cada paso claramente, incluyes ejemplos y criterios de éxito.", bad:"Das instrucciones vagas sin detalles suficientes."},
+  {q:"Debes escribir una propuesta.", good:"Incluyes problema, solución, beneficios, costos y timeline.", bad:"Solo describes tu idea sin justificación ni detalles."},
+  {q:"Necesitas redactar políticas o procedimientos.", good:"Usas lenguaje claro, incluyes ejemplos y excepciones.", bad:"Escribes de forma ambigua que genera confusión."},
+  {q:"Debes crear un manual de usuario.", good:"Organizas por tareas, incluyes capturas de pantalla y ejemplos.", bad:"Escribes instrucciones técnicas sin considerar al usuario."},
+  {q:"Necesitas escribir un memo importante.", good:"Usas formato apropiado, eres conciso y destacas puntos clave.", bad:"Escribes párrafos largos sin estructura clara."},
+  {q:"Debes documentar una decisión.", good:"Incluyes contexto, opciones consideradas, criterios y rationale.", bad:"Solo comunicas la decisión sin explicar el proceso."},
+  {q:"Necesitas escribir instrucciones de trabajo.", good:"Las organizas paso a paso, incluyes precauciones y verificaciones.", bad:"Das instrucciones generales sin detalles específicos."},
+  {q:"Debes crear un resumen ejecutivo.", good:"Destacas puntos clave, usas bullets y mantienes brevedad.", bad:"Incluyes todos los detalles sin priorizar."},
+  {q:"Necesitas escribir una evaluación.", good:"Eres específico, balanceado y constructivo en tus comentarios.", bad:"Das feedback vago o solo críticas sin sugerencias."},
+
+  // 51-60 Comunicación interpersonal
+  {q:"Debes dar feedback difícil a un colega.", good:"Lo haces en privado, eres específico, constructivo y ofreces apoyo.", bad:"Das feedback vago en público o de forma destructiva."},
+  {q:"Alguien te da feedback negativo.", good:"Escuchas sin defenderte, haces preguntas para entender y agradeces.", bad:"Te pones a la defensiva o lo tomas personal."},
+  {q:"Necesitas pedir un favor a un compañero.", good:"Explicas el contexto, por qué lo necesitas y ofreces reciprocidad.", bad:"Pides sin explicar o das por sentado que dirá sí."},
+  {q:"Debes decir no a una solicitud.", good:"Explicas por qué no puedes, ofreces alternativas si es posible.", bad:"Dices no sin explicación o inventas excusas."},
+  {q:"Alguien está molesto contigo.", good:"Escuchas su perspectiva, te disculpas si es apropiado y buscas solución.", bad:"Ignoras su molestia o te pones a la defensiva."},
+  {q:"Necesitas negociar algo.", good:"Preparas tu posición, entiendes la suya y buscas win-win.", bad:"Insistes en tu posición sin considerar la otra parte."},
+  {q:"Debes mediar un conflicto.", good:"Escuchas ambas partes, mantienes neutralidad y facilitas solución.", bad:"Tomas partido o evitas involucrarte."},
+  {q:"Alguien te interrumpe constantemente.", good:"Pides cortésmente poder terminar tu punto antes de que respondan.", bad:"Te frustras o dejas de hablar."},
+  {q:"Necesitas comunicar un cambio importante.", good:"Explicas el qué, por qué, cuándo y cómo les afecta.", bad:"Comunicas solo el cambio sin contexto ni impacto."},
+  {q:"Debes reconocer el trabajo de alguien.", good:"Eres específico sobre qué hicieron bien y cómo ayudó.", bad:"Das reconocimiento genérico sin detalles."},
+
+  // 61-70 Comunicación con superiores
+  {q:"Debes reportar un problema a tu jefe.", good:"Presentas el problema, su impacto y propones soluciones.", bad:"Solo reportas el problema sin proponer soluciones."},
+  {q:"Tu supervisor te pide una actualización.", good:"Preparas resumen conciso con avances, obstáculos y próximos pasos.", bad:"Das información desorganizada sin estructura."},
+  {q:"Necesitas pedir recursos adicionales.", good:"Justificas la necesidad, cuantificas beneficios y propones alternativas.", bad:"Pides sin justificación clara."},
+  {q:"Debes comunicar que no cumplirás una fecha.", good:"Avisas temprano, explicas las causas y propones nueva fecha realista.", bad:"Avisas a último momento sin explicación."},
+  {q:"Tu jefe te da instrucciones poco claras.", good:"Pides aclaración específica y reformulas para confirmar comprensión.", bad:"Finges entender y luego haces mal el trabajo."},
+  {q:"Necesitas proponer una idea nueva.", good:"Preparas propuesta estructurada con beneficios, costos y plan de implementación.", bad:"Mencionas la idea casualmente sin preparación."},
+  {q:"Debes comunicar un error que cometiste.", good:"Lo reportas inmediatamente, explicas qué pasó y cómo lo corregirás.", bad:"Ocultas el error o culpas a otros factores."},
+  {q:"Tu supervisor está muy ocupado.", good:"Eres conciso, priorizas lo más importante y ofreces seguir por escrito.", bad:"Tomas todo su tiempo sin considerar su agenda."},
+  {q:"Necesitas feedback de tu jefe.", good:"Pides feedback específico sobre aspectos concretos de tu trabajo.", bad:"Preguntas genéricamente 'cómo lo estoy haciendo'."},
+  {q:"Debes comunicar una preocupación.", good:"Presentas la preocupación objetivamente con datos y posibles impactos.", bad:"Te quejas emocionalmente sin datos concretos."},
+
+  // 71-80 Comunicación con clientes
+  {q:"Un cliente está insatisfecho.", good:"Escuchas completamente, validas su frustración y propones solución.", bad:"Te pones a la defensiva o minimizas su problema."},
+  {q:"Debes explicar algo técnico a un cliente.", good:"Adaptas el lenguaje a su nivel, usas analogías y confirmas comprensión.", bad:"Usas jerga técnica sin verificar si entiende."},
+  {q:"Un cliente pide algo imposible.", good:"Explicas por qué no es posible y ofreces alternativas viables.", bad:"Dices no sin explicación ni alternativas."},
+  {q:"Debes comunicar un retraso al cliente.", good:"Avisas temprano, explicas las causas y das nueva fecha con plan de contingencia.", bad:"Avisas a último momento sin explicación."},
+  {q:"El cliente cambia constantemente los requisitos.", good:"Documentas los cambios, explicas el impacto y negocias ajustes.", bad:"Aceptas todos los cambios sin comunicar el impacto."},
+  {q:"Necesitas educar al cliente sobre tu servicio.", good:"Usas ejemplos relevantes, beneficios claros y permites preguntas.", bad:"Das información técnica sin contexto relevante."},
+  {q:"Un cliente está confundido.", good:"Haces preguntas para entender su confusión y aclaras paso a paso.", bad:"Repites la misma información sin adaptarla."},
+  {q:"Debes comunicar costos adicionales.", good:"Explicas por qué son necesarios, cuánto cuestan y qué incluyen.", bad:"Sorprendes con costos sin explicación previa."},
+  {q:"El cliente tiene expectativas irreales.", good:"Educas sobre lo que es realista con ejemplos y datos.", bad:"Prometes lo imposible para no decepcionar."},
+  {q:"Necesitas obtener información del cliente.", good:"Explicas por qué necesitas la información y cómo la usarás.", bad:"Pides información sin explicar el propósito."},
+
+  // 81-90 Comunicación en crisis
+  {q:"Hay una crisis que afecta a los clientes.", good:"Comunicas rápidamente, eres transparente y das actualizaciones regulares.", bad:"Esperas tener toda la información antes de comunicar."},
+  {q:"Debes comunicar malas noticias al equipo.", good:"Eres directo pero empático, das contexto y enfocas en próximos pasos.", bad:"Das vueltas o eres demasiado brusco."},
+  {q:"Hay rumores negativos circulando.", good:"Abordas los rumores directamente con información factual.", bad:"Ignoras los rumores esperando que desaparezcan."},
+  {q:"Un proyecto está en riesgo.", good:"Comunicas el riesgo claramente, las opciones disponibles y pides input.", bad:"Minimizas el riesgo o entras en pánico."},
+  {q:"Debes comunicar despidos o recortes.", good:"Eres directo, empático y das información sobre próximos pasos.", bad:"Das información confusa o evitas el tema."},
+  {q:"Hay un problema de seguridad.", good:"Comunicas inmediatamente, das instrucciones claras y actualizas regularmente.", bad:"Minimizas el problema o das información confusa."},
+  {q:"Un cliente importante está amenazando con irse.", good:"Escuchas sus preocupaciones, propones soluciones y escalas si es necesario.", bad:"Entras en pánico o prometes cosas imposibles."},
+  {q:"Hay conflicto público sobre tu organización.", good:"Respondes con hechos, mantienes profesionalismo y buscas resolución.", bad:"Ignoras el conflicto o respondes emocionalmente."},
+  {q:"Debes comunicar un error grave.", good:"Tomas responsabilidad, explicas qué pasó y cómo se corregirá.", bad:"Culpas a otros o minimizas la gravedad."},
+  {q:"Hay presión mediática.", good:"Preparas mensajes clave, mantienes consistencia y buscas asesoría si es necesario.", bad:"Improvisas respuestas o evitas comunicar."},
+
+  // 91-100 Comunicación estratégica
+  {q:"Debes comunicar la visión de la organización.", good:"Usas lenguaje inspirador, ejemplos concretos y conectas con valores.", bad:"Recitas la visión sin hacerla relevante."},
+  {q:"Necesitas influir en una decisión importante.", good:"Preparas argumentos sólidos, anticipas objeciones y propones win-win.", bad:"Presionas sin argumentos o datos convincentes."},
+  {q:"Debes comunicar cambios organizacionales.", good:"Explicas el por qué, el impacto y cómo apoyarás la transición.", bad:"Comunicas solo el cambio sin contexto ni apoyo."},
+  {q:"Necesitas alinear múltiples stakeholders.", good:"Identificas intereses comunes, facilitas diálogo y buscas consenso.", bad:"Impones tu perspectiva sin considerar otros intereses."},
+  {q:"Debes comunicar resultados financieros.", good:"Contextualizas los números, explicas tendencias y das perspectiva futura.", bad:"Presentas números sin contexto ni interpretación."},
+  {q:"Necesitas comunicar una nueva estrategia.", good:"Conectas la estrategia con objetivos, explicas el cómo y das timeline.", bad:"Presentas la estrategia sin plan de implementación."},
+  {q:"Debes comunicar con la junta directiva.", good:"Preparas presentación ejecutiva, anticipas preguntas y das recomendaciones claras.", bad:"Presentas información sin análisis ni recomendaciones."},
+  {q:"Necesitas comunicar impacto social.", good:"Usas historias, datos concretos y conectas con valores organizacionales.", bad:"Das información genérica sin impacto emocional."},
+  {q:"Debes comunicar innovación.", good:"Explicas el valor, usas demos o prototipos y abordas preocupaciones.", bad:"Presentas la innovación sin mostrar valor práctico."},
+  {q:"Necesitas comunicar legado y continuidad.", good:"Honras el pasado, conectas con el presente y proyectas el futuro.", bad:"Ignoras el contexto histórico o solo hablas del pasado."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

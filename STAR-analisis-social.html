@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Análisis de Situaciones Sociales</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #6366f1;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #6366f1cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #6366f1cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(232, 232, 253);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(232, 232, 253);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🧩</span>
+      <span>Pensamiento Crítico Social</span>
+    </span>
+    <h1>📊 Análisis de Situaciones Sociales</h1>
+    <p>MAPAs, cuestionar asunciones y perspectiva de tercera persona</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // CATEGORÍA 1: INTERPRETACIÓN DE COMPORTAMIENTOS (10 situaciones)
+  {q:"Un amigo responde tarde a tu mensaje y parece distante.", good:"Analizas el contexto, consideras factores externos y preguntas con curiosidad cómo está.", bad:"Asumes que está molesto contigo y dejas de hablarle."},
+  {q:"Tu compañero de trabajo no te saluda en el pasillo.", good:"Consideras que puede estar concentrado o preocupado, y lo saludas normalmente.", bad:"Piensas que te está ignorando a propósito y te sientes ofendido."},
+  {q:"Alguien en una reunión no hace contacto visual contigo.", good:"Reconoces que puede ser timidez, distracción o diferencias culturales.", bad:"Interpretas que no le caes bien o que no respeta tu opinión."},
+  {q:"Un familiar cancela una cita contigo a último momento.", good:"Preguntas si está todo bien y ofreces reagendar cuando le convenga.", bad:"Asumes que no valora tu tiempo y te enojas sin preguntar el motivo."},
+  {q:"Tu pareja está más callada de lo usual durante la cena.", good:"Observas su lenguaje corporal y preguntas gentilmente si algo le preocupa.", bad:"Asumes que está molesta contigo y empiezas a defenderte."},
+  {q:"Un cliente parece impaciente durante tu presentación.", good:"Notas las señales y preguntas si prefiere que vayas directo al punto principal.", bad:"Ignoras las señales y continúas con tu presentación completa."},
+  {q:"Tu jefe no responde a tu email después de dos días.", good:"Consideras que puede estar ocupado y le envías un recordatorio cortés.", bad:"Asumes que tu propuesta fue rechazada y te desanimas."},
+  {q:"Alguien en el grupo no participa en la conversación.", good:"Observas si parece cómodo y ocasionalmente le diriges una pregunta amable.", bad:"Asumes que no está interesado y lo excluyes del resto de la charla."},
+  {q:"Un vecino no devuelve tu saludo en el ascensor.", good:"Consideras que puede no haberte visto o estar distraído.", bad:"Decides que es antipático y evitas saludarlo en el futuro."},
+  {q:"Tu amigo llega 20 minutos tarde sin avisar.", good:"Cuando llega, preguntas si tuvo algún inconveniente y expresas tu preocupación.", bad:"Asumes que no respeta tu tiempo y le haces un reclamo inmediato."},
+
+  // CATEGORÍA 2: DINÁMICAS GRUPALES (10 situaciones)
+  {q:"En una reunión familiar, dos tíos empiezan a discutir sobre política.", good:"Observas las tensiones, evalúas si puedes mediar o si es mejor cambiar de tema.", bad:"Te pones nervioso y sales de la habitación sin intentar entender la situación."},
+  {q:"En tu grupo de amigos, notas que dos personas se están distanciando.", good:"Observas los patrones de interacción y consideras si puedes ayudar de manera sutil.", bad:"Ignoras la tensión y esperas que se resuelva sola."},
+  {q:"Durante una cena, alguien hace un comentario que incomoda a otros.", good:"Notas las reacciones del grupo y evalúas si es momento de cambiar el tema.", bad:"Finges que no pasó nada y continúas comiendo en silencio."},
+  {q:"En el trabajo, hay tensión entre dos departamentos.", good:"Analizas las causas del conflicto y buscas puntos en común para facilitar la colaboración.", bad:"Tomas partido por uno de los lados sin entender completamente la situación."},
+  {q:"En una fiesta, notas que alguien se ve incómodo y aislado.", good:"Observas la situación y te acercas de manera amable para incluirlo en la conversación.", bad:"Asumes que prefiere estar solo y no haces nada."},
+  {q:"Tu grupo de estudio tiene conflictos sobre cómo organizarse.", good:"Analizas las diferentes perspectivas y propones una solución que considere las necesidades de todos.", bad:"Te frustras con el desacuerdo y propones dividir el grupo."},
+  {q:"En una actividad grupal, una persona domina toda la conversación.", good:"Observas cómo afecta al grupo y buscas maneras sutiles de incluir a otros.", bad:"Te molestas internamente pero no haces nada para equilibrar la participación."},
+  {q:"Notas que en tu equipo de trabajo hay favoritismo.", good:"Analizas objetivamente la situación y consideras cómo abordar el tema constructivamente.", bad:"Te quejas con otros compañeros sin buscar soluciones."},
+  {q:"En una celebración, hay un malentendido que genera tensión.", good:"Identificas el origen del malentendido y ayudas a clarificar la situación.", bad:"Evitas involucrarte y esperas que otros resuelvan el problema."},
+  {q:"Tu clase tiene divisiones entre diferentes grupos sociales.", good:"Observas las dinámicas y buscas oportunidades para crear puentes entre los grupos.", bad:"Te quedas solo con tu grupo habitual sin intentar entender a los demás."},
+
+  // CATEGORÍA 3: COMUNICACIÓN NO VERBAL (10 situaciones)
+  {q:"Durante una conversación, notas que la persona cruza los brazos y se aleja ligeramente.", good:"Reconoces señales de incomodidad y ajustas tu enfoque o preguntas si prefiere hablar en otro momento.", bad:"Continúas hablando sin notar las señales de que la persona quiere terminar la conversación."},
+  {q:"En una presentación, ves que algunas personas miran el reloj frecuentemente.", good:"Notas la señal de impaciencia y aceleras hacia los puntos más importantes.", bad:"Ignoras las señales y continúas con tu ritmo original."},
+  {q:"Tu interlocutor evita el contacto visual durante una conversación importante.", good:"Reconoces que puede indicar incomodidad o timidez y adaptas tu estilo de comunicación.", bad:"Asumes que no está prestando atención y te frustras."},
+  {q:"Alguien sonríe pero su sonrisa no llega a los ojos.", good:"Notas la incongruencia y consideras que puede estar siendo cortés pero no genuinamente feliz.", bad:"Tomas la sonrisa al pie de la letra sin notar que puede ser forzada."},
+  {q:"En una reunión, una persona tamborilea los dedos constantemente.", good:"Interpretas que puede estar ansiosa o impaciente y consideras abordar sus preocupaciones.", bad:"Te distraes con el ruido pero no consideras qué puede estar sintiendo."},
+  {q:"Tu amigo habla más rápido de lo usual y gesticula mucho.", good:"Reconoces señales de excitación o nerviosismo y ajustas tu respuesta en consecuencia.", bad:"No notas el cambio en su comportamiento y respondes de manera habitual."},
+  {q:"Durante una conversación, la persona se toca frecuentemente el cuello.", good:"Identificas una posible señal de estrés o incomodidad y consideras cambiar el tema.", bad:"No prestas atención a estos gestos y continúas con el tema que puede estar causando malestar."},
+  {q:"Alguien mantiene una postura muy rígida durante toda la conversación.", good:"Notas la tensión corporal y consideras que puede estar nervioso o incómodo.", bad:"No observas su lenguaje corporal y asumes que está relajado."},
+  {q:"Una persona asiente constantemente pero su expresión parece confundida.", good:"Reconoces la contradicción entre gestos y expresión, y verificas si realmente está entendiendo.", bad:"Asumes que está de acuerdo porque asiente, sin notar su confusión."},
+  {q:"En una conversación grupal, notas que alguien se inclina hacia adelante cuando hablas.", good:"Interpretas esto como señal de interés y continúas desarrollando tu punto.", bad:"No notas esta señal de engagement y cambias de tema prematuramente."},
+
+  // CATEGORÍA 4: CONTEXTOS CULTURALES Y SOCIALES (10 situaciones)
+  {q:"En una cena con personas de diferentes culturas, notas diferentes estilos de comunicación.", good:"Observas y respetas las diferencias culturales, adaptando tu estilo según el contexto.", bad:"Juzgas los estilos diferentes como incorrectos o extraños."},
+  {q:"En un evento formal, alguien actúa de manera muy casual.", good:"Consideras que puede no estar familiarizado con el protocolo y lo ayudas sutilmente.", bad:"Asumes que es irrespetuoso y lo juzgas negativamente."},
+  {q:"Un compañero de trabajo de otra generación usa un estilo de comunicación muy diferente.", good:"Reconoces las diferencias generacionales y buscas puntos de conexión.", bad:"Asumes que no pueden entenderse debido a la diferencia de edad."},
+  {q:"En una reunión internacional, hay diferentes normas sobre puntualidad.", good:"Analizas las expectativas culturales y adaptas tu comprensión del tiempo.", bad:"Te frustras cuando otros no siguen tu concepto de puntualidad."},
+  {q:"Alguien de un contexto socioeconómico diferente hace comentarios que no entiendes.", good:"Reconoces las diferencias de experiencia y haces preguntas respetuosas para entender mejor.", bad:"Asumes que sus comentarios no son relevantes o importantes."},
+  {q:"En un grupo diverso, notas que algunos participan más que otros.", good:"Consideras factores culturales que pueden afectar la participación y creas espacios inclusivos.", bad:"Asumes que los que no participan no están interesados."},
+  {q:"Un colega de otro país tiene un estilo de trabajo muy diferente al tuyo.", good:"Analizas las diferencias culturales en estilos de trabajo y buscas formas de colaborar efectivamente.", bad:"Criticas su estilo sin considerar las diferencias culturales."},
+  {q:"En una celebración religiosa diferente a la tuya, no entiendes algunos rituales.", good:"Observas respetuosamente y haces preguntas apropiadas para entender mejor.", bad:"Juzgas los rituales como extraños o innecesarios."},
+  {q:"Alguien usa expresiones o jerga que no conoces.", good:"Reconoces las diferencias lingüísticas y pides aclaraciones de manera respetuosa.", bad:"Asumes que está hablando incorrectamente o de manera poco profesional."},
+  {q:"En un contexto académico, hay diferentes niveles de formalidad.", good:"Observas las normas del ambiente y adaptas tu comportamiento apropiadamente.", bad:"Mantienes el mismo nivel de formalidad sin considerar el contexto."},
+
+  // CATEGORÍA 5: SITUACIONES DE CONFLICTO (10 situaciones)
+  {q:"Dos amigos están discutiendo y te piden que tomes partido.", good:"Analizas ambas perspectivas y ayudas a encontrar puntos en común sin tomar partido.", bad:"Inmediatamente apoyas a tu amigo más cercano sin escuchar ambos lados."},
+  {q:"En el trabajo hay tensión entre tu jefe y un compañero.", good:"Observas la dinámica sin involucrarte directamente y mantienes profesionalismo con ambos.", bad:"Chismeas sobre la situación o tomas partido abiertamente."},
+  {q:"Tu pareja y tu mejor amigo no se llevan bien.", good:"Analizas las causas del conflicto y buscas maneras de mejorar la relación entre ellos.", bad:"Ignoras el problema y esperas que se resuelva solo."},
+  {q:"En una reunión familiar, surge un conflicto sobre una decisión importante.", good:"Facilitas la comunicación ayudando a que cada parte exprese sus preocupaciones claramente.", bad:"Evitas el conflicto y te retiras de la situación."},
+  {q:"Dos compañeros de equipo tienen estilos de trabajo incompatibles.", good:"Analizas las fortalezas de cada estilo y propones maneras de complementarse.", bad:"Te frustras con la tensión y sugieres que trabajen por separado."},
+  {q:"En tu grupo de amigos hay celos por una nueva amistad.", good:"Reconoces la dinámica de celos y trabajas para incluir a todos de manera equilibrada.", bad:"Ignoras los celos y continúas favoreciendo la nueva amistad."},
+  {q:"Tu vecino se queja constantemente de ruido que no crees estar haciendo.", good:"Analizas objetivamente la situación y buscas una solución que funcione para ambos.", bad:"Te pones a la defensiva y escalas el conflicto."},
+  {q:"En clase, hay tensión entre el profesor y algunos estudiantes.", good:"Observas las dinámicas de poder y consideras maneras constructivas de mejorar la comunicación.", bad:"Tomas partido sin entender completamente la situación."},
+  {q:"Tu hermano y tu pareja no se llevan bien durante las reuniones familiares.", good:"Analizas las causas de la tensión y facilitas interacciones más positivas.", bad:"Te sientes atrapado en el medio y evitas las reuniones familiares."},
+  {q:"En tu trabajo hay rumores que están afectando el ambiente laboral.", good:"Evalúas la veracidad de los rumores y trabajas para promover comunicación directa.", bad:"Participas en los rumores sin verificar la información."},
+
+  // CATEGORÍA 6: SITUACIONES EMOCIONALES COMPLEJAS (10 situaciones)
+  {q:"Un amigo está pasando por un duelo y su comportamiento ha cambiado mucho.", good:"Reconoces que el duelo afecta el comportamiento y ofreces apoyo sin juzgar sus reacciones.", bad:"Te frustras con sus cambios de humor y te alejas."},
+  {q:"Tu compañero de trabajo parece estar lidiando con ansiedad.", good:"Notas las señales de ansiedad y ofreces apoyo de manera discreta y profesional.", bad:"Asumes que es perezoso o desorganizado sin considerar factores emocionales."},
+  {q:"Alguien en tu familia está actuando de manera irritable últimamente.", good:"Consideras factores estresantes en su vida y te acercas con empatía.", bad:"Respondes con irritabilidad sin intentar entender qué puede estar pasando."},
+  {q:"Un amigo cancela planes repetidamente sin dar explicaciones claras.", good:"Reconoces que puede estar lidiando con algo difícil y ofreces apoyo sin presionar.", bad:"Asumes que no valora tu amistad y dejas de invitarlo."},
+  {q:"Tu pareja está más sensible de lo usual a los comentarios.", good:"Notas el cambio en sensibilidad y ajustas tu comunicación para ser más cuidadoso.", bad:"Continúas hablando de la misma manera y te frustras con sus reacciones."},
+  {q:"Un colega parece estar abrumado con su carga de trabajo.", good:"Observas las señales de estrés y ofreces ayuda o sugieres redistribuir tareas.", bad:"Asumes que no puede manejar su trabajo y lo criticas."},
+  {q:"Alguien en tu grupo social está actuando de manera más retraída.", good:"Reconoces el cambio de comportamiento y te acercas de manera gentil para ofrecer apoyo.", bad:"Asumes que ya no quiere ser parte del grupo y lo excluyes."},
+  {q:"Tu hermano está pasando por una separación y está muy cambiado.", good:"Entiendes que la separación afecta su estado emocional y le das espacio mientras ofreces apoyo.", bad:"Te molestas porque no es el mismo de siempre y se lo haces saber."},
+  {q:"Un amigo está tomando decisiones que consideras arriesgadas.", good:"Analizas si sus decisiones pueden estar influenciadas por su estado emocional y ofreces perspectiva sin juzgar.", bad:"Lo criticas directamente sin considerar qué puede estar motivando sus decisiones."},
+  {q:"Tu jefe parece estar bajo mucha presión últimamente.", good:"Reconoces las señales de estrés y adaptas tu comunicación para ser más eficiente y menos demandante.", bad:"Continúas con tus solicitudes habituales sin considerar su estado actual."},
+
+  // CATEGORÍA 7: MALENTENDIDOS Y COMUNICACIÓN (10 situaciones)
+  {q:"Alguien malinterpreta tu comentario y se ofende.", good:"Reconoces el malentendido, te disculpas por la confusión y clarifica tu intención original.", bad:"Te frustras porque 'no entendió' y insistes en que tu comentario fue claro."},
+  {q:"En un mensaje de texto, tu tono es malinterpretado.", good:"Reconoces las limitaciones de la comunicación escrita y aclaras tu intención por teléfono.", bad:"Insistes en que el otro debería haber entendido tu tono por el contexto."},
+  {q:"Durante una presentación, notas caras de confusión en la audiencia.", good:"Pausas para verificar comprensión y ajustas tu explicación según las necesidades.", bad:"Continúas con tu presentación asumiendo que eventualmente entenderán."},
+  {q:"Un compañero interpreta tu sugerencia como una crítica.", good:"Clarifica que tu intención era ayudar y reformulas tu sugerencia de manera más constructiva.", bad:"Te defiendes diciendo que solo estabas tratando de ayudar sin reconocer cómo sonó."},
+  {q:"En una conversación grupal, tu comentario genera silencio incómodo.", good:"Reconoces que algo en tu comentario causó incomodidad y preguntas si necesitas aclarar algo.", bad:"Ignoras el silencio y continúas hablando como si nada hubiera pasado."},
+  {q:"Alguien no responde a tu pregunta directa en una conversación.", good:"Consideras que puede no haber escuchado o entendido, y reformulas la pregunta.", bad:"Asumes que te está ignorando y te sientes ofendido."},
+  {q:"Tu explicación de un proceso confunde más a la persona.", good:"Reconoces que tu explicación no fue efectiva y pruebas un enfoque diferente.", bad:"Repites la misma explicación más lentamente, asumiendo que el problema es de comprensión."},
+  {q:"En un email, tu solicitud es malinterpretada como una orden.", good:"Reconoces el malentendido y envías una aclaración con un tono más colaborativo.", bad:"Te frustras porque tu intención era clara y culpas al otro por malinterpretar."},
+  {q:"Durante una broma, la otra persona no se ríe y parece incómoda.", good:"Inmediatamente reconoces que la broma no fue bien recibida y te disculpas.", bad:"Insistes en que era solo una broma y que no debería tomárselo tan en serio."},
+  {q:"Tu consejo es rechazado de manera defensiva.", good:"Reconoces que tu consejo puede haber sonado como juicio y reformulas tu apoyo.", bad:"Insistes en que tu consejo es bueno y que debería escucharte."},
+
+  // CATEGORÍA 8: DINÁMICAS DE PODER Y JERARQUÍA (10 situaciones)
+  {q:"En una reunión, tu jefe interrumpe constantemente a los empleados.", good:"Observas la dinámica de poder y buscas maneras apropiadas de asegurar que todas las voces sean escuchadas.", bad:"Te frustras con las interrupciones pero no haces nada para mejorar la situación."},
+  {q:"Un compañero más senior desestima tus ideas sin considerarlas.", good:"Analizas si es un patrón de comportamiento y buscas maneras estratégicas de presentar tus ideas.", bad:"Te sientes desvalorizado y dejas de contribuir con ideas."},
+  {q:"En un grupo, alguien usa su posición para dominar las decisiones.", good:"Reconoces el abuso de poder y buscas maneras diplomáticas de promover decisiones más democráticas.", bad:"Te sometes a sus decisiones para evitar conflictos."},
+  {q:"Tu profesor favorece claramente a ciertos estudiantes.", good:"Observas el favoritismo y consideras maneras apropiadas de abordar la inequidad.", bad:"Te quejas con otros estudiantes pero no buscas soluciones constructivas."},
+  {q:"En tu familia, un miembro siempre toma las decisiones importantes.", good:"Analizas la dinámica familiar y buscas maneras respetuosas de promover más participación.", bad:"Te resignas a que esa persona siempre decida por todos."},
+  {q:"Un cliente trata de manera despectiva al personal de servicio.", good:"Reconoces el abuso de poder y intervienes de manera diplomática para proteger al personal.", bad:"Te sientes incómodo pero no haces nada para intervenir."},
+  {q:"En tu trabajo, hay una cultura de micromanagement.", good:"Analizas cómo esta dinámica afecta la productividad y buscas maneras de promover más autonomía.", bad:"Te frustras con la falta de confianza pero no propones alternativas."},
+  {q:"Alguien usa información privilegiada para ganar ventaja en una situación.", good:"Reconoces el uso inequitativo de información y consideras maneras éticas de nivelar el campo.", bad:"Te sientes en desventaja pero no abordas la inequidad."},
+  {q:"En una negociación, la otra parte usa tácticas de intimidación.", good:"Identificas las tácticas de poder y mantienes tu posición de manera firme pero profesional.", bad:"Te intimidas y aceptas términos desfavorables."},
+  {q:"Un líder de grupo toma crédito por el trabajo de otros.", good:"Observas el patrón y buscas maneras apropiadas de asegurar que el reconocimiento sea justo.", bad:"Te frustras con la injusticia pero no tomas acción para corregirla."},
+
+  // CATEGORÍA 9: SITUACIONES DE INCLUSIÓN Y DIVERSIDAD (10 situaciones)
+  {q:"En una reunión, notas que las mujeres son interrumpidas más frecuentemente.", good:"Observas el patrón de interrupciones y buscas maneras de amplificar las voces que están siendo silenciadas.", bad:"No notas el patrón o lo ignoras como algo normal."},
+  {q:"Alguien hace un comentario que excluye a personas de cierto grupo.", good:"Reconoces el impacto excluyente y abordas el comentario de manera educativa.", bad:"Ignoras el comentario para evitar incomodidad."},
+  {q:"En tu equipo, siempre se eligen las mismas personas para proyectos importantes.", good:"Analizas si hay sesgos en la selección y propones criterios más inclusivos.", bad:"Asumes que siempre se elige a los 'mejores' sin cuestionar los criterios."},
+  {q:"Durante una conversación, alguien hace suposiciones sobre una persona basadas en su apariencia.", good:"Reconoces el sesgo implícito y rediriges la conversación hacia información real.", bad:"Participas en las suposiciones sin cuestionarlas."},
+  {q:"En un evento social, notas que ciertas personas están siendo excluidas sutilmente.", good:"Observas los patrones de exclusión y activamente incluyes a las personas marginadas.", bad:"No notas la exclusión o asumes que es preferencia personal."},
+  {q:"Alguien usa lenguaje que puede ser ofensivo para ciertos grupos.", good:"Reconoces el impacto potencial del lenguaje y ofreces alternativas más inclusivas.", bad:"Piensas que la gente es 'demasiado sensible' y no ves problema con el lenguaje."},
+  {q:"En tu clase, los estudiantes internacionales participan menos en discusiones.", good:"Consideras barreras culturales y lingüísticas, y creas oportunidades más inclusivas para participar.", bad:"Asumes que no están interesados o preparados."},
+  {q:"Durante una actividad grupal, se forman cliques que excluyen a otros.", good:"Reconoces la formación de grupos excluyentes y trabajas para crear dinámicas más inclusivas.", bad:"Te quedas con tu grupo habitual sin considerar a los excluidos."},
+  {q:"Alguien hace una 'broma' que se basa en estereotipos.", good:"Reconoces cómo los estereotipos pueden ser dañinos y abordas el tema de manera educativa.", bad:"Te ríes de la broma sin considerar su impacto en otros."},
+  {q:"En una discusión, las perspectivas de ciertos grupos no están siendo consideradas.", good:"Notas la falta de diversidad de perspectivas y activamente buscas incluir voces diferentes.", bad:"No notas que faltan perspectivas importantes en la discusión."},
+
+  // CATEGORÍA 10: SITUACIONES DIGITALES Y VIRTUALES (10 situaciones)
+  {q:"En una videollamada, notas que alguien parece distraído o multitarea.", good:"Reconoces las señales de distracción y ajustas tu presentación para ser más engaging.", bad:"Te frustras con la falta de atención pero continúas sin hacer ajustes."},
+  {q:"En un chat grupal, hay un malentendido que está escalando.", good:"Reconoces que el formato escrito puede amplificar malentendidos y sugieres una llamada para aclarar.", bad:"Participas en el malentendido sin considerar las limitaciones del medio."},
+  {q:"Alguien no responde a mensajes importantes pero está activo en redes sociales.", good:"Consideras que puede haber razones válidas y usas un canal de comunicación diferente.", bad:"Asumes que te está ignorando deliberadamente y te ofendes."},
+  {q:"En una reunión virtual, hay problemas técnicos que afectan la participación.", good:"Reconoces cómo los problemas técnicos afectan la dinámica y buscas alternativas inclusivas.", bad:"Continúas con la reunión ignorando a quienes tienen dificultades técnicas."},
+  {q:"Un comentario en redes sociales genera reacciones muy polarizadas.", good:"Analizas cómo las redes sociales amplifican polarización y respondes de manera constructiva.", bad:"Te unes a uno de los lados sin considerar la complejidad del tema."},
+  {q:"En un foro online, hay un debate que se está volviendo tóxico.", good:"Reconoces la escalada tóxica y intentas redireccionar hacia una discusión más constructiva.", bad:"Participas en la toxicidad o simplemente te retiras sin intentar mejorar la situación."},
+  {q:"Alguien comparte información que parece cuestionable en un grupo.", good:"Analizas la credibilidad de la información y ofreces fuentes confiables de manera respetuosa.", bad:"Compartes la información sin verificar o atacas agresivamente su credibilidad."},
+  {q:"En una clase virtual, la participación es muy desigual.", good:"Observas los patrones de participación y buscas maneras de incluir a más estudiantes.", bad:"Asumes que los que no participan no están interesados."},
+  {q:"Un proyecto colaborativo online está teniendo problemas de coordinación.", good:"Analizas las dificultades específicas del trabajo remoto y propones herramientas o procesos mejores.", bad:"Te frustras con la falta de coordinación sin considerar soluciones específicas para el entorno digital."},
+  {q:"En una presentación virtual, no puedes leer las reacciones de la audiencia.", good:"Reconoces las limitaciones del formato y activamente solicitas feedback durante la presentación.", bad:"Asumes que todo está bien porque no ves reacciones negativas obvias."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

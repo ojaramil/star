@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Señales de Atención y Desconexión</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #8b5cf6;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #8b5cf6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #8b5cf6cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(238, 231, 254);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(238, 231, 254);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>👁️</span>
+      <span>Comunicación No Verbal</span>
+    </span>
+    <h1>📡 Señales de Atención y Desconexión</h1>
+    <p>Detectar interés, aburrimiento, ansiedad y fin de conversación</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // CATEGORÍA 1: SEÑALES VISUALES DE DESCONEXIÓN (10 situaciones)
+  {q:"Tu compañero empieza a mirar la ventana mientras le explicas un tema.", good:"Preguntas si prefieren continuar luego o cambiar la forma de explicar para recuperar su atención.", bad:"Hablas más fuerte y sigues con el mismo discurso."},
+  {q:"Durante una conversación, la persona mira constantemente su teléfono.", good:"Pausas y preguntas si necesita atender algo urgente o si prefieren hablar en otro momento.", bad:"Continúas hablando ignorando que está distraída con el teléfono."},
+  {q:"En una reunión, notas que alguien tiene la mirada perdida.", good:"Haces una pausa y preguntas si hay alguna duda o si necesitan un descanso.", bad:"Continúas con la presentación sin verificar si están siguiendo el contenido."},
+  {q:"Tu amigo evita el contacto visual durante una conversación importante.", good:"Reconoces la incomodidad y ajustas tu enfoque o preguntas si prefiere abordar el tema de otra manera.", bad:"Insistes en mantener contacto visual y continúas con el tema incómodo."},
+  {q:"Durante una explicación, ves que la persona mira frecuentemente el reloj.", good:"Reconoces la señal de prisa y ofreces resumir los puntos principales o continuar en otro momento.", bad:"Ignoras la señal y continúas con tu explicación completa."},
+  {q:"En clase, un estudiante mira hacia abajo constantemente.", good:"Te acercas discretamente para verificar si está siguiendo la clase o necesita ayuda.", bad:"Asumes que no está prestando atención y lo llamas la atención públicamente."},
+  {q:"Tu pareja mira al vacío mientras le cuentas sobre tu día.", good:"Pausas y preguntas si está preocupada por algo o si prefiere hablar en otro momento.", bad:"Te frustras y le reclamas que no te está escuchando."},
+  {q:"Durante una presentación, ves que varias personas miran sus laptops.", good:"Haces la presentación más interactiva o preguntas si hay dudas para recuperar la atención.", bad:"Continúas leyendo tus diapositivas sin intentar reconectar con la audiencia."},
+  {q:"Tu hijo mira hacia otro lado cuando le das instrucciones.", good:"Te pones a su altura, estableces contacto visual y verificas que haya entendido.", bad:"Repites las instrucciones más fuerte sin asegurar que tenga tu atención."},
+  {q:"En una cita, la persona mira constantemente alrededor del restaurante.", good:"Preguntas si se siente cómoda en el lugar o si prefiere ir a otro sitio más tranquilo.", bad:"Continúas hablando sin considerar que puede estar incómoda con el ambiente."},
+
+  // CATEGORÍA 2: SEÑALES CORPORALES DE DESCONEXIÓN (10 situaciones)
+  {q:"Notas que la persona se recuesta hacia atrás y cruza los brazos.", good:"Reconoces la señal de desconexión y cambias tu enfoque o preguntas si algo les incomoda.", bad:"Continúas con tu punto sin notar que se están cerrando a la conversación."},
+  {q:"Durante una conversación, la persona empieza a tamborilear los dedos.", good:"Interpretas la señal de impaciencia y aceleras hacia el punto principal o preguntas si tienen prisa.", bad:"Te distraes con el ruido pero no consideras que puede indicar impaciencia."},
+  {q:"Tu interlocutor se gira ligeramente hacia un lado mientras hablas.", good:"Notas la señal de desconexión y verificas si prefieren continuar la conversación en otro momento.", bad:"Continúas hablando sin notar que su lenguaje corporal indica desinterés."},
+  {q:"Alguien empieza a jugar con objetos en la mesa durante tu explicación.", good:"Reconoces la señal de distracción y haces tu explicación más interactiva o tomas un descanso.", bad:"Te molestas con la distracción pero continúas sin abordar la pérdida de atención."},
+  {q:"La persona bosteza repetidamente durante la conversación.", good:"Reconoces que puede estar cansada y ofreces continuar en otro momento o hacer la conversación más breve.", bad:"Te ofendes pensando que tu conversación es aburrida y te pones a la defensiva."},
+  {q:"Notas que alguien se aleja físicamente mientras hablas.", good:"Respetas su espacio personal y ajustas tu posición o preguntas si se sienten cómodos.", bad:"Te acercas más para 'recuperar' su atención, invadiendo su espacio personal."},
+  {q:"Tu compañero de trabajo se frota las sienes durante tu presentación.", good:"Reconoces señales de fatiga o estrés y ofreces hacer un descanso o resumir los puntos clave.", bad:"Continúas con tu presentación completa sin considerar su estado."},
+  {q:"Durante una conversación, la persona cambia constantemente de posición.", good:"Interpretas la inquietud como posible incomodidad y preguntas si prefieren cambiar de lugar o tema.", bad:"Ignoras la inquietud y continúas con la conversación sin hacer ajustes."},
+  {q:"Alguien empieza a balancearse o mover el pie mientras hablas.", good:"Reconoces la señal de impaciencia o ansiedad y ajustas tu ritmo o preguntas si necesitan un descanso.", bad:"Te distraes con el movimiento pero no consideras qué puede estar sintiendo."},
+  {q:"La persona se toca frecuentemente el cuello o la cara durante la conversación.", good:"Interpretas estas señales como posible incomodidad y verificas si el tema les resulta difícil.", bad:"Continúas con el tema sin notar que puede estar causando estrés."},
+
+  // CATEGORÍA 3: SEÑALES VERBALES DE DESCONEXIÓN (10 situaciones)
+  {q:"Alguien responde con monosílabos a tus preguntas abiertas.", good:"Reconoces la falta de engagement y cambias tu enfoque o preguntas si prefieren hablar en otro momento.", bad:"Continúas haciendo preguntas sin notar que no están interesados en conversar."},
+  {q:"La persona dice 'ajá' repetidamente sin agregar comentarios.", good:"Pausas y verificas si realmente están siguiendo la conversación o si necesitan aclaración.", bad:"Asumes que están de acuerdo y continúas sin verificar su comprensión real."},
+  {q:"Tu interlocutor cambia abruptamente de tema.", good:"Reconoces que puede no estar interesado en el tema actual y exploras el nuevo tema que propone.", bad:"Insistes en volver al tema original sin considerar por qué lo cambió."},
+  {q:"Alguien dice 'está bien' con un tono plano a tus sugerencias.", good:"Reconoces que el tono indica falta de entusiasmo y exploras qué les preocupa realmente.", bad:"Tomas su 'está bien' como acuerdo genuino y procedes sin verificar."},
+  {q:"La persona responde con retrasos largos a tus comentarios.", good:"Interpretas los silencios como necesidad de procesamiento o desconexión y ajustas tu ritmo.", bad:"Llenas los silencios hablando más sin darles espacio para procesar."},
+  {q:"Tu compañero dice 'supongo' en lugar de dar respuestas definitivas.", good:"Reconoces la incertidumbre y exploras qué información necesitan para sentirse más seguros.", bad:"Asumes que están de acuerdo y continúas sin abordar sus dudas."},
+  {q:"Alguien interrumpe para preguntar algo no relacionado con el tema.", good:"Reconoces que pueden estar perdidos o distraídos y retomas desde un punto más claro.", bad:"Respondes la pregunta rápidamente y continúas donde te quedaste sin verificar comprensión."},
+  {q:"La persona repite 'entiendo' sin hacer preguntas o comentarios.", good:"Verificas su comprensión real haciendo preguntas específicas sobre el contenido.", bad:"Asumes que realmente entienden porque dicen que sí."},
+  {q:"Tu interlocutor da respuestas muy generales a preguntas específicas.", good:"Reconoces que pueden no haber entendido y reformulas tus preguntas de manera más clara.", bad:"Te frustras con las respuestas vagas y repites las mismas preguntas."},
+  {q:"Alguien dice 'como quieras' cuando les pides su opinión.", good:"Reconoces que pueden sentirse desconectados de la decisión y exploras qué les importa realmente.", bad:"Tomas su respuesta como libertad total para decidir sin considerar sus verdaderos sentimientos."},
+
+  // CATEGORÍA 4: SEÑALES DE ATENCIÓN POSITIVA (10 situaciones)
+  {q:"La persona se inclina hacia adelante mientras hablas.", good:"Reconoces el interés y continúas desarrollando el punto que captó su atención.", bad:"No notas la señal de engagement y cambias de tema prematuramente."},
+  {q:"Tu interlocutor hace preguntas específicas sobre lo que estás explicando.", good:"Reconoces el engagement genuino y profundizas en los aspectos que más les interesan.", bad:"Respondes brevemente y continúas con tu agenda sin aprovechar su interés."},
+  {q:"Alguien asiente y mantiene contacto visual constante.", good:"Interpretas las señales positivas y mantienes el nivel de detalle y ritmo actual.", bad:"Malinterpretas el engagement y aceleras pensando que ya entendieron todo."},
+  {q:"La persona toma notas mientras explicas.", good:"Reconoces el interés activo y pausas ocasionalmente para que puedan escribir puntos importantes.", bad:"Continúas hablando rápidamente sin darles tiempo para tomar notas adecuadas."},
+  {q:"Tu compañero hace comentarios relevantes que muestran que está siguiendo.", good:"Reconoces su engagement y construyes sobre sus comentarios para profundizar la conversación.", bad:"Agradeces brevemente pero continúas con tu plan sin incorporar sus aportes."},
+  {q:"Alguien sonríe genuinamente y responde con entusiasmo.", good:"Reconoces la conexión positiva y mantienes el tono y estilo que está funcionando.", bad:"No notas la respuesta positiva y cambias tu enfoque innecesariamente."},
+  {q:"La persona repite puntos clave con sus propias palabras.", good:"Reconoces que están procesando activamente y los animas a continuar elaborando.", bad:"Corriges pequeñas diferencias en lugar de celebrar su comprensión."},
+  {q:"Tu interlocutor hace conexiones con sus propias experiencias.", good:"Reconoces el engagement personal y exploras esas conexiones para profundizar el aprendizaje.", bad:"Redireccionas rápidamente a tu contenido sin valorar sus conexiones personales."},
+  {q:"Alguien pide ejemplos adicionales o aclaraciones.", good:"Interpretas esto como interés genuino y proporcionas los ejemplos que solicitan.", bad:"Asumes que no entendieron tu explicación original y la repites igual."},
+  {q:"La persona sugiere aplicaciones prácticas de lo que están discutiendo.", good:"Reconoces su engagement activo y exploras juntos las aplicaciones que proponen.", bad:"Agradeces la sugerencia pero continúas con tu contenido teórico."},
+
+  // CATEGORÍA 5: CONTEXTOS EDUCATIVOS (10 situaciones)
+  {q:"En clase, varios estudiantes miran sus teléfonos simultáneamente.", good:"Reconoces la pérdida de atención grupal y cambias a una actividad más interactiva.", bad:"Continúas con la clase magistral ignorando la distracción generalizada."},
+  {q:"Un estudiante pone la cabeza sobre el escritorio.", good:"Te acercas discretamente para verificar si se siente bien o necesita un descanso.", bad:"Asumes que está siendo irrespetuoso y lo llamas la atención públicamente."},
+  {q:"Durante una explicación, notas que los estudiantes no toman notas.", good:"Pausas para verificar si la información es clara o si necesitan que la repitas de otra manera.", bad:"Continúas explicando asumiendo que están memorizando todo."},
+  {q:"Varios estudiantes conversan entre ellos durante tu clase.", good:"Reconoces que pueden estar confundidos y pausas para aclarar dudas o cambiar de actividad.", bad:"Te molestas y pides silencio sin abordar la causa de la desconexión."},
+  {q:"Un estudiante mira constantemente hacia la puerta.", good:"Verificas discretamente si necesita salir o si algo lo está distrayendo.", bad:"Ignoras la distracción y continúas con la clase."},
+  {q:"Durante un examen, notas que un estudiante se ve muy ansioso.", good:"Te acercas discretamente para verificar si necesita aclaración o un momento para calmarse.", bad:"Asumes que no estudió y continúas supervisando sin ofrecer apoyo."},
+  {q:"En una presentación grupal, algunos estudiantes no participan.", good:"Creas oportunidades específicas para que todos contribuyan de manera cómoda.", bad:"Asumes que no prepararon su parte y los evalúas negativamente."},
+  {q:"Un estudiante hace preguntas que parecen fuera de tema.", good:"Reconoces que puede estar confundido y ayudas a conectar su pregunta con el tema principal.", bad:"Descartas la pregunta como irrelevante sin explorar la confusión subyacente."},
+  {q:"Durante una actividad grupal, un equipo está muy silencioso.", good:"Te acercas para verificar si entienden la actividad o necesitan orientación.", bad:"Asumes que están trabajando bien y no intervienes."},
+  {q:"Un estudiante entrega un trabajo muy diferente a lo solicitado.", good:"Reconoces una posible falta de comprensión y programas una reunión para aclarar expectativas.", bad:"Asumes que no siguió instrucciones y lo calificas mal sin verificar si entendió."},
+
+  // CATEGORÍA 6: CONTEXTOS LABORALES (10 situaciones)
+  {q:"En una reunión, tu colega revisa emails constantemente.", good:"Sugieres posponer la reunión si hay urgencias o hacer la discusión más concisa.", bad:"Continúas con la reunión ignorando que está distraído con otros asuntos."},
+  {q:"Durante una presentación, tu jefe mira documentos en su escritorio.", good:"Pausas y preguntas si prefiere revisar la información por escrito o continuar en otro momento.", bad:"Hablas más fuerte para captar su atención sin abordar la distracción."},
+  {q:"Un compañero responde emails durante una conversación contigo.", good:"Preguntas si necesita atender algo urgente o si pueden hablar cuando esté más disponible.", bad:"Continúas hablando compitiendo con los emails por su atención."},
+  {q:"En una capacitación, varios empleados parecen desinteresados.", good:"Cambias a un formato más interactivo o preguntas qué aspectos les resultan más relevantes.", bad:"Continúas con el contenido programado sin ajustar el enfoque."},
+  {q:"Tu subordinado asiente a todo pero no hace preguntas.", good:"Verificas su comprensión real con preguntas específicas y creas un ambiente seguro para dudas.", bad:"Asumes que entendió perfectamente porque asiente."},
+  {q:"Durante una videoconferencia, notas que alguien está claramente multitarea.", good:"Sugieres compartir un resumen por escrito o hacer la reunión más enfocada.", bad:"Continúas con la reunión ignorando que no están completamente presentes."},
+  {q:"Un cliente parece impaciente durante tu explicación del producto.", good:"Reconoces la impaciencia y preguntas qué aspectos específicos les interesan más.", bad:"Continúas con tu presentación completa sin ajustar al interés del cliente."},
+  {q:"En una evaluación de desempeño, el empleado se ve desconectado.", good:"Pausas para verificar cómo se siente con el proceso y si necesita aclarar algo.", bad:"Continúas con la evaluación sin abordar su desconexión emocional."},
+  {q:"Durante una lluvia de ideas, algunos participantes no contribuyen.", good:"Cambias la dinámica para incluir diferentes estilos de participación.", bad:"Asumes que no tienen ideas y continúas con los participantes activos."},
+  {q:"Tu equipo parece desanimado durante una reunión de proyecto.", good:"Reconoces el estado emocional del grupo y abordas las preocupaciones antes de continuar.", bad:"Ignoras el ambiente y continúas con la agenda técnica."},
+
+  // CATEGORÍA 7: CONTEXTOS SOCIALES Y FAMILIARES (10 situaciones)
+  {q:"En una cena familiar, tu hermano está muy callado.", good:"Te acercas después para preguntarle en privado si está todo bien.", bad:"Asumes que está de mal humor y evitas interactuar con él."},
+  {q:"Durante una conversación con amigos, uno parece ausente.", good:"Incluyes sutilmente a la persona en la conversación o preguntas en privado si está bien.", bad:"Continúas la conversación ignorando que alguien se siente excluido."},
+  {q:"En una fiesta, notas que alguien está solo en una esquina.", good:"Te acercas de manera amigable para incluirlo en alguna conversación o actividad.", bad:"Asumes que prefiere estar solo y no haces nada."},
+  {q:"Tu pareja responde con monosílabos durante la cena.", good:"Preguntas gentilmente si algo le preocupa o si prefiere hablar más tarde.", bad:"Te frustras con las respuestas cortas y dejas de intentar conversar."},
+  {q:"Durante una reunión familiar, un niño se porta mal constantemente.", good:"Reconoces que puede estar aburrido o necesitar atención y buscas maneras de incluirlo.", bad:"Te molestas con el comportamiento sin considerar qué puede necesitar."},
+  {q:"En una conversación grupal, alguien interrumpe constantemente.", good:"Reconoces que puede estar ansioso por participar y buscas maneras de incluirlo de forma ordenada.", bad:"Te frustras con las interrupciones y lo excluyes de la conversación."},
+  {q:"Tu amigo cancela planes a último momento repetidamente.", good:"Reconoces que algo puede estar pasando y ofreces apoyo sin presionar.", bad:"Asumes que no valora tu amistad y dejas de invitarlo."},
+  {q:"Durante una actividad familiar, un miembro se queja constantemente.", good:"Reconoces que puede estar expresando una necesidad no satisfecha y exploras qué le preocupa.", bad:"Te molestas con las quejas y le pides que deje de ser negativo."},
+  {q:"En una conversación, alguien cambia de tema cada vez que mencionas algo personal.", good:"Reconoces que puede ser un tema sensible y respetas sus límites.", bad:"Insistes en el tema personal sin notar su incomodidad."},
+  {q:"Tu hijo adolescente responde con gruñidos a tus preguntas.", good:"Reconoces que puede ser su forma de comunicar que necesita espacio y ajustas tu enfoque.", bad:"Te frustras con la falta de comunicación y insistes en obtener respuestas verbales."},
+
+  // CATEGORÍA 8: SEÑALES MIXTAS Y CONFUSAS (10 situaciones)
+  {q:"Alguien dice que está interesado pero su lenguaje corporal sugiere lo contrario.", good:"Reconoces la incongruencia y gentilmente verificas sus verdaderos sentimientos.", bad:"Tomas sus palabras al pie de la letra ignorando las señales no verbales."},
+  {q:"Una persona asiente pero hace preguntas que sugieren confusión.", good:"Reconoces la contradicción y exploras qué parte específica necesita aclaración.", bad:"Asumes que entendió porque asiente y no abordas la confusión evidente."},
+  {q:"Tu interlocutor sonríe pero evita el contacto visual.", good:"Notas la señal mixta y ajustas tu enfoque para crear un ambiente más cómodo.", bad:"Te enfocas solo en la sonrisa e ignoras la incomodidad que muestra evitar la mirada."},
+  {q:"Alguien participa activamente pero parece tenso.", good:"Reconoces la tensión a pesar del engagement y verificas si se sienten cómodos con el tema.", bad:"Te enfocas solo en la participación e ignoras las señales de estrés."},
+  {q:"Una persona dice 'está bien' pero suspira profundamente.", good:"Reconoces que el suspiro contradice sus palabras y exploras qué realmente siente.", bad:"Aceptas su 'está bien' sin notar la señal de resignación o frustración."},
+  {q:"Tu compañero se ríe de tu broma pero parece incómodo.", good:"Reconoces que la risa puede ser cortesía y verificas si tu humor fue apropiado.", bad:"Asumes que le gustó la broma porque se rió e ignoras su incomodidad."},
+  {q:"Alguien hace muchas preguntas pero parece impaciente.", good:"Reconoces que puede estar ansioso por entender rápido y ajustas tu ritmo de explicación.", bad:"Te frustras con las preguntas constantes sin reconocer la ansiedad subyacente."},
+  {q:"Una persona te agradece pero su tono suena sarcástico.", good:"Reconoces la posible incongruencia y verificas si realmente están satisfechos con tu ayuda.", bad:"Tomas el agradecimiento al pie de la letra sin notar el posible sarcasmo."},
+  {q:"Tu interlocutor mantiene contacto visual pero tamborilea los dedos.", good:"Notas la combinación de atención e impaciencia y ajustas para ser más conciso.", bad:"Te enfocas solo en el contacto visual e ignoras la señal de impaciencia."},
+  {q:"Alguien dice que tiene tiempo pero mira constantemente el reloj.", good:"Reconoces la contradicción y ofreces ser más breve o continuar en otro momento.", bad:"Confías en sus palabras e ignoras la evidente preocupación por el tiempo."},
+
+  // CATEGORÍA 9: RECUPERACIÓN DE ATENCIÓN (10 situaciones)
+  {q:"Notas que perdiste la atención de tu audiencia durante una presentación.", good:"Pausas, haces una pregunta interactiva o cambias a un ejemplo práctico para reconectar.", bad:"Continúas leyendo tus diapositivas esperando que eventualmente vuelvan a prestar atención."},
+  {q:"En una conversación, te das cuenta de que la persona se desconectó.", good:"Pausas y preguntas qué les parece más interesante del tema o si prefieren cambiar de enfoque.", bad:"Repites lo que acabas de decir más fuerte para 'recuperar' su atención."},
+  {q:"Durante una explicación, ves que alguien está confundido.", good:"Te detienes para verificar comprensión y explicas de manera diferente si es necesario.", bad:"Continúas con la explicación esperando que eventualmente entienda."},
+  {q:"Tu estudiante parece perdido durante la clase.", good:"Te acercas discretamente para verificar dónde se perdió y lo ayudas a reconectar.", bad:"Continúas con la clase asumiendo que puede ponerse al día solo."},
+  {q:"En una reunión, notas que el grupo está desconectado.", good:"Cambias la dinámica con una pregunta abierta o una actividad que requiera participación.", bad:"Continúas con tu agenda ignorando la falta de engagement del grupo."},
+  {q:"Tu hijo no está prestando atención a tus instrucciones.", good:"Pausas, estableces contacto visual y verificas que esté listo para escuchar antes de continuar.", bad:"Repites las instrucciones más fuerte sin asegurar que tenga tu atención."},
+  {q:"Durante una capacitación, los participantes parecen abrumados.", good:"Haces un descanso y ajustas el ritmo o la cantidad de información que estás presentando.", bad:"Continúas con el contenido programado pensando que deben adaptarse."},
+  {q:"Tu cliente parece haber perdido interés en tu propuesta.", good:"Pausas para preguntar qué aspectos les resultan más relevantes o preocupantes.", bad:"Continúas con tu presentación completa esperando recuperar su interés."},
+  {q:"En una conversación importante, notas que la persona está distraída.", good:"Sugieres continuar en un momento con menos distracciones o en un lugar más apropiado.", bad:"Insistes en continuar la conversación importante a pesar de las distracciones."},
+  {q:"Durante una explicación técnica, ves caras de confusión.", good:"Te detienes para usar analogías más simples o ejemplos concretos que faciliten la comprensión.", bad:"Continúas con el lenguaje técnico asumiendo que eventualmente entenderán."},
+
+  // CATEGORÍA 10: AUTOCONCIENCIA DE TU PROPIA ATENCIÓN (10 situaciones)
+  {q:"Te das cuenta de que estás pensando en otra cosa mientras alguien te habla.", good:"Reconoces tu distracción, te disculpas y pides que repitan lo importante.", bad:"Finges que estuviste prestando atención y respondes de manera genérica."},
+  {q:"Notas que estás mirando tu teléfono mientras alguien te explica algo importante.", good:"Guardas el teléfono inmediatamente y te disculpas por la distracción.", bad:"Continúas revisando el teléfono mientras finges escuchar."},
+  {q:"Te sientes abrumado con información y empiezas a desconectarte.", good:"Pides una pausa para procesar la información o solicitas un resumen de los puntos clave.", bad:"Finges que estás siguiendo todo mientras internamente te sientes perdido."},
+  {q:"Durante una reunión larga, sientes que tu atención está decayendo.", good:"Tomas notas activamente o haces preguntas para mantenerte engaged.", bad:"Te permites desconectarte mentalmente esperando que la reunión termine."},
+  {q:"Te das cuenta de que estás juzgando lo que dice la persona en lugar de escuchar.", good:"Reconoces tu sesgo, te reenfocas en entender su perspectiva sin juzgar.", bad:"Continúas juzgando internamente mientras finges escuchar."},
+  {q:"Notas que estás preparando tu respuesta mientras la otra persona habla.", good:"Te detienes mentalmente y te enfocas en escuchar completamente antes de formular tu respuesta.", bad:"Continúas preparando tu respuesta perdiendo partes importantes de lo que dicen."},
+  {q:"Te sientes impaciente durante una explicación lenta.", good:"Reconoces tu impaciencia y te enfocas en encontrar valor en el ritmo de la otra persona.", bad:"Muestras señales de impaciencia que pueden hacer sentir mal al otro."},
+  {q:"Durante una conversación emocional, sientes que te estás desconectando por incomodidad.", good:"Reconoces tu incomodidad y haces un esfuerzo consciente por mantenerte presente.", bad:"Te desconectas emocionalmente para evitar la incomodidad."},
+  {q:"Te das cuenta de que estás multitarea mientras alguien necesita tu atención completa.", good:"Dejas de hacer otras cosas y das tu atención completa a la persona.", bad:"Continúas multitarea pensando que puedes hacer ambas cosas efectivamente."},
+  {q:"Notas que tu mente está en 'piloto automático' durante una conversación rutinaria.", good:"Haces un esfuerzo consciente por estar presente y encontrar algo interesante en la conversación.", bad:"Continúas en piloto automático dando respuestas automáticas."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

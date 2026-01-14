@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Movilidad y Transporte</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ef4444;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #ef4444cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #ef4444cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(253, 227, 227);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(253, 227, 227);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🏠</span>
+      <span>Vida Independiente</span>
+    </span>
+    <h1>🚌 Movilidad y Transporte</h1>
+    <p>Usar transporte público, planificar rutas y manejar retrasos</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Planificación de rutas
+  {q:"Debes llegar a una cita en un barrio que no conoces.", good:"Revisas rutas con anticipación, preparas un plan alterno y sales con tiempo extra.", bad:"Sales a última hora confiando en que improvisarás el camino."},
+  {q:"Tienes una cita importante en hora pico.", good:"Calculas el tiempo de tráfico, sales con anticipación y tienes ruta alternativa.", bad:"Sales a la hora normal sin considerar el tráfico."},
+  {q:"Debes ir a un lugar nuevo usando transporte público.", good:"Investigas rutas, horarios y paradas con anticipación.", bad:"Llegas a la estación sin saber qué transporte tomar."},
+  {q:"Necesitas llegar a tiempo a una entrevista.", good:"Planificas la ruta, sales temprano y ubicas el lugar exacto antes.", bad:"Sales justo a tiempo sin conocer la ubicación exacta."},
+  {q:"Vas a un evento en una zona con poco estacionamiento.", good:"Investigas opciones de estacionamiento y transporte alternativo.", bad:"Llegas sin plan y das vueltas buscando donde aparcar."},
+  {q:"Debes viajar a otra ciudad.", good:"Planificas la ruta, paradas, combustible y tiempo de viaje.", bad:"Sales sin planificar y te quedas sin combustible."},
+  {q:"Tienes múltiples citas en un día.", good:"Organizas las citas por ubicación para optimizar el recorrido.", bad:"Vas de un extremo a otro de la ciudad sin orden."},
+  {q:"Necesitas usar un medio de transporte nuevo.", good:"Investigas cómo funciona, costos y rutas antes de usarlo.", bad:"Intentas usarlo sin información previa."},
+  {q:"Vas a un lugar donde nunca has estado.", good:"Estudias el mapa, referencias cercanas y posibles complicaciones.", bad:"Confías solo en el GPS sin estudiar la zona."},
+  {q:"Debes llegar en horario específico.", good:"Calculas tiempo de viaje, posibles retrasos y sales con margen.", bad:"Calculas el tiempo exacto sin considerar imprevistos."},
+
+  // 11-20 Uso de transporte público
+  {q:"Es tu primer día usando el metro.", good:"Estudias el mapa, compras la tarjeta y practicas la ruta.", bad:"Entras sin saber cómo funciona el sistema."},
+  {q:"El autobús que tomas siempre llega tarde.", good:"Ajustas tu horario considerando el retraso habitual.", bad:"Sigues llegando a la parada a la hora oficial."},
+  {q:"Necesitas hacer transbordo en el transporte público.", good:"Planificas los transbordos, tiempos de espera y rutas alternativas.", bad:"Haces transbordos sin planificar y pierdes conexiones."},
+  {q:"No tienes dinero exacto para el autobús.", good:"Preparas cambio exacto o tarjeta antes de viajar.", bad:"Subes sin dinero exacto y generas problemas."},
+  {q:"El transporte público está en huelga.", good:"Te informas de huelgas y planificas transporte alternativo.", bad:"Llegas a la parada sin saber que hay huelga."},
+  {q:"Viajas en transporte público con equipaje.", good:"Eliges horarios menos concurridos y transporte apropiado.", bad:"Viajas en hora pico con mucho equipaje."},
+  {q:"No sabes en qué parada bajarte.", good:"Sigues la ruta en tu teléfono y preguntas al conductor.", bad:"Esperas reconocer el lugar y te pasas de parada."},
+  {q:"El transporte público está muy lleno.", good:"Esperas el siguiente o buscas ruta alternativa.", bad:"Te aprietas incómodamente con todos."},
+  {q:"Necesitas viajar de noche en transporte público.", good:"Investigas la seguridad de la ruta y horarios nocturnos.", bad:"Viajas sin considerar los riesgos nocturnos."},
+  {q:"Tu tarjeta de transporte no tiene saldo.", good:"Revisas el saldo regularmente y recargas con anticipación.", bad:"Te das cuenta cuando ya estás en el transporte."},
+
+  // 21-30 Manejo de vehículo propio
+  {q:"Tu coche hace un ruido extraño.", good:"Lo revisas inmediatamente o lo llevas al mecánico.", bad:"Ignoras el ruido hasta que se descompone."},
+  {q:"Necesitas combustible y estás en zona desconocida.", good:"Buscas gasolineras cercanas antes de que se acabe.", bad:"Esperas hasta que casi no tienes combustible."},
+  {q:"Llueve mucho y debes manejar.", good:"Reduces velocidad, aumentas distancia y usas luces.", bad:"Manejas igual que en clima normal."},
+  {q:"Estás en un embotellamiento.", good:"Mantienes la calma, pones música y aceptas el retraso.", bad:"Te estresas, cambias de carril constantemente."},
+  {q:"No conoces las reglas de tránsito de una ciudad.", good:"Investigas las reglas locales antes de manejar.", bad:"Manejas asumiendo que son iguales a tu ciudad."},
+  {q:"Tu coche no arranca.", good:"Tienes números de emergencia y plan de transporte alternativo.", bad:"Entras en pánico sin plan de contingencia."},
+  {q:"Debes estacionar en paralelo.", good:"Practicas la maniobra y tomas tu tiempo.", bad:"Intentas rápidamente y bloqueas el tráfico."},
+  {q:"Manejas de noche en carretera.", good:"Verificas luces, descansas antes y planificas paradas.", bad:"Manejas cansado sin preparación especial."},
+  {q:"Hay obras en tu ruta habitual.", good:"Buscas rutas alternativas y sales con tiempo extra.", bad:"Tomas la misma ruta y llegas tarde."},
+  {q:"Debes manejar en una ciudad muy grande.", good:"Estudias el tráfico, zonas y planificas rutas estratégicas.", bad:"Manejas sin conocer los patrones de tráfico."},
+
+  // 31-40 Situaciones de emergencia
+  {q:"Tu coche se descompone en la carretera.", good:"Te orillas seguramente, pones señales y llamas por ayuda.", bad:"Te quedas en el carril sin señalizar el problema."},
+  {q:"Tienes un accidente menor.", good:"Verificas heridos, llamas a autoridades y documentas todo.", bad:"Te vas del lugar sin reportar."},
+  {q:"Se te poncha una llanta.", good:"Te orillas seguro, tienes herramientas y sabes cambiarla.", bad:"No sabes qué hacer y bloqueas el tráfico."},
+  {q:"Te quedas sin batería en el coche.", good:"Tienes cables pasacorriente y números de emergencia.", bad:"No tienes herramientas ni plan de emergencia."},
+  {q:"Te pierdes en una zona peligrosa.", good:"Mantienes las puertas cerradas, buscas lugar seguro y pides ayuda.", bad:"Te bajas a preguntar direcciones."},
+  {q:"Hay una emergencia médica mientras manejas.", good:"Te orillas seguro, llamas emergencias y das primeros auxilios.", bad:"Sigues manejando buscando un hospital."},
+  {q:"El clima se pone peligroso mientras manejas.", good:"Te orillas en lugar seguro y esperas que mejore.", bad:"Sigues manejando en condiciones peligrosas."},
+  {q:"Ves un accidente en la carretera.", good:"Llamas a emergencias, ayudas si puedes y no obstruyes.", bad:"Te detienes a ver y generas más tráfico."},
+  {q:"Tu coche se sobrecalienta.", good:"Te orillas inmediatamente y esperas que se enfríe.", bad:"Sigues manejando y dañas el motor."},
+  {q:"Hay un problema con otro conductor agresivo.", good:"Evitas confrontación, no respondes y buscas ayuda si es necesario.", bad:"Respondes agresivamente y escalas el conflicto."},
+
+  // 41-50 Planificación de viajes
+  {q:"Planeas un viaje largo por carretera.", good:"Planificas paradas, revisas el coche y preparas kit de emergencia.", bad:"Sales sin planificar paradas ni revisar el vehículo."},
+  {q:"Viajas con niños pequeños.", good:"Planificas paradas frecuentes, entretenimiento y snacks.", bad:"Planificas como si viajaras solo."},
+  {q:"Debes viajar en temporada alta.", good:"Reservas con anticipación y planificas rutas alternativas.", bad:"Viajas sin reservas en la temporada más ocupada."},
+  {q:"Viajas a un lugar con clima diferente.", good:"Investigas el clima y preparas el coche apropiadamente.", bad:"No consideras las condiciones climáticas diferentes."},
+  {q:"Planeas un viaje con presupuesto limitado.", good:"Calculas costos de combustible, peajes y hospedaje.", bad:"Viajas sin calcular los costos totales."},
+  {q:"Debes viajar con mascotas.", good:"Preparas transportadora, documentos y paradas para la mascota.", bad:"Viajas con la mascota suelta sin preparación."},
+  {q:"Viajas solo por primera vez.", good:"Informas tu ruta a alguien y mantienes comunicación regular.", bad:"Viajas sin informar a nadie tu itinerario."},
+  {q:"Planeas visitar múltiples ciudades.", good:"Organizas la ruta lógicamente para minimizar distancias.", bad:"Visitas las ciudades sin orden lógico."},
+  {q:"Viajas en época de vacaciones escolares.", good:"Anticipas más tráfico y planificas horarios alternativos.", bad:"Viajas en horarios pico sin considerar el tráfico extra."},
+  {q:"Debes cruzar fronteras internacionales.", good:"Verificas documentos, requisitos y tiempos de cruce.", bad:"Llegas a la frontera sin documentos apropiados."},
+
+  // 51-60 Transporte alternativo
+  {q:"Decides usar bicicleta para ir al trabajo.", good:"Planificas ruta segura, usas casco y ropa apropiada.", bad:"Usas cualquier ruta sin equipo de seguridad."},
+  {q:"Necesitas usar un taxi o Uber.", good:"Verificas la identidad del conductor y compartes tu ubicación.", bad:"Te subes sin verificar datos del conductor."},
+  {q:"Decides caminar a tu destino.", good:"Planificas ruta segura, usas calzado cómodo y llevas agua.", bad:"Caminas sin planificar la ruta ni prepararte."},
+  {q:"Usas scooter eléctrico por primera vez.", good:"Lees las instrucciones, usas casco y practicas en área segura.", bad:"Lo usas inmediatamente sin leer instrucciones."},
+  {q:"Necesitas transporte para una mudanza.", good:"Calculas el tamaño necesario y reservas con anticipación.", bad:"Rentas cualquier vehículo sin calcular el espacio."},
+  {q:"Debes transportar algo frágil.", good:"Usas embalaje apropiado y manejas con cuidado extra.", bad:"Transportas sin protección especial."},
+  {q:"Usas transporte compartido con desconocidos.", good:"Verificas referencias y mantienes comunicación con conocidos.", bad:"Compartes transporte sin precauciones."},
+  {q:"Necesitas transporte accesible por discapacidad.", good:"Verificas que el transporte tenga las adaptaciones necesarias.", bad:"Asumes que cualquier transporte servirá."},
+  {q:"Usas transporte nocturno.", good:"Eliges opciones seguras y mantienes comunicación con alguien.", bad:"Usas cualquier transporte sin considerar seguridad nocturna."},
+  {q:"Debes transportar equipaje pesado.", good:"Eliges transporte apropiado y pides ayuda si la necesitas.", bad:"Intentas cargar todo tú solo sin ayuda."},
+
+  // 61-70 Navegación y orientación
+  {q:"Tu GPS se queda sin batería.", good:"Tienes mapa físico de respaldo y conoces referencias básicas.", bad:"Te quedas completamente perdido sin el GPS."},
+  {q:"Estás en una zona sin señal de celular.", good:"Tienes mapa offline y referencias físicas anotadas.", bad:"Dependes completamente de la señal del celular."},
+  {q:"Las indicaciones del GPS parecen incorrectas.", good:"Usas tu criterio, verificas con mapas y pides direcciones.", bad:"Sigues ciegamente las indicaciones incorrectas."},
+  {q:"Necesitas encontrar una dirección específica.", good:"Anotas referencias cercanas y números de contacto.", bad:"Solo tienes la dirección sin referencias adicionales."},
+  {q:"Estás en una ciudad con calles confusas.", good:"Estudias el mapa general y identificas puntos de referencia.", bad:"Navegas sin entender la estructura de la ciudad."},
+  {q:"Debes explicar cómo llegar a alguien más.", good:"Das referencias claras, puntos de referencia y alternativas.", bad:"Das direcciones vagas sin referencias útiles."},
+  {q:"Te pierdes en una zona rural.", good:"Buscas señales, preguntas en lugares seguros y mantienes la calma.", bad:"Entras en pánico y tomas caminos al azar."},
+  {q:"Necesitas navegar sin conocer el idioma local.", good:"Usas mapas visuales, aplicaciones de traducción y gestos.", bad:"Intentas preguntar solo en tu idioma."},
+  {q:"Estás en una rotonda complicada.", good:"Estudias las salidas antes de entrar y sigues las señales.", bad:"Entras sin saber qué salida tomar."},
+  {q:"Debes encontrar estacionamiento en zona desconocida.", good:"Investigas opciones de estacionamiento antes de llegar.", bad:"Llegas sin saber dónde aparcar."},
+
+  // 71-80 Seguridad en el transporte
+  {q:"Viajas solo de noche.", good:"Informas tu ruta, mantienes comunicación y eliges rutas seguras.", bad:"Viajas sin informar a nadie y por rutas desconocidas."},
+  {q:"Notas que alguien te sigue.", good:"Cambias de ruta, vas a lugar público y pides ayuda.", bad:"Sigues a tu destino original ignorando la situación."},
+  {q:"Tu vehículo tiene problemas mecánicos.", good:"Te orillas en lugar seguro y llamas por ayuda.", bad:"Sigues manejando con problemas mecánicos."},
+  {q:"Estás en una zona de alta criminalidad.", good:"Mantienes puertas cerradas, no te detienes y sales rápido.", bad:"Te comportas como en cualquier zona normal."},
+  {q:"Alguien te pide aventón.", good:"Evalúas la situación y tu seguridad antes de decidir.", bad:"Das aventón sin considerar los riesgos."},
+  {q:"Ves comportamiento sospechoso en el transporte.", good:"Mantienes distancia, observas y reportas si es necesario.", bad:"Ignoras la situación completamente."},
+  {q:"Debes dejar tu vehículo en zona insegura.", good:"Quitas objetos de valor, cierras bien y buscas alternativa si es posible.", bad:"Dejas el coche con objetos visibles."},
+  {q:"Viajas con dinero o objetos valiosos.", good:"Los mantienes ocultos, usas múltiples escondites y evitas ostentación.", bad:"Llevas todo visible sin precauciones."},
+  {q:"Estás varado en lugar peligroso.", good:"Buscas refugio seguro, llamas por ayuda y evitas salir del vehículo.", bad:"Sales a buscar ayuda en zona peligrosa."},
+  {q:"Alguien intenta forzar tu vehículo.", good:"No te resistes por objetos materiales, priorizas tu seguridad.", bad:"Te resistes poniendo en riesgo tu integridad."},
+
+  // 81-90 Eficiencia y sostenibilidad
+  {q:"Quieres reducir tu huella de carbono.", good:"Combinas viajes, usas transporte público y planificas rutas eficientes.", bad:"Haces cada viaje por separado sin planificar."},
+  {q:"Los precios del combustible están altos.", good:"Optimizas rutas, combinas viajes y consideras alternativas.", bad:"Sigues con los mismos hábitos de transporte."},
+  {q:"Necesitas ser más puntual.", good:"Analizas tus patrones de retraso y ajustas horarios de salida.", bad:"Sigues saliendo a la misma hora y llegando tarde."},
+  {q:"Quieres ahorrar dinero en transporte.", good:"Comparas opciones, usas transporte público y planificas viajes.", bad:"Usas siempre la opción más conveniente sin considerar costo."},
+  {q:"Debes reducir el tiempo de traslado.", good:"Analizas rutas alternativas y horarios de menor tráfico.", bad:"Siempre usas la misma ruta sin optimizar."},
+  {q:"Quieres hacer ejercicio incorporando transporte.", good:"Caminas o usas bicicleta para distancias apropiadas.", bad:"Usas vehículo para todas las distancias."},
+  {q:"Necesitas transportarte durante huelgas.", good:"Planificas alternativas y sales con tiempo extra.", bad:"Intentas usar el transporte normal durante la huelga."},
+  {q:"Quieres conocer mejor tu ciudad.", good:"Usas diferentes rutas y medios de transporte para explorar.", bad:"Siempre usas las mismas rutas conocidas."},
+  {q:"Debes coordinar transporte con otras personas.", good:"Planificas puntos de encuentro y horarios claros.", bad:"Improvisas la coordinación sin planificar."},
+  {q:"Quieres ser más independiente en transporte.", good:"Aprendes diferentes opciones y rutas de tu área.", bad:"Dependes siempre de otros para transportarte."},
+
+  // 91-100 Situaciones especiales
+  {q:"Debes transportarte durante una emergencia.", good:"Tienes plan de evacuación y rutas alternativas preparadas.", bad:"No tienes plan para emergencias."},
+  {q:"Necesitas transporte accesible para alguien con discapacidad.", good:"Investigas opciones accesibles y planificas con anticipación.", bad:"Asumes que cualquier transporte funcionará."},
+  {q:"Debes viajar con equipamiento especial.", good:"Verificas restricciones y preparas el transporte apropiado.", bad:"Intentas transportar sin verificar restricciones."},
+  {q:"Viajas a un evento masivo.", good:"Planificas transporte público, llegada temprana y salida alternativa.", bad:"Planificas como cualquier viaje normal."},
+  {q:"Necesitas transporte en país extranjero.", good:"Investigas el sistema de transporte local y normas culturales.", bad:"Asumes que funciona igual que en tu país."},
+  {q:"Debes coordinar transporte para un grupo.", good:"Planificas opciones grupales y puntos de encuentro claros.", bad:"Cada uno se transporta por su cuenta sin coordinación."},
+  {q:"Viajas durante condiciones climáticas extremas.", good:"Ajustas planes, usas equipo apropiado y consideras cancelar si es peligroso.", bad:"Viajas normalmente sin considerar el clima extremo."},
+  {q:"Necesitas transporte de carga pesada.", good:"Calculas peso, dimensiones y rentas vehículo apropiado.", bad:"Intentas transportar en vehículo inadecuado."},
+  {q:"Debes llegar a lugar con acceso restringido.", good:"Verificas permisos, horarios y requisitos de acceso.", bad:"Llegas sin verificar restricciones de acceso."},
+  {q:"Planificas transporte para toda la familia.", good:"Consideras necesidades de cada miembro y planificas apropiadamente.", bad:"Planificas solo para adultos sin considerar niños o mayores."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

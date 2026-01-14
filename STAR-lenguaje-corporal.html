@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Lenguaje Corporal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #8b5cf6;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #8b5cf6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #8b5cf6cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(238, 231, 254);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(238, 231, 254);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>👁️</span>
+      <span>Comunicación No Verbal</span>
+    </span>
+    <h1>🕺 Lenguaje Corporal</h1>
+    <p>Mirada, gestos, postura, proxemia y señales de poder</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // CATEGORÍA 1: INTERPRETACIÓN DE POSTURAS CORPORALES (10 situaciones)
+  {q:"Mientras expones notas que varias personas se inclinan hacia atrás con los brazos cruzados.", good:"Pausas, ajustas tu postura abierta y preguntas si necesitan aclaraciones.", bad:"Ignoras las señales y sigues leyendo las diapositivas sin cambios."},
+  {q:"Tu compañero de trabajo se sienta muy erguido con los hombros tensos.", good:"Reconoces señales de estrés o defensividad y ajustas tu enfoque para ser menos confrontativo.", bad:"Continúas con tu punto sin notar que puede estar sintiéndose atacado."},
+  {q:"Durante una conversación, la persona se inclina hacia adelante.", good:"Interpretas esto como interés y continúas desarrollando el tema que captó su atención.", bad:"No notas la señal de engagement y cambias de tema prematuramente."},
+  {q:"Alguien mantiene una postura muy rígida durante toda la reunión.", good:"Reconoces posible incomodidad o nerviosismo y buscas maneras de crear un ambiente más relajado.", bad:"Asumes que está prestando atención y continúas sin abordar su tensión."},
+  {q:"Tu interlocutor se encorva y mira hacia abajo frecuentemente.", good:"Interpretas señales de desánimo o inseguridad y ajustas tu tono para ser más alentador.", bad:"Continúas hablando sin notar que puede estar sintiéndose mal."},
+  {q:"Durante una presentación, alguien se sienta en el borde de la silla.", good:"Reconoces señales de interés o urgencia y te enfocas en los puntos que más les importan.", bad:"No notas su engagement y continúas con tu ritmo habitual."},
+  {q:"Una persona mantiene los brazos muy pegados al cuerpo.", good:"Interpretas esto como posible incomodidad o necesidad de espacio personal.", bad:"Te acercas más físicamente sin respetar su necesidad de espacio."},
+  {q:"Tu amigo adopta una postura muy abierta con brazos extendidos.", good:"Reconoces señales de confianza y apertura, y respondes con una postura igualmente abierta.", bad:"Mantienes una postura cerrada sin reflejar su apertura."},
+  {q:"Alguien se gira ligeramente hacia un lado mientras hablas.", good:"Interpretas esto como posible desinterés o incomodidad y verificas si prefieren cambiar de tema.", bad:"Continúas hablando sin notar que su cuerpo se está alejando."},
+  {q:"Durante una conversación, la persona cambia constantemente de posición.", good:"Reconoces inquietud o impaciencia y preguntas si necesitan un descanso o cambiar de lugar.", bad:"Ignoras la inquietud y continúas con una conversación larga."},
+
+  // CATEGORÍA 2: GESTOS CON LAS MANOS (10 situaciones)
+  {q:"Tu interlocutor tamborilea los dedos constantemente en la mesa.", good:"Reconoces señales de impaciencia o ansiedad y aceleras hacia los puntos principales.", bad:"Te distraes con el ruido pero no consideras qué puede estar sintiendo."},
+  {q:"Alguien se toca frecuentemente el cuello durante la conversación.", good:"Interpretas esto como posible señal de estrés o incomodidad y suavizas tu enfoque.", bad:"Continúas con el tema que puede estar causando estrés sin ajustar."},
+  {q:"Durante una explicación, la persona gesticula mucho con las manos.", good:"Reconoces entusiasmo o necesidad de expresarse y les das espacio para participar más.", bad:"Te distraes con los gestos sin aprovechar su energía para la conversación."},
+  {q:"Tu compañero mantiene las manos muy quietas y rígidas.", good:"Interpretas posible tensión o autocontrol y creas un ambiente más relajado.", bad:"No notas la rigidez y continúas con un tono formal que puede aumentar su tensión."},
+  {q:"Alguien se cubre la boca mientras habla.", good:"Reconoces posible inseguridad o duda sobre lo que está diciendo y lo animas gentilmente.", bad:"No notas la señal de inseguridad y no ofreces apoyo adicional."},
+  {q:"Durante una presentación, una persona levanta la mano pero la baja rápidamente.", good:"Notas la duda y la invitas específicamente a participar de manera alentadora.", bad:"Continúas sin notar que alguien quería participar pero se sintió inseguro."},
+  {q:"Tu interlocutor aprieta los puños mientras habla.", good:"Reconoces señales de frustración o enojo y abordas las emociones antes de continuar.", bad:"Ignoras la tensión emocional y continúas con el tema que puede estar causando frustración."},
+  {q:"Alguien juega constantemente con objetos mientras conversas.", good:"Interpretas esto como necesidad de estimulación o nerviosismo y ajustas tu enfoque.", bad:"Te molestas con la distracción sin considerar que puede ser una forma de autorregulación."},
+  {q:"Una persona mantiene las palmas abiertas mientras explica algo.", good:"Reconoces señales de honestidad y apertura, y respondes con confianza.", bad:"No notas la señal de sinceridad y mantienes una actitud escéptica innecesaria."},
+  {q:"Tu compañero se frota las manos nerviosamente.", good:"Interpretas ansiedad o nerviosismo y ofreces tranquilidad o un ambiente más cómodo.", bad:"No notas la ansiedad y continúas con un ritmo que puede aumentar su nerviosismo."},
+
+  // CATEGORÍA 3: EXPRESIONES FACIALES (10 situaciones)
+  {q:"Durante tu explicación, notas que alguien frunce el ceño.", good:"Pausas para verificar si hay confusión y ofreces aclarar cualquier punto.", bad:"Continúas explicando sin abordar la posible confusión."},
+  {q:"Tu interlocutor sonríe pero la sonrisa no llega a sus ojos.", good:"Reconoces que puede ser una sonrisa cortés y exploras si realmente están cómodos.", bad:"Tomas la sonrisa al pie de la letra sin notar que puede ser forzada."},
+  {q:"Alguien levanta las cejas repetidamente mientras hablas.", good:"Interpretas esto como sorpresa o escepticismo y verificas su comprensión.", bad:"No notas la señal de sorpresa y continúas sin abordar sus reacciones."},
+  {q:"Durante una conversación, la persona parpadea más de lo usual.", good:"Reconoces posible estrés o incomodidad y ajustas tu enfoque para ser menos intenso.", bad:"No notas la señal de estrés y continúas con la misma intensidad."},
+  {q:"Tu compañero mantiene una expresión muy neutra durante toda la reunión.", good:"Reconoces que puede estar procesando información o sintiéndose incómodo, y verificas ocasionalmente.", bad:"Asumes que está de acuerdo con todo porque no muestra reacciones negativas."},
+  {q:"Alguien se muerde el labio mientras escucha tu propuesta.", good:"Interpretas ansiedad o duda y ofreces tiempo para preguntas o consideración.", bad:"No notas la señal de ansiedad y presionas por una respuesta inmediata."},
+  {q:"Durante una presentación, ves que alguien bosteza.", good:"Reconoces fatiga o aburrimiento y haces la presentación más interactiva.", bad:"Te ofendes por el bostezo y continúas con el mismo formato aburrido."},
+  {q:"Tu interlocutor mantiene la mandíbula tensa mientras habla.", good:"Reconoces tensión o frustración y abordas las emociones subyacentes.", bad:"Ignoras la tensión física y continúas con el tema que puede estar causando estrés."},
+  {q:"Una persona evita el contacto visual durante una conversación importante.", good:"Reconoces incomodidad y ajustas tu posición o enfoque para crear más comodidad.", bad:"Insistes en el contacto visual sin considerar que puede ser incómodo para ellos."},
+  {q:"Alguien tiene una expresión de sorpresa prolongada.", good:"Pausas para verificar si necesitan tiempo para procesar la información.", bad:"Continúas hablando sin darles tiempo para asimilar lo que acabas de decir."},
+
+  // CATEGORÍA 4: CONTACTO VISUAL (10 situaciones)
+  {q:"Durante una conversación, tu interlocutor mira constantemente hacia otro lado.", good:"Reconoces distracción o incomodidad y preguntas si prefieren hablar en otro momento.", bad:"Continúas hablando compitiendo por su atención sin abordar la distracción."},
+  {q:"Alguien mantiene contacto visual muy intenso contigo.", good:"Reconoces que puede ser cultural o personal, y mantienes un nivel cómodo de contacto visual.", bad:"Te sientes incómodo y evitas completamente el contacto visual."},
+  {q:"Tu compañero mira hacia abajo frecuentemente durante la conversación.", good:"Interpretas posible timidez o inseguridad y ajustas tu tono para ser más alentador.", bad:"Asumes desinterés y terminas la conversación prematuramente."},
+  {q:"Durante una presentación, alguien te mira fijamente sin parpadear.", good:"Reconoces interés intenso o posible desafío y ajustas tu mensaje apropiadamente.", bad:"Te intimidas con la mirada intensa y pierdes el hilo de tu presentación."},
+  {q:"Una persona alterna entre mirarte y mirar su teléfono.", good:"Reconoces la división de atención y preguntas si necesitan atender algo urgente.", bad:"Compites con el teléfono por su atención sin abordar la distracción."},
+  {q:"Tu interlocutor mira hacia la puerta repetidamente.", good:"Interpretas que puede tener prisa o estar esperando algo, y ofreces ser más breve.", bad:"Ignoras la señal de que pueden querer irse y continúas con una conversación larga."},
+  {q:"Alguien cierra los ojos por períodos largos mientras hablas.", good:"Reconoces que puede estar procesando información o sintiéndose abrumado.", bad:"Asumes que no está prestando atención y hablas más fuerte."},
+  {q:"Durante una reunión, una persona evita mirar a ciertos participantes.", good:"Notas la dinámica y consideras si hay tensión que necesita ser abordada.", bad:"Ignoras la tensión interpersonal y continúas con la agenda."},
+  {q:"Tu compañero mantiene contacto visual solo cuando habla, no cuando escucha.", good:"Reconoces su patrón de comunicación y lo respetas sin forzar contacto visual.", bad:"Interpretas esto como desinterés cuando escucha y te sientes ignorado."},
+  {q:"Alguien mira constantemente el reloj durante tu explicación.", good:"Reconoces la preocupación por el tiempo y ofreces resumir los puntos principales.", bad:"Ignoras la señal de prisa y continúas con tu explicación completa."},
+
+  // CATEGORÍA 5: PROXIMIDAD Y ESPACIO PERSONAL (10 situaciones)
+  {q:"Durante una conversación, la persona se aleja ligeramente cuando te acercas.", good:"Reconoces su necesidad de espacio personal y mantienes una distancia cómoda.", bad:"Te acercas más para 'conectar mejor' invadiendo su espacio personal."},
+  {q:"Tu compañero se sienta muy lejos de ti en una reunión pequeña.", good:"Respetas su preferencia de distancia y no lo tomas como algo personal.", bad:"Te sientes rechazado y cambias tu actitud hacia ellos."},
+  {q:"Alguien se acerca mucho a ti mientras habla.", good:"Reconoces que puede ser su estilo cultural o personal y mantienes tu comodidad sin ofender.", bad:"Te alejas bruscamente sin considerar que puede ser su forma normal de comunicarse."},
+  {q:"En una conversación grupal, una persona se mantiene en la periferia.", good:"Notas su posición y ocasionalmente la incluyes sin forzar su participación.", bad:"Asumes que no quiere participar y la ignoras completamente."},
+  {q:"Tu interlocutor crea barreras físicas con objetos entre ustedes.", good:"Reconoces su necesidad de espacio emocional o físico y respetas las barreras.", bad:"Intentas remover las barreras para 'mejorar la comunicación'."},
+  {q:"Durante una presentación, alguien se sienta en la última fila.", good:"Respetas su elección de posición y te aseguras de incluirlos visualmente.", bad:"Asumes que no están interesados porque se sentaron atrás."},
+  {q:"Una persona se para muy cerca de la pared durante una conversación.", good:"Reconoces que puede necesitar apoyo físico o sentirse más seguro así.", bad:"Interpretas esto como desinterés o grosería."},
+  {q:"Tu compañero cambia de asiento para estar más lejos de cierta persona.", good:"Notas la dinámica interpersonal y consideras si hay tensión que abordar.", bad:"Ignoras la señal de conflicto interpersonal."},
+  {q:"Alguien mantiene objetos personales muy cerca de su cuerpo.", good:"Reconoces posible necesidad de seguridad o comodidad y respetas su espacio.", bad:"Intentas mover sus objetos para 'hacer más espacio'."},
+  {q:"Durante una actividad, una persona evita el contacto físico casual.", good:"Reconoces su preferencia y evitas contacto físico innecesario.", bad:"Insistes en contacto físico 'amigable' sin respetar sus límites."},
+
+  // CATEGORÍA 6: MOVIMIENTOS Y GESTOS REPETITIVOS (10 situaciones)
+  {q:"Tu interlocutor balancea el pie constantemente durante la conversación.", good:"Reconoces posible impaciencia o ansiedad y ajustas el ritmo de la conversación.", bad:"Te distraes con el movimiento sin considerar qué puede estar sintiendo."},
+  {q:"Alguien se toca el cabello repetidamente mientras habla.", good:"Interpretas posible nerviosismo o autoconciencia y creas un ambiente más relajado.", bad:"No notas la señal de nerviosismo y mantienes un tono formal que puede aumentar su ansiedad."},
+  {q:"Durante una reunión, una persona hace clic con su bolígrafo constantemente.", good:"Reconoces inquietud o aburrimiento y haces la reunión más interactiva.", bad:"Te molestas con el ruido pero no abordas la causa subyacente."},
+  {q:"Tu compañero se ajusta la ropa frecuentemente durante la conversación.", good:"Interpretas posible incomodidad o autoconciencia y ajustas el ambiente o tema.", bad:"No notas la señal de incomodidad y continúas con el mismo enfoque."},
+  {q:"Alguien cruza y descruza las piernas repetidamente.", good:"Reconoces inquietud o incomodidad física y ofreces un descanso o cambio de posición.", bad:"Ignoras la inquietud y continúas con una conversación larga sin descansos."},
+  {q:"Una persona se aclara la garganta constantemente.", good:"Reconoces posible nerviosismo o necesidad de hablar, y le das oportunidades de participar.", bad:"Te distraes con el sonido sin considerar que puede querer decir algo."},
+  {q:"Tu interlocutor juega con sus accesorios (anillos, pulseras) mientras escucha.", good:"Interpretas esto como posible necesidad de estimulación o nerviosismo.", bad:"Te molestas con la distracción sin entender que puede ser autorregulación."},
+  {q:"Alguien se balancea ligeramente hacia adelante y atrás.", good:"Reconoces posible necesidad de movimiento o autorregulación sensorial.", bad:"Interpretas el movimiento como falta de respeto o atención."},
+  {q:"Durante una presentación, una persona organiza y reorganiza sus materiales.", good:"Reconoces posible ansiedad o necesidad de control, y ofreces estructura clara.", bad:"Te distraes con su actividad sin considerar qué puede necesitar."},
+  {q:"Tu compañero tamborilea con los dedos en diferentes superficies.", good:"Interpretas necesidad de estimulación o impaciencia y ajustas tu enfoque.", bad:"Te frustras con el ruido constante sin abordar la necesidad subyacente."},
+
+  // CATEGORÍA 7: SEÑALES DE ESTRÉS Y TENSIÓN (10 situaciones)
+  {q:"Notas que alguien respira de manera más rápida y superficial.", good:"Reconoces señales de estrés o ansiedad y ofreces un descanso o cambio de tema.", bad:"Continúas con el tema que puede estar causando estrés sin abordar su estado."},
+  {q:"Tu interlocutor tiene los músculos del cuello y hombros visiblemente tensos.", good:"Reconoces tensión física y sugieres un descanso o cambio de posición.", bad:"Ignoras la tensión física y continúas con una conversación larga."},
+  {q:"Durante una conversación, alguien se sonroja notablemente.", good:"Reconoces posible vergüenza o incomodidad y ajustas tu enfoque para ser más gentil.", bad:"Continúas con el tema que puede estar causando vergüenza."},
+  {q:"Una persona suda visiblemente durante una presentación.", good:"Reconoces nerviosismo y ofreces apoyo o un ambiente más cómodo.", bad:"Ignoras su nerviosismo y no ofreces ningún tipo de apoyo."},
+  {q:"Tu compañero tiene las manos temblorosas durante la conversación.", good:"Reconoces posible ansiedad o nerviosismo y creas un ambiente más tranquilizador.", bad:"No notas la ansiedad física y mantienes un tono que puede aumentar su nerviosismo."},
+  {q:"Alguien se toca frecuentemente la frente o las sienes.", good:"Interpretas posible dolor de cabeza o estrés y ofreces un descanso.", bad:"Continúas con la actividad sin considerar que pueden estar sintiéndose mal."},
+  {q:"Durante una reunión, una persona aprieta la mandíbula repetidamente.", good:"Reconoces tensión o frustración y abordas las emociones antes de continuar.", bad:"Ignoras la tensión emocional y continúas con la agenda."},
+  {q:"Tu interlocutor tiene movimientos más rígidos de lo usual.", good:"Reconoces posible estrés o incomodidad y ajustas tu enfoque para ser menos confrontativo.", bad:"No notas el cambio en su comportamiento corporal."},
+  {q:"Alguien se abraza a sí mismo durante la conversación.", good:"Reconoces necesidad de comodidad o seguridad y creas un ambiente más acogedor.", bad:"Interpretas esto como desinterés o grosería."},
+  {q:"Una persona tiene tics o movimientos involuntarios más pronunciados.", good:"Reconoces posible aumento de estrés y ajustas el ambiente para ser menos estresante.", bad:"Te distraes con los tics sin considerar que pueden indicar estrés."},
+
+  // CATEGORÍA 8: SEÑALES DE INTERÉS Y ENGAGEMENT (10 situaciones)
+  {q:"Tu interlocutor se inclina hacia adelante y asiente frecuentemente.", good:"Reconoces alto interés y continúas desarrollando los puntos que más los enganchan.", bad:"No aprovechas su interés y cambias de tema prematuramente."},
+  {q:"Alguien imita sutilmente tu postura corporal.", good:"Reconoces esta señal de conexión y rapport, y mantienes el estilo que está funcionando.", bad:"No notas la sincronización corporal y cambias tu postura innecesariamente."},
+  {q:"Durante una explicación, una persona toma notas activamente.", good:"Reconoces su engagement y pausas ocasionalmente para que puedan escribir.", bad:"Hablas muy rápido sin darles tiempo para tomar notas adecuadas."},
+  {q:"Tu compañero mantiene contacto visual constante y sonríe genuinamente.", good:"Reconoces conexión positiva y mantienes el nivel de energía que está funcionando.", bad:"No notas la respuesta positiva y cambias tu enfoque innecesariamente."},
+  {q:"Alguien gesticula de manera que complementa lo que estás diciendo.", good:"Reconoces que están siguiendo activamente y los invitas a participar más.", bad:"Te distraes con sus gestos sin aprovechar su engagement."},
+  {q:"Una persona se acerca físicamente durante partes interesantes de tu explicación.", good:"Notas su interés creciente y profundizas en los temas que más los atraen.", bad:"No reconoces la señal de interés y mantienes el mismo nivel superficial."},
+  {q:"Tu interlocutor hace preguntas con lenguaje corporal abierto.", good:"Reconoces curiosidad genuina y dedicas tiempo a responder completamente.", bad:"Respondes brevemente sin notar su interés en profundizar."},
+  {q:"Durante una presentación, alguien se sienta en el borde de la silla.", good:"Reconoces engagement alto y te enfocas en los aspectos que más los interesan.", bad:"No notas su interés y continúas con tu agenda sin ajustar."},
+  {q:"Una persona refleja tus expresiones faciales apropiadamente.", good:"Reconoces conexión emocional y continúas con el tono que está creando rapport.", bad:"No notas la sincronización emocional y cambias tu expresividad."},
+  {q:"Tu compañero orienta todo su cuerpo hacia ti durante la conversación.", good:"Reconoces atención completa y aprovechas este momento para puntos importantes.", bad:"No valoras su atención total y no priorizas la información más relevante."},
+
+  // CATEGORÍA 9: ADAPTACIÓN DE TU PROPIO LENGUAJE CORPORAL (10 situaciones)
+  {q:"Notas que tu postura cerrada puede estar afectando la conversación.", good:"Ajustas conscientemente a una postura más abierta para mejorar la comunicación.", bad:"Mantienes la postura cerrada sin considerar cómo afecta a otros."},
+  {q:"Te das cuenta de que estás invadiendo el espacio personal de alguien.", good:"Te alejas discretamente para respetar su comodidad espacial.", bad:"Continúas en su espacio personal sin considerar su incomodidad."},
+  {q:"Reconoces que tu contacto visual es demasiado intenso para tu interlocutor.", good:"Ajustas tu contacto visual para que sea más cómodo para ambos.", bad:"Mantienes el contacto visual intenso sin considerar su comodidad."},
+  {q:"Notas que tus gestos pueden estar distrayendo de tu mensaje.", good:"Moderas tus gestos para que complementen en lugar de distraer.", bad:"Continúas gesticulando de manera que compite con tu mensaje verbal."},
+  {q:"Te das cuenta de que tu expresión facial no coincide con tu mensaje.", good:"Ajustas tu expresión para que sea congruente con lo que estás comunicando.", bad:"Mantienes una expresión incongruente que confunde tu mensaje."},
+  {q:"Reconoces que tu ritmo de movimiento está generando ansiedad en otros.", good:"Ajustas tu energía corporal para crear un ambiente más calmado.", bad:"Mantienes un ritmo que puede estar estresando a otros."},
+  {q:"Notas que tu posición en el espacio está excluyendo a alguien.", good:"Te reposicionas para incluir a todos en la conversación visual.", bad:"Mantienes una posición que excluye a algunos participantes."},
+  {q:"Te das cuenta de que tu lenguaje corporal contradice tus palabras.", good:"Ajustas tu cuerpo para que apoye y refuerce tu mensaje verbal.", bad:"Continúas con señales corporales que contradicen lo que dices."},
+  {q:"Reconoces que tu tensión corporal está afectando el ambiente.", good:"Conscientemente relajas tu cuerpo para crear un ambiente más cómodo.", bad:"Mantienes la tensión corporal que puede estar contagiando a otros."},
+  {q:"Notas que tu falta de gestos hace que parezcas desinteresado.", good:"Incorporas gestos apropiados para mostrar engagement y interés.", bad:"Mantienes una postura rígida que puede parecer desinteresada."},
+
+  // CATEGORÍA 10: CONTEXTOS CULTURALES Y SITUACIONALES (10 situaciones)
+  {q:"En una reunión multicultural, notas diferentes estilos de lenguaje corporal.", good:"Adaptas tu interpretación considerando diferencias culturales en expresión corporal.", bad:"Juzgas otros estilos de lenguaje corporal según tus propias normas culturales."},
+  {q:"Durante una presentación formal, alguien usa gestos muy casuales.", good:"Reconoces posible diferencia en comprensión del contexto y ajustas apropiadamente.", bad:"Juzgas su comportamiento como inapropiado sin considerar diferencias de experiencia."},
+  {q:"En un contexto profesional, notas que alguien evita contacto visual.", good:"Consideras factores culturales, personales o situacionales antes de interpretar.", bad:"Asumes falta de respeto o confianza sin considerar otros factores."},
+  {q:"Durante una negociación, la otra parte usa lenguaje corporal muy controlado.", good:"Reconoces la estrategia y ajustas tu enfoque sin tomar decisiones precipitadas.", bad:"Malinterpretas el control corporal como desinterés o hostilidad."},
+  {q:"En un ambiente relajado, alguien mantiene postura muy formal.", good:"Respetas su estilo personal sin forzar un cambio de comportamiento.", bad:"Intentas que se 'relajen' sin respetar su comodidad con la formalidad."},
+  {q:"Durante una conversación emocional, alguien controla mucho su expresión.", good:"Reconoces su forma de manejar emociones y no presionas por más expresividad.", bad:"Interpretas el control emocional como falta de sentimientos."},
+  {q:"En un grupo intergeneracional, notas diferentes normas de lenguaje corporal.", good:"Adaptas tu comunicación considerando las diferencias generacionales.", bad:"Esperas que todos sigan las mismas normas de lenguaje corporal."},
+  {q:"Durante una actividad física, el lenguaje corporal cambia significativamente.", good:"Ajustas tu interpretación considerando el contexto físico de la actividad.", bad:"Interpretas el lenguaje corporal sin considerar el contexto de actividad física."},
+  {q:"En un espacio muy pequeño, el lenguaje corporal se ve limitado.", good:"Consideras las limitaciones espaciales al interpretar comportamiento corporal.", bad:"Interpretas el comportamiento sin considerar las restricciones del espacio."},
+  {q:"Durante una situación de estrés grupal, todos muestran tensión corporal.", good:"Reconoces que el contexto estresante afecta el lenguaje corporal de todos.", bad:"Interpretas la tensión individual sin considerar el estrés situacional grupal."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

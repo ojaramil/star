@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR · [NOMBRE HABILIDAD]</title>
+<style>
+  :root{
+    --bg:#e3f2fd; --card:#ffffff; --text:#0d1624; --brand:#0d47a1; --muted:#5a6a7a;
+    --border:#c5cae9; --ok:#1565c0; --no:#c62828; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+  .app{max-width:960px;margin:auto;padding:20px}
+  .header{background:linear-gradient(90deg,var(--brand),#1976d2);color:#fff;padding:18px;border-radius:12px;text-align:center;box-shadow:0 4px 12px rgba(13,71,161,.25)}
+  .small{font-size:13px;opacity:.9}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);margin:16px 0}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{width:100%;padding:14px;border-radius:12px;border:2px solid var(--border);background:#e8eaf6;cursor:pointer;text-align:left;font-size:16px;transition:all .2s}
+  .btn:hover{background:#c5cae9;transform:translateY(-1px)}
+  .btn.secondary{width:auto;background:#fff}
+  .pill{background:#e3f2fd;border:1px solid var(--border);padding:4px 10px;border-radius:999px;font-weight:600}
+  .kpi{color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+  .progress{height:10px;background:#d1d8f0;border-radius:999px;overflow:hidden}
+  .fill{height:100%;width:0;background:linear-gradient(90deg,var(--brand),#42a5f5)}
+  .feedback{font-weight:700;margin-top:10px;font-size:15px}
+  .ok{color:var(--ok)}
+  .no{color:var(--no)}
+  .footer{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .tag{padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:#fff;cursor:pointer;transition:all .2s}
+  .tag.active{border-color:var(--brand);background:#e3f2fd;font-weight:600}
+  .tags{display:flex;gap:8px;flex-wrap:wrap}
+  .hint{font-size:13px;color:var(--muted);margin-bottom:6px}
+  h2{margin:0 0 8px;font-size:20px;color:var(--brand)}
+  .habilidad-tag{background:var(--brand);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600}
+  @media (min-width:720px){
+    .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>STAR Platform</h1>
+    <div class="habilidad-tag">[NOMBRE HABILIDAD COMPLETO]</div>
+    <div class="small">100 situaciones binarias • Semáforo de dificultad • Refuerzo positivo inmediato</div>
+  </div>
+
+  <div class="card" id="info">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div class="kpi">
+        <span class="pill" id="counter">1 / 100</span>
+        <span class="pill" id="scoreKpi">Puntos: 0</span>
+        <span class="pill" id="accKpi">Aciertos: 0%</span>
+      </div>
+      <div style="min-width:220px;flex:1">
+        <div class="progress"><div id="bar" class="fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="screen"></div>
+
+  <div class="card">
+    <div class="footer">
+      <button class="btn secondary" id="prev">← Anterior</button>
+      <button class="btn secondary" id="next">Siguiente →</button>
+      <button class="btn secondary" id="shuffle">🔀 Mezclar</button>
+      <button class="btn secondary" id="reset">🔄 Reiniciar</button>
+    </div>
+    <div class="hint" style="margin-top:10px">💡 Consejo: Elige la opción que muestre pensamiento flexible, planificación y consideración hacia ti y los demás.</div>
+  </div>
+</div>
+
+<script>
+// ========= BANCO DE 100 SITUACIONES =========
+// INSTRUCCIONES: Reemplaza TODO el array SITUACIONES con los casos específicos de esta habilidad
+// Formato: {q:"Situación", good:"Respuesta adaptativa", bad:"Respuesta inflexible"}
+// El buen comportamiento debe ser SIEMPRE la primera opción "good"
+const SITUACIONES = [
+  // EJEMPLO (reemplazar con 100 casos reales):
+  {q:"[Situación ejemplo]", good:"[Respuesta correcta]", bad:"[Respuesta incorrecta]"},
+  {q:"[Situación ejemplo 2]", good:"[Respuesta correcta 2]", bad:"[Respuesta incorrecta 2]"},
+  // ... hasta 100
+];
+
+// ===== NO MODIFICAR DEBAJO DE ESTA LÍNEA =====
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function setProgress(i, total){
+  document.getElementById("counter").textContent = (i+1) + " / " + total;
+  const acc = intentos ? Math.round((puntos/intentos)*100) : 0;
+  document.getElementById("scoreKpi").textContent = "Puntos: " + puntos;
+  document.getElementById("accKpi").textContent = "Aciertos: " + acc + "%";
+  document.getElementById("bar").style.width = ((i+1)/total*100) + "%";
+}
+
+function render(){
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+  
+  const options = Math.random() > 0.5
+    ? [{t:item.good, ok:true},{t:item.bad, ok:false}]
+    : [{t:item.bad, ok:false},{t:item.good, ok:true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div style="flex:1">
+        <h2>Situación</h2>
+        <p>${item.q}</p>
+      </div>
+      <div class="pill">Caso #${idx+1}</div>
+    </div>
+
+    <div class="opts">
+      <button class="btn" data-ok="${options[0].ok?'1':'0'}">${options[0].t}</button>
+      <button class="btn" data-ok="${options[1].ok?'1':'0'}">${options[1].t}</button>
+    </div>
+
+    <div id="fb" class="feedback"></div>
+
+    <div style="margin-top:12px">
+      <div class="hint">Clasifica la dificultad percibida (opcional):</div>
+      <div class="tags">
+        <span class="tag ${difSel==='verde'?'active':''}" data-dif="verde">🟢 Verde (fácil)</span>
+        <span class="tag ${difSel==='amarillo'?'active':''}" data-dif="amarillo">🟡 Amarillo (requiere ayuda)</span>
+        <span class="tag ${difSel==='rojo'?'active':''}" data-dif="rojo">🔴 Rojo (difícil)</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .btn").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      if(ok){
+        puntos++;
+        fb.textContent = "¡Correcto! Has identificado la respuesta adaptativa.";
+        fb.className = "feedback ok";
+        setTimeout(()=>{ next(); }, 500);
+      } else {
+        fb.textContent = "Reflexiona de nuevo: busca la opción flexible y planificada.";
+        fb.className = "feedback no";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .tag").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      document.querySelectorAll("#screen .tag").forEach(x=>x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next(){ idx = (idx+1) % SITUACIONES.length; render(); }
+function prev(){ idx = (idx-1+SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle(){ order = shuffle(order); idx = 0; puntos = 0; intentos = 0; for(const k in dificultad) delete dificultad[k]; render(); }
+function resetAll(){ idx=0; puntos=0; intentos=0; order=[...Array(SITUACIONES.length).keys()]; for(const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+// Inicio
+if(SITUACIONES.length < 100) alert("⚠️ ADVERTENCIA: Aún no has agregado las 100 situaciones completas");
+reshuffle();
+</script>
+</body>
+</html>

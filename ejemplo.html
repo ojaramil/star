@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR · Interpretación de Lenguaje No Verbal</title>
+<style>
+  :root{
+    --bg:#e3f2fd; --card:#ffffff; --text:#0d1624; --brand:#0d47a1; --muted:#5a6a7a;
+    --border:#c5cae9; --ok:#1565c0; --no:#c62828; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+  .app{max-width:960px;margin:auto;padding:20px}
+  .header{background:linear-gradient(90deg,var(--brand),#1976d2);color:#fff;padding:18px;border-radius:12px;text-align:center;box-shadow:0 4px 12px rgba(13,71,161,.25)}
+  .small{font-size:13px;opacity:.9}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);margin:16px 0}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{width:100%;padding:14px;border-radius:12px;border:2px solid var(--border);background:#e8eaf6;cursor:pointer;text-align:left;font-size:16px;transition:all .2s}
+  .btn:hover{background:#c5cae9;transform:translateY(-1px)}
+  .btn.secondary{width:auto;background:#fff}
+  .pill{background:#e3f2fd;border:1px solid var(--border);padding:4px 10px;border-radius:999px;font-weight:600}
+  .kpi{color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+  .progress{height:10px;background:#d1d8f0;border-radius:999px;overflow:hidden}
+  .fill{height:100%;width:0;background:linear-gradient(90deg,var(--brand),#42a5f5)}
+  .feedback{font-weight:700;margin-top:10px;font-size:15px}
+  .ok{color:var(--ok)}
+  .no{color:var(--no)}
+  .footer{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .tag{padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:#fff;cursor:pointer;transition:all .2s}
+  .tag.active{border-color:var(--brand);background:#e3f2fd;font-weight:600}
+  .tags{display:flex;gap:8px;flex-wrap:wrap}
+  .hint{font-size:13px;color:var(--muted);margin-bottom:6px}
+  h2{margin:0 0 8px;font-size:20px;color:var(--brand)}
+  .habilidad-tag{background:var(--brand);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600}
+  @media (min-width:720px){
+    .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>STAR Platform</h1>
+    <div class="habilidad-tag">Interpretación de Lenguaje No Verbal</div>
+    <div class="small">100 situaciones binarias • Semáforo de dificultad • Refuerzo positivo inmediato</div>
+  </div>
+
+  <div class="card" id="info">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div class="kpi">
+        <span class="pill" id="counter">1 / 100</span>
+        <span class="pill" id="scoreKpi">Puntos: 0</span>
+        <span class="pill" id="accKpi">Aciertos: 0%</span>
+      </div>
+      <div style="min-width:220px;flex:1">
+        <div class="progress"><div id="bar" class="fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="screen"></div>
+
+  <div class="card">
+    <div class="footer">
+      <button class="btn secondary" id="prev">← Anterior</button>
+      <button class="btn secondary" id="next">Siguiente →</button>
+      <button class="btn secondary" id="shuffle">🔀 Mezclar</button>
+      <button class="btn secondary" id="reset">🔄 Reiniciar</button>
+    </div>
+    <div class="hint" style="margin-top:10px">💡 Consejo: Observa detenidamente las señales no verbales y elige la respuesta que mejor las interprete.</div>
+  </div>
+</div>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Mirada y contacto visual
+  {q:"Tu compañero mira el reloj mientras hablas.", good:"Noto que tal vez tiene prisa y acorto mi historia.", bad:"Sigo hablando sin detenerme."},
+  {q:"La persona cruza los brazos y frunce el ceño.", good:"Parece molesta, mejor pregunto si algo le inquieta.", bad:"Ignoro su expresión y sigo como si nada."},
+  {q:"Tu amigo no te mira a los ojos al saludar.", good:"Entiendo que algunas personas prefieren evitar el contacto visual.", bad:"Insisto en que me mire mientras hablo."},
+  {q:"Alguien se aparta un paso al acercarte.", good:"Noto que necesita más espacio personal, me detengo.", bad:"Me acerco más porque no lo noto."},
+  {q:"El profesor levanta una ceja mientras explicas.", good:"Tal vez hay algo confuso, mejor pregunto si entendió.", bad:"Continúo sin verificar si hay dudas."},
+  {q:"Tu jefe asiente rápido y mira la puerta.", good:"Detecta que necesita irse, resumo rápido.", bad:"Sigo dando detalles largos."},
+  {q:"Un compañero sonríe pero su mirada está triste.", good:"Intuyo que no se siente bien, pregunto cómo está.", bad:"Asumo que está feliz y no pregunto más."},
+  {q:"Alguien se toca la nuca y suspira.", good:"Parece estresado, ofrezco ayuda.", bad:"No le doy importancia y sigo con mi tema."},
+  {q:"Tu amigo se inclina hacia adelante con los ojos brillantes.", good:"Está interesado, continúo con entusiasmo.", bad:"Cambio de tema pensando que se aburre."},
+  {q:"La persona se quita las gafas y las limpia.", good:"Tal vez necesita tiempo para pensar, hago una pausa.", bad:"Sigo hablando sin pausar."},
+
+  // 11-20 Gestos y postura
+  {q:"Tu compañero te da la mano floja al saludar.", good:"Noto que es una persona más reservada, respeto su forma.", bad:"Le aprieto la mano con fuerza por costumbre."},
+  {q:"Alguien se da la vuelta mientras hablas.", good:"Entiendo que quiere terminar la conversación, me despido.", bad:"Me coloco frente a él para seguir hablando."},
+  {q:"Tu amigo se muerde el labio mirando el suelo.", good:"Parece nervioso, hablo con voz calmada.", bad:"Le pregunto por qué no me mira fijamente."},
+  {q:"Un compañero gesticula mucho con las manos.", good:"Sus gestos refuerzan su mensaje, los observo.", bad:"Me distraigo y solo miro las manos."},
+  {q:"El profesor se inclina hacia ti cuando habla.", good:"Quiso enfatizar algo importante, presto atención.", bad:"Me incomodo y me alejo."},
+  {q:"Alguien se toca la barbilla pensativo.", good:"Está reflexionando, espero a que termine de pensar.", bad:"Interrumpo con otra pregunta."},
+  {q:"Tu jefe te señala con el dedo índice.", good:"Me está llamando la atención directamente, escucho.", bad:"Siento que me acusa y me defiendo."},
+  {q:"Un amigo se da golpecitos en la pierna.", good:"Parece ansioso, pregunto si quiere cambiar de actividad.", bad:"No le presto atención al malestar."},
+  {q:"La persona se encoge de hombros sin hablar.", good:"No sabe la respuesta, acepto la incertidumbre.", bad:"Insisto en que me dé una respuesta clara."},
+  {q:"Tu compañero se acerca mucho al hablar.", good:"Respetuosamente inclino el torso hacia atrás.", bad:"Me quedo quieto sin marcar mi espacio."},
+
+  // 21-30 Expresiones faciales
+  {q:"Alguien frunce el ceño leyendo un mensaje.", good:"Parece confundido, pregunto si necesita aclaración.", bad:"Asumo que está molesto conmigo."},
+  {q:"Tu amigo sonríe con los ojos cerrados.", good:"Sonrisa genuina, respondo con igual energía.", bad:"Pienso que se burla y me encierro."},
+  {q:"La persona muestra los dientes pero tensa la mandíbula.", good:"Sonrisa forzada, investigo qué pasa.", bad:"Creo que es una sonrisa normal."},
+  {q:"Un compañero abre mucho los ojos sorprendido.", good:"Está asombrado, pregunto qué le llamó la atención.", bad:"Me asusto también sin saber por qué."},
+  {q:"Tu profesor tiene ceño fruncido leyendo tu trabajo.", good:"Puede haber un error, pregunto si está todo bien.", bad:"Asumo que reprobaré y me angustio."},
+  {q:"Alguien sonríe con una ceja levantada.", good:"Expresa curiosidad, explico más del tema.", bad:"Pienso que está siendo irónico."},
+  {q:"Tu amigo tiene cara de cansancio profundo.", good:"Noto que está agotado, le ofrezco ayuda o pausa.", bad:"Le pido que me ayude igual."},
+  {q:"Una persona se sonroja al hablar.", good:"Puede estar avergonzada, suavizo el tono.", bad:"Señalo su rubor y la avergüenzo más."},
+  {q:"Tu jefe aprieta los labios en línea recta.", good:"Está serio o insatisfecho, pregunto qué necesita.", bad:"Asumo que está enojado y me defiendo."},
+  {q:"Alguien abre la boca sin hablar, sorprendido.", good:"Espero a que se recupere del shock.", bad:"Le presiono para que responda rápido."},
+
+  // 31-40 Proxemia y distancia
+  {q:"Alguien se aleja al acercarte a saludar.", good:"Respeto su espacio personal y saludo desde lejos.", bad:"Me acerco más para saludar igual."},
+  {q:"Tu amigo se sienta muy cerca en el sofá.", good:"Si me incomoda, lo menciono con tacto.", bad:"Me quedo incómodo sin decir nada."},
+  {q:"Un compañero bloquea la puerta charlando.", good:"Le indico amablemente que necesito pasar.", bad:"Espero pacientemente sin decir nada."},
+  {q:"La persona habla a solo 10 cm de tu cara.", good:"Retrocedo suavemente sin ofender.", bad:"Me quedo quieto sin aire."},
+  {q:"Alguien se sienta al otro lado de la sala.", good:"Entiendo que necesita distancia, respeto.", bad:"Me siento junto a él invadiendo su espacio."},
+  {q:"Tu compañero gira la silla para no mirarte.", good:"Noto que necesita privacidad, no lo molesto.", bad:"Giro la silla para que me mire."},
+  {q:"Un grupo se cierra en círculo sin incluirte.", good:"Espero a que se abra o me acerco con respeto.", bad:"Me abro paso sin miramientos."},
+  {q:"Alguien se para detrás de ti mientras trabajas.", good:"Pregunto si necesita algo, ofrezco ayuda.", bad:"Me incomodo y me enfado."},
+  {q:"Tu amigo se agacha para hablar contigo sentado.", good:"Agradezco el gesto, mantengo contacto visual.", bad:"Me siento intimidado por la altura."},
+  {q:"Un cliente se inclina sobre el mostrador.", good:"Me acerco para escuchar mejor sin invadir.", bad:"Me alejo pensando que es agresivo."},
+
+  // 41-50 Paralenguaje (tono, ritmo)
+  {q:"Alguien habla muy rápido y nervioso.", good:"Calmo con voz pausada y escucho.", bad:"Le pido que hable más rápido para terminar."},
+  {q:"Tu jefe habla en tono seco y cortante.", good:"Es su estilo, no lo tomo personal.", bad:"Asumo que está molesta conmigo."},
+  {q:"Un amigo habla muy bajito y tímido.", good:"Me acerco para escuchar sin presionar.", bad:"Le digo que hable más fuerte."},
+  {q:"La persona suelta una risa nerviosa tras hablar.", good:"Intuyo inseguridad, le animo.", bad:"Creo que se burla y me molesto."},
+  {q:"Alguien habla con voz temblorosa.", good:"Parece nervioso, le doy tiempo.", bad:"Le interrumpo por no entender."},
+  {q:"Tu compañero grita de emoción.", good:"Comparto su entusiasmo.", bad:"Pienso que está gritando enojo."},
+  {q:"Una persona habla pausada y profunda.", good:"Presto atención, es importante para ella.", bad:"Me aburro y cambio de tema."},
+  {q:"Alguien usa tono cantarín al explicar.", good:"Es su forma expresiva, la escucho.", bad:"Le pido que hable normal."},
+  {q:"Tu profesor habla quedo al final de clase.", good:"Me acerco para escuchar mejor.", bad:"Abandono sin escuchar instrucciones."},
+  {q:"Un amigo responde con monosílabos cortos.", good:"Parece distante, pregunto si está bien.", bad:"Sigo hablando sin notar su desinterés."},
+
+  // 51-60 Señales de fin de conversación
+  {q:"Alguien mira el reloj y da pasos hacia la puerta.", good:"Entiendo que se debe ir, termino rápido.", bad:"Sigo extendiendo la conversación."},
+  {q:"Tu compañero dice 'bueno...' y hace silencio.", good:"Es una despedida, me despido también.", bad:"Lleno el silencio con más temas."},
+  {q:"La persona guarda sus cosas lentamente.", good:"Está preparándose para irse, termino.", bad:"Le pregunto otra cosa."},
+  {q:"Alguien deja de responder y asiente solo.", good:"Noto que ya no conversa, doy por terminado.", bad:"Sigo hablando solamente."},
+  {q:"Tu amigo deja de hacer contacto visual.", good:"Está desconectando, me despido.", bad:"Le exijo que me mire."},
+  {q:"Un compañero dice 'ya veo...' en tono final.", good:"Es una señal de cierre, agradezco y termino.", bad:"Empiezo a explicar de nuevo."},
+  {q:"La persona se levanta de la silla.", good:"Se está yendo, digo adiós.", bad:"Le pido que se siente otra vez."},
+  {q:"Alguien dice 'hablamos luego' pero no especifica.", good:"Acepto y espero a que me contacte.", bad:"Le pregunto cuándo exactamente ahora."},
+  {q:"Tu jefe cierra el portátil bruscamente.", good:"Terminó la reunión, me retiro.", bad:"Pregunto si quiere ver algo más."},
+  {q:"Un amigo pasa la mirada por encima de tu hombro.", good:"Busca a otra persona, termino la charla.", bad:"Le pido atención exclusiva."},
+
+  // 61-70 Señales de interés vs aburrimiento
+  {q:"Alguien se inclina hacia ti mientras hablas.", good:"Está interesado, continúo con detalles.", bad:"Pienso que invade espacio y me alejo."},
+  {q:"Tu compañero bosteza sin taparse la boca.", good:"Parece cansado, acorto la explicación.", bad:"Me ofendo y le pregunto si se aburre."},
+  {q:"La persona hace preguntas rápidas.", good:"Noto interés, profundizo en el tema.", bad:"Me agobio y corto la conversación."},
+  {q:"Alguien juega con el móvil mientras hablas.", good:"Noto desinterés, pregunto si prefiere otro momento.", bad:"Sigo hablando más fuerte para llamar atención."},
+  {q:"Tu amigo mantiene contacto visual constante.", good:"Está atento, continúo con confianza.", bad:"Me incomodo y rompo el contacto."},
+  {q:"Un compañero repite lo que dices.", good:"Está procesando, confirmo que entendió bien.", bad:"Me impaciento y le interrumpo."},
+  {q:"La persona se anima al hablar de un tema.", good:"Noto pasión, lo animo a continuar.", bad:"Cambio de tema abruptamente."},
+  {q:"Alguien mira a todos menos a ti en grupo.", good:"Intuyo exclusión, me uno con cautela o pregunto.", bad:"Me retiro ofendido sin intentar."},
+  {q:"Tu jefe toma notas mientras hablas.", good:"Es importante, hablo despacio y claro.", bad:"Me incomodo y hablo más rápido."},
+  {q:"Un amigo responde con 'uy', 'vaya' repetido.", good:"Está conectado, continúo.", bad:"Pienso que no escucha y me callo."},
+
+  // 71-80 Señales de emociones complejas
+  {q:"Alguien tiene lágrimas pero sonríe.", good:"Parece una emoción mixta, pregunto si está bien.", bad:"Asumo que es feliz y no pregunto."},
+  {q:"Tu compañero se ríe en un momento serio.", good:"Puede estar nervioso, no lo tomo a mal.", bad:"Le regaño por ser irrespetuoso."},
+  {q:"La persona se pone roja y calla.", good:"Parece avergonzada, suavizo el ambiente.", bad:"Le pido que hable más fuerte."},
+  {q:"Alguien tiene cara de pánico pero dice 'estoy bien'.", good:"Sus palabras y cara no coinciden, ofrezco apoyo.", bad:"Creo que está bien y no insisto."},
+  {q:"Tu amigo se frota las manos rápidamente.", good:"Muestra ansiedad, le doy tiempo.", bad:"Le pido que esté quieto."},
+  {q:"Un compañero respira profundo y cierra los ojos.", good:"Esta controlando emoción, le doy espacio.", bad:"Le pregunto qué le pasa repetidas veces."},
+  {q:"La persona sonríe forzadamente al recibir críticas.", good:"Noto incomodidad, suavizo el tono.", bad:"Continúo con la crítica pensando que le gusta."},
+  {q:"Alguien mueve la cabeza con tristeza.", good:"Intuyo tristeza, pregunto si quiere hablar.", bad:"Ignoro la señal y sigo con mi día."},
+  {q:"Tu jefe frunce ceño pero dice 'buen intento'.", good:"Hay contradicción, pregunto qué mejorar.", bad:"Asumo que felicita y no pregunto más."},
+  {q:"Un amigo cierra los puños al hablar.", good:"Parece frustrado, le pregunto qué le molesta.", bad:"Pienso que quiere pelear y me alejo."},
+
+  // 81-90 Señales culturales/situacionales
+  {q:"Alguien hace silencio en un ascensor.", good:"Respeto la norma de espacio cerrado, callo.", bad:"Sigo hablando alto como si nada."},
+  {q:"La profesora pone el dedo en los labios.", good:"Señal de silencio, guardo el móvil.", bad:"Sigo charlando con mi compañero."},
+  {q:"Un desconocido asiente en la calle.", good:"Es un saludo cortés, devuelvo el gesto.", bad:"Ignoro el gesto porque no lo conozco."},
+  {q:"Tu compañero te guiña un ojo.", good:"Puede ser una broma, sonrío sin sobreinterpretar.", bad:"Pienso que se burla y me enojo."},
+  {q:"Alguien se quita el gorro al entrar.", good:"Sigo el gesto de respeto, lo saludo formal.", bad:"No noto el gesto y sigo con mi actividad."},
+  {q:"Un amigo chasquea los dedos señalando algo.", good:"Miro a donde señala sin sentirme ordenado.", bad:"Me molesto por el chasquido."},
+  {q:"La persona se pone de pie en una reunión.", good:"Señal de que quiere hablar, le cedo turno.", bad:"Yo también me levanto para hablar."},
+  {q:"Alguien te señala con la barbilla.", good:"Es una forma de señalar, miro a donde indica.", bad:"Me ofendo por no usar el dedo."},
+  {q:"Tu compañero te pasa la mano por el cuello.", good:"Parece cansado, le pregunto si descansó.", bad:"Pienso que es una señal de agresión."},
+  {q:"Un desconocido te sonríe en el bus.", good:"Devuelvo una sonrisa cortés breve.", bad:"Miro fijamente sin sonreír."},
+
+  // 91-100 Señales de ayuda/silencio
+  {q:"Alguien te mira fijamente sin hablar.", good:"Parece necesitar algo, pregunto si puedo ayudar.", bad:"Me incomodo y evito su mirada."},
+  {q:"Tu amigo se queda callado tras una pregunta.", good:"Necesita tiempo para responder, espero.", bad:"Repito la pregunta más fuerte."},
+  {q:"Un compañero te sigue a todas partes sin hablar.", good:"Intuyo que quiere compañía, le incluyo en la actividad.", bad:"Le pido que deje de seguirme."},
+  {q:"Alguien se esconde la cara con las manos.", good:"Está abrumado, le doy espacio o apoyo silencioso.", bad:"Le quito las manos de la cara."},
+  {q:"Tu jefe te mira por encima de las gafas.", good:"Es una mirada evaluadora, espero instrucciones.", bad:"Me siento juzgado y me justifico."},
+  {q:"Un amigo mira tu camisa y luego tu cara.", good:"Puede haber algo en mi camisa, reviso discretamente.", bad:"Le pregunto qué le pasa con mi camisa."},
+  {q:"Alguien se señala el pecho y luego a ti.", good:"Es un gesto de inclusión, asiento.", bad:"No entiendo el gesto y lo ignoro."},
+  {q:"Tu compañero se rasca la cabeza confundido.", good:"No entendió, repaso la información.", bad:"Sigo adelante sin verificar."},
+  {q:"Un desconocido te ofrece su asiento.", good:"Es un gesto amable, agradezco y acepto si lo necesito.", bad:"Lo rechazo sin mirarlo."},
+  {q:"Alguien cierra los ojos al escucharte.", good:"Está concentrado, continúo claramente.", bad:"Pienso que no me escucha y me enojo."}
+];
+
+// ===== SISTEMA BASE (NO TOCAR) =====
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function setProgress(i, total){
+  document.getElementById("counter").textContent = (i+1) + " / " + total;
+  const acc = intentos ? Math.round((puntos/intentos)*100) : 0;
+  document.getElementById("scoreKpi").textContent = "Puntos: " + puntos;
+  document.getElementById("accKpi").textContent = "Aciertos: " + acc + "%";
+  document.getElementById("bar").style.width = ((i+1)/total*100) + "%";
+}
+
+function render(){
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+  
+  const options = Math.random() > 0.5
+    ? [{t:item.good, ok:true},{t:item.bad, ok:false}]
+    : [{t:item.bad, ok:false},{t:item.good, ok:true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div style="flex:1">
+        <h2>Situación</h2>
+        <p>${item.q}</p>
+      </div>
+      <div class="pill">Caso #${idx+1}</div>
+    </div>
+
+    <div class="opts">
+      <button class="btn" data-ok="${options[0].ok?'1':'0'}">${options[0].t}</button>
+      <button class="btn" data-ok="${options[1].ok?'1':'0'}">${options[1].t}</button>
+    </div>
+
+    <div id="fb" class="feedback"></div>
+
+    <div style="margin-top:12px">
+      <div class="hint">Clasifica la dificultad percibida (opcional):</div>
+      <div class="tags">
+        <span class="tag ${difSel==='verde'?'active':''}" data-dif="verde">🟢 Verde (fácil)</span>
+        <span class="tag ${difSel==='amarillo'?'active':''}" data-dif="amarillo">🟡 Amarillo (requiere ayuda)</span>
+        <span class="tag ${difSel==='rojo'?'active':''}" data-dif="rojo">🔴 Rojo (difícil)</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .btn").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      if(ok){
+        puntos++;
+        fb.textContent = "¡Correcto! Has identificado la respuesta adaptativa.";
+        fb.className = "feedback ok";
+        setTimeout(()=>{ next(); }, 500);
+      } else {
+        fb.textContent = "Reflexiona de nuevo: busca la opción flexible y planificada.";
+        fb.className = "feedback no";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .tag").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      document.querySelectorAll("#screen .tag").forEach(x=>x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next(){ idx = (idx+1) % SITUACIONES.length; render(); }
+function prev(){ idx = (idx-1+SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle(){ order = shuffle(order); idx = 0; puntos = 0; intentos = 0; for(const k in dificultad) delete dificultad[k]; render(); }
+function resetAll(){ idx=0; puntos=0; intentos=0; order=[...Array(SITUACIONES.length).keys()]; for(const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+if(SITUACIONES.length < 100) alert("⚠️ ADVERTENCIA: Aún no has agregado las 100 situaciones completas");
+reshuffle();
+</script>
+</body>
+</html>

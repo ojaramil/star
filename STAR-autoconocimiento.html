@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Autoconocimiento y Autodefensa</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #f59e0b;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #f59e0bcc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #f59e0bcc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(254, 240, 218);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(254, 240, 218);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>❤️</span>
+      <span>Regulación Emocional</span>
+    </span>
+    <h1>🔍 Autoconocimiento y Autodefensa</h1>
+    <p>Reconocer fortalezas, pedir ajustes y construir identidad positiva</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Identificación de fortalezas
+  {q:"Tu jefe pregunta qué apoyos te ayudan a rendir mejor.", good:"Describes tus necesidades concretas y propones ajustes razonables que facilitan tu desempeño.", bad:"Dices que todo está bien aunque sabes que necesitas apoyo."},
+  {q:"Un amigo te pregunta en qué eres bueno.", good:"Identificas tus habilidades específicas con ejemplos concretos.", bad:"Dices que no eres bueno en nada."},
+  {q:"Te piden que describas tus puntos fuertes en una entrevista.", good:"Mencionas 3-4 fortalezas con ejemplos de cómo las has aplicado.", bad:"Te quedas en blanco o dices que no tienes ninguna."},
+  {q:"Notas que resuelves problemas técnicos mejor que otros.", good:"Reconoces esta fortaleza y la ofreces cuando el equipo la necesita.", bad:"Asumes que es algo que todos pueden hacer igual."},
+  {q:"Recibes elogios por tu trabajo detallado.", good:"Aceptas el cumplido y reconoces que la atención al detalle es tu fortaleza.", bad:"Minimizas el cumplido diciendo que cualquiera lo haría."},
+  {q:"Te das cuenta de que aprendes mejor con ejemplos visuales.", good:"Identificas tu estilo de aprendizaje y buscas recursos visuales.", bad:"Te frustras sin entender por qué los textos no te funcionan."},
+  {q:"Notas que trabajas mejor en las mañanas.", good:"Reconoces tu ritmo circadiano y programas tareas importantes temprano.", bad:"Ignoras tu patrón y trabajas a cualquier hora con bajo rendimiento."},
+  {q:"Te das cuenta de que eres bueno escuchando a otros.", good:"Valoras esta habilidad y la usas para apoyar a tu equipo.", bad:"No le das importancia porque no es una habilidad técnica."},
+  {q:"Identificas que te concentras mejor con música.", good:"Reconoces esta necesidad y creas tu ambiente de trabajo ideal.", bad:"Trabajas en silencio porque crees que así debe ser."},
+  {q:"Notas que eres persistente ante los desafíos.", good:"Reconoces tu resiliencia como una fortaleza valiosa.", bad:"Piensas que solo eres terco y no lo valoras."},
+
+  // 11-20 Identificación de limitaciones
+  {q:"Te das cuenta de que las reuniones largas te agotan.", good:"Reconoces tu límite y pides pausas o reuniones más cortas.", bad:"Aguantas sin decir nada hasta agotarte completamente."},
+  {q:"Notas que te cuesta recordar instrucciones verbales.", good:"Identificas esta limitación y pides que te las envíen por escrito.", bad:"Finges que entendiste y luego cometes errores."},
+  {q:"Te das cuenta de que procesas información más lento que otros.", good:"Reconoces tu ritmo y pides tiempo adicional cuando lo necesitas.", bad:"Te presionas para ir más rápido y cometes errores."},
+  {q:"Identificas que los espacios ruidosos te distraen.", good:"Reconoces tu sensibilidad y buscas espacios tranquilos o usas auriculares.", bad:"Intentas concentrarte sin apoyos y no logras trabajar bien."},
+  {q:"Notas que te cuesta iniciar tareas sin estructura.", good:"Reconoces esta necesidad y creas listas o pasos claros antes de empezar.", bad:"Te frustras por no empezar sin entender por qué."},
+  {q:"Te das cuenta de que las multitareas te abruman.", good:"Identificas tu límite y trabajas en una tarea a la vez.", bad:"Intentas hacer todo simultáneamente y no terminas nada bien."},
+  {q:"Reconoces que te cuesta decir no.", good:"Identificas este patrón y practicas establecer límites.", bad:"Sigues aceptando todo hasta el agotamiento."},
+  {q:"Notas que te afectan mucho las críticas.", good:"Reconoces tu sensibilidad y trabajas en estrategias para procesarlas.", bad:"Evitas cualquier feedback para no sentirte mal."},
+  {q:"Identificas que te cuesta improvisar.", good:"Reconoces esta limitación y te preparas con anticipación.", bad:"Te obligas a improvisar y te sientes ansioso."},
+  {q:"Te das cuenta de que necesitas más tiempo para socializar.", good:"Reconoces tu ritmo social y lo comunicas a tus amigos.", bad:"Te fuerzas a socializar al ritmo de otros y te agotas."},
+
+  // 21-30 Necesidades sensoriales
+  {q:"Notas que las luces fluorescentes te molestan.", good:"Identificas tu sensibilidad y usas lámparas personales o filtros.", bad:"Aguantas el malestar sin buscar soluciones."},
+  {q:"Te das cuenta de que ciertas texturas de ropa te incomodan.", good:"Reconoces tu sensibilidad táctil y eliges ropa cómoda.", bad:"Usas ropa incómoda porque es lo que se espera."},
+  {q:"Identificas que necesitas movimiento para concentrarte.", good:"Reconoces esta necesidad y usas pelota de estrés o te permites moverte.", bad:"Te obligas a estar completamente quieto y pierdes concentración."},
+  {q:"Notas que ciertos olores te distraen o molestan.", good:"Identificas tu sensibilidad olfativa y evitas o minimizas esos olores.", bad:"Aguantas el malestar sin comunicarlo."},
+  {q:"Te das cuenta de que necesitas presión profunda para calmarte.", good:"Reconoces esta necesidad y usas mantas pesadas o abrazos.", bad:"No entiendes por qué te sientes inquieto constantemente."},
+  {q:"Identificas que los espacios muy llenos te saturan.", good:"Reconoces tu límite sensorial y planificas visitas en horarios tranquilos.", bad:"Te obligas a ir en horas pico y te sobrecargas."},
+  {q:"Notas que necesitas silencio para procesar información compleja.", good:"Identificas esta necesidad y buscas espacios tranquilos para tareas difíciles.", bad:"Intentas trabajar con ruido y no logras concentrarte."},
+  {q:"Te das cuenta de que ciertos sonidos te irritan intensamente.", good:"Reconoces tu sensibilidad auditiva y usas protección o evitas esos sonidos.", bad:"Aguantas hasta que explotas emocionalmente."},
+  {q:"Identificas que necesitas rutinas predecibles para sentirte seguro.", good:"Reconoces esta necesidad y creas estructuras que te apoyen.", bad:"Intentas ser espontáneo porque crees que deberías serlo."},
+  {q:"Notas que el contacto visual prolongado te incomoda.", good:"Reconoces tu preferencia y alternas entre mirar y desviar la vista.", bad:"Te fuerzas a mantener contacto visual constante y te agobias."},
+
+  // 31-40 Patrones emocionales
+  {q:"Identificas que te frustras rápido cuando algo no funciona.", good:"Reconoces este patrón y desarrollas estrategias de pausa.", bad:"Explotas cada vez sin entender por qué."},
+  {q:"Notas que te cuesta identificar cuándo estás cansado.", good:"Reconoces esta dificultad y estableces horarios de descanso fijos.", bad:"Trabajas hasta el colapso sin darte cuenta."},
+  {q:"Te das cuenta de que guardas emociones hasta explotar.", good:"Identificas este patrón y practicas expresar emociones gradualmente.", bad:"Sigues acumulando hasta tener crisis."},
+  {q:"Reconoces que te afectan mucho los cambios de planes.", good:"Identificas esta sensibilidad y creas estrategias de adaptación.", bad:"Te desregulas con cada cambio sin prepararte."},
+  {q:"Notas que te cuesta recuperarte de situaciones estresantes.", good:"Reconoces tu tiempo de recuperación y lo planificas.", bad:"Te exiges recuperarte rápido y te frustras."},
+  {q:"Identificas que tiendes a rumiar sobre errores pasados.", good:"Reconoces este patrón y desarrollas técnicas de redirección.", bad:"Te quedas atrapado en pensamientos negativos sin salida."},
+  {q:"Te das cuenta de que te sobreestimulas fácilmente.", good:"Reconoces tu umbral y planificas descansos regulares.", bad:"Sigues hasta la sobrecarga sin pausas."},
+  {q:"Notas que te cuesta pedir ayuda cuando la necesitas.", good:"Identificas esta dificultad y practicas pedir apoyo.", bad:"Luchas solo hasta que la situación empeora."},
+  {q:"Reconoces que te afecta mucho la injusticia.", good:"Identificas esta sensibilidad y canalizas tu energía constructivamente.", bad:"Te desgastas emocionalmente sin estrategias."},
+  {q:"Te das cuenta de que necesitas tiempo a solas para recargar.", good:"Reconoces tu necesidad de soledad y la programas regularmente.", bad:"Te fuerzas a estar siempre acompañado y te agotas."},
+
+  // 41-50 Estilos de comunicación
+  {q:"Identificas que prefieres comunicación escrita sobre verbal.", good:"Reconoces tu preferencia y la comunicas cuando es posible.", bad:"Te obligas a comunicarte verbalmente siempre y te estreses."},
+  {q:"Notas que necesitas tiempo para procesar preguntas.", good:"Reconoces tu ritmo y pides tiempo para pensar antes de responder.", bad:"Respondes apresuradamente y luego te arrepientes."},
+  {q:"Te das cuenta de que eres muy literal en la comunicación.", good:"Reconoces este estilo y pides aclaraciones cuando algo es ambiguo.", bad:"Malinterpretas constantemente sin darte cuenta."},
+  {q:"Identificas que te cuesta leer entre líneas.", good:"Reconoces esta dificultad y pides comunicación directa.", bad:"Asumes significados incorrectos constantemente."},
+  {q:"Notas que hablas mucho cuando estás nervioso.", good:"Reconoces este patrón y practicas pausas conscientes.", bad:"Hablas sin parar sin darte cuenta del impacto."},
+  {q:"Te das cuenta de que evitas conflictos a toda costa.", good:"Identificas este patrón y practicas comunicación asertiva.", bad:"Acumulas resentimientos sin expresar tus necesidades."},
+  {q:"Reconoces que necesitas instrucciones paso a paso.", good:"Identificas esta necesidad y pides información estructurada.", bad:"Finges entender instrucciones vagas y luego fallas."},
+  {q:"Notas que te cuesta modular el tono de voz.", good:"Reconoces esta dificultad y pides feedback sobre tu tono.", bad:"Ofendes a otros sin darte cuenta de cómo suenas."},
+  {q:"Identificas que prefieres conversaciones profundas sobre charla casual.", good:"Reconoces tu preferencia y buscas conexiones significativas.", bad:"Te fuerzas a hacer small talk y te sientes vacío."},
+  {q:"Te das cuenta de que interrumpes sin querer cuando te emocionas.", good:"Reconoces este patrón y practicas esperar tu turno.", bad:"Interrumpes constantemente sin notar la molestia de otros."},
+
+  // 51-60 Necesidades de apoyo
+  {q:"Identificas que necesitas recordatorios visuales para tareas.", good:"Reconoces esta necesidad y creas sistemas de recordatorios.", bad:"Olvidas tareas constantemente sin buscar soluciones."},
+  {q:"Notas que trabajas mejor con supervisión regular.", good:"Reconoces esta necesidad y pides check-ins periódicos.", bad:"Trabajas sin guía y te pierdes en el proceso."},
+  {q:"Te das cuenta de que necesitas ejemplos concretos para entender.", good:"Identificas tu estilo de aprendizaje y pides ejemplos.", bad:"Te quedas confundido sin pedir aclaraciones."},
+  {q:"Reconoces que necesitas validación externa frecuente.", good:"Identificas esta necesidad y buscas feedback regular.", bad:"Te sientes inseguro constantemente sin pedir confirmación."},
+  {q:"Notas que necesitas ayuda para priorizar tareas.", good:"Reconoces esta dificultad y pides apoyo en la organización.", bad:"Te abrumas con todo sin saber por dónde empezar."},
+  {q:"Identificas que necesitas plazos claros para motivarte.", good:"Reconoces esta necesidad y estableces deadlines específicos.", bad:"Procrastinas sin estructura temporal."},
+  {q:"Te das cuenta de que necesitas alguien que te ayude a tomar decisiones.", good:"Reconoces esta necesidad y buscas un mentor o apoyo.", bad:"Te paralizas ante decisiones sin pedir ayuda."},
+  {q:"Notas que necesitas pausas frecuentes para mantener concentración.", good:"Reconoces tu ritmo y programas descansos regulares.", bad:"Trabajas sin parar y pierdes efectividad."},
+  {q:"Identificas que necesitas feedback específico, no general.", good:"Reconoces esta necesidad y pides comentarios concretos.", bad:"Te quedas confundido con feedback vago."},
+  {q:"Te das cuenta de que necesitas rutinas escritas para recordarlas.", good:"Reconoces esta necesidad y documentas tus procesos.", bad:"Intentas recordar todo y olvidas pasos importantes."},
+
+  // 61-70 Autodefensa y límites
+  {q:"Alguien te pide hacer algo que va contra tus valores.", good:"Reconoces el conflicto y te niegas con firmeza pero respeto.", bad:"Aceptas por no crear conflicto aunque te afecte."},
+  {q:"Te asignan más trabajo del que puedes manejar.", good:"Reconoces tu límite y comunicas tu carga actual.", bad:"Aceptas todo y te sobrecargas hasta el agotamiento."},
+  {q:"Alguien te trata de forma irrespetuosa.", good:"Identificas el maltrato y estableces límites claros.", bad:"Aguantas el maltrato sin defenderte."},
+  {q:"Te piden que trabajes fuera de tu horario constantemente.", good:"Reconoces la invasión de tu tiempo personal y estableces límites.", bad:"Trabajas siempre que te piden sin cuestionar."},
+  {q:"Alguien invalida tus necesidades de apoyo.", good:"Defiendes tus necesidades con información y firmeza.", bad:"Dudas de ti mismo y dejas de pedir apoyo."},
+  {q:"Te presionan para hacer algo que te incomoda físicamente.", good:"Reconoces tu límite corporal y te niegas sin culpa.", bad:"Te fuerzas y te lastimas o incomodas."},
+  {q:"Alguien comparte información tuya sin tu permiso.", good:"Identificas la violación de privacidad y lo confrontas.", bad:"Te molestas en silencio sin decir nada."},
+  {q:"Te critican por usar tus estrategias de apoyo.", good:"Defiendes tus necesidades explicando por qué las usas.", bad:"Dejas de usar tus apoyos por vergüenza."},
+  {q:"Alguien te presiona para socializar cuando necesitas descanso.", good:"Reconoces tu necesidad de soledad y la comunicas.", bad:"Cedes a la presión y te agotas más."},
+  {q:"Te piden que hagas algo peligroso o poco ético.", good:"Identificas el riesgo y te niegas claramente.", bad:"Lo haces por miedo a las consecuencias de negarte."},
+
+  // 71-80 Reconocimiento de triggers
+  {q:"Identificas que ciertos temas te activan emocionalmente.", good:"Reconoces tus triggers y estableces límites sobre esos temas.", bad:"Te expones constantemente sin protegerte."},
+  {q:"Notas que ciertas personas te drenan energía.", good:"Identificas estas relaciones y limitas tu exposición.", bad:"Sigues interactuando sin límites y te agotas."},
+  {q:"Te das cuenta de que ciertos lugares te generan ansiedad.", good:"Reconoces estos espacios y planificas estrategias de afrontamiento.", bad:"Te obligas a ir sin preparación y te desregulas."},
+  {q:"Identificas que ciertas fechas te afectan emocionalmente.", good:"Reconoces estos momentos y planificas autocuidado extra.", bad:"Te sorprendes cada vez sin prepararte."},
+  {q:"Notas que ciertos tipos de conflicto te paralizan.", good:"Identificas tu patrón y desarrollas estrategias de manejo.", bad:"Evitas todo conflicto sin resolverlo."},
+  {q:"Te das cuenta de que la falta de sueño te desregula.", good:"Reconoces esta conexión y priorizas tu descanso.", bad:"Sigues sin dormir bien sin ver la relación."},
+  {q:"Identificas que el hambre te pone irritable.", good:"Reconoces esta necesidad y comes regularmente.", bad:"Ignoras el hambre y explotas emocionalmente."},
+  {q:"Notas que los cambios repentinos te estresan.", good:"Identificas este trigger y pides avisos anticipados cuando es posible.", bad:"Te desregulas con cada cambio sin prepararte."},
+  {q:"Te das cuenta de que ciertas memorias te afectan.", good:"Reconoces estos triggers y buscas apoyo terapéutico.", bad:"Te expones sin apoyo y te retraumatizas."},
+  {q:"Identificas que la sobrecarga de información te bloquea.", good:"Reconoces tu límite y pides información en dosis pequeñas.", bad:"Intentas procesar todo y te paralizas."},
+
+  // 81-90 Autoconocimiento en relaciones
+  {q:"Te das cuenta de que tiendes a complacer a otros.", good:"Reconoces este patrón y practicas priorizar tus necesidades.", bad:"Sigues complaciendo hasta perder tu identidad."},
+  {q:"Notas que te apegas rápido a las personas.", good:"Identificas este patrón y trabajas en vínculos saludables.", bad:"Te apegas sin límites y sufres cuando se alejan."},
+  {q:"Identificas que evitas la intimidad emocional.", good:"Reconoces este patrón y trabajas en abrirte gradualmente.", bad:"Mantienes a todos a distancia sin conexiones profundas."},
+  {q:"Te das cuenta de que proyectas tus inseguridades en otros.", good:"Reconoces este mecanismo y trabajas en tu autoestima.", bad:"Culpas a otros sin ver tu parte."},
+  {q:"Notas que repites patrones de relaciones poco saludables.", good:"Identificas el patrón y buscas ayuda para cambiarlo.", bad:"Sigues eligiendo las mismas dinámicas dañinas."},
+  {q:"Identificas que tienes dificultad para confiar.", good:"Reconoces este patrón y trabajas en construir confianza gradualmente.", bad:"No confías en nadie y te aíslas."},
+  {q:"Te das cuenta de que idealizas a las personas al inicio.", good:"Reconoces esta tendencia y te das tiempo para conocerlas realmente.", bad:"Te desilusionas constantemente cuando ves sus defectos."},
+  {q:"Notas que te cuesta expresar afecto.", good:"Identificas esta dificultad y practicas formas de mostrar cariño.", bad:"Mantienes distancia emocional sin intentar cambiar."},
+  {q:"Identificas que necesitas mucho espacio personal.", good:"Reconoces esta necesidad y la comunicas en tus relaciones.", bad:"Te sientes culpable por necesitar distancia."},
+  {q:"Te das cuenta de que tiendes a aislarte cuando estás mal.", good:"Reconoces este patrón y practicas pedir apoyo.", bad:"Te aíslas completamente sin permitir ayuda."},
+
+  // 91-100 Crecimiento personal
+  {q:"Identificas un área donde quieres mejorar.", good:"Reconoces la oportunidad de crecimiento y creas un plan.", bad:"Te criticas sin tomar acción para cambiar."},
+  {q:"Notas que has progresado en algo que antes te costaba.", good:"Reconoces tu crecimiento y lo celebras.", bad:"Minimizas tu progreso sin valorarlo."},
+  {q:"Te das cuenta de que necesitas ayuda profesional.", good:"Reconoces esta necesidad y buscas terapia o apoyo.", bad:"Niegas que necesitas ayuda hasta que empeora."},
+  {q:"Identificas un patrón que quieres cambiar.", good:"Reconoces el patrón, entiendes su origen y trabajas en cambiarlo.", bad:"Te frustras con el patrón sin entenderlo ni cambiarlo."},
+  {q:"Notas que ciertos apoyos ya no los necesitas.", good:"Reconoces tu progreso y ajustas tus estrategias.", bad:"Sigues usando apoyos innecesarios por costumbre."},
+  {q:"Te das cuenta de que has desarrollado una nueva habilidad.", good:"Reconoces tu aprendizaje y lo integras conscientemente.", bad:"No notas tu progreso y sigues sintiéndote incapaz."},
+  {q:"Identificas que tus necesidades han cambiado.", good:"Reconoces el cambio y ajustas tus estrategias.", bad:"Sigues usando las mismas estrategias aunque no funcionen."},
+  {q:"Notas que puedes manejar situaciones que antes te abrumaban.", good:"Reconoces tu resiliencia creciente y confías más en ti.", bad:"No valoras tu progreso y sigues sintiéndote frágil."},
+  {q:"Te das cuenta de que entiendes mejor tus emociones.", good:"Reconoces tu mayor inteligencia emocional y la usas.", bad:"No notas tu crecimiento en autoconocimiento."},
+  {q:"Identificas que puedes defender tus necesidades mejor que antes.", good:"Reconoces tu empoderamiento y lo celebras.", bad:"No valoras cuánto has crecido en autodefensa."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

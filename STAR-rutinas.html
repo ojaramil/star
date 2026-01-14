@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Rutinas y Transiciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ec4899;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #ec4899cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #ec4899cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(252, 228, 240);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(252, 228, 240);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🔔</span>
+      <span>Manejo Sensorial</span>
+    </span>
+    <h1>🔄 Rutinas y Transiciones</h1>
+    <p>Crear rutinas, usar warning systems y adaptar a cambios</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Rutinas matutinas
+  {q:"Tu terapeuta cambia la hora habitual de la sesión.", good:"Anotas el nuevo horario, ajustas recordatorios y preparas una actividad de transición.", bad:"Te molestas y cancelas porque el cambio te descoloca."},
+  {q:"Tu alarma no suena y te despiertas tarde.", good:"Respiras, ajustas tu rutina a lo esencial y sales sin entrar en pánico.", bad:"Te desesperas, saltas pasos importantes y sales estresado."},
+  {q:"Tienes una mañana con más tiempo del usual.", good:"Aprovechas para hacer tu rutina más calmadamente o agregar algo que disfrutas.", bad:"Te quedas en la cama sin aprovechar el tiempo extra."},
+  {q:"Necesitas salir más temprano de lo normal.", good:"Preparas todo la noche anterior y ajustas tu rutina matutina.", bad:"Intentas hacer todo igual y sales tarde de todos modos."},
+  {q:"Te sientes muy cansado al despertar.", good:"Ajustas tu rutina a una versión más simple pero la mantienes.", bad:"Te saltas toda tu rutina y empiezas el día desorganizado."},
+  {q:"Alguien interrumpe tu rutina matutina.", good:"Atiendes lo necesario y retomas tu rutina donde la dejaste.", bad:"Abandonas toda tu rutina por la interrupción."},
+  {q:"Olvidaste hacer algo de tu rutina nocturna.", good:"Haces lo mínimo necesario en la mañana y ajustas para hoy.", bad:"Te frustras y dejas que arruine toda tu mañana."},
+  {q:"Tienes una cita muy temprano.", good:"Ajustas tu rutina matutina para que quepa antes de salir.", bad:"Sales sin hacer nada de tu rutina y te sientes mal todo el día."},
+  {q:"El clima está terrible en la mañana.", good:"Ajustas tu rutina considerando el clima pero la mantienes.", bad:"Usas el clima como excusa para no hacer nada."},
+  {q:"Te despiertas sintiéndote ansioso.", good:"Incluyes técnicas de regulación en tu rutina matutina.", bad:"Ignoras la ansiedad y te apresuras empeorando todo."},
+
+  // 11-20 Rutinas nocturnas
+  {q:"Llegas muy tarde a casa.", good:"Haces una versión reducida de tu rutina nocturna con lo esencial.", bad:"Te vas directo a dormir sin preparar nada para mañana."},
+  {q:"Estás muy cansado en la noche.", good:"Simplificas tu rutina pero mantienes los pasos clave.", bad:"Te duermes sin hacer nada y mañana será caótico."},
+  {q:"Tienes una actividad social en la noche.", good:"Planificas hacer tu rutina antes de salir o al regresar.", bad:"Sales sin preparar nada y regresas a dormir directo."},
+  {q:"No tienes sueño a tu hora habitual.", good:"Mantienes tu rutina de todos modos para señalar a tu cuerpo que es hora de dormir.", bad:"Te quedas despierto sin rutina y alteras tu ciclo de sueño."},
+  {q:"Olvidaste comprar algo necesario para mañana.", good:"Lo resuelves ahora o ajustas tu plan de mañana, luego continúas tu rutina.", bad:"Entras en pánico y no puedes dormir."},
+  {q:"Tienes mucho en mente antes de dormir.", good:"Incluyes tiempo para escribir tus pensamientos o hacer lista de pendientes.", bad:"Te vas a dormir con la mente acelerada."},
+  {q:"Tu rutina nocturna se siente aburrida.", good:"Agregas un elemento nuevo que disfrutes manteniendo la estructura.", bad:"Abandonas la rutina porque te aburre."},
+  {q:"Alguien te pide algo justo antes de dormir.", good:"Evalúas si es urgente, si no lo es lo dejas para mañana.", bad:"Atiendes todo sacrificando tu rutina y sueño."},
+  {q:"Estás enganchado en una actividad entretenida.", good:"Usas alarma para recordarte tu hora de rutina nocturna.", bad:"Sigues hasta muy tarde y no haces tu rutina."},
+  {q:"Te sientes mal físicamente en la noche.", good:"Adaptas tu rutina a cómo te sientes pero mantienes lo básico.", bad:"No haces nada y te sientes peor mañana."},
+
+  // 21-30 Transiciones entre actividades
+  {q:"Terminas de trabajar y debes empezar a estudiar.", good:"Tomas un descanso de 10 minutos, cambias de espacio y te preparas mentalmente.", bad:"Pasas directo sin transición y no puedes concentrarte."},
+  {q:"Sales de una reunión estresante.", good:"Tomas unos minutos para respirar y procesar antes de la siguiente actividad.", bad:"Pasas inmediatamente a lo siguiente llevando el estrés."},
+  {q:"Llegas a casa después del trabajo.", good:"Tienes un ritual de llegada: cambiar ropa, lavarte, tomar agua.", bad:"Entras y te tiras en el sofá sin transición."},
+  {q:"Debes cambiar de una tarea creativa a una administrativa.", good:"Cierras la tarea creativa, guardas todo y preparas lo necesario para la administrativa.", bad:"Saltas entre ambas sin cerrar ninguna bien."},
+  {q:"Terminas de hacer ejercicio.", good:"Tienes una rutina post-ejercicio: estiramiento, ducha, hidratación.", bad:"Paras abruptamente y pasas a otra cosa."},
+  {q:"Vas a salir de casa.", good:"Revisas tu checklist: llaves, cartera, teléfono, lo que necesites.", bad:"Sales apurado y olvidas cosas importantes."},
+  {q:"Terminas de comer.", good:"Limpias inmediatamente o al menos apilas los platos.", bad:"Dejas todo y se acumula."},
+  {q:"Cambias de un ambiente ruidoso a uno tranquilo.", good:"Te das tiempo para que tu sistema nervioso se ajuste.", bad:"Esperas funcionar igual inmediatamente."},
+  {q:"Terminas una actividad social.", good:"Te das tiempo a solas para recargar antes de la siguiente cosa.", bad:"Empiezas otra actividad sin recuperarte."},
+  {q:"Debes pasar de descanso a trabajo.", good:"Usas una señal clara: alarma, cambio de lugar, ritual de inicio.", bad:"Sigues descansando sin darte cuenta hasta que es tarde."},
+
+  // 31-40 Rutinas de trabajo/estudio
+  {q:"Empiezas tu jornada de trabajo.", good:"Tienes un ritual de inicio: revisar agenda, priorizar, preparar espacio.", bad:"Empiezas con lo primero que ves sin plan."},
+  {q:"Llevas 2 horas trabajando sin parar.", good:"Tomas un descanso programado de 10 minutos.", bad:"Sigues hasta agotarte sin pausas."},
+  {q:"Terminas una tarea importante.", good:"Marcas como completada, celebras brevemente y pasas a la siguiente.", bad:"Pasas inmediatamente sin reconocer el logro."},
+  {q:"Tienes una tarde de estudio.", good:"Divides en bloques de 25-50 minutos con descansos entre ellos.", bad:"Intentas estudiar 4 horas seguidas sin pausas."},
+  {q:"Te distraes constantemente.", good:"Identificas las distracciones y creas rutina para eliminarlas antes de empezar.", bad:"Sigues trabajando con todas las distracciones activas."},
+  {q:"Terminas tu jornada laboral.", good:"Tienes un ritual de cierre: guardar trabajo, limpiar escritorio, planificar mañana.", bad:"Apagas todo y te vas sin cerrar."},
+  {q:"Tienes una tarea difícil que hacer.", good:"La programas para tu mejor momento del día con tu rutina de preparación.", bad:"La haces cuando sea sin considerar tu energía."},
+  {q:"Necesitas concentración profunda.", good:"Sigues tu rutina de deep work: silenciar todo, avisar, preparar ambiente.", bad:"Intentas concentrarte con interrupciones constantes."},
+  {q:"Tienes múltiples tareas pequeñas.", good:"Las agrupas en un bloque de tiempo con tu rutina de tareas rápidas.", bad:"Las haces cuando te acuerdas interrumpiendo otras cosas."},
+  {q:"Te sientes improductivo.", good:"Revisas tu rutina de trabajo y ajustas lo que no funciona.", bad:"Sigues con la misma rutina inefectiva."},
+
+  // 41-50 Rutinas de autocuidado
+  {q:"Es hora de tu ducha diaria.", good:"Tienes una rutina: temperatura, productos, orden de lavado.", bad:"Te duchas diferente cada vez sin consistencia."},
+  {q:"Necesitas tomar tus medicamentos.", good:"Los tomas a la misma hora con alarma y registro.", bad:"Los tomas cuando te acuerdas a diferentes horas."},
+  {q:"Es momento de comer.", good:"Comes a horarios regulares en un lugar designado.", bad:"Comes a cualquier hora en cualquier lugar."},
+  {q:"Necesitas hacer ejercicio.", good:"Tienes días y horarios fijos con rutina de preparación.", bad:"Haces ejercicio cuando te provoca sin consistencia."},
+  {q:"Debes cuidar tu higiene dental.", good:"Te cepillas después de cada comida siguiendo la misma rutina.", bad:"Te cepillas cuando te acuerdas sin regularidad."},
+  {q:"Necesitas tiempo de relajación.", good:"Programas tiempo específico diario para actividades relajantes.", bad:"Solo te relajas cuando estás al borde del colapso."},
+  {q:"Es hora de dormir.", good:"Sigues tu rutina de sueño: misma hora, mismos pasos preparatorios.", bad:"Te duermes a diferentes horas sin rutina."},
+  {q:"Necesitas hidratarte.", good:"Tienes recordatorios y rutina de tomar agua regularmente.", bad:"Solo tomas agua cuando tienes mucha sed."},
+  {q:"Debes revisar tu salud.", good:"Tienes rutina de chequeos médicos programados anualmente.", bad:"Solo vas al médico cuando estás enfermo."},
+  {q:"Necesitas cuidar tu salud mental.", good:"Tienes rutinas de autocuidado emocional diarias.", bad:"Solo te ocupas cuando estás en crisis."},
+
+  // 51-60 Rutinas domésticas
+  {q:"Tu casa está desordenada.", good:"Tienes rutina diaria de 15 minutos de orden.", bad:"Dejas que se acumule hasta que es inmanejable."},
+  {q:"Necesitas lavar ropa.", good:"Lavas en días específicos de la semana con rutina completa.", bad:"Lavas cuando no tienes ropa limpia en crisis."},
+  {q:"La cocina está sucia después de cocinar.", good:"Limpias inmediatamente después de comer como parte de tu rutina.", bad:"Dejas todo y se acumula por días."},
+  {q:"Necesitas hacer compras.", good:"Tienes día fijo semanal con lista preparada.", bad:"Vas cuando se te acaba todo sin planificar."},
+  {q:"Debes pagar cuentas.", good:"Tienes día específico del mes para revisar y pagar todas.", bad:"Pagas cuando te acuerdas acumulando recargos."},
+  {q:"Tu espacio de trabajo está desordenado.", good:"Al final del día ordenas como parte de tu rutina de cierre.", bad:"Trabajas en el desorden sin ordenar nunca."},
+  {q:"Necesitas mantener plantas o mascotas.", good:"Tienes rutina diaria de cuidados a hora específica.", bad:"Las cuidas cuando te acuerdas sin regularidad."},
+  {q:"Debes sacar la basura.", good:"Tienes días específicos y lo haces como parte de tu rutina.", bad:"Sacas la basura cuando ya está desbordando."},
+  {q:"Necesitas limpiar profundamente.", good:"Tienes rutina semanal o mensual de limpieza profunda.", bad:"Solo limpias cuando hay visitas o está muy sucio."},
+  {q:"Debes revisar tu despensa.", good:"Revisas semanalmente y haces lista de lo que falta.", bad:"Descubres que falta algo cuando lo necesitas."},
+
+  // 61-70 Adaptación de rutinas
+  {q:"Tu rutina ya no te funciona.", good:"Analizas qué cambió y ajustas tu rutina a tu nueva realidad.", bad:"Sigues forzando una rutina que no funciona."},
+  {q:"Tienes más responsabilidades ahora.", good:"Reestructuras tu rutina para incluir las nuevas responsabilidades.", bad:"Intentas agregar todo sin quitar nada y te sobrecargas."},
+  {q:"Tu energía es diferente a antes.", good:"Ajustas tu rutina a tus nuevos niveles de energía.", bad:"Intentas mantener el mismo ritmo y te agotas."},
+  {q:"Cambiaste de horario laboral.", good:"Adaptas todas tus rutinas al nuevo horario.", bad:"Intentas mantener las mismas horas y no funciona."},
+  {q:"Una parte de tu rutina te aburre.", good:"Modificas esa parte manteniendo el objetivo pero cambiando la forma.", bad:"Abandonas toda la rutina por aburrimiento."},
+  {q:"Descubres una mejor forma de hacer algo.", good:"Integras la mejora en tu rutina gradualmente.", bad:"Cambias todo de golpe y te desorganizas."},
+  {q:"Tu rutina es muy rígida.", good:"Agregas flexibilidad manteniendo la estructura básica.", bad:"La haces tan flexible que deja de ser rutina."},
+  {q:"Tu rutina es muy laxa.", good:"Agregas más estructura y consistencia gradualmente.", bad:"Intentas volverla súper rígida y no la sostienes."},
+  {q:"Alguien critica tu rutina.", good:"Evalúas si la crítica es válida y ajustas si es necesario.", bad:"Abandonas tu rutina por la opinión de otros."},
+  {q:"Tu rutina no incluye algo importante.", good:"Identificas el hueco y agregas ese elemento gradualmente.", bad:"Intentas agregar muchas cosas a la vez y fallas."},
+
+  // 71-80 Rutinas en situaciones especiales
+  {q:"Estás de viaje.", good:"Adaptas tu rutina esencial al nuevo contexto.", bad:"Abandonas toda rutina porque estás de viaje."},
+  {q:"Estás enfermo.", good:"Simplificas tu rutina a lo mínimo necesario.", bad:"Intentas mantener todo igual y empeoras."},
+  {q:"Es fin de semana.", good:"Tienes rutina de fin de semana diferente pero consistente.", bad:"El fin de semana es caos total sin estructura."},
+  {q:"Es un día festivo.", good:"Planificas cómo adaptar tus rutinas al día especial.", bad:"El día festivo desorganiza toda tu semana."},
+  {q:"Tienes visitas en casa.", good:"Ajustas tu rutina pero mantienes lo esencial.", bad:"Abandonas toda rutina y te desregulas."},
+  {q:"Estás muy estresado.", good:"Mantienes tus rutinas básicas porque te dan estabilidad.", bad:"Abandonas todo cuando más lo necesitas."},
+  {q:"Tienes un evento importante.", good:"Ajustas tu rutina para prepararte adecuadamente.", bad:"El evento desorganiza completamente tu día."},
+  {q:"Cambias de estación del año.", good:"Adaptas tus rutinas a la nueva estación.", bad:"Intentas mantener rutinas de verano en invierno."},
+  {q:"Tienes un día muy ocupado.", good:"Mantienes las rutinas esenciales aunque sea en versión reducida.", bad:"Abandonas toda rutina por estar ocupado."},
+  {q:"Tienes un día muy libre.", good:"Mantienes estructura básica aunque tengas más tiempo.", bad:"El día libre se vuelve improductivo sin rutina."},
+
+  // 81-90 Construcción de nuevas rutinas
+  {q:"Quieres crear una rutina nueva.", good:"Empiezas con una versión simple y la construyes gradualmente.", bad:"Intentas una rutina compleja desde el inicio y fallas."},
+  {q:"Quieres agregar un hábito a tu rutina.", good:"Lo anclas a una rutina existente y empiezas pequeño.", bad:"Intentas agregarlo sin conexión y lo olvidas."},
+  {q:"Tu nueva rutina es difícil de mantener.", good:"La simplificas hasta que sea sostenible.", bad:"Insistes en la versión difícil y la abandonas."},
+  {q:"Olvidas tu nueva rutina frecuentemente.", good:"Agregas recordatorios y señales visuales.", bad:"Esperas recordarla sin apoyos."},
+  {q:"Tu nueva rutina no te gusta.", good:"Ajustas la forma manteniendo el objetivo.", bad:"La fuerzas aunque la odies y la abandonas."},
+  {q:"Llevas una semana con tu nueva rutina.", good:"Celebras el progreso y ajustas lo que no funciona.", bad:"No reconoces tu logro y te enfocas en lo que falta."},
+  {q:"Rompiste tu nueva rutina.", good:"Retomas al día siguiente sin culpa.", bad:"Usas un día perdido como excusa para abandonar."},
+  {q:"Tu nueva rutina requiere mucho tiempo.", good:"Buscas formas de hacerla más eficiente.", bad:"La abandonas porque no tienes tiempo."},
+  {q:"No ves resultados de tu nueva rutina.", good:"Das tiempo suficiente antes de evaluar resultados.", bad:"La abandonas rápido por no ver resultados inmediatos."},
+  {q:"Tu nueva rutina está funcionando.", good:"La mantienes consistentemente y la haces parte de tu vida.", bad:"Te confías y empiezas a saltarla."},
+
+  // 91-100 Mantenimiento de rutinas
+  {q:"Llevas meses con tu rutina.", good:"La revisas periódicamente y ajustas lo necesario.", bad:"La sigues en automático sin evaluar si sigue funcionando."},
+  {q:"Tu rutina se siente mecánica.", good:"Agregas elementos de mindfulness o disfrute.", bad:"La sigues sin presencia ni intención."},
+  {q:"Alguien interrumpe tu rutina constantemente.", good:"Comunicas la importancia de tu rutina y estableces límites.", bad:"Permites las interrupciones y pierdes tu rutina."},
+  {q:"Te sientes orgulloso de tu rutina.", good:"Compartes lo que funciona con otros que puedan beneficiarse.", bad:"Te vuelves rígido y crítico con quien no la sigue."},
+  {q:"Tu rutina te da estabilidad.", good:"La valoras y proteges como herramienta de bienestar.", bad:"La das por sentada hasta que la pierdes."},
+  {q:"Necesitas motivación para tu rutina.", good:"Recuerdas por qué la creaste y los beneficios que te da.", bad:"La sigues por obligación sin conexión con su propósito."},
+  {q:"Tu rutina evolucionó naturalmente.", good:"Reconoces y documentas la evolución.", bad:"No notas cómo ha cambiado con el tiempo."},
+  {q:"Quieres ayudar a alguien a crear rutinas.", good:"Compartes tu experiencia sin imponer tu forma.", bad:"Insistes en que hagan exactamente como tú."},
+  {q:"Tu rutina te salvó en un momento difícil.", good:"Reconoces su valor y la mantienes incluso en buenos momentos.", bad:"La abandonas cuando te sientes bien."},
+  {q:"Has dominado tus rutinas.", good:"Usas esa habilidad para crear nuevas rutinas cuando las necesitas.", bad:"Te estancas sin seguir creciendo."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

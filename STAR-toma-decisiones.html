@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Toma de Decisiones Sociales</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #6366f1;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #6366f1cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #6366f1cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(232, 232, 253);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(232, 232, 253);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🧩</span>
+      <span>Pensamiento Crítico Social</span>
+    </span>
+    <h1>⚖️ Toma de Decisiones Sociales</h1>
+    <p>Decidir confianza, honestidad, priorizar amistades saludables</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Decisiones sociales básicas
+  {q:"Te invitan a unirte a un proyecto con personas que no conoces.", good:"Evalúas pros y contras, consultas con alguien de confianza y decides con información.", bad:"Aceptas sin pensar o rechazas impulsivamente."},
+  {q:"Un amigo te invita a salir pero estás cansado.", good:"Evalúas tu nivel de energía, consideras la importancia y decides honestamente.", bad:"Aceptas por compromiso aunque no quieras ir."},
+  {q:"Te ofrecen unirte a un grupo de estudio.", good:"Preguntas sobre horarios, dinámica y evalúas si te conviene.", bad:"Dices que sí sin saber cómo funciona."},
+  {q:"Alguien te pide ser su compañero de cuarto.", good:"Evalúas compatibilidad, hábitos y hablas de expectativas antes de decidir.", bad:"Aceptas solo porque necesitas lugar."},
+  {q:"Te invitan a una fiesta el mismo día de un examen.", good:"Priorizas según tus objetivos y decides en consecuencia.", bad:"Vas a la fiesta sin considerar el examen."},
+  {q:"Un conocido te pide prestado dinero.", good:"Evalúas tu situación financiera, la relación y si puedes permitírtelo.", bad:"Prestas sin pensar en tus propias necesidades."},
+  {q:"Te proponen cambiar de trabajo.", good:"Evalúas salario, beneficios, crecimiento y estabilidad antes de decidir.", bad:"Cambias impulsivamente sin analizar."},
+  {q:"Alguien te pide guardar un secreto incómodo.", good:"Evalúas las implicaciones éticas antes de comprometerte.", bad:"Aceptas sin pensar en las consecuencias."},
+  {q:"Te ofrecen mudarte a otra ciudad.", good:"Evalúas oportunidades, costos, red de apoyo y tus objetivos.", bad:"Decides basándote solo en la emoción del momento."},
+  {q:"Un amigo te pide mentir por él.", good:"Consideras tus valores y las consecuencias antes de decidir.", bad:"Mientes automáticamente por lealtad."},
+
+  // 11-20 Decisiones sobre límites
+  {q:"Alguien te pide un favor que te incomoda.", good:"Evalúas tu incomodidad, consideras alternativas y decides con honestidad.", bad:"Aceptas por no saber decir que no."},
+  {q:"Te piden trabajar horas extra sin pago.", good:"Evalúas si es justo, tus necesidades y decides según tus límites.", bad:"Aceptas por miedo a parecer poco comprometido."},
+  {q:"Un familiar te pide que hagas algo contra tus principios.", good:"Evalúas el conflicto de valores y decides según tu integridad.", bad:"Cedes por presión familiar."},
+  {q:"Alguien invade tu espacio personal constantemente.", good:"Evalúas la situación y decides comunicar tus límites.", bad:"No dices nada y te resientes."},
+  {q:"Te piden compartir información personal.", good:"Evalúas tu nivel de confianza y privacidad antes de decidir.", bad:"Compartes todo sin considerar consecuencias."},
+  {q:"Alguien te presiona para tomar una decisión rápida.", good:"Reconoces la presión, pides tiempo y decides con calma.", bad:"Decides apresuradamente por la presión."},
+  {q:"Te piden hacer algo que va contra tu salud.", good:"Priorizas tu bienestar y decides en consecuencia.", bad:"Lo haces por no decepcionar a otros."},
+  {q:"Alguien te pide tiempo que no tienes.", good:"Evalúas tu carga actual y decides honestamente.", bad:"Aceptas y te sobrecargas."},
+  {q:"Te ofrecen algo que parece demasiado bueno.", good:"Evalúas si es realista, investigas y decides con cautela.", bad:"Aceptas sin cuestionar nada."},
+  {q:"Alguien te pide elegir entre dos personas.", good:"Evalúas la situación, consideras no elegir y decides lo más justo.", bad:"Eliges impulsivamente sin pensar."},
+
+  // 21-30 Decisiones de relaciones
+  {q:"Un amigo te pide terminar otra amistad.", good:"Evalúas la situación completa y decides según tus propios criterios.", bad:"Terminas la amistad solo porque te lo piden."},
+  {q:"Alguien te propone una relación romántica.", good:"Evalúas tus sentimientos, compatibilidad y momento de vida.", bad:"Aceptas por soledad o presión."},
+  {q:"Un amigo te pide perdonar algo grave.", good:"Evalúas el daño, su arrepentimiento y tu capacidad de perdonar.", bad:"Perdonas automáticamente sin procesar."},
+  {q:"Te piden elegir entre tu pareja y tu familia.", good:"Evalúas la situación, buscas mediación y decides lo más saludable.", bad:"Eliges impulsivamente sin intentar resolver."},
+  {q:"Alguien te propone vivir juntos.", good:"Evalúas la relación, finanzas, compatibilidad y timing.", bad:"Aceptas por emoción sin planificar."},
+  {q:"Un amigo te pide mentir a su pareja.", good:"Evalúas las implicaciones éticas y decides no involucrarte.", bad:"Mientes sin considerar las consecuencias."},
+  {q:"Te proponen una amistad con beneficios.", good:"Evalúas tus sentimientos, expectativas y posibles complicaciones.", bad:"Aceptas sin pensar en las emociones involucradas."},
+  {q:"Alguien te pide dar otra oportunidad.", good:"Evalúas el patrón de comportamiento y tu bienestar.", bad:"Das otra oportunidad sin cambios reales."},
+  {q:"Te piden elegir entre dos eventos importantes.", good:"Evalúas prioridades, consecuencias y decides conscientemente.", bad:"Eliges al azar sin pensar."},
+  {q:"Un amigo te pide distanciarte de alguien.", good:"Evalúas tus propias experiencias y decides independientemente.", bad:"Te distancias solo porque te lo piden."},
+
+  // 31-40 Decisiones académicas/laborales
+  {q:"Te ofrecen dos trabajos diferentes.", good:"Comparas salario, beneficios, crecimiento, cultura y decides informadamente.", bad:"Eliges el que paga más sin considerar otros factores."},
+  {q:"Debes elegir una carrera universitaria.", good:"Evalúas tus intereses, habilidades, mercado laboral y consultas.", bad:"Eliges lo que otros esperan de ti."},
+  {q:"Te proponen liderar un proyecto.", good:"Evalúas tu capacidad, tiempo disponible y apoyo antes de aceptar.", bad:"Aceptas por ego sin considerar la realidad."},
+  {q:"Debes decidir si renunciar a tu trabajo.", good:"Evalúas finanzas, alternativas, razones y timing.", bad:"Renuncias impulsivamente en un mal día."},
+  {q:"Te ofrecen estudiar en el extranjero.", good:"Evalúas costos, beneficios, red de apoyo y objetivos.", bad:"Decides solo por la aventura sin planificar."},
+  {q:"Debes elegir entre dos materias optativas.", good:"Evalúas interés, utilidad, carga de trabajo y decides.", bad:"Eliges la que parece más fácil sin más análisis."},
+  {q:"Te proponen cambiar de área en tu trabajo.", good:"Evalúas oportunidades de crecimiento, interés y habilidades.", bad:"Cambias solo por cambiar sin evaluar."},
+  {q:"Debes decidir si hacer un posgrado.", good:"Evalúas costos, beneficios profesionales, timing y alternativas.", bad:"Te inscribes porque todos lo hacen."},
+  {q:"Te ofrecen trabajar desde casa.", good:"Evalúas tu estilo de trabajo, espacio, disciplina y decides.", bad:"Aceptas sin considerar si funciona para ti."},
+  {q:"Debes elegir entre dos proyectos.", good:"Evalúas impacto, aprendizaje, recursos y alineación con objetivos.", bad:"Eliges el más fácil sin considerar crecimiento."},
+
+  // 41-50 Decisiones financieras
+  {q:"Te ofrecen un préstamo para algo que quieres.", good:"Evalúas necesidad real, capacidad de pago e intereses.", bad:"Lo tomas sin calcular si puedes pagarlo."},
+  {q:"Debes decidir si comprar o rentar.", good:"Evalúas finanzas, estabilidad, planes a futuro y mercado.", bad:"Compras por presión social sin analizar."},
+  {q:"Te proponen invertir en un negocio.", good:"Investigas el negocio, evalúas riesgos y consultas expertos.", bad:"Inviertes por emoción sin investigar."},
+  {q:"Debes elegir un plan de seguro.", good:"Comparas coberturas, costos, beneficios y decides informadamente.", bad:"Eliges el más barato sin ver cobertura."},
+  {q:"Te ofrecen una tarjeta de crédito.", good:"Evalúas si la necesitas, tasas de interés y tu capacidad de control.", bad:"La sacas solo por los puntos."},
+  {q:"Debes decidir cuánto ahorrar mensualmente.", good:"Evalúas ingresos, gastos, objetivos y decides un monto realista.", bad:"No ahorras porque piensas que no puedes."},
+  {q:"Te proponen un plan de pensiones.", good:"Evalúas opciones, rendimientos, riesgos y decides a largo plazo.", bad:"Lo ignoras porque parece muy lejano."},
+  {q:"Debes elegir entre dos productos similares.", good:"Comparas calidad, precio, durabilidad y decides el mejor valor.", bad:"Compras el más barato sin considerar calidad."},
+  {q:"Te ofrecen un descuento si compras ahora.", good:"Evalúas si realmente lo necesitas más allá del descuento.", bad:"Compras solo porque está en oferta."},
+  {q:"Debes decidir si pagar deudas o ahorrar.", good:"Evalúas intereses, urgencias y creas un plan balanceado.", bad:"Haces uno u otro sin estrategia."},
+
+  // 51-60 Decisiones de salud
+  {q:"Debes elegir entre dos tratamientos médicos.", good:"Investigas ambos, consultas opiniones y evalúas riesgos/beneficios.", bad:"Eliges el más rápido sin investigar."},
+  {q:"Te recomiendan cambiar tu dieta.", good:"Evalúas tu situación, consultas nutricionista y decides gradualmente.", bad:"Haces cambios drásticos sin orientación."},
+  {q:"Debes decidir si empezar terapia.", good:"Evalúas tus necesidades, opciones disponibles y decides informadamente.", bad:"Lo pospones indefinidamente por estigma."},
+  {q:"Te proponen una cirugía electiva.", good:"Investigas riesgos, beneficios, alternativas y consultas varios médicos.", bad:"Decides basándote solo en estética."},
+  {q:"Debes elegir un gimnasio o actividad física.", good:"Evalúas ubicación, costo, tus preferencias y sostenibilidad.", bad:"Eliges el más caro asumiendo que es mejor."},
+  {q:"Te recomiendan tomar medicación.", good:"Preguntas sobre efectos, alternativas y decides informadamente.", bad:"La tomas o rechazas sin hacer preguntas."},
+  {q:"Debes decidir si hacerte un chequeo médico.", good:"Evalúas tu historial, síntomas y decides preventivamente.", bad:"Solo vas cuando ya estás muy enfermo."},
+  {q:"Te proponen un plan de ejercicio intenso.", good:"Evalúas tu condición actual, objetivos y decides gradualmente.", bad:"Empiezas intensamente y te lesionas."},
+  {q:"Debes elegir entre descansar o seguir trabajando enfermo.", good:"Priorizas tu salud y decides descansar.", bad:"Sigues trabajando empeorando tu condición."},
+  {q:"Te recomiendan cambiar un hábito poco saludable.", good:"Evalúas tu motivación, apoyo disponible y creas un plan.", bad:"Intentas cambiar todo de golpe y fallas."},
+
+  // 61-70 Decisiones de tiempo
+  {q:"Debes elegir entre dos compromisos simultáneos.", good:"Evalúas prioridades, importancia y consecuencias de cada uno.", bad:"Intentas ir a ambos y llegas tarde a los dos."},
+  {q:"Te piden dedicar tiempo a algo nuevo.", good:"Evalúas tu carga actual y decides si puedes agregarlo.", bad:"Aceptas sin considerar tu tiempo disponible."},
+  {q:"Debes decidir cómo usar tu tiempo libre.", good:"Balanceas descanso, productividad y disfrute conscientemente.", bad:"Lo desperdicias sin intención y te arrepientes."},
+  {q:"Te proponen un compromiso a largo plazo.", good:"Evalúas tu capacidad de mantenerlo en el tiempo.", bad:"Aceptas sin pensar en la sostenibilidad."},
+  {q:"Debes elegir entre dormir o terminar algo.", good:"Evalúas la urgencia real y priorizas tu salud.", bad:"Sacrificas sueño constantemente."},
+  {q:"Te piden tiempo que habías reservado para ti.", good:"Evalúas la urgencia y decides si ceder o mantener tu tiempo.", bad:"Cedes siempre tu tiempo personal."},
+  {q:"Debes decidir cuánto tiempo dedicar a un hobby.", good:"Balanceas responsabilidades y autocuidado conscientemente.", bad:"Lo abandonas completamente o le dedicas todo."},
+  {q:"Te proponen un viaje en fechas complicadas.", good:"Evalúas compromisos, costos y decides si es viable.", bad:"Vas sin considerar las complicaciones."},
+  {q:"Debes elegir entre eficiencia y calidad.", good:"Evalúas el contexto y decides el balance apropiado.", bad:"Siempre eliges velocidad sin considerar calidad."},
+  {q:"Te piden adelantar una entrega.", good:"Evalúas si es posible sin sacrificar calidad o salud.", bad:"Aceptas sin considerar el impacto."},
+
+  // 71-80 Decisiones éticas
+  {q:"Ves a alguien haciendo trampa.", good:"Evalúas la situación, consecuencias y decides según tus valores.", bad:"Ignoras la situación por comodidad."},
+  {q:"Te ofrecen ventaja injusta.", good:"Evalúas las implicaciones éticas y decides con integridad.", bad:"La tomas sin considerar la justicia."},
+  {q:"Debes elegir entre honestidad y conveniencia.", good:"Priorizas la honestidad evaluando consecuencias.", bad:"Eliges lo conveniente sin considerar valores."},
+  {q:"Sabes algo que podría ayudar a alguien.", good:"Evalúas si es tu lugar compartirlo y decides éticamente.", bad:"Lo guardas o lo compartes sin pensar."},
+  {q:"Te piden participar en algo cuestionable.", good:"Evalúas las implicaciones éticas y decides según tus valores.", bad:"Participas por presión de grupo."},
+  {q:"Debes elegir entre lealtad y justicia.", good:"Evalúas ambos valores y decides lo más ético.", bad:"Eliges lealtad ciega sin considerar justicia."},
+  {q:"Encuentras dinero que no es tuyo.", good:"Evalúas cómo devolverlo o reportarlo apropiadamente.", bad:"Te lo quedas sin intentar encontrar al dueño."},
+  {q:"Te piden mentir para proteger a alguien.", good:"Evalúas las consecuencias y buscas alternativas honestas.", bad:"Mientes automáticamente sin considerar opciones."},
+  {q:"Debes elegir entre tu beneficio y el colectivo.", good:"Evalúas el impacto y decides balanceando ambos.", bad:"Siempre priorizas tu beneficio individual."},
+  {q:"Sabes de una injusticia pero denunciarla te afecta.", good:"Evalúas riesgos, apoyos y decides conscientemente.", bad:"Callas por miedo sin considerar alternativas."},
+
+  // 81-90 Decisiones de cambio
+  {q:"Debes decidir si cambiar algo que no funciona.", good:"Evalúas qué no funciona, alternativas y decides con plan.", bad:"Sigues igual por miedo al cambio."},
+  {q:"Te proponen salir de tu zona de confort.", good:"Evalúas el crecimiento potencial, riesgos y decides informadamente.", bad:"Rechazas automáticamente por miedo."},
+  {q:"Debes elegir entre estabilidad y crecimiento.", good:"Evalúas tu momento de vida, recursos y decides conscientemente.", bad:"Eliges siempre lo seguro sin considerar crecimiento."},
+  {q:"Te piden cambiar algo de tu personalidad.", good:"Evalúas si es un cambio saludable o presión externa.", bad:"Cambias para complacer sin reflexionar."},
+  {q:"Debes decidir si terminar algo que empezaste.", good:"Evalúas si sigue siendo valioso o es persistencia tóxica.", bad:"Abandonas o persistes sin evaluar."},
+  {q:"Te proponen mudarte por trabajo.", good:"Evalúas impacto en tu vida, relaciones, objetivos y decides.", bad:"Decides solo por el aspecto laboral."},
+  {q:"Debes elegir entre tradición e innovación.", good:"Evalúas el valor de ambas y decides el mejor balance.", bad:"Te aferras a la tradición sin considerar mejoras."},
+  {q:"Te piden adaptarte a un cambio organizacional.", good:"Evalúas el cambio, tus opciones y decides tu respuesta.", bad:"Te resistes automáticamente sin evaluar."},
+  {q:"Debes decidir si reinventarte profesionalmente.", good:"Evalúas motivaciones, recursos, timing y decides con plan.", bad:"Cambias impulsivamente en una crisis."},
+  {q:"Te proponen cambiar tu estilo de vida.", good:"Evalúas motivaciones, sostenibilidad y decides gradualmente.", bad:"Haces cambios drásticos sin preparación."},
+
+  // 91-100 Decisiones complejas
+  {q:"Debes tomar una decisión sin información completa.", good:"Evalúas lo que sabes, riesgos y decides con la mejor información disponible.", bad:"Te paralizas esperando certeza absoluta."},
+  {q:"Te piden decidir algo que afecta a muchos.", good:"Consultas a los afectados, evalúas impacto y decides inclusivamente.", bad:"Decides solo sin considerar a los demás."},
+  {q:"Debes elegir entre dos opciones igualmente buenas.", good:"Evalúas pros y contras, confías en tu intuición y decides.", bad:"Te paralizas sin poder elegir."},
+  {q:"Te enfrentas a una decisión irreversible.", good:"Evalúas profundamente, consultas y decides con toda la información.", bad:"Decides impulsivamente sin considerar la permanencia."},
+  {q:"Debes decidir algo bajo presión extrema.", good:"Respiras, evalúas lo esencial y decides lo mejor posible.", bad:"Decides en pánico sin pensar."},
+  {q:"Te piden decidir entre dos males.", good:"Evalúas cuál causa menos daño y buscas alternativas.", bad:"Te paralizas sin decidir nada."},
+  {q:"Debes tomar una decisión impopular.", good:"Evalúas lo correcto vs lo popular y decides con integridad.", bad:"Decides lo popular aunque sepas que está mal."},
+  {q:"Te enfrentas a una decisión que cambiará tu vida.", good:"Tomas tiempo, consultas, evalúas y decides conscientemente.", bad:"Decides impulsivamente o por miedo no decides."},
+  {q:"Debes elegir entre tu pasado y tu futuro.", good:"Honras tu pasado pero decides basándote en tu futuro.", bad:"Te aferras al pasado impidiendo tu futuro."},
+  {q:"Te piden decidir algo que va contra tu intuición.", good:"Evalúas tu intuición, los hechos y decides balanceando ambos.", bad:"Ignoras tu intuición completamente."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Estrategias de Regulación</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #f59e0b;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #f59e0bcc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #f59e0bcc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(254, 240, 218);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(254, 240, 218);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>❤️</span>
+      <span>Regulación Emocional</span>
+    </span>
+    <h1>🛠️ Estrategias de Regulación</h1>
+    <p>Técnicas de prevención, manejo en el momento y post-crisis</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Respiración y técnicas físicas
+  {q:"Previo a una entrevista notas las manos sudorosas y el pulso acelerado.", good:"Aplicas respiraciones, estiras hombros y usas una frase de autoapoyo.", bad:"Te criticas por estar nervioso y no haces nada para bajar la activación."},
+  {q:"Sientes ansiedad creciendo en tu pecho.", good:"Haces respiración profunda 4-7-8 para calmar tu sistema nervioso.", bad:"Dejas que la ansiedad crezca sin hacer nada."},
+  {q:"Estás muy tenso antes de una presentación.", good:"Haces estiramientos suaves y relajación muscular progresiva.", bad:"Te quedas tenso sin intentar relajarte."},
+  {q:"Tu corazón late muy rápido por estrés.", good:"Usas respiración diafragmática para bajar tu ritmo cardíaco.", bad:"Entras en pánico por el ritmo cardíaco."},
+  {q:"Sientes que vas a explotar de frustración.", good:"Haces ejercicio físico o caminas para liberar la tensión.", bad:"Explotas con alguien sin regular primero."},
+  {q:"Estás hiperventilando por ansiedad.", good:"Respiras en una bolsa o haces respiración controlada.", bad:"Sigues hiperventilando sin intervenir."},
+  {q:"Tus músculos están muy tensos.", good:"Haces yoga, estiramientos o masaje para liberar tensión.", bad:"Mantienes la tensión hasta que te duele."},
+  {q:"Sientes mucha energía nerviosa.", good:"La canalizas en movimiento: bailar, correr o limpiar.", bad:"La reprimes y te sientes más ansioso."},
+  {q:"Estás temblando de nervios.", good:"Usas técnicas de grounding y respiración para estabilizarte.", bad:"Intentas esconder el temblor sin regularte."},
+  {q:"Tu cuerpo está en modo de alerta constante.", good:"Practicas relajación progresiva o meditación regularmente.", bad:"Vives en alerta sin hacer nada para regularte."},
+
+  // 11-20 Técnicas cognitivas
+  {q:"Tienes pensamientos catastróficos.", good:"Cuestionas los pensamientos y buscas evidencia real.", bad:"Crees todos los pensamientos sin cuestionarlos."},
+  {q:"Estás rumiando sobre un error.", good:"Usas técnicas de detención de pensamiento y redirección.", bad:"Sigues rumiando sin parar."},
+  {q:"Te sientes abrumado por todo.", good:"Divides los problemas en partes manejables.", bad:"Ves todo como un problema gigante."},
+  {q:"Piensas que todo saldrá mal.", good:"Identificas el pensamiento distorsionado y lo reformulas.", bad:"Actúas desde el pensamiento negativo."},
+  {q:"Te criticas duramente.", good:"Usas autocompasión y hablas contigo como a un amigo.", bad:"Sigues criticándote sin parar."},
+  {q:"Estás atrapado en el pasado.", good:"Usas técnicas de mindfulness para volver al presente.", bad:"Sigues reviviendo el pasado constantemente."},
+  {q:"Anticipas lo peor constantemente.", good:"Practicas pensar en escenarios realistas y positivos también.", bad:"Solo te preparas para lo peor."},
+  {q:"Personalizas todo lo que pasa.", good:"Cuestionas si realmente es sobre ti o hay otros factores.", bad:"Asumes que todo es tu culpa."},
+  {q:"Piensas en blanco y negro.", good:"Buscas los grises y la complejidad de la situación.", bad:"Ves todo como todo o nada."},
+  {q:"Magnificas los problemas.", good:"Pones los problemas en perspectiva realista.", bad:"Haces montañas de granos de arena."},
+
+  // 21-30 Distracción saludable
+  {q:"Estás muy ansioso esperando resultados.", good:"Te distraes con una actividad que disfrutas.", bad:"Te quedas obsesionado esperando."},
+  {q:"No puedes dejar de pensar en algo doloroso.", good:"Te permites un descanso mental con una distracción sana.", bad:"Fuerzas pensar en ello constantemente."},
+  {q:"Estás abrumado emocionalmente.", good:"Tomas un break viendo algo ligero o haciendo un hobby.", bad:"Sigues en el abrumamiento sin descanso."},
+  {q:"Sientes que no puedes más.", good:"Te das permiso de desconectar temporalmente.", bad:"Te obligas a seguir sin pausa."},
+  {q:"Estás en un loop de preocupación.", good:"Rompes el loop con música, arte o naturaleza.", bad:"Sigues en el loop sin interrupción."},
+  {q:"Necesitas procesar algo difícil.", good:"Alternas entre procesar y distraerte sanamente.", bad:"Procesas sin parar hasta agotarte."},
+  {q:"Estás esperando algo estresante.", good:"Ocupas tu mente con actividades productivas o placenteras.", bad:"Te quedas paralizado esperando."},
+  {q:"Sientes dolor emocional intenso.", good:"Usas distracción temporal mientras buscas apoyo.", bad:"Te hundes en el dolor sin alivio."},
+  {q:"Estás en crisis emocional.", good:"Usas distracción de emergencia para estabilizarte.", bad:"Actúas impulsivamente desde la crisis."},
+  {q:"No puedes dormir por preocupación.", good:"Usas técnicas de distracción mental para relajarte.", bad:"Sigues preocupándote toda la noche."},
+
+  // 31-40 Expresión emocional
+  {q:"Sientes ganas de llorar.", good:"Te permites llorar en un espacio seguro.", bad:"Reprimes las lágrimas constantemente."},
+  {q:"Estás muy enojado.", good:"Expresas el enojo de forma segura: escribir, hablar, ejercicio.", bad:"Explotas con otros o lo reprimes."},
+  {q:"Tienes emociones que no puedes verbalizar.", good:"Las expresas a través de arte, música o movimiento.", bad:"Las guardas sin expresarlas de ninguna forma."},
+  {q:"Necesitas desahogarte.", good:"Hablas con alguien de confianza o escribes en un diario.", bad:"Guardas todo hasta explotar."},
+  {q:"Sientes frustración acumulada.", good:"Encuentras formas seguras de liberar la frustración.", bad:"La acumulas hasta que sale de forma destructiva."},
+  {q:"Tienes tristeza profunda.", good:"Te permites sentirla y expresarla apropiadamente.", bad:"Finges estar bien sin procesar la tristeza."},
+  {q:"Estás abrumado de emociones.", good:"Las expresas gradualmente de formas saludables.", bad:"Las reprimes todas hasta colapsar."},
+  {q:"Sientes alegría intensa.", good:"Te permites expresarla y celebrarla.", bad:"La reprimes por miedo al juicio."},
+  {q:"Tienes miedo que necesitas expresar.", good:"Lo compartes con alguien seguro o lo escribes.", bad:"Finges valentía sin procesar el miedo."},
+  {q:"Sientes amor que quieres expresar.", good:"Lo expresas de forma apropiada y auténtica.", bad:"Lo guardas por miedo al rechazo."},
+
+  // 41-50 Autocuidado inmediato
+  {q:"Estás al borde del colapso emocional.", good:"Tomas un break inmediato para cuidarte.", bad:"Sigues empujándote sin parar."},
+  {q:"Sientes que no puedes respirar del estrés.", good:"Te alejas de la situación y te cuidas.", bad:"Sigues en la situación estresante."},
+  {q:"Estás agotado emocionalmente.", good:"Priorizas descanso y actividades restauradoras.", bad:"Sigues exigiéndote sin descanso."},
+  {q:"Sientes que te vas a enfermar del estrés.", good:"Tomas medidas inmediatas de autocuidado.", bad:"Ignoras las señales hasta enfermarte."},
+  {q:"Estás desregulado completamente.", good:"Usas tu kit de herramientas de regulación.", bad:"Actúas desde la desregulación."},
+  {q:"Sientes que necesitas llorar.", good:"Te das espacio y tiempo para hacerlo.", bad:"Te obligas a aguantar."},
+  {q:"Estás hambriento y emocional.", good:"Comes algo nutritivo para estabilizarte.", bad:"Ignoras el hambre y te desregulas más."},
+  {q:"No has dormido bien y estás irritable.", good:"Priorizas dormir una siesta o descansar.", bad:"Sigues sin dormir y empeoras."},
+  {q:"Estás sobrecargado sensorialmente.", good:"Te retiras a un espacio tranquilo.", bad:"Sigues en el ambiente sobrecargante."},
+  {q:"Sientes que vas a explotar.", good:"Te excusas y te das espacio para regularte.", bad:"Explotas en el momento sin regularte."},
+
+  // 51-60 Conexión social
+  {q:"Te sientes solo y triste.", good:"Contactas a alguien de confianza para conectar.", bad:"Te aíslas más en la tristeza."},
+  {q:"Necesitas apoyo emocional.", good:"Pides ayuda a tu red de apoyo.", bad:"Intentas manejarlo todo solo."},
+  {q:"Estás abrumado y necesitas perspectiva.", good:"Hablas con alguien que te ayude a ver claramente.", bad:"Te quedas atrapado en tu perspectiva."},
+  {q:"Sientes que nadie te entiende.", good:"Buscas a alguien con experiencias similares.", bad:"Te convences de que estás solo."},
+  {q:"Necesitas validación emocional.", good:"Compartes con alguien que pueda validarte.", bad:"Te invalidas a ti mismo sin buscar apoyo."},
+  {q:"Estás en crisis y necesitas ayuda.", good:"Llamas a línea de crisis o persona de confianza.", bad:"Intentas manejarlo solo en crisis."},
+  {q:"Sientes vergüenza y quieres esconderte.", good:"Compartes con alguien seguro para procesar.", bad:"Te aíslas en la vergüenza."},
+  {q:"Necesitas que alguien te escuche.", good:"Pides específicamente que te escuchen sin consejos.", bad:"Guardas todo sin compartir."},
+  {q:"Estás celebrando algo y quieres compartirlo.", good:"Compartes tu alegría con otros.", bad:"Guardas tu alegría por miedo al juicio."},
+  {q:"Necesitas un abrazo.", good:"Pides un abrazo a alguien cercano.", bad:"Te privas de contacto físico reconfortante."},
+
+  // 61-70 Mindfulness y presencia
+  {q:"Estás ansioso por el futuro.", good:"Usas mindfulness para volver al momento presente.", bad:"Te pierdes en preocupaciones futuras."},
+  {q:"Estás atrapado en el pasado.", good:"Practicas grounding para anclar en el ahora.", bad:"Revives el pasado constantemente."},
+  {q:"Tu mente está acelerada.", good:"Practicas meditación o respiración consciente.", bad:"Dejas que tu mente corra sin control."},
+  {q:"Estás desconectado de tu cuerpo.", good:"Haces un body scan para reconectar.", bad:"Sigues desconectado ignorando tu cuerpo."},
+  {q:"Sientes que todo es caótico.", good:"Usas los 5 sentidos para anclar en el presente.", bad:"Te pierdes en el caos mental."},
+  {q:"Estás comiendo sin darse cuenta.", good:"Practicas alimentación consciente.", bad:"Comes en automático sin presencia."},
+  {q:"Caminas sin notar nada alrededor.", good:"Practicas caminar consciente notando tu entorno.", bad:"Caminas perdido en pensamientos."},
+  {q:"Estás haciendo todo en automático.", good:"Traes consciencia a tus acciones cotidianas.", bad:"Vives en piloto automático."},
+  {q:"Sientes que el tiempo pasa sin vivirlo.", good:"Practicas presencia en cada momento.", bad:"Dejas que la vida pase sin estar presente."},
+  {q:"Estás multitasking y abrumado.", good:"Practicas hacer una cosa a la vez con presencia.", bad:"Sigues haciendo mil cosas sin presencia."},
+
+  // 71-80 Reestructuración cognitiva
+  {q:"Piensas 'soy un fracaso'.", good:"Reformulas: 'Cometí un error, puedo aprender'.", bad:"Aceptas el pensamiento como verdad."},
+  {q:"Crees que 'nadie me quiere'.", good:"Buscas evidencia real y reformulas el pensamiento.", bad:"Actúas desde esa creencia."},
+  {q:"Piensas 'siempre me pasa lo mismo'.", good:"Identificas excepciones y reformulas.", bad:"Generalizas sin cuestionar."},
+  {q:"Crees que 'debería ser perfecto'.", good:"Reformulas con expectativas realistas.", bad:"Te exiges perfección imposible."},
+  {q:"Piensas 'no puedo con esto'.", good:"Reformulas: 'Es difícil pero puedo intentarlo'.", bad:"Te rindes desde el pensamiento."},
+  {q:"Crees que 'todo está mal'.", good:"Identificas qué está bien también.", bad:"Solo ves lo negativo."},
+  {q:"Piensas 'es mi culpa'.", good:"Evalúas responsabilidad real vs culpa tóxica.", bad:"Asumes toda la culpa."},
+  {q:"Crees que 'nunca mejorará'.", good:"Buscas evidencia de cambio posible.", bad:"Te hundes en la desesperanza."},
+  {q:"Piensas 'no soy suficiente'.", good:"Identificas tus fortalezas y reformulas.", bad:"Internalizas la insuficiencia."},
+  {q:"Crees que 'todos me juzgan'.", good:"Cuestionas si es real o proyección.", bad:"Actúas desde el miedo al juicio."},
+
+  // 81-90 Planificación de afrontamiento
+  {q:"Sabes que viene una situación estresante.", good:"Planificas estrategias de afrontamiento con anticipación.", bad:"Llegas sin preparación emocional."},
+  {q:"Tienes un trigger conocido próximo.", good:"Preparas tu plan de regulación antes.", bad:"Te expones sin preparación."},
+  {q:"Vas a una situación socialmente ansiosa.", good:"Planificas breaks, temas de conversación y salida.", bad:"Vas sin plan y te abrumas."},
+  {q:"Sabes que algo te va a enojar.", good:"Preparas cómo manejar el enojo con anticipación.", bad:"Reaccionas impulsivamente sin plan."},
+  {q:"Tienes una conversación difícil pendiente.", good:"Planificas qué decir y cómo regularte.", bad:"Entras sin preparación emocional."},
+  {q:"Viene un aniversario doloroso.", good:"Planificas autocuidado y apoyo para ese día.", bad:"El día te sorprende sin preparación."},
+  {q:"Sabes que estarás con alguien difícil.", good:"Preparas límites y estrategias de regulación.", bad:"Vas sin protección emocional."},
+  {q:"Tienes un examen importante.", good:"Planificas manejo de ansiedad además de estudiar.", bad:"Solo estudias sin preparar la regulación."},
+  {q:"Viene un cambio grande.", good:"Planificas cómo manejar las emociones del cambio.", bad:"Dejas que el cambio te abrume."},
+  {q:"Sabes que algo te va a decepcionar.", good:"Preparas cómo procesar la decepción.", bad:"Te sorprende sin plan de afrontamiento."},
+
+  // 91-100 Estrategias avanzadas
+  {q:"Estás en una espiral emocional.", good:"Usas tu plan de crisis para salir de la espiral.", bad:"Sigues cayendo sin intervenir."},
+  {q:"Nada de lo usual funciona.", good:"Pruebas estrategias nuevas o pides ayuda profesional.", bad:"Te rindes sin buscar alternativas."},
+  {q:"Estás disociando por estrés.", good:"Usas grounding intenso para volver al presente.", bad:"Te quedas disociado sin intervenir."},
+  {q:"Sientes impulsos autodestructivos.", good:"Usas tu plan de seguridad y pides ayuda.", bad:"Actúas desde los impulsos."},
+  {q:"Estás en flashback traumático.", good:"Usas técnicas de grounding y orientación temporal.", bad:"Te quedas atrapado en el flashback."},
+  {q:"Tienes un ataque de pánico.", good:"Usas tu protocolo de pánico: respiración, grounding, autocompasión.", bad:"Dejas que el pánico te controle."},
+  {q:"Estás en crisis suicida.", good:"Llamas a línea de crisis, vas a emergencias o contactas a tu red.", bad:"Te aíslas en la crisis."},
+  {q:"Sientes que pierdes el control.", good:"Usas todas tus herramientas y pides ayuda.", bad:"Actúas desde la desregulación total."},
+  {q:"Estás en un estado emocional extremo.", good:"Reconoces la intensidad y usas regulación intensiva.", bad:"Actúas desde el estado extremo."},
+  {q:"Nada parece ayudar.", good:"Buscas ayuda profesional inmediata.", bad:"Te rindes sin buscar apoyo especializado."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

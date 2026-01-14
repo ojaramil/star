@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Flexibilidad Cognitiva</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #10b981;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #10b981cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #10b981cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(219, 245, 236);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(219, 245, 236);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🧠</span>
+      <span>Habilidades Ejecutivas</span>
+    </span>
+    <h1>🔄 Flexibilidad Cognitiva</h1>
+    <p>Adaptarse a cambios, tolerar incertidumbre y considerar múltiples perspectivas</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Cambios de planes
+  {q:"Llegas al cine y descubres que la función que querías está agotada.", good:"Propones otra película u horario alternativo sin engancharte en la que se agotó.", bad:"Insistes en entrar igual y discutes con el personal."},
+  {q:"Tu amigo cancela los planes a último momento.", good:"Ajustas tu día, propones otra fecha o haces algo diferente sin molestarte.", bad:"Te enojas y le dejas de hablar por días."},
+  {q:"El restaurante que querías está cerrado.", good:"Buscas otra opción cercana o cambias el tipo de comida sin problema.", bad:"Te frustras y decides no comer nada."},
+  {q:"Llueve y tenías planes al aire libre.", good:"Adaptas la actividad a un lugar cerrado o la pospones.", bad:"Insistes en salir igual y te mojas completamente."},
+  {q:"Tu ruta habitual está bloqueada.", good:"Tomas una ruta alternativa sin estresarte.", bad:"Te quedas esperando que se abra sin buscar alternativas."},
+  {q:"El producto que buscabas está agotado.", good:"Eliges una alternativa similar o vuelves otro día.", bad:"Te frustras y te vas sin comprar nada que necesitas."},
+  {q:"Tu clase favorita se cancela.", good:"Aprovechas el tiempo para otra actividad productiva.", bad:"Pierdes el día completo porque no sabes qué hacer."},
+  {q:"Cambian el horario de una reunión.", good:"Ajustas tu agenda y reorganizas tus actividades.", bad:"Te niegas a asistir porque no era el horario original."},
+  {q:"Tu método usual no funciona.", good:"Pruebas un enfoque diferente sin aferrarte al anterior.", bad:"Insistes en el mismo método aunque no funcione."},
+  {q:"El plan A falla completamente.", good:"Pasas al plan B sin perder tiempo lamentándote.", bad:"Te paralizas porque solo tenías un plan."},
+
+  // 11-20 Perspectivas diferentes
+  {q:"Alguien tiene una opinión opuesta a la tuya.", good:"Escuchas su perspectiva y consideras que ambos pueden tener razón.", bad:"Insistes en que solo tu opinión es correcta."},
+  {q:"Te muestran una forma diferente de hacer algo.", good:"Consideras el nuevo método y evalúas si puede ser mejor.", bad:"Rechazas cualquier forma que no sea la tuya."},
+  {q:"Alguien interpreta una situación diferente a ti.", good:"Reconoces que puede haber múltiples interpretaciones válidas.", bad:"Insistes en que tu interpretación es la única correcta."},
+  {q:"Un compañero propone un enfoque distinto al tuyo.", good:"Evalúas ambos enfoques y consideras combinarlos.", bad:"Defiendes tu enfoque sin considerar el otro."},
+  {q:"Recibes feedback que contradice tu visión.", good:"Reflexionas sobre el feedback y consideras ajustar tu perspectiva.", bad:"Rechazas el feedback porque no coincide con tu visión."},
+  {q:"Alguien te muestra evidencia que contradice tu creencia.", good:"Consideras la evidencia y estás dispuesto a cambiar de opinión.", bad:"Ignoras la evidencia para mantener tu creencia."},
+  {q:"Un experto sugiere algo diferente a lo que pensabas.", good:"Valoras su experiencia y consideras su sugerencia.", bad:"Desestimas su opinión porque no es lo que esperabas."},
+  {q:"Tu equipo quiere ir en una dirección diferente.", good:"Escuchas sus razones y consideras que pueden tener un buen punto.", bad:"Impones tu dirección sin escuchar al equipo."},
+  {q:"Alguien te muestra un error en tu razonamiento.", good:"Agradeces la corrección y ajustas tu pensamiento.", bad:"Te pones a la defensiva y niegas el error."},
+  {q:"Una nueva información contradice lo que sabías.", good:"Actualizas tu conocimiento con la nueva información.", bad:"Te aferras a lo que sabías ignorando lo nuevo."},
+
+  // 21-30 Resolución de problemas
+  {q:"Tu primera solución no funciona.", good:"Analizas por qué falló y pruebas un enfoque diferente.", bad:"Te frustras y abandonas el problema."},
+  {q:"Encuentras un obstáculo inesperado.", good:"Buscas formas creativas de rodearlo o superarlo.", bad:"Te rindes porque no estaba en tu plan."},
+  {q:"El problema es más complejo de lo que pensabas.", good:"Divides el problema en partes más pequeñas y abordables.", bad:"Te abrumas y no sabes por dónde empezar."},
+  {q:"Tu estrategia habitual no aplica aquí.", good:"Desarrollas una nueva estrategia específica para esta situación.", bad:"Intentas forzar tu estrategia habitual aunque no funcione."},
+  {q:"Necesitas usar herramientas que no conoces.", good:"Aprendes a usar las nuevas herramientas con apertura.", bad:"Te niegas a usar nada que no conozcas."},
+  {q:"El problema requiere colaboración.", good:"Te adaptas a trabajar con otros aunque prefieras trabajar solo.", bad:"Insistes en resolverlo solo aunque necesites ayuda."},
+  {q:"La solución obvia no está disponible.", good:"Piensas creativamente en soluciones alternativas.", bad:"Te quedas esperando que la solución obvia aparezca."},
+  {q:"Necesitas cambiar tu enfoque a mitad del proceso.", good:"Ajustas tu enfoque sin ver el cambio como un fracaso.", bad:"Sigues con el enfoque original aunque no funcione."},
+  {q:"Alguien sugiere una solución que no habías considerado.", good:"Evalúas la sugerencia con mente abierta.", bad:"La rechazas porque no fue tu idea."},
+  {q:"El problema tiene múltiples soluciones posibles.", good:"Evalúas las opciones y eliges la más apropiada.", bad:"Te paralizas porque no hay una única respuesta correcta."},
+
+  // 31-40 Cambios en el trabajo
+  {q:"Implementan un nuevo sistema en el trabajo.", good:"Aprendes el nuevo sistema con actitud positiva.", bad:"Te resistes y sigues usando el sistema viejo."},
+  {q:"Cambian tus responsabilidades laborales.", good:"Te adaptas a las nuevas responsabilidades y aprendes lo necesario.", bad:"Te quejas constantemente de que no es lo que firmaste."},
+  {q:"Tu jefe tiene un estilo diferente al anterior.", good:"Te adaptas a su estilo de liderazgo.", bad:"Comparas constantemente y te resistes al cambio."},
+  {q:"Reorganizan tu equipo de trabajo.", good:"Construyes relaciones con los nuevos compañeros.", bad:"Te cierras y extrañas al equipo anterior."},
+  {q:"Cambian los procedimientos establecidos.", good:"Aprendes los nuevos procedimientos sin resistencia.", bad:"Sigues haciendo las cosas como antes."},
+  {q:"Te piden trabajar en un proyecto diferente.", good:"Ves la oportunidad de aprender algo nuevo.", bad:"Te molestas porque no es tu área de confort."},
+  {q:"Modifican tus horarios de trabajo.", good:"Ajustas tu rutina personal al nuevo horario.", bad:"Te quejas constantemente sin adaptarte."},
+  {q:"Introducen nueva tecnología.", good:"Aprendes a usarla viendo los beneficios.", bad:"Te resistes porque la tecnología anterior funcionaba."},
+  {q:"Cambian la ubicación de tu oficina.", good:"Te adaptas al nuevo espacio y lo organizas.", bad:"Te quejas constantemente del cambio."},
+  {q:"Modifican las políticas de la empresa.", good:"Entiendes las razones y te adaptas a las nuevas políticas.", bad:"Ignoras las nuevas políticas por inconformidad."},
+
+  // 41-50 Aprendizaje y educación
+  {q:"El profesor enseña diferente a como aprendes mejor.", good:"Adaptas tu forma de estudiar al estilo del profesor.", bad:"No aprendes nada porque no es tu método preferido."},
+  {q:"Debes estudiar un tema que no te interesa.", good:"Buscas ángulos interesantes del tema para motivarte.", bad:"No estudias porque no te gusta."},
+  {q:"Tu método de estudio no funciona para esta materia.", good:"Experimentas con diferentes métodos hasta encontrar uno que funcione.", bad:"Sigues usando el mismo método y repruebas."},
+  {q:"Cambian el formato del examen.", good:"Ajustas tu preparación al nuevo formato.", bad:"Estudias igual y te sorprende el formato."},
+  {q:"Debes trabajar en grupo cuando prefieres trabajar solo.", good:"Te adaptas y aprovechas los beneficios del trabajo en equipo.", bad:"No participas o intentas hacer todo solo."},
+  {q:"El material está en un formato que no prefieres.", good:"Te adaptas al formato disponible.", bad:"No estudias esperando que esté en tu formato preferido."},
+  {q:"Debes aprender algo completamente nuevo.", good:"Abordas el aprendizaje con curiosidad y paciencia.", bad:"Te frustras porque no lo entiendes inmediatamente."},
+  {q:"Tu compañero de estudio tiene un ritmo diferente.", good:"Ajustas tu ritmo o estudian por separado sin conflicto.", bad:"Te frustras y terminas la colaboración."},
+  {q:"Cambian los requisitos del proyecto.", good:"Ajustas tu trabajo a los nuevos requisitos.", bad:"Entregas el proyecto según los requisitos originales."},
+  {q:"Recibes una calificación inesperada.", good:"Analizas qué pasó y ajustas tu enfoque.", bad:"Culpas al profesor sin reflexionar."},
+
+  // 51-60 Relaciones personales
+  {q:"Tu amigo cambia de intereses.", good:"Te interesas por sus nuevos intereses o respetas la diferencia.", bad:"Te alejas porque ya no tienen nada en común."},
+  {q:"Tu pareja quiere probar algo nuevo.", good:"Estás abierto a probar cosas nuevas juntos.", bad:"Te niegas porque no es lo que usualmente hacen."},
+  {q:"Un familiar cambia de opinión política.", good:"Respetas su cambio y evitas conflictos innecesarios.", bad:"Inicias debates constantes y dañas la relación."},
+  {q:"Tu amigo necesita más espacio.", good:"Respetas su necesidad y ajustas la frecuencia de contacto.", bad:"Te ofendes y lo presionas más."},
+  {q:"Alguien cercano cambia su estilo de vida.", good:"Apoyas su cambio aunque sea diferente a tu estilo.", bad:"Criticas su cambio constantemente."},
+  {q:"Tu grupo de amigos evoluciona.", good:"Te adaptas a la nueva dinámica del grupo.", bad:"Intentas que todo siga igual que antes."},
+  {q:"Alguien te pide cambiar un comportamiento.", good:"Consideras el pedido y haces ajustes razonables.", bad:"Te niegas a cambiar nada."},
+  {q:"Tu relación entra en una nueva etapa.", good:"Te adaptas a los cambios naturales de la relación.", bad:"Intentas mantener todo exactamente igual."},
+  {q:"Alguien tiene necesidades diferentes a las tuyas.", good:"Buscas formas de satisfacer ambas necesidades.", bad:"Insistes en que tus necesidades son más importantes."},
+  {q:"Un amigo comete un error.", good:"Ves más allá del error y mantienes la amistad.", bad:"Terminas la amistad por un error."},
+
+  // 61-70 Situaciones cotidianas
+  {q:"Tu comida favorita no está disponible.", good:"Eliges otra opción sin problema.", bad:"No comes nada porque solo querías eso."},
+  {q:"El clima arruina tus planes.", good:"Adaptas tus planes al clima.", bad:"Sales igual y sufres las consecuencias."},
+  {q:"Tu serie favorita termina.", good:"Buscas una nueva serie para disfrutar.", bad:"No ves nada más porque nada será igual."},
+  {q:"Cambian tu marca favorita de producto.", good:"Pruebas la nueva versión o buscas alternativas.", bad:"Dejas de comprar el producto por el cambio."},
+  {q:"Tu rutina se interrumpe.", good:"Ajustas tu rutina sin estresarte.", bad:"Tu día completo se arruina por la interrupción."},
+  {q:"Algo no sale como lo planeaste.", good:"Te adaptas y encuentras el lado positivo.", bad:"Te frustras y no disfrutas nada."},
+  {q:"Debes usar transporte diferente al usual.", good:"Usas el transporte alternativo sin problema.", bad:"Prefieres no ir a ningún lado."},
+  {q:"Tu lugar favorito está lleno.", good:"Buscas otro lugar o vuelves en otro momento.", bad:"Esperas horas o te vas molesto."},
+  {q:"Cambian el diseño de una app que usas.", good:"Te adaptas al nuevo diseño gradualmente.", bad:"Dejas de usar la app por el cambio."},
+  {q:"Tu plan perfecto tiene un detalle imperfecto.", good:"Disfrutas lo demás sin enfocarte en lo imperfecto.", bad:"Lo imperfecto arruina todo el plan."},
+
+  // 71-80 Creatividad y alternativas
+  {q:"No tienes los ingredientes exactos de una receta.", good:"Improvisas con lo que tienes creativamente.", bad:"No cocinas porque falta un ingrediente."},
+  {q:"Tu herramienta habitual no está disponible.", good:"Usas una herramienta alternativa o improvises.", bad:"No haces nada esperando tu herramienta."},
+  {q:"El camino tradicional está bloqueado.", good:"Encuentras un camino alternativo creativo.", bad:"Te rindes y no llegas a tu destino."},
+  {q:"Tu método preferido no es posible.", good:"Desarrollas un nuevo método adaptado.", bad:"No haces nada porque solo conoces un método."},
+  {q:"Tienes recursos limitados.", good:"Trabajas creativamente con lo que tienes.", bad:"Te paralizas por no tener todo lo ideal."},
+  {q:"La solución estándar no aplica.", good:"Creas una solución personalizada.", bad:"Intentas forzar la solución estándar."},
+  {q:"Necesitas combinar dos enfoques diferentes.", good:"Integras ambos enfoques creativamente.", bad:"Eliges uno y descartas el otro completamente."},
+  {q:"Tu idea original no es viable.", good:"Modificas tu idea para hacerla viable.", bad:"Abandonas completamente la idea."},
+  {q:"Debes trabajar con limitaciones.", good:"Ves las limitaciones como desafíos creativos.", bad:"Te quejas de las limitaciones sin actuar."},
+  {q:"No hay una respuesta clara.", good:"Toleras la ambigüedad y avanzas con lo que sabes.", bad:"Te paralizas esperando certeza absoluta."},
+
+  // 81-90 Cambios personales
+  {q:"Tus prioridades cambian con el tiempo.", good:"Ajustas tus objetivos a tus nuevas prioridades.", bad:"Sigues persiguiendo objetivos que ya no te importan."},
+  {q:"Descubres que estabas equivocado sobre algo.", good:"Aceptas el error y ajustas tu comprensión.", bad:"Niegas la evidencia para no admitir el error."},
+  {q:"Tu cuerpo cambia y no puedes hacer lo mismo de antes.", good:"Adaptas tus actividades a tus capacidades actuales.", bad:"Te frustras intentando hacer lo mismo."},
+  {q:"Tus gustos evolucionan.", good:"Abrazas tus nuevos gustos sin juzgarte.", bad:"Te aferras a tus gustos antiguos por identidad."},
+  {q:"Necesitas cambiar un hábito poco saludable.", good:"Desarrollas un nuevo hábito más saludable.", bad:"Te resistes al cambio aunque te perjudique."},
+  {q:"Tu situación de vida cambia.", good:"Te adaptas a tu nueva realidad.", bad:"Intentas mantener tu vida anterior aunque no sea posible."},
+  {q:"Descubres una nueva pasión.", good:"Integras la nueva pasión en tu vida.", bad:"La ignoras porque no era parte de tu plan."},
+  {q:"Tus valores evolucionan.", good:"Alineas tu vida con tus valores actuales.", bad:"Vives según valores que ya no tienes."},
+  {q:"Necesitas dejar ir algo del pasado.", good:"Sueltas lo que ya no sirve y avanzas.", bad:"Te aferras al pasado impidiendo tu crecimiento."},
+  {q:"Tu identidad evoluciona.", good:"Abrazas tu evolución personal.", bad:"Te resistes al cambio por miedo a perder tu identidad."},
+
+  // 91-100 Flexibilidad avanzada
+  {q:"Dos verdades parecen contradictorias.", good:"Reconoces que ambas pueden ser verdad en diferentes contextos.", bad:"Insistes en que solo una puede ser verdad."},
+  {q:"La situación es más compleja de lo que pensabas.", good:"Abrazas la complejidad y ajustas tu comprensión.", bad:"Simplificas excesivamente para mantener tu visión."},
+  {q:"Necesitas cambiar de opinión públicamente.", good:"Admites el cambio con madurez.", bad:"Mantienes tu opinión por orgullo."},
+  {q:"Tu plan de vida cambia completamente.", good:"Te adaptas al nuevo rumbo con apertura.", bad:"Te aferras al plan original aunque ya no sea viable."},
+  {q:"Debes integrar feedback contradictorio.", good:"Buscas el valor en cada perspectiva.", bad:"Descartas todo porque no coincide."},
+  {q:"La realidad no coincide con tus expectativas.", good:"Ajustas tus expectativas a la realidad.", bad:"Te frustras constantemente con la realidad."},
+  {q:"Necesitas ser flexible y firme simultáneamente.", good:"Encuentras el balance entre ambos.", bad:"Eres completamente rígido o completamente flexible."},
+  {q:"Tu enfoque necesita evolucionar constantemente.", good:"Mantienes una mentalidad de crecimiento continuo.", bad:"Te estancas en un enfoque que funcionó antes."},
+  {q:"Debes navegar múltiples perspectivas válidas.", good:"Integras múltiples perspectivas en tu comprensión.", bad:"Eliges una perspectiva y descartas las demás."},
+  {q:"La vida te lleva en una dirección inesperada.", good:"Confías en el proceso y te adaptas con gracia.", bad:"Luchas contra la corriente constantemente."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Inicio y Mantenimiento de Conversaciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #3b82f6;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #3b82f6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #3b82f6cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(226, 236, 254);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(226, 236, 254);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>👥</span>
+      <span>Habilidades Sociales</span>
+    </span>
+    <h1>💬 Inicio y Mantenimiento de Conversaciones</h1>
+    <p>Aprende a detectar momentos, turnos de palabra, mantener interés y cerrar adecuadamente</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+      // 1-10 Inicio de conversaciones
+      { q: "Durante el receso ves a un compañero nuevo revisando su móvil solo.", good: "Te acercas con un saludo sencillo, comentas algo del entorno y haces una pregunta abierta para iniciar la charla.", bad: "Te sientas a su lado sin decir nada esperando que él hable primero." },
+      { q: "Estás en el ascensor con un vecino que no conoces.", good: "Saludas con un 'buenos días', comentas algo neutral como el clima y sonríes.", bad: "Miras tu teléfono evitando cualquier interacción." },
+      { q: "Alguien lleva una camiseta de tu banda favorita.", good: "Comentas sobre la banda, compartes tu canción favorita y preguntas cuál es la suya.", bad: "Solo miras la camiseta sin decir nada." },
+      { q: "Estás en una fila larga esperando.", good: "Haces un comentario ligero sobre la espera a la persona cercana y observas si responde positivamente.", bad: "Te quejas en voz alta sin dirigirte a nadie específicamente." },
+      { q: "Llegas a una reunión social donde no conoces a nadie.", good: "Te presentas a alguien cercano, preguntas cómo conoce al anfitrión y muestras interés.", bad: "Te sientas en una esquina esperando que alguien se acerque." },
+      { q: "Un compañero de clase lleva un libro interesante.", good: "Preguntas sobre el libro, compartes si lo has leído y pides su opinión.", bad: "Solo lo miras sin iniciar conversación." },
+      { q: "Estás en la cafetería y alguien se sienta cerca.", good: "Saludas brevemente, comentas sobre la comida o el lugar y observas su receptividad.", bad: "Comes en silencio sin levantar la vista." },
+      { q: "Ves a alguien con una mascota en el parque.", good: "Preguntas el nombre de la mascota, comentas algo positivo y haces una pregunta sobre ella.", bad: "Solo miras la mascota sin interactuar con el dueño." },
+      { q: "Alguien lleva algo único o llamativo.", good: "Haces un cumplido genuino sobre el objeto y preguntas su historia.", bad: "Lo miras fijamente sin decir nada." },
+      { q: "Estás en un evento y alguien está solo como tú.", good: "Te acercas, te presentas y comentas sobre el evento para romper el hielo.", bad: "Ambos se quedan solos sin intentar conectar." },
+
+      // 11-20 Mantenimiento de conversaciones
+      { q: "Alguien te cuenta sobre su fin de semana.", good: "Escuchas activamente, haces preguntas de seguimiento y compartes algo relacionado.", bad: "Esperas que termine para hablar de tu fin de semana." },
+      { q: "La conversación tiene una pausa incómoda.", good: "Retomas con una pregunta relacionada al tema anterior o introduces uno nuevo suavemente.", bad: "Te quedas en silencio esperando que la otra persona hable." },
+      { q: "Alguien menciona un tema que no conoces.", good: "Admites que no lo conoces, haces preguntas para aprender y muestras interés genuino.", bad: "Finges que sabes o cambias de tema abruptamente." },
+      { q: "La persona habla mucho sobre un tema.", good: "Escuchas con atención, haces preguntas relevantes y buscas un momento para aportar.", bad: "Interrumpes constantemente o te desconectas mentalmente." },
+      { q: "Alguien te hace una pregunta personal.", good: "Respondes con el nivel de detalle que te sientes cómodo y devuelves una pregunta similar.", bad: "Das una respuesta de una palabra sin reciprocar." },
+      { q: "La conversación se desvía a varios temas.", good: "Sigues el flujo natural, conectas ideas y permites que evolucione orgánicamente.", bad: "Insistes en volver al tema original constantemente." },
+      { q: "Alguien comparte una opinión diferente a la tuya.", good: "Escuchas su perspectiva, haces preguntas para entender mejor y compartes tu visión respetuosamente.", bad: "Interrumpes para corregirlo o te cierras a su opinión." },
+      { q: "La persona menciona algo que te apasiona.", good: "Compartes tu entusiasmo sin monopolizar, preguntas su experiencia y encuentras puntos en común.", bad: "Hablas solo de ti y no dejas que la otra persona participe." },
+      { q: "Alguien te cuenta una anécdota.", good: "Escuchas hasta el final, reaccionas apropiadamente y haces preguntas sobre detalles interesantes.", bad: "Interrumpes para contar tu propia anécdota similar." },
+      { q: "La conversación se vuelve repetitiva.", good: "Introduces sutilmente un nuevo ángulo del tema o propones cambiar de tema amablemente.", bad: "Sigues repitiendo lo mismo o te aburres visiblemente." },
+
+      // 21-30 Escucha activa
+      { q: "Alguien te cuenta un problema.", good: "Escuchas sin interrumpir, validas sus sentimientos y preguntas si quiere consejo o solo desahogarse.", bad: "Inmediatamente le das soluciones sin preguntar qué necesita." },
+      { q: "La persona menciona algo importante para ella.", good: "Prestas atención completa, haces contacto visual y demuestras que valoras lo que dice.", bad: "Miras tu teléfono mientras habla." },
+      { q: "Alguien te cuenta una historia larga.", good: "Mantienes el interés, haces preguntas clarificadoras y muestras que sigues el hilo.", bad: "Bostezas o miras a otros lados constantemente." },
+      { q: "La persona se emociona al hablar.", good: "Reconoces su emoción, le das espacio para expresarse y respondes con empatía.", bad: "Le dices que se calme o cambias de tema incómodo." },
+      { q: "Alguien menciona algo que dijiste antes.", good: "Aprecias que recordó, expandes sobre el tema y muestras que también recuerdas detalles de sus historias.", bad: "No recuerdas haberlo mencionado y cambias de tema." },
+      { q: "La persona habla bajito o con timidez.", good: "Te acercas un poco, muestras paciencia y la animas con tu lenguaje corporal.", bad: "Le pides que hable más fuerte de forma brusca." },
+      { q: "Alguien te cuenta algo confidencial.", good: "Agradeces su confianza, aseguras que no lo compartirás y escuchas sin juzgar.", bad: "Reaccionas con sorpresa exagerada o lo cuentas después." },
+      { q: "La persona se contradice en su historia.", good: "Escuchas completamente, luego preguntas con curiosidad para clarificar sin acusar.", bad: "La interrumpes para señalar la contradicción." },
+      { q: "Alguien comparte una experiencia difícil.", good: "Validas su experiencia, muestras empatía y ofreces apoyo si es apropiado.", bad: "Minimizas su experiencia o la comparas con algo peor." },
+      { q: "La persona hace una pausa para pensar.", good: "Esperas pacientemente, le das tiempo y no llenas el silencio innecesariamente.", bad: "Terminas su frase o cambias de tema." },
+
+      // 31-40 Lenguaje corporal en conversaciones
+      { q: "Alguien cruza los brazos mientras hablas.", good: "Notas la señal, verificas si está cómodo y ajustas tu enfoque si es necesario.", bad: "Ignoras la señal y sigues hablando igual." },
+      { q: "La persona mira su reloj durante la conversación.", good: "Reconoces que puede tener prisa, ofreces terminar la conversación o continuarla después.", bad: "Sigues hablando sin notar su necesidad de irse." },
+      { q: "Alguien se inclina hacia ti mientras hablas.", good: "Interpretas su interés, continúas con confianza y mantienes el engagement.", bad: "Te alejas incómodo por la cercanía." },
+      { q: "La persona evita el contacto visual.", good: "Respetas su estilo de comunicación, no lo presionas y te enfocas en el contenido.", bad: "Le pides que te mire a los ojos constantemente." },
+      { q: "Alguien sonríe mientras te escucha.", good: "Interpretas su receptividad positiva y continúas con confianza.", bad: "Asumes que se está burlando y te pones a la defensiva." },
+      { q: "La persona se aleja físicamente.", good: "Notas que necesita más espacio personal y ajustas tu distancia.", bad: "Te acercas más sin notar su incomodidad." },
+      { q: "Alguien asiente mientras hablas.", good: "Reconoces su comprensión, continúas y verificas ocasionalmente si tiene preguntas.", bad: "Asumes que está de acuerdo con todo sin verificar." },
+      { q: "La persona bosteza durante la conversación.", good: "Preguntas si está cansado, ofreces terminar la conversación o hacerla más breve.", bad: "Te ofendes y asumes que le aburres." },
+      { q: "Alguien juega con su teléfono mientras hablas.", good: "Pausas y preguntas si es buen momento para hablar o si prefiere continuar después.", bad: "Hablas más fuerte para captar su atención." },
+      { q: "La persona se toca la cara o el cuello.", good: "Notas posible nerviosismo o incomodidad, ajustas el tono y verificas si está bien.", bad: "Ignoras las señales y continúas sin cambios." },
+
+      // 41-50 Temas de conversación
+      { q: "No sabes de qué hablar con alguien nuevo.", good: "Haces preguntas abiertas sobre intereses, trabajo, hobbies o experiencias recientes.", bad: "Hablas solo del clima y luego te quedas en silencio." },
+      { q: "Alguien menciona un tema controversial.", good: "Escuchas su perspectiva, compartes la tuya respetuosamente o cambias de tema si es incómodo.", bad: "Inicias un debate acalorado o te ofendes." },
+      { q: "La conversación se vuelve muy personal muy rápido.", good: "Estableces límites amables, compartes lo que te sientes cómodo y rediriges si es necesario.", bad: "Te cierras completamente o compartes demasiado por presión." },
+      { q: "Alguien pregunta algo que no quieres responder.", good: "Respondes con tacto que prefieres no hablar de eso y propones otro tema.", bad: "Te molestas visiblemente o das una respuesta grosera." },
+      { q: "La persona habla de algo que te aburre.", good: "Encuentras un aspecto interesante del tema, haces preguntas o cambias sutilmente de tema.", bad: "Bostezas o dices directamente que te aburre." },
+      { q: "Alguien menciona un logro personal.", good: "Celebras su logro, haces preguntas sobre cómo lo consiguió y muestras interés genuino.", bad: "Minimizas su logro o inmediatamente hablas de tus propios logros." },
+      { q: "La conversación toca un tema sensible para ti.", good: "Reconoces tu incomodidad, pides cambiar de tema con tacto o te retiras si es necesario.", bad: "Explotas emocionalmente o te cierras sin explicar." },
+      { q: "Alguien hace una broma que no entiendes.", good: "Sonríes y pides que te la explique o simplemente sigues la conversación.", bad: "Finges que la entendiste o te quedas serio sin reaccionar." },
+      { q: "La persona menciona un problema social complejo.", good: "Escuchas su perspectiva, haces preguntas para entender mejor y compartes con respeto.", bad: "Simplificas el problema o impones tu opinión como la única correcta." },
+      { q: "Alguien comparte una creencia diferente a la tuya.", good: "Respetas la diferencia, haces preguntas para entender y encuentras puntos en común.", bad: "Intentas convencerlo de que está equivocado." },
+
+      // 51-60 Cierre de conversaciones
+      { q: "Necesitas terminar una conversación pero la persona sigue hablando.", good: "Esperas una pausa, explicas que debes irte y propones continuar después.", bad: "Te vas abruptamente sin explicar." },
+      { q: "La conversación llegó a su fin natural.", good: "Resumes brevemente, agradeces la charla y te despides cordialmente.", bad: "Fuerzas más temas para prolongar innecesariamente." },
+      { q: "Alguien te dice que debe irse.", good: "Respetas su tiempo, te despides amablemente y propones reconectar si es apropiado.", bad: "Lo retienes con más preguntas o temas." },
+      { q: "La conversación se volvió incómoda.", good: "Reconoces el momento, te disculpas si es necesario y cierras con gracia.", bad: "Sigues intentando forzar la conversación." },
+      { q: "Quieres terminar una conversación aburrida.", good: "Esperas un momento apropiado, das una razón válida y te despides con respeto.", bad: "Inventas una excusa obvia o te vas sin decir nada." },
+      { q: "Alguien te da señales de que quiere terminar.", good: "Captas las señales, facilitas el cierre y te despides sin presionar.", bad: "Ignoras las señales y continúas hablando." },
+      { q: "La conversación fue muy positiva.", good: "Expresas que disfrutaste la charla, intercambias contacto si es apropiado y te despides.", bad: "Te vas sin reconocer la buena conexión." },
+      { q: "Necesitas irte pero no quieres ser grosero.", good: "Explicas honestamente tu situación, te disculpas y propones continuar después.", bad: "Inventas una emergencia falsa obvia." },
+      { q: "La persona te pide tu contacto.", good: "Decides si quieres compartirlo, lo haces o declinas con tacto y respeto.", bad: "Das un contacto falso o te niegas de forma grosera." },
+      { q: "Quieres mantener contacto después de una buena conversación.", good: "Propones intercambiar contactos, mencionas un plan específico o sugieres reconectar.", bad: "Asumes que se volverán a ver sin hacer nada al respecto." },
+
+      // 61-70 Conversaciones grupales
+      { q: "Estás en una conversación grupal y no puedes participar.", good: "Escuchas activamente, buscas un momento para aportar o haces preguntas relevantes.", bad: "Te quedas callado sintiéndote excluido sin intentar participar." },
+      { q: "Alguien monopoliza la conversación grupal.", good: "Buscas un momento para intervenir, incluyes a otros con preguntas o cambias sutilmente el enfoque.", bad: "Te frustras en silencio o interrumpes bruscamente." },
+      { q: "El grupo habla de algo que no conoces.", good: "Escuchas para aprender, haces preguntas cuando es apropiado o esperas un cambio de tema.", bad: "Te desconectas completamente o finges que sabes." },
+      { q: "Quieres incluir a alguien callado en la conversación grupal.", good: "Le haces una pregunta directa, pides su opinión o creas espacio para que participe.", bad: "Lo ignoras o lo pones en evidencia de forma incómoda." },
+      { q: "El grupo se divide en conversaciones paralelas.", good: "Eliges una conversación para unirte o intentas reunificar el grupo si es apropiado.", bad: "Intentas participar en ambas y no sigues ninguna." },
+      { q: "Alguien dice algo incorrecto en el grupo.", good: "Corriges con tacto y respeto, o dejas pasar si no es importante.", bad: "Lo corriges públicamente de forma humillante." },
+      { q: "El grupo habla de alguien que no está presente.", good: "Evitas participar en chismes, cambias de tema o defiendes a la persona ausente.", bad: "Participas activamente en el chisme." },
+      { q: "Quieres cambiar el tema en una conversación grupal.", good: "Esperas una pausa natural, introduces el nuevo tema conectándolo con el anterior.", bad: "Interrumpes abruptamente con un tema completamente diferente." },
+      { q: "El grupo tiene opiniones divididas.", good: "Escuchas todas las perspectivas, medias si es apropiado o mantienes una postura neutral.", bad: "Tomas partido agresivamente o inicias un conflicto." },
+      { q: "Alguien nuevo se une a la conversación grupal.", good: "Lo incluyes, le das contexto de lo que hablan y lo presentas si es necesario.", bad: "Ignoras su llegada y sigues hablando." },
+
+      // 71-80 Conversaciones difíciles
+      { q: "Alguien te critica en una conversación.", good: "Escuchas la crítica, evalúas si es válida y respondes con calma y madurez.", bad: "Te pones a la defensiva inmediatamente o contraatacas." },
+      { q: "La persona se molesta durante la conversación.", good: "Reconoces su emoción, preguntas qué pasó y buscas resolver el malentendido.", bad: "Ignoras su molestia o te molestas también." },
+      { q: "Alguien te interrumpe constantemente.", good: "Esperas que termine, luego pides amablemente poder completar tu idea.", bad: "Subes la voz para hablar por encima o te callas resentido." },
+      { q: "La conversación se vuelve un debate acalorado.", good: "Bajas el tono, buscas puntos en común o propones pausar la discusión.", bad: "Escalas el conflicto o te retiras enojado." },
+      { q: "Alguien te malinterpreta.", good: "Clarifica tu punto con calma, pides disculpas si fue confuso y reformulas tu mensaje.", bad: "Te frustras y culpas a la persona por no entender." },
+      { q: "La persona comparte algo que te ofende.", good: "Expresas cómo te hizo sentir con calma, explicas por qué y das oportunidad de disculparse.", bad: "Explotas emocionalmente o guardas el resentimiento." },
+      { q: "Alguien te pide disculpas en una conversación.", good: "Escuchas la disculpa, evalúas su sinceridad y decides si aceptarla.", bad: "Rechazas la disculpa sin escuchar o la aceptas sin perdonar realmente." },
+      { q: "La conversación toca un trauma personal.", good: "Estableces límites, pides cambiar de tema o te retiras si es necesario cuidarte.", bad: "Fuerzas continuar y te afectas emocionalmente." },
+      { q: "Alguien te presiona para dar una opinión.", good: "Expresas que necesitas pensar más al respecto o das tu opinión con claridad.", bad: "Das una opinión que no sientes por presión." },
+      { q: "La persona no acepta tu punto de vista.", good: "Aceptas que no están de acuerdo, respetas la diferencia y cambias de tema si es necesario.", bad: "Insistes hasta convencerlo o terminas la conversación enojado." },
+
+      // 81-90 Conversaciones profesionales
+      { q: "Necesitas hablar con tu jefe sobre un problema.", good: "Preparas tus puntos, eliges un momento apropiado y comunicas con respeto y claridad.", bad: "Te quejas sin proponer soluciones o evitas la conversación." },
+      { q: "Un cliente está molesto.", good: "Escuchas su queja sin interrumpir, validas su frustración y ofreces soluciones.", bad: "Te pones a la defensiva o culpas a otros." },
+      { q: "Debes dar feedback negativo a un compañero.", good: "Eliges un momento privado, eres específico y constructivo, y ofreces apoyo.", bad: "Lo criticas públicamente o eres vago en tu feedback." },
+      { q: "Alguien te da feedback negativo en el trabajo.", good: "Escuchas sin defenderte, haces preguntas para entender mejor y agradeces el feedback.", bad: "Te justificas constantemente o lo tomas como ataque personal." },
+      { q: "Necesitas negociar algo en el trabajo.", good: "Preparas tus argumentos, escuchas la otra perspectiva y buscas un acuerdo mutuo.", bad: "Exiges sin flexibilidad o cedes en todo por evitar conflicto." },
+      { q: "Un compañero te interrumpe en una reunión.", good: "Esperas que termine, luego retomas tu punto con firmeza pero respeto.", bad: "Te callas resentido o inicias una confrontación." },
+      { q: "Debes presentar una idea en una reunión.", good: "Preparas tu presentación, anticipas preguntas y comunicas con claridad y confianza.", bad: "Improvisas sin preparación o te disculpas excesivamente." },
+      { q: "Alguien cuestiona tu trabajo.", good: "Escuchas sus preocupaciones, explicas tu razonamiento y estás abierto a mejorar.", bad: "Te ofendes o desestimas sus comentarios." },
+      { q: "Necesitas pedir un aumento o promoción.", good: "Preparas evidencia de tu valor, eliges el momento apropiado y comunicas con confianza.", bad: "Esperas que te lo ofrezcan o lo pides sin argumentos." },
+      { q: "Un compañero comparte información confidencial.", good: "Escuchas, mantienes la confidencialidad y no compartes la información.", bad: "Compartes el chisme con otros." },
+
+      // 91-100 Habilidades avanzadas
+      { q: "Alguien te cuenta algo muy personal inesperadamente.", good: "Escuchas con empatía, agradeces su confianza y respondes apropiadamente al nivel de intimidad.", bad: "Te incomodas visiblemente o cambias de tema abruptamente." },
+      { q: "Necesitas dar malas noticias a alguien.", good: "Eliges un momento y lugar apropiado, eres directo pero empático y ofreces apoyo.", bad: "Evitas dar la noticia o la das de forma insensible." },
+      { q: "La conversación se vuelve muy emocional.", good: "Permites la emoción, ofreces apoyo y espacio, y manejas la situación con madurez.", bad: "Te incomodas y tratas de minimizar las emociones." },
+      { q: "Alguien te pide consejo importante.", good: "Escuchas completamente, haces preguntas para entender y ofreces perspectivas sin imponer.", bad: "Das consejos sin entender la situación completa." },
+      { q: "Necesitas confrontar a alguien sobre su comportamiento.", good: "Eliges un momento privado, eres específico sobre el comportamiento y su impacto, y buscas solución.", bad: "Lo confrontas públicamente o eres vago en tus quejas." },
+      { q: "La persona te confía un secreto difícil.", good: "Evalúas si puedes guardarlo éticamente, estableces límites si es necesario y respetas su confianza.", bad: "Prometes guardar el secreto y luego lo cuentas." },
+      { q: "Alguien busca tu validación constantemente.", good: "Ofreces validación genuina cuando es apropiado, pero también fomentas su autoconfianza.", bad: "Validas todo sin ser honesto o niegas toda validación." },
+      { q: "Necesitas mediar un conflicto entre dos personas.", good: "Escuchas ambas perspectivas sin tomar partido, facilitas la comunicación y buscas soluciones.", bad: "Tomas partido inmediatamente o evitas involucrarte." },
+      { q: "La conversación requiere vulnerabilidad de tu parte.", good: "Evalúas si es seguro, compartes apropiadamente y permites la conexión genuina.", bad: "Te cierras completamente o compartes demasiado muy rápido." },
+      { q: "Alguien te agradece por una conversación significativa.", good: "Aceptas el agradecimiento con gracia, expresas que también lo valoraste y refuerzas la conexión.", bad: "Minimizas el impacto o te incomodas con el agradecimiento." }
+    ];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

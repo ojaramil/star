@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Planificación y Organización</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #10b981;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #10b981cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #10b981cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(219, 245, 236);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(219, 245, 236);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>🧠</span>
+      <span>Habilidades Ejecutivas</span>
+    </span>
+    <h1>📅 Planificación y Organización</h1>
+    <p>Macro y micro planificación, priorización y seguimiento de metas</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // 1-10 Planificación diaria
+  {q:"Tienes tres entregas esta semana y poco tiempo disponible.", good:"Listas las tareas, priorizas por fecha y asignas bloques realistas en tu agenda.", bad:"Empiezas por lo que más te apetece sin mirar los plazos."},
+  {q:"Te despiertas y tienes muchas cosas que hacer hoy.", good:"Haces una lista, priorizas las 3 más importantes y asignas horarios.", bad:"Empiezas a hacer cosas al azar sin plan."},
+  {q:"Tienes una reunión importante a las 3 PM.", good:"Bloqueas tiempo antes para prepararte y después para seguimiento.", bad:"Llegas sin preparación y no dejas tiempo para procesar."},
+  {q:"Necesitas hacer compras, limpiar y estudiar.", good:"Asignas tiempo específico a cada tarea y las ordenas lógicamente.", bad:"Intentas hacer todo a la vez y no terminas nada."},
+  {q:"Tu día se ve muy lleno.", good:"Identificas lo esencial, delegas o pospones lo no urgente.", bad:"Intentas meter todo sin considerar el tiempo real."},
+  {q:"Tienes tareas pequeñas acumuladas.", good:"Agrupas tareas similares y les asignas un bloque de tiempo.", bad:"Las vas haciendo cuando te acuerdas sin orden."},
+  {q:"Sabes que mañana será un día pesado.", good:"Preparas lo que puedes hoy, organizas materiales y planificas tu energía.", bad:"No haces nada hoy y mañana te abrumas."},
+  {q:"Tienes tiempo libre inesperado.", good:"Revisas tu lista de pendientes y avanzas algo productivo.", bad:"Lo desperdicias sin aprovechar para adelantar."},
+  {q:"Necesitas hacer algo que te genera ansiedad.", good:"Lo programas para tu mejor momento del día y preparas apoyo.", bad:"Lo evitas hasta el último momento."},
+  {q:"Tu energía es baja hoy.", good:"Ajustas tu plan, priorizas lo esencial y dejas tareas pesadas para otro día.", bad:"Intentas cumplir todo tu plan y te frustras."},
+
+  // 11-20 Planificación semanal
+  {q:"Es domingo y empieza una nueva semana.", good:"Revisas tu calendario, identificas prioridades y preparas lo necesario.", bad:"Empiezas el lunes sin saber qué te espera."},
+  {q:"Tienes un proyecto grande que entregar el viernes.", good:"Divides el proyecto en tareas diarias y asignas tiempo cada día.", bad:"Dejas todo para el jueves en la noche."},
+  {q:"Esta semana tienes tres exámenes.", good:"Creas un calendario de estudio distribuyendo temas por día.", bad:"Estudias todo junto el día anterior."},
+  {q:"Necesitas balancear trabajo, estudio y vida personal.", good:"Asignas bloques específicos para cada área en tu semana.", bad:"Dejas que el trabajo invada todo sin límites."},
+  {q:"Sabes que el miércoles será caótico.", good:"Preparas cosas el martes, reduces compromisos y planificas recuperación.", bad:"Llenas el miércoles sin considerar el impacto."},
+  {q:"Tienes citas médicas esta semana.", good:"Las agendas en tu calendario con tiempo de traslado y preparación.", bad:"Las anotas mentalmente y olvidas alguna."},
+  {q:"Necesitas hacer ejercicio regularmente.", good:"Programas días y horarios específicos en tu semana.", bad:"Dices que harás ejercicio cuando tengas tiempo."},
+  {q:"Tienes compromisos sociales y laborales.", good:"Balanceas ambos en tu calendario dejando tiempo de descanso.", bad:"Llenas cada espacio sin pausas de recuperación."},
+  {q:"Esta semana hay un día festivo.", good:"Ajustas tu planificación considerando el día libre.", bad:"Te sorprende el festivo y pierdes un día de trabajo."},
+  {q:"Necesitas preparar algo para el fin de semana.", good:"Programas tiempo durante la semana para prepararlo gradualmente.", bad:"Lo dejas todo para el viernes en la noche."},
+
+  // 21-30 Planificación mensual
+  {q:"Empieza un nuevo mes.", good:"Revisas fechas importantes, plazos y eventos del mes completo.", bad:"Vas día a día sin visión del mes."},
+  {q:"Tienes pagos mensuales que hacer.", good:"Creas un calendario de pagos con fechas específicas.", bad:"Pagas cuando te acuerdas y acumulas recargos."},
+  {q:"Necesitas ahorrar para algo específico.", good:"Calculas cuánto ahorrar cada semana del mes y lo programas.", bad:"Dices que ahorrarás lo que sobre al final."},
+  {q:"Tienes un proyecto que dura todo el mes.", good:"Divides el proyecto en hitos semanales con entregables.", bad:"Trabajas sin estructura hasta la fecha final."},
+  {q:"Este mes hay varios cumpleaños.", good:"Los anotas al inicio del mes y preparas con anticipación.", bad:"Te acuerdas el mismo día sin preparación."},
+  {q:"Necesitas hacer trámites este mes.", good:"Listas los trámites, verificas requisitos y agendas fechas.", bad:"Los vas haciendo cuando puedes sin orden."},
+  {q:"Tienes objetivos mensuales en el trabajo.", good:"Divides los objetivos en tareas semanales medibles.", bad:"Esperas a fin de mes para ver qué lograste."},
+  {q:"Este mes quieres desarrollar un hábito nuevo.", good:"Planificas cómo integrar el hábito diariamente con recordatorios.", bad:"Lo intentas sin plan y lo abandonas en días."},
+  {q:"Necesitas balancear múltiples proyectos este mes.", good:"Asignas tiempo semanal a cada proyecto en tu calendario.", bad:"Saltas entre proyectos sin estructura."},
+  {q:"Tienes gastos grandes este mes.", good:"Planificas tu presupuesto considerando todos los gastos anticipados.", bad:"Gastas normalmente y te sorprendes sin dinero."},
+
+  // 31-40 Planificación de proyectos
+  {q:"Te asignan un proyecto nuevo.", good:"Defines alcance, divides en fases, estimas tiempos y creas cronograma.", bad:"Empiezas a trabajar sin plan claro."},
+  {q:"El proyecto tiene múltiples entregables.", good:"Creas una lista de entregables con fechas y dependencias.", bad:"Trabajas sin orden hasta que piden algo."},
+  {q:"Necesitas coordinar con otras personas.", good:"Identificas puntos de coordinación y agendas reuniones de sincronización.", bad:"Asumes que todos saben qué hacer sin comunicar."},
+  {q:"El proyecto tiene un plazo ajustado.", good:"Trabajas hacia atrás desde la fecha final asignando tiempos realistas.", bad:"Empiezas sin calcular si el tiempo es suficiente."},
+  {q:"Surgen imprevistos en el proyecto.", good:"Tienes tiempo de contingencia planeado y ajustas el cronograma.", bad:"Te desesperas porque no consideraste imprevistos."},
+  {q:"Necesitas recursos para el proyecto.", good:"Identificas recursos necesarios al inicio y los solicitas con anticipación.", bad:"Pides recursos cuando ya los necesitas urgentemente."},
+  {q:"El proyecto tiene riesgos potenciales.", good:"Identificas riesgos, evalúas probabilidad y planificas mitigación.", bad:"No consideras riesgos hasta que ocurren."},
+  {q:"Debes reportar avances del proyecto.", good:"Estableces hitos medibles y fechas de reporte desde el inicio.", bad:"Reportas sin métricas claras de progreso."},
+  {q:"El proyecto requiere aprender algo nuevo.", good:"Programas tiempo específico para aprendizaje antes de ejecutar.", bad:"Intentas aprender mientras ejecutas y te atrasas."},
+  {q:"Terminas una fase del proyecto.", good:"Revisas lo completado, documentas aprendizajes y planificas la siguiente fase.", bad:"Pasas a la siguiente fase sin revisar ni documentar."},
+
+  // 41-50 Gestión del tiempo
+  {q:"Tienes una tarea que toma 3 horas.", good:"Bloqueas 3.5 horas considerando pausas y imprevistos.", bad:"Agendas exactamente 3 horas sin margen."},
+  {q:"Necesitas concentración profunda.", good:"Bloqueas tiempo sin interrupciones, avisas que no estarás disponible.", bad:"Intentas concentrarte con interrupciones constantes."},
+  {q:"Tienes muchas reuniones en un día.", good:"Dejas espacios entre reuniones para procesar y preparar.", bad:"Agendas reuniones consecutivas sin respiro."},
+  {q:"Una tarea siempre te toma más de lo estimado.", good:"Ajustas tus estimaciones futuras basándote en experiencia real.", bad:"Sigues estimando mal y llegando tarde."},
+  {q:"Tienes tareas urgentes e importantes.", good:"Usas matriz de priorización y atacas lo urgente-importante primero.", bad:"Haces lo urgente sin importar si es importante."},
+  {q:"Te interrumpen constantemente.", good:"Estableces horarios de disponibilidad y bloques de trabajo sin interrupciones.", bad:"Estás siempre disponible y no avanzas nada."},
+  {q:"Tienes tiempo muerto entre actividades.", good:"Planificas tareas pequeñas para esos espacios.", bad:"Desperdicias ese tiempo sin aprovecharlo."},
+  {q:"Una tarea te genera procrastinación.", good:"La divides en pasos pequeños y empiezas por el más fácil.", bad:"La evitas hasta que se vuelve crisis."},
+  {q:"Necesitas hacer algo repetitivo.", good:"Buscas formas de automatizar o agrupar para eficiencia.", bad:"Lo haces manualmente cada vez sin optimizar."},
+  {q:"Tu estimación de tiempo fue incorrecta.", good:"Analizas por qué fallaste y ajustas futuras estimaciones.", bad:"Sigues estimando mal sin aprender."},
+
+  // 51-60 Organización de materiales
+  {q:"Necesitas varios documentos para una tarea.", good:"Reúnes todos los materiales antes de empezar.", bad:"Buscas cada documento cuando lo necesitas interrumpiendo el flujo."},
+  {q:"Tienes archivos desorganizados.", good:"Creas un sistema de carpetas lógico y organizas todo.", bad:"Guardas todo sin orden y pierdes tiempo buscando."},
+  {q:"Necesitas información de varias fuentes.", good:"Consolidas la información en un solo lugar antes de trabajar.", bad:"Saltas entre fuentes perdiendo tiempo y concentración."},
+  {q:"Tienes herramientas que usas frecuentemente.", good:"Las organizas en un lugar accesible y siempre las devuelves ahí.", bad:"Las dejas donde sea y pierdes tiempo buscándolas."},
+  {q:"Necesitas preparar materiales para una presentación.", good:"Haces una lista de materiales y los preparas con días de anticipación.", bad:"Preparas todo la noche anterior con estrés."},
+  {q:"Tienes notas dispersas de un proyecto.", good:"Consolidas todas las notas en un documento organizado.", bad:"Mantienes notas en múltiples lugares sin orden."},
+  {q:"Necesitas acceso rápido a información frecuente.", good:"Creas un sistema de referencia rápida o favoritos.", bad:"Buscas la misma información repetidamente."},
+  {q:"Tienes versiones múltiples de un documento.", good:"Usas control de versiones con nombres claros y fechas.", bad:"Guardas todo como 'final', 'final2', 'final_final'."},
+  {q:"Necesitas compartir archivos con otros.", good:"Organizas los archivos en carpetas compartidas con estructura clara.", bad:"Envías archivos por email sin organización."},
+  {q:"Tienes backup de información importante.", good:"Programas backups automáticos regulares en múltiples lugares.", bad:"No haces backups y arriesgas perder todo."},
+
+  // 61-70 Planificación de objetivos
+  {q:"Tienes un objetivo grande a largo plazo.", good:"Lo divides en objetivos mensuales, semanales y diarios.", bad:"Lo mantienes como idea vaga sin plan de acción."},
+  {q:"Quieres desarrollar una habilidad nueva.", good:"Defines qué nivel quieres alcanzar, en cuánto tiempo y cómo practicar.", bad:"Dices que quieres aprender sin plan específico."},
+  {q:"Tienes múltiples objetivos.", good:"Priorizas cuáles trabajar primero y cuáles posponer.", bad:"Intentas lograr todos simultáneamente y no avanzas en ninguno."},
+  {q:"Un objetivo parece abrumador.", good:"Lo divides en el paso más pequeño posible y empiezas por ahí.", bad:"Te paralizas por lo grande que parece."},
+  {q:"Necesitas medir tu progreso.", good:"Defines métricas específicas y fechas de revisión.", bad:"Trabajas sin saber si estás avanzando."},
+  {q:"Tu objetivo requiere recursos.", good:"Identificas qué necesitas y planificas cómo conseguirlo.", bad:"Empiezas sin los recursos necesarios."},
+  {q:"Alcanzaste un objetivo.", good:"Celebras el logro, reflexionas qué funcionó y estableces el siguiente.", bad:"Pasas al siguiente sin reconocer tu éxito."},
+  {q:"No estás avanzando en un objetivo.", good:"Analizas qué obstáculos hay y ajustas tu estrategia.", bad:"Sigues haciendo lo mismo esperando resultados diferentes."},
+  {q:"Tu objetivo cambió.", good:"Reevalúas si sigue siendo relevante y ajustas o cambias de objetivo.", bad:"Sigues persiguiendo algo que ya no quieres."},
+  {q:"Necesitas apoyo para tu objetivo.", good:"Identificas quién puede ayudarte y pides apoyo específico.", bad:"Intentas lograrlo solo aunque necesites ayuda."},
+
+  // 71-80 Planificación financiera
+  {q:"Recibes tu salario.", good:"Asignas dinero a categorías antes de gastar: necesidades, ahorro, ocio.", bad:"Gastas libremente y esperas que alcance."},
+  {q:"Tienes un gasto grande próximo.", good:"Calculas cuánto ahorrar cada mes y lo separas automáticamente.", bad:"Esperas tener el dinero cuando llegue el momento."},
+  {q:"Quieres ahorrar para algo específico.", good:"Defines monto, plazo y cantidad mensual necesaria.", bad:"Ahorras cantidades aleatorias sin plan."},
+  {q:"Tienes deudas que pagar.", good:"Listas todas las deudas, priorizas por interés y creas plan de pago.", bad:"Pagas lo que puedes sin estrategia."},
+  {q:"Necesitas reducir gastos.", good:"Analizas tus gastos, identificas lo prescindible y estableces límites.", bad:"Dices que gastarás menos sin plan específico."},
+  {q:"Quieres invertir dinero.", good:"Te educas sobre opciones, defines tu perfil de riesgo y diversificas.", bad:"Inviertes impulsivamente sin conocimiento."},
+  {q:"Tienes gastos variables cada mes.", good:"Calculas un promedio y lo incluyes en tu presupuesto.", bad:"Te sorprendes cada mes con gastos inesperados."},
+  {q:"Necesitas un fondo de emergencia.", good:"Defines cuánto necesitas y ahorras sistemáticamente hasta lograrlo.", bad:"No tienes ahorros y cada imprevisto es crisis."},
+  {q:"Tus ingresos son irregulares.", good:"Calculas tu ingreso promedio y presupuestas conservadoramente.", bad:"Gastas según el mejor mes y sufres en los malos."},
+  {q:"Quieres mejorar tu situación financiera.", good:"Educas sobre finanzas, estableces objetivos y creas plan de acción.", bad:"Esperas que mejore sin hacer cambios."},
+
+  // 81-90 Planificación de eventos
+  {q:"Organizas una reunión con amigos.", good:"Defines fecha, lugar, hora, confirmas asistencia y planificas logística.", bad:"Propones juntarse sin definir detalles."},
+  {q:"Tienes una presentación importante.", good:"Preparas contenido, practicas, pruebas tecnología y llegas temprano.", bad:"Preparas la presentación la noche anterior."},
+  {q:"Planeas un viaje.", good:"Investigas destino, reservas con anticipación, haces itinerario flexible.", bad:"Viajas sin plan esperando improvisar todo."},
+  {q:"Organizas un evento familiar.", good:"Coordinas con todos, defines roles, preparas con anticipación.", bad:"Asumes que todo saldrá bien sin coordinar."},
+  {q:"Tienes una cita importante.", good:"Planificas ruta, tiempo de traslado, qué llevar y llegas temprano.", bad:"Sales justo a tiempo sin considerar imprevistos."},
+  {q:"Organizas una celebración.", good:"Haces lista de invitados, presupuesto, compras y cronograma.", bad:"Compras todo el mismo día y te estresas."},
+  {q:"Planeas una actividad al aire libre.", good:"Revisas clima, preparas plan B, llevas lo necesario.", bad:"Vas sin preparación y el clima arruina todo."},
+  {q:"Tienes múltiples eventos en un día.", good:"Calculas tiempos de traslado, preparas lo necesario para cada uno.", bad:"Agendas todo sin considerar logística."},
+  {q:"Organizas algo con muchas personas.", good:"Usas herramientas de coordinación, confirmas asistencia, comunicas claramente.", bad:"Asumes que todos saben qué hacer."},
+  {q:"Un evento requiere preparación especial.", good:"Haces checklist, preparas con días de anticipación, verificas todo.", bad:"Preparas todo a última hora con estrés."},
+
+  // 91-100 Revisión y ajuste
+  {q:"Termina tu semana.", good:"Revisas qué lograste, qué faltó y ajustas plan para la siguiente.", bad:"Empiezas la nueva semana sin reflexionar."},
+  {q:"Tu plan no funcionó como esperabas.", good:"Analizas qué falló, aprendes y ajustas tu enfoque.", bad:"Te frustras sin analizar qué cambiar."},
+  {q:"Lograste más de lo planeado.", good:"Reconoces tu éxito y evalúas si puedes mantener ese ritmo.", bad:"No reconoces tu logro y sigues igual."},
+  {q:"Constantemente te falta tiempo.", good:"Analizas dónde se va tu tiempo y ajustas estimaciones.", bad:"Sigues planeando igual y llegando tarde."},
+  {q:"Tus prioridades cambiaron.", good:"Revisas tu plan y lo ajustas a las nuevas prioridades.", bad:"Sigues el plan viejo aunque ya no sea relevante."},
+  {q:"Una estrategia no te funciona.", good:"Experimentas con nuevos enfoques hasta encontrar lo que funciona.", bad:"Insistes en la misma estrategia fallida."},
+  {q:"Necesitas mejorar tu planificación.", good:"Buscas recursos, aprendes técnicas nuevas y las implementas.", bad:"Sigues planeando mal sin buscar mejorar."},
+  {q:"Termina un proyecto.", good:"Documentas lecciones aprendidas para aplicar en futuros proyectos.", bad:"Pasas al siguiente sin reflexionar."},
+  {q:"Tu sistema de organización es caótico.", good:"Dedicas tiempo a crear un sistema que funcione para ti.", bad:"Sigues en el caos sin tomar acción."},
+  {q:"Quieres ser más productivo.", good:"Analizas tus patrones, identificas mejoras y las implementas gradualmente.", bad:"Intentas cambiar todo de golpe y abandonas rápido."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>

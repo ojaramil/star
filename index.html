@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>S.T.A.R · Sistema de Training para Autonomía y Relaciones</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --orange: #f97316;
+      --orange-light: #fff7ed;
+      --green: #10b981;
+      --green-light: #ecfdf5;
+      --blue: #0d47a1;
+      --border: #e2e8f0;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+      --radius: 16px;
+
+      /* Colores por dominio */
+      --social: #3b82f6;
+      --comunic: #8b5cf6;
+      --ejecut: #10b981;
+      --emoc: #f59e0b;
+      --vida: #ef4444;
+      --acad: #06b6d4;
+      --sensor: #ec4899;
+      --pensam: #6366f1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Barra superior promocional */
+    .promo-bar {
+      background: linear-gradient(135deg, var(--green), #059669);
+      color: white;
+      padding: 12px 20px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .promo-bar strong {
+      color: #fef08a;
+    }
+
+    .promo-btn {
+      background: white;
+      color: var(--green);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .promo-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Navegación */
+    .nav {
+      background: white;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo img {
+      height: 50px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--orange);
+    }
+
+    .nav-cta {
+      background: var(--orange);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: #ea580c;
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--bg-secondary);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .hero-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--orange-light);
+      color: var(--orange);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero h1 span {
+      color: var(--orange);
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .hero-feature .check {
+      width: 22px;
+      height: 22px;
+      background: var(--green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    /* Stats Pills */
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .stat-pill {
+      background: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--orange);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Progress Section */
+    .progress-section {
+      max-width: 600px;
+      margin: 40px auto 0;
+      background: white;
+      padding: 20px 24px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .progress-title {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .progress-percent {
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #f1f5f9;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange), #fb923c);
+      width: 0%;
+      transition: width 0.5s ease;
+      border-radius: 999px;
+    }
+
+    /* Main Content */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-header h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    /* Dominio Cards */
+    .dominio-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .dominio-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .dominio-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-left: 4px solid var(--dominio-color);
+    }
+
+    .dominio-header:hover {
+      background: var(--bg-secondary);
+    }
+
+    .dominio-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--dominio-color);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .dominio-info {
+      flex: 1;
+    }
+
+    .dominio-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .dominio-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .dominio-arrow {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+
+    .dominio-header[data-open="true"] .dominio-arrow {
+      transform: rotate(180deg);
+      background: var(--dominio-color);
+      color: white;
+    }
+
+    /* Habilidades Grid */
+    .habilidades-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 0 24px 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .habilidades-grid.open {
+      display: grid;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hab-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .hab-card:hover {
+      background: white;
+      border-color: var(--dominio-color);
+      transform: translateX(4px);
+    }
+
+    .hab-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      flex-shrink: 0;
+    }
+
+    .hab-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hab-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .hab-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .hab-progress {
+      font-size: 11px;
+      color: var(--orange);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hab-progress-bar {
+      flex: 1;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      max-width: 80px;
+    }
+
+    .hab-progress-fill {
+      height: 100%;
+      background: var(--orange);
+      width: 0%;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-secondary);
+      padding: 40px 24px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-logo {
+      height: 60px;
+      margin-bottom: 16px;
+    }
+
+    .footer p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .footer-brand {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: 2px;
+      margin-bottom: 4px !important;
+    }
+
+    .footer-tagline {
+      font-size: 15px;
+      color: var(--orange);
+      font-weight: 500;
+      margin-bottom: 16px !important;
+    }
+
+    .footer-tip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange-light);
+      color: var(--orange);
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-cta {
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+
+      .hero {
+        padding: 40px 20px;
+      }
+
+      .stats-container {
+        gap: 12px;
+      }
+
+      .stat-pill {
+        padding: 10px 16px;
+      }
+
+      .stat-number {
+        font-size: 22px;
+      }
+
+      .habilidades-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* STARID Bar */
+    .starid-bar {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .starid-label {
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .starid-value {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f97316;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+    }
+
+    .starid-btn {
+      background: transparent;
+      color: #60a5fa;
+      border: 1px solid #60a5fa;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .starid-btn:hover {
+      background: #60a5fa;
+      color: white;
+    }
+
+    .starid-btn.sync {
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .starid-btn.sync:hover {
+      background: #10b981;
+      color: white;
+    }
+
+    .starid-status {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .starid-status.synced {
+      color: #10b981;
+    }
+
+    .starid-status.error {
+      color: #ef4444;
+    }
+
+    /* Recover Input */
+    .starid-recover {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .starid-recover.show {
+      display: flex;
+    }
+
+    .starid-recover input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #475569;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      width: 160px;
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
+    }
+
+    .starid-recover input::placeholder {
+      color: #64748b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Barra promocional -->
+  <div class="promo-bar">
+    🎯 <strong>¡Nuevo!</strong> 2900 situaciones de práctica para desarrollar tu autonomía y relaciones
+    <a href="#dominios" class="promo-btn">Explorar ahora</a>
+  </div>
+
+  <!-- Barra STARID -->
+  <div class="starid-bar">
+    <span class="starid-label">🔑 Tu STARID:</span>
+    <span class="starid-value" id="starid-display">Generando...</span>
+    <span class="starid-status" id="starid-status"></span>
+    <button class="starid-btn" id="starid-copy" title="Copiar ID">📋 Copiar</button>
+    <button class="starid-btn" id="starid-recover-btn">🔄 Recuperar</button>
+    <div class="starid-recover" id="starid-recover-form">
+      <input type="text" id="starid-input" placeholder="STAR-XXXX-XXXX" maxlength="14">
+      <button class="starid-btn sync" id="starid-recover-submit">Recuperar</button>
+      <button class="starid-btn" id="starid-recover-cancel">✕</button>
+    </div>
+  </div>
+
+  <!-- Navegación -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <img src="logo-claro.png" alt="Asperger para Asperger">
+    </div>
+    <ul class="nav-links">
+      <li><a href="#dominios">Dominios</a></li>
+      <li><a href="#como-funciona">Cómo Funciona</a></li>
+      <li><a href="#progreso">Mi Progreso</a></li>
+    </ul>
+    <a href="#empezar" class="nav-cta">Comenzar</a>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <span class="hero-badge">✨ Plataforma 100% Gratuita</span>
+      <h1>Desarrolla habilidades para la <span>autonomía</span> y las <span>relaciones</span></h1>
+      <p>S.T.A.R es tu sistema de entrenamiento personal con situaciones prácticas para la vida real. Aprende a tu
+        ritmo, sin presiones.</p>
+
+      <div class="hero-features">
+        <div class="hero-feature">
+          <span class="check">✓</span>
+          <span>8 dominios de habilidades</span>
+        </div>
+        <div class="hero-feature">
+          <span class="check">✓</span>
+          <span>29 módulos especializados</span>
+        </div>
+        <div class="hero-feature">
+          <span class="check">✓</span>
+          <span>2900 situaciones prácticas</span>
+        </div>
+      </div>
+
+      <div class="stats-container">
+        <div class="stat-pill">
+          <span class="stat-number">8</span>
+          <span class="stat-label">Dominios</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-number">29</span>
+          <span class="stat-label">Habilidades</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-number">2900</span>
+          <span class="stat-label">Situaciones</span>
+        </div>
+      </div>
+
+      <div class="progress-section" id="progreso">
+        <div class="progress-header">
+          <span class="progress-title">📊 Tu progreso total</span>
+          <span class="progress-percent" id="progreso-total">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="barra-total"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dominios Section -->
+  <main class="main" id="dominios">
+    <div class="section-header">
+      <h2>🌟 Explora los Dominios</h2>
+      <p>Selecciona un área para comenzar tu entrenamiento</p>
+    </div>
+
+    <!-- DOMINIO 1: SOCIALES -->
+    <div class="dominio-card" style="--dominio-color: var(--social)">
+      <div class="dominio-header" onclick="toggleDominio(this)" data-open="false">
+        <div class="dominio-icon">👥</div>
+        <div class="dominio-info">
+          <div class="dominio-title">Habilidades Sociales</div>
+          <div class="dominio-meta">4 módulos · 400 situaciones</div>
+        </div>
+        <div class="dominio-arrow">▼</div>
+      </div>
+      <div class="habilidades-grid">
+        <a class="hab-card" data-habilidad="conversacion" href="STAR-conversacion.html">
+          <div class="hab-icon">💬</div>
+          <div class="hab-info">
+            <div class="hab-name">Inicio y Mantenimiento de Conversaciones</div>
+            <div class="hab-desc">Detectar momentos, turnos de palabra, mantener interés y cerrar adecuadamente</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="reglas-sociales" href="STAR-reglas-sociales.html">
+          <div class="hab-icon">🎭</div>
+          <div class="hab-info">
+            <div class="hab-name">Reglas Sociales Implícitas</div>
+            <div class="hab-desc">Jerarquías, humor, sarcasmo, mentiras sociales y adaptación contextual</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="amistades" href="STAR-amistades.html">
+          <div class="hab-icon">🤝</div>
+          <div class="hab-info">
+            <div class="hab-name">Construcción de Amistades</div>
+            <div class="hab-desc">Identificar intereses compartidos, mantener contacto y resolver conflictos</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="trabajo-equipo" href="STAR-trabajo-equipo.html">
+          <div class="hab-icon">🧩</div>
+          <div class="hab-info">
+            <div class="hab-name">Trabajo en Equipo</div>
+            <div class="hab-desc">Colaborar, dividir tareas, dar feedback y compartir crédito</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- DOMINIO 2: COMUNICACIÓN NO VERBAL -->
+    <div class="dominio-card" style="--dominio-color: var(--comunic)">
+      <div class="dominio-header" onclick="toggleDominio(this)" data-open="false">
+        <div class="dominio-icon">👁️</div>
+        <div class="dominio-info">
+          <div class="dominio-title">Comunicación No Verbal</div>
+          <div class="dominio-meta">3 módulos · 300 situaciones</div>
+        </div>
+        <div class="dominio-arrow">▼</div>
+      </div>
+      <div class="habilidades-grid">
+        <a class="hab-card" data-habilidad="lenguaje-corporal" href="STAR-lenguaje-corporal.html">
+          <div class="hab-icon">🕺</div>
+          <div class="hab-info">
+            <div class="hab-name">Lenguaje Corporal</div>
+            <div class="hab-desc">Mirada, gestos, postura, proxemia y señales de poder</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="paralenguaje" href="STAR-paralenguaje.html">
+          <div class="hab-icon">🎵</div>
+          <div class="hab-info">
+            <div class="hab-name">Paralenguaje (Voz)</div>
+            <div class="hab-desc">Tono, volumen, velocidad, pausas y énfasis vocal</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="atencion-desconexion" href="STAR-atencion-desconexion.html">
+          <div class="hab-icon">📡</div>
+          <div class="hab-info">
+            <div class="hab-name">Señales de Atención y Desconexión</div>
+            <div class="hab-desc">Detectar interés, aburrimiento, ansiedad y fin de conversación</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- DOMINIO 3: EJECUTIVAS -->
+    <div class="dominio-card" style="--dominio-color: var(--ejecut)">
+      <div class="dominio-header" onclick="toggleDominio(this)" data-open="false">
+        <div class="dominio-icon">🧠</div>
+        <div class="dominio-info">
+          <div class="dominio-title">Habilidades Ejecutivas</div>
+          <div class="dominio-meta">4 módulos · 400 situaciones</div>
+        </div>
+        <div class="dominio-arrow">▼</div>
+      </div>
+      <div class="habilidades-grid">
+        <a class="hab-card" data-habilidad="flexibilidad-cognitiva" href="STAR-flexibilidad-cognitiva.html">
+          <div class="hab-icon">🔄</div>
+          <div class="hab-info">
+            <div class="hab-name">Flexibilidad Cognitiva</div>
+            <div class="hab-desc">Adaptarse a cambios, tolerar incertidumbre y considerar múltiples perspectivas</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="planificacion" href="STAR-planificacion.html">
+          <div class="hab-icon">📅</div>
+          <div class="hab-info">
+            <div class="hab-name">Planificación y Organización</div>
+            <div class="hab-desc">Macro y micro planificación, priorización y seguimiento de metas</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="inhibicion" href="STAR-inhibicion.html">
+          <div class="hab-icon">⏸️</div>
+          <div class="hab-info">
+            <div class="hab-name">Inhibición y Autocontrol</div>
+            <div class="hab-desc">Pensar antes de actuar, resistir impulsos y manejar frustración</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="memoria-trabajo" href="STAR-memoria-trabajo.html">
+          <div class="hab-icon">📝</div>
+          <div class="hab-info">
+            <div class="hab-name">Memoria de Trabajo</div>
+            <div class="hab-desc">Recordar instrucciones, nombres y hacer seguimiento de múltiples datos</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- DOMINIO 4: EMOCIONAL -->
+    <div class="dominio-card" style="--dominio-color: var(--emoc)">
+      <div class="dominio-header" onclick="toggleDominio(this)" data-open="false">
+        <div class="dominio-icon">❤️</div>
+        <div class="dominio-info">
+          <div class="dominio-title">Regulación Emocional</div>
+          <div class="dominio-meta">4 módulos · 400 situaciones</div>
+        </div>
+        <div class="dominio-arrow">▼</div>
+      </div>
+      <div class="habilidades-grid">
+        <a class="hab-card" data-habilidad="identificacion-emocional" href="STAR-identificacion-emocional.html">
+          <div class="hab-icon">🎯</div>
+          <div class="hab-info">
+            <div class="hab-name">Identificación de Emociones</div>
+            <div class="hab-desc">Reconocer propias y ajenas, nombrar emociones básicas y complejas</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="estrategias-regulacion" href="STAR-estrategias-regulacion.html">
+          <div class="hab-icon">🛠️</div>
+          <div class="hab-info">
+            <div class="hab-name">Estrategias de Regulación</div>
+            <div class="hab-desc">Técnicas de prevención, manejo en el momento y post-crisis</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="ansiedad-social" href="STAR-ansiedad-social.html">
+          <div class="hab-icon">😰</div>
+          <div class="hab-info">
+            <div class="hab-name">Manejo de Ansiedad Social</div>
+            <div class="hab-desc">Preparación, scripts de seguridad y exposición gradual</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="autoconocimiento" href="STAR-autoconocimiento.html">
+          <div class="hab-icon">🔍</div>
+          <div class="hab-info">
+            <div class="hab-name">Autoconocimiento y Autodefensa</div>
+            <div class="hab-desc">Reconocer fortalezas, pedir ajustes y construir identidad positiva</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- DOMINIO 5: VIDA INDEPENDIENTE -->
+    <div class="dominio-card" style="--dominio-color: var(--vida)">
+      <div class="dominio-header" onclick="toggleDominio(this)" data-open="false">
+        <div class="dominio-icon">🏠</div>
+        <div class="dominio-info">
+          <div class="dominio-title">Vida Independiente</div>
+          <div class="dominio-meta">4 módulos · 400 situaciones</div>
+        </div>
+        <div class="dominio-arrow">▼</div>
+      </div>
+      <div class="habilidades-grid">
+        <a class="hab-card" data-habilidad="hogar" href="STAR-hogar.html">
+          <div class="hab-icon">🧹</div>
+          <div class="hab-info">
+            <div class="hab-name">Manejo del Hogar</div>
+            <div class="hab-desc">Limpieza, cocina, lavandería y mantenimiento básico</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="autocuidado" href="STAR-autocuidado.html">
+          <div class="hab-icon">🛁</div>
+          <div class="hab-info">
+            <div class="hab-name">Autocuidado y Salud</div>
+            <div class="hab-desc">Higiene, alimentación, sueño, medicación y ejercicio</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="finanzas" href="STAR-finanzas.html">
+          <div class="hab-icon">💳</div>
+          <div class="hab-info">
+            <div class="hab-name">Gestión Financiera</div>
+            <div class="hab-desc">Presupuestos, banca, compras, ahorro e impuestos</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="movilidad" href="STAR-movilidad.html">
+          <div class="hab-icon">🚌</div>
+          <div class="hab-info">
+            <div class="hab-name">Movilidad y Transporte</div>
+            <div class="hab-desc">Usar transporte público, planificar rutas y manejar retrasos</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- DOMINIO 6: ACADÉMICO/LABORAL -->
+    <div class="dominio-card" style="--dominio-color: var(--acad)">
+      <div class="dominio-header" onclick="toggleDominio(this)" data-open="false">
+        <div class="dominio-icon">💼</div>
+        <div class="dominio-info">
+          <div class="dominio-title">Entorno Académico y Laboral</div>
+          <div class="dominio-meta">4 módulos · 400 situaciones</div>
+        </div>
+        <div class="dominio-arrow">▼</div>
+      </div>
+      <div class="habilidades-grid">
+        <a class="hab-card" data-habilidad="organizacion-laboral" href="STAR-organizacion-laboral.html">
+          <div class="hab-icon">📁</div>
+          <div class="hab-info">
+            <div class="hab-name">Organización Académica/Laboral</div>
+            <div class="hab-desc">Sistema de archivos, gestión de tareas y estudio proactivo</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="comunicacion-profesional" href="STAR-comunicacion-profesional.html">
+          <div class="hab-icon">📧</div>
+          <div class="hab-info">
+            <div class="hab-name">Comunicación Profesional</div>
+            <div class="hab-desc">Emails, reuniones, networking y manejo de conflictos</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="tiempo-laboral" href="STAR-tiempo-laboral.html">
+          <div class="hab-icon">⏱️</div>
+          <div class="hab-info">
+            <div class="hab-name">Gestión del Tiempo Laboral</div>
+            <div class="hab-desc">Técnicas Pomodoro, estimación realista y manejo de multitarea</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="adaptacion-laboral" href="STAR-adaptacion-laboral.html">
+          <div class="hab-icon">🔄</div>
+          <div class="hab-info">
+            <div class="hab-name">Adaptación Laboral</div>
+            <div class="hab-desc">Cultura organizacional, ajustes razonables y manejo de feedback</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- DOMINIO 7: SENSORIAL -->
+    <div class="dominio-card" style="--dominio-color: var(--sensor)">
+      <div class="dominio-header" onclick="toggleDominio(this)" data-open="false">
+        <div class="dominio-icon">🔔</div>
+        <div class="dominio-info">
+          <div class="dominio-title">Manejo Sensorial</div>
+          <div class="dominio-meta">3 módulos · 300 situaciones</div>
+        </div>
+        <div class="dominio-arrow">▼</div>
+      </div>
+      <div class="habilidades-grid">
+        <a class="hab-card" data-habilidad="identificacion-sensorial" href="STAR-identificacion-sensorial.html">
+          <div class="hab-icon">🎚️</div>
+          <div class="hab-info">
+            <div class="hab-name">Identificación y Regulación Sensorial</div>
+            <div class="hab-desc">Detectar sobrecarga auditiva, visual, táctil y usar estrategias</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="estrategias-sensoriales" href="STAR-estrategias-sensoriales.html">
+          <div class="hab-icon">🧰</div>
+          <div class="hab-info">
+            <div class="hab-name">Estrategias de Acomodo</div>
+            <div class="hab-desc">Kit de supervivencia sensorial, espacios seguros y ajustes</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="rutinas" href="STAR-rutinas.html">
+          <div class="hab-icon">🔄</div>
+          <div class="hab-info">
+            <div class="hab-name">Rutinas y Transiciones</div>
+            <div class="hab-desc">Crear rutinas, usar warning systems y adaptar a cambios</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- DOMINIO 8: PENSAMIENTO CRÍTICO -->
+    <div class="dominio-card" style="--dominio-color: var(--pensam)">
+      <div class="dominio-header" onclick="toggleDominio(this)" data-open="false">
+        <div class="dominio-icon">🧩</div>
+        <div class="dominio-info">
+          <div class="dominio-title">Pensamiento Crítico Social</div>
+          <div class="dominio-meta">3 módulos · 300 situaciones</div>
+        </div>
+        <div class="dominio-arrow">▼</div>
+      </div>
+      <div class="habilidades-grid">
+        <a class="hab-card" data-habilidad="analisis-social" href="STAR-analisis-social.html">
+          <div class="hab-icon">📊</div>
+          <div class="hab-info">
+            <div class="hab-name">Análisis de Situaciones Sociales</div>
+            <div class="hab-desc">MAPAs, cuestionar asunciones y perspectiva de tercera persona</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="toma-decisiones" href="STAR-toma-decisiones.html">
+          <div class="hab-icon">⚖️</div>
+          <div class="hab-info">
+            <div class="hab-name">Toma de Decisiones Sociales</div>
+            <div class="hab-desc">Decidir confianza, honestidad, priorizar amistades saludables</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a class="hab-card" data-habilidad="aprendizaje-errores" href="STAR-aprendizaje-errores.html">
+          <div class="hab-icon">📈</div>
+          <div class="hab-info">
+            <div class="hab-name">Aprendizaje de Errores Sociales</div>
+            <div class="hab-desc">Analizar interacciones, crear manual personal y perdonarse</div>
+            <div class="hab-progress">
+              <span data-progress="0">0/100</span>
+              <div class="hab-progress-bar">
+                <div class="hab-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <img src="logo-claro.png" alt="Asperger para Asperger" class="footer-logo">
+    <p class="footer-brand">S.T.A.R</p>
+    <p class="footer-tagline">Sistema de Training para Autonomía y Relaciones</p>
+    <p>v1.0 · 100% Offline · Datos guardados localmente</p>
+    <p>Un proyecto de <strong>Asperger para Asperger®</strong></p>
+    <div class="footer-tip">
+      💡 Haz clic en cualquier dominio para explorar sus habilidades
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // CONFIGURACIÓN DE API
+    // ============================================================
+    // IMPORTANTE: Reemplazar con la URL de tu Google Apps Script desplegado
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyQXYELpZVYAbcRcXFPkFGH8nQQVTAs-d4owkORUYZmlUS2rGewTzjdWPZp3kKQapEr/exec';
+
+    // ============================================================
+    // GESTIÓN DE STARID
+    // ============================================================
+    let currentStarId = null;
+
+    // Generar STARID local (fallback si no hay conexión)
+    function generateLocalStarId() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let part1 = '', part2 = '';
+      for (let i = 0; i < 4; i++) {
+        part1 += chars.charAt(Math.floor(Math.random() * chars.length));
+        part2 += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return 'STAR-' + part1 + '-' + part2;
+    }
+
+    // Inicializar STARID
+    async function initStarId() {
+      const display = document.getElementById('starid-display');
+      const status = document.getElementById('starid-status');
+
+      // Intentar cargar desde localStorage
+      const savedId = localStorage.getItem('star-id');
+
+      if (savedId) {
+        currentStarId = savedId;
+        display.textContent = savedId;
+        status.textContent = '✓ Guardado localmente';
+        status.className = 'starid-status synced';
+
+        // Intentar sincronizar con servidor
+        syncWithServer();
+      } else {
+        // Intentar registrar con servidor
+        try {
+          status.textContent = 'Conectando...';
+          const response = await fetch(`${API_URL}?action=register`);
+          const data = await response.json();
+
+          if (data.success && data.starid) {
+            currentStarId = data.starid;
+            localStorage.setItem('star-id', data.starid);
+            display.textContent = data.starid;
+            status.textContent = '✓ Sincronizado';
+            status.className = 'starid-status synced';
+          } else {
+            throw new Error('No se pudo registrar');
+          }
+        } catch (err) {
+          // Fallback: generar ID local
+          currentStarId = generateLocalStarId();
+          localStorage.setItem('star-id', currentStarId);
+          display.textContent = currentStarId;
+          status.textContent = '⚠ Solo local';
+          status.className = 'starid-status';
+        }
+      }
+    }
+
+    // Sincronizar con servidor
+    async function syncWithServer() {
+      const status = document.getElementById('starid-status');
+
+      try {
+        const progreso = JSON.parse(localStorage.getItem('star-progreso') || '{}');
+
+        // Guardar progreso en servidor
+        const response = await fetch(`${API_URL}?action=saveProgress&starid=${currentStarId}&data=${encodeURIComponent(JSON.stringify(progreso))}`);
+        const data = await response.json();
+
+        if (data.success) {
+          status.textContent = '✓ Sincronizado';
+          status.className = 'starid-status synced';
+        }
+      } catch (err) {
+        status.textContent = '⚠ Solo local';
+        status.className = 'starid-status';
+      }
+    }
+
+    // Recuperar cuenta
+    async function recoverAccount(starid) {
+      const display = document.getElementById('starid-display');
+      const status = document.getElementById('starid-status');
+
+      if (!starid || !starid.match(/^STAR-[A-Z0-9]{4}-[A-Z0-9]{4}$/i)) {
+        alert('Formato de STARID inválido. Debe ser: STAR-XXXX-XXXX');
+        return false;
+      }
+
+      try {
+        status.textContent = 'Recuperando...';
+        const response = await fetch(`${API_URL}?action=recover&starid=${starid.toUpperCase()}`);
+        const data = await response.json();
+
+        if (data.success) {
+          currentStarId = data.starid;
+          localStorage.setItem('star-id', data.starid);
+          display.textContent = data.starid;
+
+          // Cargar progreso recuperado
+          if (data.progress && Object.keys(data.progress).length > 0) {
+            localStorage.setItem('star-progreso', JSON.stringify(data.progress));
+            cargarProgresos();
+          }
+
+          status.textContent = '✓ Cuenta recuperada';
+          status.className = 'starid-status synced';
+
+          alert('¡Cuenta recuperada exitosamente!');
+          return true;
+        } else {
+          throw new Error(data.error || 'No se encontró la cuenta');
+        }
+      } catch (err) {
+        status.textContent = '✗ Error';
+        status.className = 'starid-status error';
+        alert('Error: ' + err.message);
+        return false;
+      }
+    }
+
+    // Copiar STARID
+    function copyStarId() {
+      if (currentStarId) {
+        navigator.clipboard.writeText(currentStarId).then(() => {
+          const btn = document.getElementById('starid-copy');
+          btn.textContent = '✓ Copiado';
+          setTimeout(() => btn.textContent = '📋 Copiar', 2000);
+        });
+      }
+    }
+
+    // Event listeners para STARID
+    document.getElementById('starid-copy').addEventListener('click', copyStarId);
+
+    document.getElementById('starid-recover-btn').addEventListener('click', () => {
+      document.getElementById('starid-recover-form').classList.add('show');
+      document.getElementById('starid-recover-btn').style.display = 'none';
+    });
+
+    document.getElementById('starid-recover-cancel').addEventListener('click', () => {
+      document.getElementById('starid-recover-form').classList.remove('show');
+      document.getElementById('starid-recover-btn').style.display = '';
+      document.getElementById('starid-input').value = '';
+    });
+
+    document.getElementById('starid-recover-submit').addEventListener('click', async () => {
+      const input = document.getElementById('starid-input').value.trim().toUpperCase();
+      const success = await recoverAccount(input);
+      if (success) {
+        document.getElementById('starid-recover-form').classList.remove('show');
+        document.getElementById('starid-recover-btn').style.display = '';
+        document.getElementById('starid-input').value = '';
+      }
+    });
+
+    // ============================================================
+    // GESTIÓN DE DOMINIOS
+    // ============================================================
+    function toggleDominio(header) {
+      const grid = header.nextElementSibling;
+      const isOpen = header.dataset.open === "true";
+
+      // Close all others first
+      document.querySelectorAll('.dominio-header').forEach(h => {
+        h.dataset.open = "false";
+        h.nextElementSibling.classList.remove('open');
+      });
+
+      // Toggle current
+      if (!isOpen) {
+        header.dataset.open = "true";
+        grid.classList.add('open');
+      }
+    }
+
+    // ============================================================
+    // PERSISTENCIA Y PROGRESO
+    // ============================================================
+    function guardarProgreso(habilidad, progreso) {
+      const datos = JSON.parse(localStorage.getItem('star-progreso') || '{}');
+      datos[habilidad] = progreso;
+      localStorage.setItem('star-progreso', JSON.stringify(datos));
+      actualizarProgresoTotal();
+
+      // Sincronizar con servidor en segundo plano
+      syncWithServer();
+    }
+
+    function cargarProgresos() {
+      const datos = JSON.parse(localStorage.getItem('star-progreso') || '{}');
+      document.querySelectorAll('.hab-card').forEach(card => {
+        const habilidad = card.dataset.habilidad;
+        const progData = datos[habilidad];
+        const prog = progData ? (progData.completadas || progData) : 0;
+        const progressSpan = card.querySelector('.hab-progress span');
+        const progressFill = card.querySelector('.hab-progress-fill');
+        if (progressSpan) {
+          progressSpan.textContent = `${prog}/100`;
+          progressSpan.dataset.progress = prog;
+        }
+        if (progressFill) {
+          progressFill.style.width = prog + '%';
+        }
+      });
+      actualizarProgresoTotal();
+    }
+
+    function actualizarProgresoTotal() {
+      const cards = document.querySelectorAll('.hab-card');
+      const total = cards.length * 100;
+      let logrado = 0;
+
+      cards.forEach(card => {
+        const span = card.querySelector('.hab-progress span');
+        if (span && span.dataset.progress) {
+          logrado += parseInt(span.dataset.progress);
+        }
+      });
+
+      const porcent = Math.round((logrado / total) * 100);
+      document.getElementById('progreso-total').textContent = porcent + '%';
+      document.getElementById('barra-total').style.width = porcent + '%';
+    }
+
+    // ============================================================
+    // INICIALIZACIÓN
+    // ============================================================
+    cargarProgresos();
+    initStarId();
+  </script>
+</body>
+
+</html>

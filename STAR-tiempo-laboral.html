@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R · Gestión del Tiempo Laboral</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --blue: #3b82f6;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #06b6d4;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  /* Navegación */
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  
+  .nav-back:hover {
+    color: var(--orange);
+  }
+  
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .nav-logo img {
+    height: 40px;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--dominio-color), #06b6d4cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  
+  .header-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .header h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Stats Bar */
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .stat-item.highlight {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+  
+  .progress-container {
+    flex: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
+  
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dominio-color), #06b6d4cc);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  
+  /* Main Content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Situation Card */
+  .situation-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .situation-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .situation-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dominio-color);
+  }
+  
+  .situation-number {
+    background: var(--bg-secondary);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .situation-body {
+    padding: 24px;
+  }
+  
+  .situation-text {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--dominio-color);
+  }
+  
+  .options-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  
+  .option-btn:hover {
+    border-color: var(--dominio-color);
+    background: rgb(218, 244, 249);
+    transform: translateY(-2px);
+  }
+  
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+  
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feedback.show {
+    display: flex;
+  }
+  
+  .feedback.correct {
+    background: var(--green-light);
+    color: #166534;
+  }
+  
+  .feedback.incorrect {
+    background: var(--red-light);
+    color: #991b1b;
+  }
+  
+  .feedback-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .feedback.correct .feedback-icon {
+    background: var(--green);
+    color: white;
+  }
+  
+  .feedback.incorrect .feedback-icon {
+    background: var(--red);
+    color: white;
+  }
+  
+  /* Difficulty Tags */
+  .difficulty-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .difficulty-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  
+  .difficulty-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .difficulty-tag {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .difficulty-tag:hover {
+    border-color: #94a3b8;
+  }
+  
+  .difficulty-tag.active {
+    border-color: var(--dominio-color);
+    background: rgb(218, 244, 249);
+    color: var(--dominio-color);
+  }
+  
+  /* Navigation Controls */
+  .controls-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+  }
+  
+  .controls-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .control-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .control-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  
+  .control-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+  
+  .control-btn.primary:hover {
+    background: #ea580c;
+  }
+  
+  .tip-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--orange-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stats-bar {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+    .stat-item {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .situation-body {
+      padding: 16px;
+    }
+    .option-btn {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .controls-grid {
+      flex-direction: column;
+    }
+    .control-btn {
+      min-width: 100%;
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navegación -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon">←</span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">
+    <img src="logo-claro.png" alt="Asperger para Asperger">
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <span>💼</span>
+      <span>Entorno Académico y Laboral</span>
+    </span>
+    <h1>⏱️ Gestión del Tiempo Laboral</h1>
+    <p>Técnicas Pomodoro, estimación realista y manejo de multitarea</p>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <span>📍</span>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <span>⭐</span>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <span>🎯</span>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Situation Card -->
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title">📋 Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen">
+      <!-- Content will be rendered by JS -->
+    </div>
+  </div>
+  
+  <!-- Controls -->
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <span>←</span>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <span>→</span>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <span>🔀</span>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <span>🔄</span>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <span>💡</span>
+      <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>S.T.A.R Platform · Un proyecto de Asperger para Asperger®</p>
+</footer>
+
+<script>
+const SITUACIONES = [
+  // CATEGORÍA 1: PLANIFICACIÓN Y ORGANIZACIÓN DIARIA (10 situaciones)
+  {q:"Tu agenda se llena de reuniones y encargos pequeños.", good:"Bloqueas tramos de trabajo, agrupas tareas similares y dejas espacio para imprevistos.", bad:"Intentas hacerlo todo a la vez sin usar agenda."},
+  {q:"Cada mañana llegas al trabajo sin saber por dónde empezar.", good:"Dedicas 10 minutos cada mañana a revisar prioridades y planificar el día.", bad:"Empiezas con lo primero que ves en tu escritorio o email."},
+  {q:"Te interrumpen constantemente durante el día.", good:"Estableces horarios específicos para disponibilidad y comunicas cuándo no puedes ser interrumpido.", bad:"Permites interrupciones constantes sin establecer límites."},
+  {q:"Al final del día sientes que no lograste nada importante.", good:"Planificas 2-3 tareas importantes cada día y las priorizas sobre las urgentes.", bad:"Reaccionas a todo lo que surge sin planificación previa."},
+  {q:"Tu lista de tareas pendientes crece constantemente.", good:"Revisas semanalmente tu lista, eliminas lo obsoleto y priorizas lo importante.", bad:"Sigues agregando tareas sin revisar o eliminar las innecesarias."},
+  {q:"No sabes cuánto tiempo te toman realmente las tareas.", good:"Llevas registro del tiempo real de actividades para mejorar estimaciones futuras.", bad:"Siempre subestimas el tiempo necesario para completar tareas."},
+  {q:"Tienes múltiples proyectos y no sabes cómo balancearlos.", good:"Asignas tiempo específico a cada proyecto y usas un sistema de seguimiento.", bad:"Saltas entre proyectos sin planificación, perdiendo contexto constantemente."},
+  {q:"Las tareas administrativas consumen todo tu tiempo.", good:"Agrupas tareas administrativas en bloques específicos del día.", bad:"Haces tareas administrativas cuando surgen, interrumpiendo trabajo importante."},
+  {q:"No tienes tiempo para trabajo estratégico o creativo.", good:"Bloqueas tiempo específico para trabajo profundo y lo proteges como reunión importante.", bad:"Esperas tener tiempo libre que nunca llega para trabajo estratégico."},
+  {q:"Tu energía varía durante el día pero no lo consideras.", good:"Identificas tus horas de mayor energía y programas tareas importantes en esos momentos.", bad:"Trabajas de manera uniforme sin considerar tus ritmos naturales de energía."},
+
+  // CATEGORÍA 2: GESTIÓN DE REUNIONES (10 situaciones)
+  {q:"Pasas la mayor parte del día en reuniones improductivas.", good:"Evalúas la necesidad de cada reunión y declinas las que no agregan valor.", bad:"Aceptas todas las invitaciones sin evaluar su importancia."},
+  {q:"Las reuniones siempre se extienden más allá del tiempo programado.", good:"Estableces agendas claras con tiempos específicos y las cumples estrictamente.", bad:"Permites que las reuniones se extiendan indefinidamente."},
+  {q:"No tienes tiempo entre reuniones para procesar información.", good:"Programas 15 minutos de buffer entre reuniones para procesar y preparar.", bad:"Programas reuniones consecutivas sin tiempo de transición."},
+  {q:"Llegas tarde a reuniones porque subestimas el tiempo de traslado.", good:"Calculas tiempo de traslado y preparación, agregando buffer para imprevistos.", bad:"Sales justo a tiempo sin considerar posibles retrasos."},
+  {q:"En reuniones largas pierdes concentración y productividad.", good:"Propones descansos cada hora y agendas más enfocadas.", bad:"Sufres reuniones largas sin proponer mejoras en la estructura."},
+  {q:"No preparas adecuadamente las reuniones por falta de tiempo.", good:"Bloqueas tiempo específico antes de cada reunión para preparación.", bad:"Llegas a reuniones sin preparación, perdiendo efectividad."},
+  {q:"Tienes reuniones recurrentes que han perdido su propósito.", good:"Revisas regularmente el valor de reuniones recurrentes y las cancelas si no son necesarias.", bad:"Mantienes reuniones por inercia sin evaluar su utilidad actual."},
+  {q:"Las reuniones no tienen seguimiento de acciones.", good:"Dedicas los últimos 5 minutos a definir acciones específicas y responsables.", bad:"Terminas reuniones sin claridad sobre próximos pasos."},
+  {q:"Programas reuniones cuando podrías resolver por email.", good:"Evalúas si la reunión es necesaria o si se puede resolver por otros medios.", bad:"Programas reuniones automáticamente sin considerar alternativas más eficientes."},
+  {q:"No tienes control sobre tu calendario de reuniones.", good:"Bloqueas tiempo para trabajo individual y comunicas tu disponibilidad claramente.", bad:"Permites que otros llenen completamente tu calendario."},
+
+  // CATEGORÍA 3: MANEJO DE INTERRUPCIONES (10 situaciones)
+  {q:"Compañeros te interrumpen constantemente con preguntas.", good:"Estableces horarios de oficina abierta y enseñas a otros a encontrar respuestas.", bad:"Respondes inmediatamente a toda interrupción sin establecer límites."},
+  {q:"El teléfono y notificaciones te distraen constantemente.", good:"Estableces horarios específicos para revisar mensajes y silencias notificaciones durante trabajo concentrado.", bad:"Respondes inmediatamente a cada notificación que llega."},
+  {q:"Tu jefe te asigna tareas urgentes que interrumpen tu planificación.", good:"Negocias prioridades y comunicas el impacto en otros proyectos.", bad:"Aceptas todo como urgente sin evaluar la verdadera prioridad."},
+  {q:"Interrupciones 'rápidas' se convierten en conversaciones largas.", good:"Estableces límites de tiempo claros y ofreces programar tiempo específico si es necesario.", bad:"Permites que interrupciones breves se extiendan indefinidamente."},
+  {q:"No puedes concentrarte por el ambiente ruidoso de la oficina.", good:"Buscas espacios tranquilos o usas auriculares con cancelación de ruido.", bad:"Intentas trabajar con distracciones constantes sin buscar soluciones."},
+  {q:"Colegas te involucran en conversaciones no relacionadas con trabajo.", good:"Participas brevemente y luego rediriges cortésmente hacia el trabajo.", bad:"Te involucras en todas las conversaciones sociales sin límites de tiempo."},
+  {q:"Emergencias falsas interrumpen constantemente tu trabajo.", good:"Evalúas la verdadera urgencia antes de interrumpir tu trabajo planificado.", bad:"Tratas toda solicitud como emergencia real."},
+  {q:"No sabes cómo decir 'no' a solicitudes de tiempo.", good:"Desarrollas frases corteses pero firmes para declinar solicitudes no prioritarias.", bad:"Aceptas todas las solicitudes para evitar conflictos."},
+  {q:"Las interrupciones te hacen perder el hilo de trabajo complejo.", good:"Tomas notas rápidas antes de atender interrupciones para retomar fácilmente.", bad:"Atiendes interrupciones sin prepararte para retomar el trabajo."},
+  {q:"Interrumpes tu propio trabajo revisando redes sociales o noticias.", good:"Usas aplicaciones de bloqueo y estableces horarios específicos para revisar contenido personal.", bad:"Revisas redes sociales y noticias impulsivamente durante el trabajo."},
+
+  // CATEGORÍA 4: PRIORIZACIÓN Y TOMA DE DECISIONES (10 situaciones)
+  {q:"Todo parece urgente e importante al mismo tiempo.", good:"Usas matriz de Eisenhower para clasificar tareas por urgencia e importancia.", bad:"Intentas hacer todo al mismo tiempo sin priorizar."},
+  {q:"Tu jefe cambia prioridades constantemente.", good:"Documentas cambios de prioridad y comunicas el impacto en otros proyectos.", bad:"Cambias de dirección sin evaluar el costo de los cambios constantes."},
+  {q:"No sabes qué tareas delegar y cuáles hacer tú mismo.", good:"Evalúas qué requiere tu expertise específico y delegas el resto apropiadamente.", bad:"Intentas hacer todo tú mismo o delegas sin criterio claro."},
+  {q:"Procrastinas tareas importantes pero difíciles.", good:"Divides tareas complejas en pasos pequeños y estableces deadlines intermedios.", bad:"Postergas tareas difíciles hasta que se vuelven urgentes."},
+  {q:"Te distraes con tareas fáciles evitando las importantes.", good:"Completas primero 1-2 tareas importantes antes de hacer las fáciles.", bad:"Haces todas las tareas fáciles primero, dejando las importantes para después."},
+  {q:"No tienes criterios claros para evaluar qué es realmente importante.", good:"Defines criterios basados en objetivos organizacionales y personales.", bad:"Decides importancia basándote en presión externa o preferencias personales."},
+  {q:"Dedicas demasiado tiempo a perfeccionar tareas de baja importancia.", good:"Estableces estándares de calidad apropiados según la importancia de cada tarea.", bad:"Aplicas el mismo nivel de perfección a todas las tareas."},
+  {q:"No comunicas tus prioridades a tu equipo.", good:"Compartes tus prioridades regularmente y explicas el razonamiento detrás de ellas.", bad:"Trabajas con prioridades que solo tú conoces."},
+  {q:"Cambias de prioridades basándote en el último email recibido.", good:"Evalúas nuevas solicitudes contra tus prioridades establecidas antes de cambiar.", bad:"Reaccionas inmediatamente a cada nueva solicitud sin evaluación."},
+  {q:"No revisas si tus prioridades siguen siendo relevantes.", good:"Revisas semanalmente tus prioridades y las ajustas según cambios en objetivos.", bad:"Mantienes las mismas prioridades sin evaluar su relevancia actual."},
+
+  // CATEGORÍA 5: PRODUCTIVIDAD Y CONCENTRACIÓN (10 situaciones)
+  {q:"Te cuesta mantener concentración en tareas largas.", good:"Usas técnicas como Pomodoro para mantener concentración en bloques manejables.", bad:"Intentas trabajar en tareas largas sin descansos ni estructura."},
+  {q:"Tu espacio de trabajo está desorganizado y te distrae.", good:"Organizas tu espacio para minimizar distracciones y tener todo lo necesario a mano.", bad:"Trabajas en un espacio caótico que constantemente te distrae."},
+  {q:"Multitarea constantemente y no completas nada bien.", good:"Te enfocas en una tarea a la vez hasta completarla o llegar a un punto de parada natural.", bad:"Saltas entre múltiples tareas sin completar ninguna adecuadamente."},
+  {q:"Tu energía decae significativamente después del almuerzo.", good:"Planificas tareas que requieren menos concentración para después del almuerzo.", bad:"Intentas hacer trabajo complejo cuando tu energía está baja."},
+  {q:"No tienes rutinas que te ayuden a entrar en modo de trabajo.", good:"Desarrollas rituales de inicio que te ayuden a entrar en estado de concentración.", bad:"Empiezas a trabajar sin preparación mental o física."},
+  {q:"Te distraes fácilmente con pensamientos no relacionados con el trabajo.", good:"Mantienes una libreta para anotar pensamientos distractores y revisarlos después.", bad:"Sigues cada pensamiento distractor, perdiendo concentración constantemente."},
+  {q:"No sabes cuándo eres más productivo durante el día.", good:"Observas tus patrones de energía y programas trabajo importante en tus horas pico.", bad:"Trabajas de manera uniforme sin considerar variaciones en tu productividad."},
+  {q:"Trabajas en tareas complejas cuando hay muchas distracciones.", good:"Programas trabajo complejo para momentos con menos interrupciones.", bad:"Intentas hacer trabajo que requiere concentración en momentos de alta distracción."},
+  {q:"No tomas descansos y tu productividad disminuye.", good:"Programas descansos regulares para mantener energía y concentración.", bad:"Trabajas sin parar pensando que serás más productivo."},
+  {q:"Tu productividad varía mucho sin entender por qué.", good:"Llevas registro de factores que afectan tu productividad para identificar patrones.", bad:"Aceptas variaciones en productividad sin analizar las causas."},
+
+  // CATEGORÍA 6: GESTIÓN DE DEADLINES Y PROYECTOS (10 situaciones)
+  {q:"Siempre entregas proyectos a último momento.", good:"Planificas hacia atrás desde el deadline, incluyendo buffer para imprevistos.", bad:"Empiezas proyectos sin planificación temporal hasta que el deadline se acerca."},
+  {q:"Subestimas constantemente el tiempo necesario para proyectos.", good:"Usas experiencias pasadas y consultas con otros para hacer estimaciones realistas.", bad:"Haces estimaciones optimistas sin considerar complejidad real."},
+  {q:"No comunicas retrasos hasta que es demasiado tarde.", good:"Monitoreas progreso regularmente y comunicas riesgos de retraso temprano.", bad:"Esperas hasta el último momento para comunicar que no cumplirás el deadline."},
+  {q:"Trabajas horas extra constantemente para cumplir deadlines.", good:"Planificas mejor y negocias deadlines realistas en lugar de compensar con horas extra.", bad:"Aceptas deadlines imposibles y compensas trabajando más horas."},
+  {q:"No tienes visibilidad del progreso real de tus proyectos.", good:"Estableces hitos intermedios y revisas progreso regularmente.", bad:"Solo evalúas progreso cuando alguien pregunta o se acerca el deadline."},
+  {q:"Múltiples deadlines coinciden en la misma semana.", good:"Planificas con anticipación para distribuir trabajo y evitar acumulación.", bad:"Trabajas intensivamente cuando los deadlines se acumulan."},
+  {q:"No consideras dependencias entre tareas al planificar.", good:"Identificas dependencias críticas y las planificas en el orden correcto.", bad:"Planificas tareas sin considerar qué debe completarse antes que otras."},
+  {q:"Cambios de alcance afectan tus deadlines pero no los ajustas.", good:"Renegocías deadlines cuando el alcance cambia significativamente.", bad:"Intentas cumplir deadlines originales a pesar de cambios en el alcance."},
+  {q:"No tienes plan de contingencia para cuando las cosas salen mal.", good:"Identificas riesgos principales y desarrollas planes alternativos.", bad:"Asumes que todo saldrá según el plan sin preparar alternativas."},
+  {q:"Entregas trabajo de calidad inferior por presión de tiempo.", good:"Negocias alcance o deadline para mantener estándares de calidad apropiados.", bad:"Sacrificas calidad para cumplir deadlines sin comunicar el impacto."},
+
+  // CATEGORÍA 7: COMUNICACIÓN Y COORDINACIÓN (10 situaciones)
+  {q:"Pierdes tiempo en emails que no requieren respuesta.", good:"Desarrollas criterios claros sobre qué emails requieren respuesta y cuáles son informativos.", bad:"Respondes a todos los emails sin evaluar si es necesario."},
+  {q:"No comunicas tu disponibilidad y otros asumen que siempre estás libre.", good:"Mantienes tu calendario actualizado y comunicas claramente tu disponibilidad.", bad:"Permites que otros asuman tu disponibilidad sin comunicar tus límites."},
+  {q:"Reuniones de seguimiento consumen mucho tiempo sin agregar valor.", good:"Estructuras seguimientos eficientes con agendas claras y tiempo limitado.", bad:"Permites que seguimientos se conviertan en reuniones largas sin estructura."},
+  {q:"No delegas efectivamente porque toma tiempo explicar.", good:"Inviertes tiempo inicial en explicar bien para ahorrar tiempo a largo plazo.", bad:"Haces todo tú mismo porque 'es más rápido' que explicar."},
+  {q:"Malentendidos generan retrabajo y pérdida de tiempo.", good:"Confirmas comprensión mutua y documentas decisiones importantes.", bad:"Asumes que todos entendieron sin verificar comprensión."},
+  {q:"No tienes procesos claros para coordinar con tu equipo.", good:"Estableces procesos de comunicación y coordinación claros con tu equipo.", bad:"Coordinas de manera ad-hoc, creando confusión y pérdida de tiempo."},
+  {q:"Esperas respuestas inmediatas y te frustras cuando no las recibes.", good:"Comunicas expectativas de tiempo de respuesta y planificas considerando demoras.", bad:"Asumes que todos responderán inmediatamente y no planificas demoras."},
+  {q:"No actualizas a stakeholders sobre el progreso de proyectos.", good:"Estableces rutina de comunicación regular sobre progreso de proyectos.", bad:"Solo comunicas cuando te preguntan, creando ansiedad en stakeholders."},
+  {q:"Reuniones de coordinación se vuelven sesiones de resolución de problemas.", good:"Separas coordinación de resolución de problemas en reuniones diferentes.", bad:"Permites que coordinación se convierta en sesiones largas de troubleshooting."},
+  {q:"No tienes claridad sobre quién es responsable de qué tareas.", good:"Defines responsabilidades claramente y las comunicas a todos los involucrados.", bad:"Asumes que las responsabilidades están claras sin documentarlas."},
+
+  // CATEGORÍA 8: BALANCE Y BIENESTAR (10 situaciones)
+  {q:"Trabajas constantemente fuera del horario laboral.", good:"Estableces límites claros entre trabajo y vida personal y los comunicas.", bad:"Permites que el trabajo invada constantemente tu tiempo personal."},
+  {q:"No tomas vacaciones porque 'hay mucho trabajo'.", good:"Planificas vacaciones con anticipación y preparas tu ausencia apropiadamente.", bad:"Postergas vacaciones indefinidamente, afectando tu bienestar y productividad."},
+  {q:"El estrés por tiempo afecta tu calidad de trabajo.", good:"Identificas fuentes de estrés temporal y desarrollas estrategias de manejo.", bad:"Trabajas bajo estrés constante sin abordar las causas subyacentes."},
+  {q:"No tienes tiempo para desarrollo profesional.", good:"Bloqueas tiempo específico para aprendizaje como inversión en tu futuro.", bad:"Postergas desarrollo profesional hasta tener 'tiempo libre'."},
+  {q:"Saltas comidas o comes en tu escritorio constantemente.", good:"Programas tiempo para comidas como parte esencial de tu productividad.", bad:"Sacrificas comidas para trabajar más, afectando tu energía."},
+  {q:"No haces ejercicio porque 'no tienes tiempo'.", good:"Integras actividad física en tu rutina como inversión en energía y productividad.", bad:"Eliminas ejercicio completamente para dedicar más tiempo al trabajo."},
+  {q:"Trabajas cuando estás enfermo, siendo menos productivo.", good:"Reconoces que descansar cuando estás enfermo es más eficiente a largo plazo.", bad:"Trabajas enfermo, prolongando la enfermedad y reduciendo productividad."},
+  {q:"No tienes tiempo para relaciones importantes en tu vida.", good:"Programas tiempo para relaciones importantes como prioridad no negociable.", bad:"Sacrificas relaciones personales por demandas laborales."},
+  {q:"Tu espacio de trabajo no favorece tu bienestar.", good:"Optimizas tu espacio para comodidad, ergonomía y bienestar mental.", bad:"Trabajas en condiciones que afectan tu salud y productividad."},
+  {q:"No reconoces señales de burnout hasta que es demasiado tarde.", good:"Monitoreas tu bienestar regularmente y tomas medidas preventivas.", bad:"Ignoras señales de agotamiento hasta que afecta significativamente tu desempeño."},
+
+  // CATEGORÍA 9: HERRAMIENTAS Y SISTEMAS (10 situaciones)
+  {q:"Usas múltiples sistemas que no se integran entre sí.", good:"Seleccionas herramientas que se integren o usas conectores para sincronizar información.", bad:"Mantienes sistemas separados que requieren duplicar trabajo."},
+  {q:"Pierdes tiempo buscando información en múltiples lugares.", good:"Centralizas información importante en un sistema organizado y accesible.", bad:"Guardas información en múltiples lugares sin sistema de organización."},
+  {q:"No aprovechas automatización para tareas repetitivas.", good:"Identificas procesos repetitivos y los automatizas donde sea posible.", bad:"Realizas manualmente tareas que podrían automatizarse."},
+  {q:"Tu sistema de gestión de tareas es demasiado complejo.", good:"Usas un sistema simple que realmente uses consistentemente.", bad:"Implementas sistemas complejos que abandonas por ser difíciles de mantener."},
+  {q:"No tienes backup de información importante.", good:"Implementas sistemas de respaldo automático para información crítica.", bad:"Confías en que nunca perderás información importante."},
+  {q:"Cambias constantemente de herramientas de productividad.", good:"Evalúas herramientas cuidadosamente y te comprometes con las que eliges.", bad:"Cambias de herramienta constantemente buscando la solución perfecta."},
+  {q:"No capacitas a tu equipo en herramientas que podrían ahorrar tiempo.", good:"Inviertes tiempo en capacitar al equipo en herramientas que mejoren la eficiencia.", bad:"Cada persona usa sus propias herramientas sin coordinación."},
+  {q:"Usas herramientas obsoletas que ralentizan tu trabajo.", good:"Evalúas regularmente si tus herramientas siguen siendo las más eficientes.", bad:"Te aferras a herramientas familiares aunque sean ineficientes."},
+  {q:"No mides la efectividad de tus herramientas de productividad.", good:"Evalúas regularmente si las herramientas realmente mejoran tu productividad.", bad:"Usas herramientas sin evaluar si realmente te ayudan."},
+  {q:"Tu flujo de trabajo digital es ineficiente.", good:"Optimizas tu flujo de trabajo digital para minimizar cambios de contexto.", bad:"Trabajas con flujos ineficientes que requieren múltiples cambios entre aplicaciones."},
+
+  // CATEGORÍA 10: MEJORA CONTINUA (10 situaciones)
+  {q:"Repites los mismos errores de gestión de tiempo.", good:"Analizas regularmente qué funciona y qué no, ajustando tu enfoque.", bad:"Continúas con los mismos hábitos sin reflexionar sobre su efectividad."},
+  {q:"No mides tu productividad real.", good:"Estableces métricas simples para evaluar tu productividad y progreso.", bad:"Trabajas sin medir si realmente estás siendo más eficiente."},
+  {q:"No buscas feedback sobre tu gestión del tiempo.", good:"Pides feedback regular sobre tu eficiencia y puntualidad.", bad:"Asumes que tu gestión del tiempo es buena sin buscar perspectivas externas."},
+  {q:"No experimentas con nuevas técnicas de productividad.", good:"Pruebas nuevas técnicas de manera controlada y adoptas las que funcionan.", bad:"Te quedas con los mismos métodos sin explorar mejores alternativas."},
+  {q:"No adaptas tu gestión del tiempo a cambios en tu rol.", good:"Ajustas tus estrategias de tiempo según evoluciona tu trabajo y responsabilidades.", bad:"Usas las mismas técnicas sin considerar cambios en tu contexto laboral."},
+  {q:"No compartes técnicas efectivas con tu equipo.", good:"Compartes estrategias que funcionan y aprendes de las técnicas de otros.", bad:"Guardas tus técnicas efectivas sin ayudar a mejorar la eficiencia del equipo."},
+  {q:"No tienes visión a largo plazo para tu productividad.", good:"Planificas cómo quieres que evolucione tu eficiencia y productividad.", bad:"Mejoras tu gestión del tiempo de manera reactiva sin visión estratégica."},
+  {q:"No celebras mejoras en tu gestión del tiempo.", good:"Reconoces y celebras cuando implementas mejoras exitosas en tu productividad.", bad:"Implementas mejoras sin reconocer el progreso logrado."},
+  {q:"No documentas procesos que te funcionan bien.", good:"Documentas procesos efectivos para poder replicarlos y enseñarlos.", bad:"Desarrollas procesos efectivos pero no los documentas para uso futuro."},
+  {q:"No consideras el impacto de tu gestión del tiempo en otros.", good:"Evalúas cómo tu gestión del tiempo afecta a tu equipo y stakeholders.", bad:"Te enfocas solo en tu propia eficiencia sin considerar el impacto en otros."}
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) { 
+  for(let i = a.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [a[i], a[j]] = [a[j], a[i]]; 
+  } 
+  return a; 
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{t: item.good, ok: true}, {t: item.bad, ok: false}]
+    : [{t: item.bad, ok: false}, {t: item.good, ok: true}];
+
+  const difSel = dificultad[pos] || null;
+
+  const html = `
+    <div class="situation-text">${item.q}</div>
+    
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+      </div>
+    </div>
+  `;
+  document.getElementById("screen").innerHTML = html;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      // Disable all buttons
+      document.querySelectorAll("#screen .option-btn").forEach(btn => {
+        btn.disabled = true;
+      });
+      
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+      
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.textContent = "✓";
+        fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+        setTimeout(() => { next(); }, 1200);
+      } else {
+        b.classList.add("incorrect");
+        // Highlight the correct one
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") {
+            btn.classList.add("correct");
+          }
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.textContent = "✗";
+        fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { 
+  idx = (idx + 1) % SITUACIONES.length; 
+  render(); 
+}
+
+function prev() { 
+  idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; 
+  render(); 
+}
+
+function reshuffle() { 
+  order = shuffle([...order]); 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+function resetAll() { 
+  idx = 0; 
+  puntos = 0; 
+  intentos = 0; 
+  order = [...Array(SITUACIONES.length).keys()]; 
+  for (const k in dificultad) delete dificultad[k]; 
+  render(); 
+}
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+setProgress(0, SITUACIONES.length);
+render();
+</script>
+</body>
+</html>
