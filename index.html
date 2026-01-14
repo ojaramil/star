@@ -1250,8 +1250,17 @@
     // ============================================================
     // CONFIGURACIÓN DE API
     // ============================================================
-    // IMPORTANTE: Reemplazar con la URL de tu Google Apps Script desplegado
     const API_URL = 'https://script.google.com/macros/s/AKfycbyQXYELpZVYAbcRcXFPkFGH8nQQVTAs-d4owkORUYZmlUS2rGewTzjdWPZp3kKQapEr/exec';
+
+    // Helper para llamar al API (Google Apps Script requiere seguir redirects)
+    async function callAPI(params) {
+      const url = API_URL + '?' + new URLSearchParams(params).toString();
+      const response = await fetch(url, {
+        method: 'GET',
+        redirect: 'follow'
+      });
+      return await response.json();
+    }
 
     // ============================================================
     // GESTIÓN DE STARID
@@ -1289,8 +1298,7 @@
         // Intentar registrar con servidor
         try {
           status.textContent = 'Conectando...';
-          const response = await fetch(`${API_URL}?action=register`);
-          const data = await response.json();
+          const data = await callAPI({ action: 'register' });
 
           if (data.success && data.starid) {
             currentStarId = data.starid;
@@ -1320,8 +1328,11 @@
         const progreso = JSON.parse(localStorage.getItem('star-progreso') || '{}');
 
         // Guardar progreso en servidor
-        const response = await fetch(`${API_URL}?action=saveProgress&starid=${currentStarId}&data=${encodeURIComponent(JSON.stringify(progreso))}`);
-        const data = await response.json();
+        const data = await callAPI({
+          action: 'saveProgress',
+          starid: currentStarId,
+          data: JSON.stringify(progreso)
+        });
 
         if (data.success) {
           status.textContent = '✓ Sincronizado';
@@ -1345,8 +1356,7 @@
 
       try {
         status.textContent = 'Recuperando...';
-        const response = await fetch(`${API_URL}?action=recover&starid=${starid.toUpperCase()}`);
-        const data = await response.json();
+        const data = await callAPI({ action: 'recover', starid: starid.toUpperCase() });
 
         if (data.success) {
           currentStarId = data.starid;
