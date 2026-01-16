@@ -1,0 +1,8 @@
+# Robots.txt para star.aspergerparaasperger.org
+# Bloquear todos los motores de búsqueda
+
+User-agent: *
+Disallow: /
+
+# No indexar ninguna página
+Noindex: /
