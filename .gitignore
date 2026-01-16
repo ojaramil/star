@@ -12,3 +12,6 @@ Thumbs.db
 # Temp files
 *.tmp
 *.log
+# Archivos fuente (no subir)
+app-star-source.html
+node_modules/
