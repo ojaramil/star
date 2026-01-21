@@ -37,7 +37,19 @@
     min-height: 100vh;
   }
   
-  /* Navegación */
+  
+    /* Iconos */
+    .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+    .icon-sm { width: 1em; height: 1em; }
+    .icon-lg { width: 1.5em; height: 1.5em; }
+    .icon-xl { width: 2em; height: 2em; }
+    
+    .nav-back-icon { font-size: inherit; color: var(--text-muted); }
+    .situation-title { display: flex; align-items: center; gap: 8px; }
+    .feedback-icon { font-size: inherit; }
+    .header-badge { backdrop-filter: blur(4px); }
+
+    /* Navegación */
   .nav {
     background: white;
     padding: 12px 24px;
@@ -65,15 +77,15 @@
   }
   
   .nav-back-icon {
-    width: 36px;
-    height: 36px;
-    background: var(--bg-secondary);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-  }
+            width: 36px;
+            height: 36px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
   
   .nav-logo img {
     height: 40px;
@@ -300,15 +312,14 @@
   }
   
   .feedback-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
   
   .feedback.correct .feedback-icon {
     background: var(--green);
@@ -468,7 +479,7 @@
 <!-- Navegación -->
 <nav class="nav">
   <a href="app-star.html" class="nav-back">
-    <span class="nav-back-icon">←</span>
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
     <span>Volver al inicio</span>
   </a>
   <div class="nav-logo">
@@ -480,7 +491,7 @@
 <header class="header">
   <div class="header-container">
     <span class="header-badge">
-      <span>👥</span>
+      <svg class="icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
       <span>Habilidades Sociales</span>
     </span>
     <h1>💬 Inicio y Mantenimiento de Conversaciones</h1>
@@ -491,15 +502,15 @@
 <!-- Stats Bar -->
 <div class="stats-bar">
   <div class="stat-item" id="counter">
-    <span>📍</span>
+    <svg class="icon text-muted" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
     <span>1 / 100</span>
   </div>
   <div class="stat-item highlight" id="scoreKpi">
-    <span>⭐</span>
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
     <span>0 puntos</span>
   </div>
   <div class="stat-item" id="accKpi">
-    <span>🎯</span>
+    <svg class="icon text-muted" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
     <span>0% aciertos</span>
   </div>
   <div class="progress-container">
@@ -515,7 +526,7 @@
   <!-- Situation Card -->
   <div class="situation-card">
     <div class="situation-header">
-      <span class="situation-title">📋 Situación</span>
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
       <span class="situation-number" id="caseNum">Caso #1</span>
     </div>
     <div class="situation-body" id="screen">
@@ -527,24 +538,24 @@
   <div class="controls-card">
     <div class="controls-grid">
       <button class="control-btn" id="prev">
-        <span>←</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         <span>Anterior</span>
       </button>
       <button class="control-btn primary" id="next">
         <span>Siguiente</span>
-        <span>→</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
       </button>
       <button class="control-btn" id="shuffle">
-        <span>🔀</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
         <span>Mezclar</span>
       </button>
       <button class="control-btn" id="reset">
-        <span>🔄</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
         <span>Reiniciar</span>
       </button>
     </div>
     <div class="tip-box">
-      <span>💡</span>
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
       <span>Consejo: Aplica esta habilidad en un ejemplo real y registra cómo te funcionó.</span>
     </div>
   </div>
@@ -692,10 +703,10 @@ function shuffle(a) {
 }
 
 function setProgress(i, total) {
-  document.getElementById("counter").innerHTML = `<span>📍</span><span>${i + 1} / ${total}</span>`;
+  document.getElementById("counter").innerHTML = `<svg class="icon text-muted" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
   const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
-  document.getElementById("scoreKpi").innerHTML = `<span>⭐</span><span>${puntos} puntos</span>`;
-  document.getElementById("accKpi").innerHTML = `<span>🎯</span><span>${acc}% aciertos</span>`;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon text-muted" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
   document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
   document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
 }
@@ -728,9 +739,15 @@ function render() {
     <div class="difficulty-section">
       <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
       <div class="difficulty-tags">
-        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">🟢 Fácil</span>
-        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">🟡 Requiere práctica</span>
-        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">🔴 Difícil</span>
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde">
+            <svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil
+        </span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo">
+            <svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica
+        </span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo">
+            <svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil
+        </span>
       </div>
     </div>
   `;
@@ -753,7 +770,7 @@ function render() {
         puntos++;
         b.classList.add("correct");
         fb.className = "feedback correct show";
-        fbIcon.textContent = "✓";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
         fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
         setTimeout(() => { next(); }, 1200);
       } else {
@@ -765,7 +782,7 @@ function render() {
           }
         });
         fb.className = "feedback incorrect show";
-        fbIcon.textContent = "✗";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
         fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
       }
       setProgress(idx, SITUACIONES.length);
