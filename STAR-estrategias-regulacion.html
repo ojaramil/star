@@ -472,7 +472,12 @@
     }
   }
 </style>
-<script src="star-sync.js"></script>
+<!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="star-sync.js"></script>
+    <script src="gamification.js"></script>
 </head>
 <body>
 
@@ -566,7 +571,30 @@
 </footer>
 
 <script>
-const SITUACIONES = [
+// Inyectar CSS de gamificación
+        if (window.STAR_GAMIFICATION) {
+            const gStyle = document.createElement('style');
+            gStyle.textContent = STAR_GAMIFICATION.getCSS();
+            document.head.appendChild(gStyle);
+        }
+
+        const HABILIDAD_KEY = getHabilidadKey();
+        let gameStats = window.STAR_GAMIFICATION ? STAR_GAMIFICATION.cargarStats(HABILIDAD_KEY) : {};
+
+        function renderGamificationBar() {
+            if (!window.STAR_GAMIFICATION) return;
+            const bar = document.getElementById('gamification-bar');
+            if (bar) {
+                bar.innerHTML = STAR_GAMIFICATION.renderXPBar(gameStats) + 
+                    '<div style="padding:8px 20px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:center;">' +
+                    STAR_GAMIFICATION.renderRachaPanel(gameStats) +
+                    STAR_GAMIFICATION.renderRecord(gameStats, HABILIDAD_KEY) +
+                    '</div>';
+            }
+        }
+        renderGamificationBar();
+
+        const SITUACIONES = [
   // 1-10 Respiración y técnicas físicas
   {q:"Previo a una entrevista notas las manos sudorosas y el pulso acelerado.", good:"Aplicas respiraciones, estiras hombros y usas una frase de autoapoyo.", bad:"Te criticas por estar nervioso y no haces nada para bajar la activación."},
   {q:"Sientes ansiedad creciendo en tu pecho.", good:"Haces respiración profunda 4-7-8 para calmar tu sistema nervioso.", bad:"Dejas que la ansiedad crezca sin hacer nada."},
@@ -772,6 +800,38 @@ function render() {
         fb.className = "feedback correct show";
         fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
         fbText.textContent = "¡Excelente! Has elegido la respuesta que fortalece la habilidad.";
+
+                        // GAMIFICACIÓN: respuesta correcta
+                        if (window.STAR_GAMIFICATION) {
+                            gameStats.rachaActual = (gameStats.rachaActual || 0) + 1;
+                            gameStats.totalAciertos = (gameStats.totalAciertos || 0) + 1;
+                            gameStats.totalIntentos = (gameStats.totalIntentos || 0) + 1;
+                            if (gameStats.rachaActual > (gameStats.rachaMejor || 0)) {
+                                gameStats.rachaMejor = gameStats.rachaActual;
+                            }
+                            const xpGanado = STAR_GAMIFICATION.calcularXP(gameStats.rachaActual);
+                            gameStats.totalXP = (gameStats.totalXP || 0) + xpGanado;
+                            if (puntos > (gameStats.record || 0)) {
+                                gameStats.record = puntos;
+                                gameStats.nuevoRecord = true;
+                            }
+                            // Mostrar XP flotante
+                            document.body.insertAdjacentHTML('beforeend', STAR_GAMIFICATION.renderXPGanada(xpGanado, gameStats.rachaActual));
+                            setTimeout(() => { const n = document.getElementById('xpNotif'); if(n) n.remove(); }, 1600);
+                            // Verificar logros
+                            gameStats.aciertosPercentSesion = intentos ? Math.round((puntos/intentos)*100) : 0;
+                            gameStats.intentosSesion = intentos;
+                            const nuevos = STAR_GAMIFICATION.verificarLogros(gameStats, gameStats.logros || []);
+                            nuevos.forEach(logro => {
+                                gameStats.logros = gameStats.logros || [];
+                                gameStats.logros.push(logro.id);
+                                document.body.insertAdjacentHTML('beforeend', STAR_GAMIFICATION.renderLogroNotificacion(logro));
+                                setTimeout(() => { const n = document.getElementById('logroNotif'); if(n) n.remove(); }, 5000);
+                            });
+                            STAR_GAMIFICATION.guardarStats(HABILIDAD_KEY, gameStats);
+                            renderGamificationBar();
+                        }
+
         setTimeout(() => { next(); }, 1200);
       } else {
         b.classList.add("incorrect");
@@ -785,6 +845,15 @@ function render() {
         fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
         fbText.textContent = "Reflexiona sobre esta situación. La respuesta correcta está resaltada en verde.";
       }
+      // GAMIFICACIÓN: respuesta incorrecta
+                        if (window.STAR_GAMIFICATION) {
+                            gameStats.rachaActual = 0;
+                            gameStats.totalIntentos = (gameStats.totalIntentos || 0) + 1;
+                            gameStats.intentosSesion = intentos;
+                            STAR_GAMIFICATION.guardarStats(HABILIDAD_KEY, gameStats);
+                            renderGamificationBar();
+                        }
+
       setProgress(idx, SITUACIONES.length);
     });
   });
