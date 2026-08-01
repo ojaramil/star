@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Reconstruir Confianza</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #06b6d4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #06b6d4, #06b6d4cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #06b6d4, #06b6d4cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M16.03 8.3L12.59 13 8.7 16.89c-.61.61-1.59.63-2.22.05l-4.24-3.9 6.27-9.56c.4-.61.35-1.42-.11-1.97-.57-.68-1.59-.72-2.2-.09L.79 6.78c-.53.53-.79 1.25-.79 1.99v3.1c0 1.22.75 2.29 1.88 2.68l7.63 2.63c1.11.38 2.33.05 3.12-.79l4.49-4.49c.6-.61.6-1.59 0-2.2-.6-.59-1.58-.6-2.18-.01l.09.01zM23.11 6.8c-.53-.53-1.39-.53-1.92 0l-1.6 1.6-1.72-1.72c-.59-.59-1.54-.59-2.13 0-.58.59-.58 1.54-.01 2.13l3.34 3.34c.53.53 1.39.53 1.92 0l2.12-2.12c.53-.53.53-1.39 0-1.92z"/></svg>
+      <span>Reparación Relacional</span>
+    </span>
+    <h1>🧱 Reconstruir Confianza</h1>
+    <p>Sostener la relación en el tiempo tras una ruptura.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 80</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "reconstruir-confianza";
+const SITUACIONES = [
+  {
+    "q": "Tras un conflicto fuerte, tu hijo/a duda en confiarte algo nuevo.",
+    "good": "Sostienes paciencia y consistencia sin exigir confianza inmediata.",
+    "bad": "Te frustras porque 'ya pediste disculpas, debería confiar de nuevo ya'."
+  },
+  {
+    "q": "Rompiste una promesa importante hace tiempo y aún lo recuerda.",
+    "good": "Demuestras con acciones sostenidas que puede confiar en tu palabra ahora.",
+    "bad": "Le dices que 'ya deje eso en el pasado' sin demostrar cambios reales."
+  },
+  {
+    "q": "Tu hijo/a se muestra cauteloso/a después de una reacción tuya desproporcionada.",
+    "good": "Mantienes reacciones calmadas de forma consistente para reconstruir seguridad.",
+    "bad": "Esperas que confíe de nuevo sin cambiar tu propio patrón de reacción."
+  },
+  {
+    "q": "Después de un malentendido grande, la comunicación se volvió más fría.",
+    "good": "Inviertes tiempo de calidad consistente para reconstruir la cercanía gradualmente.",
+    "bad": "Esperas que la cercanía vuelva sola sin ningún esfuerzo activo de tu parte."
+  },
+  {
+    "q": "Tu hijo/a duda en pedirte ayuda tras una vez que lo/la juzgaste con dureza.",
+    "good": "Le muestras con hechos que ahora puede acudir a ti sin ser juzgado/a.",
+    "bad": "Le reprochas que 'no confía en ti' sin ver tu propio rol en eso."
+  },
+  {
+    "q": "Después de romper una confidencia, tu hijo/a comparte menos contigo.",
+    "good": "Respetas el ritmo con que va recuperando la confianza para compartir de nuevo.",
+    "bad": "Presionas para que vuelva a compartir todo 'como antes' de inmediato."
+  },
+  {
+    "q": "Tu hijo/a cuestiona si cumplirás lo que dices tras varios incumplimientos.",
+    "good": "Cumples pequeños compromisos de forma consistente para reconstruir credibilidad.",
+    "bad": "Te ofendes porque 'debería confiar en tu palabra sin más pruebas'."
+  },
+  {
+    "q": "Después de un castigo injusto, tu hijo/a se muestra más distante.",
+    "good": "Reconoces el impacto y sostienes gestos consistentes de reparación en el tiempo.",
+    "bad": "Esperas que la distancia se resuelva sola sin ningún gesto reparador."
+  },
+  {
+    "q": "Tu hijo/a duda de tu apoyo tras una vez que tomaste partido injustamente en un conflicto.",
+    "good": "Demuestras con acciones futuras que puede contar con tu apoyo genuino.",
+    "bad": "Repites el patrón de tomar partido injustamente en conflictos siguientes."
+  },
+  {
+    "q": "Después de un periodo de mucha rigidez de tu parte, tu hijo/a se volvió más cerrado/a.",
+    "good": "Muestras flexibilidad genuina de forma sostenida para reabrir el vínculo.",
+    "bad": "Mantienes la misma rigidez esperando que él/ella se abra de todos modos."
+  },
+  {
+    "q": "Tu hijo/a te pregunta si esta vez 'de verdad' vas a cambiar algo.",
+    "good": "Respondes con honestidad y sostienes el cambio con acciones concretas después.",
+    "bad": "Prometes un cambio grande sin ningún plan concreto para sostenerlo."
+  },
+  {
+    "q": "Después de invalidar sus emociones varias veces, ahora duda en expresarlas.",
+    "good": "Validas consistentemente sus emociones en las próximas ocasiones para reconstruir seguridad.",
+    "bad": "Le pides que 'exprese más' sin cambiar tu propia forma de responder."
+  },
+  {
+    "q": "Tu hijo/a se muestra receloso/a de un nuevo plan tras una decepción anterior.",
+    "good": "Cumples ese nuevo plan de forma concreta para demostrar consistencia.",
+    "bad": "Le pides que 'confíe esta vez' sin ningún cambio real en tu comportamiento."
+  },
+  {
+    "q": "Después de compararlo/a negativamente, ahora evita compartir sus logros contigo.",
+    "good": "Celebras sus logros de forma genuina y consistente en adelante.",
+    "bad": "Esperas que comparta logros de nuevo sin cambiar tu forma de reaccionar."
+  },
+  {
+    "q": "Tu hijo/a se distancia tras notar que hablaste de él/ella con otros sin su permiso.",
+    "good": "Restableces el límite de confidencialidad y lo sostienes con hechos.",
+    "bad": "Minimizas la situación diciendo que 'solo hablabas con familia'."
+  },
+  {
+    "q": "Después de un periodo de mucha exigencia, tu hijo/a se siente inseguro/a de fallar contigo.",
+    "good": "Ajustas tus expectativas de forma sostenida para reconstruir seguridad emocional.",
+    "bad": "Mantienes el mismo nivel de exigencia esperando que se sienta seguro/a igual."
+  },
+  {
+    "q": "Tu hijo/a duda en pedirte perdón después de haber sido castigado/a con dureza por errores pasados.",
+    "good": "Muestras con hechos que los errores no serán castigados desproporcionadamente.",
+    "bad": "Repites el mismo patrón de castigo desproporcionado ante errores nuevos."
+  },
+  {
+    "q": "Después de faltar a varias citas importantes para él/ella, duda de tu compromiso.",
+    "good": "Priorizas consistentemente las próximas citas para reconstruir esa confianza.",
+    "bad": "Faltas de nuevo justificándote con las mismas excusas de siempre."
+  },
+  {
+    "q": "Tu hijo/a se muestra más callado/a tras notar que lo comparaste con su hermano/a.",
+    "good": "Evitas comparaciones de forma sostenida y valoras sus cualidades propias.",
+    "bad": "Sigues comparando ocasionalmente 'sin mala intención'."
+  },
+  {
+    "q": "Después de mucho tiempo de desconexión, buscas reconectar con tu hijo/a.",
+    "good": "Inviertes tiempo genuino y constante sin esperar resultados inmediatos.",
+    "bad": "Esperas reconectar con un solo gesto grande y puntual."
+  },
+  {
+    "q": "Después de forzar el contacto visual varias veces, ahora se pone tenso/a antes de reuniones familiares.",
+    "good": "Dejas de exigir contacto visual y sostienes esa aceptación de forma constante.",
+    "bad": "Esperas que se relaje de inmediato sin cambiar tu propia exigencia."
+  },
+  {
+    "q": "Tras burlarte de su tema favorito, ahora duda en compartirlo contigo.",
+    "good": "Muestras interés genuino y sostenido en su tema para reabrir ese espacio.",
+    "bad": "Le pides que 'vuelva a contarte cosas como antes' sin cambiar tu actitud."
+  },
+  {
+    "q": "Después de varios cambios de rutina sin aviso, ahora pregunta ansioso/a si algo va a cambiar.",
+    "good": "Sostienes avisos anticipados de forma consistente para devolverle previsibilidad.",
+    "bad": "Le dices que 'deje de preguntar tanto' sin ofrecer más anticipación real."
+  },
+  {
+    "q": "Tras compartir su diagnóstico sin permiso, ahora es más reservado/a sobre temas personales.",
+    "good": "Respetas su privacidad de forma sostenida para recuperar esa confianza.",
+    "bad": "Te frustras porque 'ya pediste disculpas, debería contarte todo de nuevo'."
+  },
+  {
+    "q": "Después de obligarlo/a a saludos físicos incómodos, ahora se tensa en reuniones familiares.",
+    "good": "Sostienes el respeto a su límite corporal en cada encuentro siguiente.",
+    "bad": "Esperas que se relaje solo porque 'ya pasó tiempo' sin cambiar la exigencia."
+  },
+  {
+    "q": "Tras llamar 'capricho' su sensibilidad a la ropa, ahora evita comprar ropa contigo.",
+    "good": "Validas consistentemente sus preferencias sensoriales en cada compra futura.",
+    "bad": "Le insistes en que 'ya se le pasará' sin ajustar tu propia actitud."
+  },
+  {
+    "q": "Después de dudar de su malestar físico, ahora oculta cuando no se siente bien.",
+    "good": "Le crees de forma sostenida ante señales físicas futuras.",
+    "bad": "Esperas que confíe en contarte de nuevo sin haber cambiado tu reacción."
+  },
+  {
+    "q": "Tras grabarlo/a en crisis sin permiso, ahora se aleja cuando saca el celular cerca.",
+    "good": "Guardas el celular en momentos vulnerables de forma consistente.",
+    "bad": "Le dices que 'no era para tanto' sin cambiar tu comportamiento futuro."
+  },
+  {
+    "q": "Después de comparar públicamente con su hermano/a, ahora evita hablar de logros en la mesa.",
+    "good": "Celebras sus logros de forma genuina y constante sin comparaciones.",
+    "bad": "Esperas que vuelva a compartir sin haber dejado de comparar."
+  },
+  {
+    "q": "Tras forzar un corte de pelo, ahora se resiste con más fuerza a cualquier cambio de imagen.",
+    "good": "Consultas y respetas sus preferencias sensoriales en cada ocasión futura.",
+    "bad": "Insistes en que 'ya pasó, no hay motivo para seguir resistiéndose'."
+  },
+  {
+    "q": "Después de exigir que 'se viera normal' en fotos, ahora evita las cámaras en reuniones.",
+    "good": "Dejas de exigir poses o gestos forzados en encuentros futuros.",
+    "bad": "Le pides que 'coopere un poco más' sin cambiar la exigencia de fondo."
+  },
+  {
+    "q": "Tras reaccionar con dureza a su stimming en público, ahora lo reprime frente a ti.",
+    "good": "Muestras aceptación consistente de su stimming en salidas futuras.",
+    "bad": "Esperas que vuelva a comportarse natural sin haber cambiado tu reacción."
+  },
+  {
+    "q": "Después de acusarlo/a de manipular con sus crisis, ahora minimiza lo que siente frente a ti.",
+    "good": "Le crees de forma sostenida ante nuevas señales de malestar.",
+    "bad": "Sigues dudando de cada crisis nueva pese a las disculpas dadas."
+  },
+  {
+    "q": "Tras no defenderlo/a de un comentario familiar, ahora evita contarte lo que le dicen otros.",
+    "good": "Lo/la defiendes activamente la próxima vez que ocurra algo similar.",
+    "bad": "Esperas que vuelva a confiarte esas situaciones sin cambiar tu reacción."
+  },
+  {
+    "q": "Después de comparar su progreso con expectativas de terapia, ahora oculta sus avances reales.",
+    "good": "Celebras su ritmo propio de forma sostenida en cada sesión futura.",
+    "bad": "Sigues comparando su progreso con el de otros esperando que no le afecte."
+  },
+  {
+    "q": "Tras no creerle sobre el acoso escolar, ahora deja de contarte lo que pasa en la escuela.",
+    "good": "Le crees de forma consistente y actúas ante cada nuevo relato suyo.",
+    "bad": "Esperas que vuelva a contarte todo sin haber cambiado tu escepticismo."
+  },
+  {
+    "q": "Después de minimizar sus problemas de sueño, ahora oculta cuánto le cuesta dormir.",
+    "good": "Indagas con curiosidad genuina cada vez que menciona el tema del sueño.",
+    "bad": "Le dices que 'ya deberías dormir mejor' sin cambiar tu forma de escuchar."
+  },
+  {
+    "q": "Tras interpretar su incapacidad como desafío varias veces, ahora se rinde antes de pedir ayuda.",
+    "good": "Distingues consistentemente entre 'no puede' y 'no quiere' en adelante.",
+    "bad": "Esperas que pida ayuda de nuevo sin haber cambiado tu interpretación."
+  },
+  {
+    "q": "Después de forzar conversaciones emocionales en el auto, ahora se cierra apenas subes al coche.",
+    "good": "Respetas su ritmo para hablar de emociones en cada trayecto futuro.",
+    "bad": "Insistes en que 'ya debería estar listo/a para hablar' sin dar más espacio."
+  },
+  {
+    "q": "Tras mostrar fastidio por su stimming en el coche, ahora lo contiene hasta que baja.",
+    "good": "Sostienes una actitud de aceptación constante en los viajes futuros.",
+    "bad": "Esperas que se relaje en el coche sin haber cambiado tu reacción al ruido."
+  },
+  {
+    "q": "Después de culparlo/a del estrés familiar, ahora se disculpa por cosas que no hizo.",
+    "good": "Aclaras de forma sostenida que el estrés familiar no es su responsabilidad.",
+    "bad": "Dejas que siga sintiéndose culpable sin corregir el patrón."
+  },
+  {
+    "q": "Tras cambiar rutinas sin aviso repetidamente, ahora pregunta con ansiedad los planes del día.",
+    "good": "Sostienes avisos claros y anticipados como parte de la rutina diaria.",
+    "bad": "Le dices que 'confíe en que todo va a estar bien' sin dar más previsibilidad."
+  },
+  {
+    "q": "Después de burlarte de su estrategia de afrontamiento, ahora la usa a escondidas de ti.",
+    "good": "Muestras respeto sostenido por esa estrategia en presencia de otros.",
+    "bad": "Esperas que la use abiertamente de nuevo sin haber cambiado tu actitud."
+  },
+  {
+    "q": "Tras dudar de su enfermedad en día de examen, ahora minimiza sus propios síntomas.",
+    "good": "Le crees de forma consistente ante cada malestar físico futuro.",
+    "bad": "Sigues revisando con sospecha cada vez que dice sentirse mal."
+  },
+  {
+    "q": "Después de no defenderlo/a de un familiar mayor, ahora evita esas reuniones familiares.",
+    "good": "Estableces y sostienes límites claros con esa persona en encuentros futuros.",
+    "bad": "Esperas que vuelva a asistir tranquilo/a sin haber puesto ningún límite nuevo."
+  },
+  {
+    "q": "Tras mostrar un video suyo sin permiso, ahora te pide el celular cada vez que lo sacas.",
+    "good": "Pides permiso de forma consistente antes de grabar o compartir algo suyo.",
+    "bad": "Le dices que 'confíe en ti' sin cambiar tu forma de manejar su privacidad."
+  },
+  {
+    "q": "Después de compararlo/a frente a su maestro/a, ahora oculta sus calificaciones.",
+    "good": "Reaccionas con apoyo constante ante sus resultados académicos futuros.",
+    "bad": "Esperas que comparta sus notas de nuevo sin haber dejado de comparar."
+  },
+  {
+    "q": "Tras presionarlo/a a socializar agobiado/a, ahora rechaza cualquier plan social contigo.",
+    "good": "Respetas su ritmo social y lo sostienes en cada invitación futura.",
+    "bad": "Insistes en que 'tiene que socializar más' sin ajustar la presión."
+  },
+  {
+    "q": "Después de llamar 'manía' su necesidad sensorial, ahora evita mencionar lo que le incomoda.",
+    "good": "Validas de forma sostenida sus señales sensoriales en cada ocasión.",
+    "bad": "Esperas que hable de sus incomodidades sin haber cambiado tu reacción previa."
+  },
+  {
+    "q": "Tras amenazar con quitarle su interés especial, ahora lo esconde de ti.",
+    "good": "Muestras interés genuino y sostenido por ese tema sin condicionarlo a nada.",
+    "bad": "Esperas que lo comparta de nuevo sin haber retirado la amenaza de fondo."
+  },
+  {
+    "q": "Después de decidir una terapia sin consultarle, ahora se resiste a cualquier actividad nueva.",
+    "good": "Lo/la incluyes de forma consistente en decisiones futuras sobre su proceso.",
+    "bad": "Esperas que coopere sin haberle dado ninguna voz en decisiones nuevas."
+  },
+  {
+    "q": "Tras leer su diario sin permiso, ahora esconde sus cuadernos y su celular.",
+    "good": "Respetas su privacidad de forma constante para recuperar ese espacio suyo.",
+    "bad": "Le pides que 'no tenga nada que ocultar' sin cambiar tu propio límite."
+  },
+  {
+    "q": "Después de exponerlo/a a un ambiente abrumador, ahora se resiste a salidas similares.",
+    "good": "Preparas y anticipas salidas futuras considerando sus señales de alerta.",
+    "bad": "Insistes en que 'tiene que acostumbrarse' sin ajustar la planificación."
+  },
+  {
+    "q": "Tras ignorar el feedback de un profesor, ahora tu hijo/a duda de tu apoyo en temas escolares.",
+    "good": "Colaboras de forma sostenida con la escuela en adelante.",
+    "bad": "Esperas que confíe en tu apoyo escolar sin haber cambiado tu actitud con los profesores."
+  },
+  {
+    "q": "Después de dudar de su diagnóstico en público, ahora evita hablar de sus necesidades frente a otros.",
+    "good": "Defiendes su diagnóstico de forma consistente ante cualquier duda externa.",
+    "bad": "Esperas que hable abiertamente de nuevo sin haber cambiado tu postura pública."
+  },
+  {
+    "q": "Tras comparar tu infancia con la suya varias veces, ahora se cierra cuando hablas de tu pasado.",
+    "good": "Evitas esas comparaciones de forma sostenida en conversaciones futuras.",
+    "bad": "Sigues comparando 'sin mala intención' esperando que no le afecte."
+  },
+  {
+    "q": "Después de acusarlo/a de flojera, ahora oculta su cansancio real frente a ti.",
+    "good": "Reconoces y validas su agotamiento de forma consistente en adelante.",
+    "bad": "Sigues esperando más esfuerzo sin considerar el agotamiento real."
+  },
+  {
+    "q": "Tras exigir disculpas performativas entre hermanos, ahora fingen resolver conflictos frente a ti.",
+    "good": "Facilitas espacio genuino para resolver conflictos sin forzar el ritual.",
+    "bad": "Sigues exigiendo la misma disculpa rápida en cada pelea nueva."
+  },
+  {
+    "q": "Después de ignorar una adaptación escolar acordada, la escuela y tu hijo/a dudan de tu seguimiento.",
+    "good": "Sostienes activamente cada adaptación acordada de ahora en adelante.",
+    "bad": "Prometes seguimiento sin cambiar realmente tu participación en la escuela."
+  },
+  {
+    "q": "Tras quitarle el dispositivo sin explicación, ahora desconfía de cualquier consecuencia que impones.",
+    "good": "Explicas con claridad cada consecuencia futura antes de aplicarla.",
+    "bad": "Esperas que acepte las consecuencias sin dar explicaciones distintas."
+  },
+  {
+    "q": "Después de burlarte de su sensibilidad a la comida, ahora come menos frente a otras personas.",
+    "good": "Respetas sus límites alimentarios de forma consistente en presencia de otros.",
+    "bad": "Esperas que coma tranquilo/a sin haber cambiado tu actitud sobre el tema."
+  },
+  {
+    "q": "Tras exigir un comportamiento 'normal' en salidas, ahora evita salir en familia.",
+    "good": "Aceptas su forma natural de estar en público de manera sostenida.",
+    "bad": "Insistes en que 'tiene que comportarse como los demás' en cada salida."
+  },
+  {
+    "q": "Después de confundir su máscara con bienestar real, ahora esconde más su malestar.",
+    "good": "Preguntas activamente y con calma cómo se siente realmente en la escuela.",
+    "bad": "Asumes que todo está bien mientras no diga lo contrario, como antes."
+  },
+  {
+    "q": "Tras minimizar su crisis frente a la familia, ahora evita esas celebraciones.",
+    "good": "Validas sus crisis abiertamente frente a otros en encuentros futuros.",
+    "bad": "Esperas que asista sin incomodidad sin haber cambiado tu reacción social."
+  },
+  {
+    "q": "Después de hablar mal de tu ex frente a él/ella, ahora evita el tema de la familia contigo.",
+    "good": "Mantienes los conflictos de pareja fuera de las conversaciones con tu hijo/a.",
+    "bad": "Sigues comentando el tema esperando que no le afecte esta vez."
+  },
+  {
+    "q": "Tras cancelar una adaptación por una visita, ahora duda si sostendrás sus acuerdos frente a otros.",
+    "good": "Sostienes sus adaptaciones incluso cuando hay visitas en casa.",
+    "bad": "Vuelves a priorizar la comodidad social sobre sus acuerdos."
+  },
+  {
+    "q": "Después de forzarlo/a a comer algo fuera de su lista segura, ahora desconfía de las cenas familiares.",
+    "good": "Respetas su lista de alimentos seguros de forma consistente en adelante.",
+    "bad": "Insistes en que 'tiene que variar más' en cada comida siguiente."
+  },
+  {
+    "q": "Tras usar su diagnóstico como insulto, ahora teme que lo vuelvas a usar en su contra.",
+    "good": "Evitas mencionar su diagnóstico en discusiones futuras, pase lo que pase.",
+    "bad": "Vuelves a mencionarlo en la siguiente discusión acalorada."
+  },
+  {
+    "q": "Después de amenazar con dejarlo/a en el supermercado, ahora se aferra a ti con miedo en lugares públicos.",
+    "good": "Sostienes calma y contención en cada salida pública futura.",
+    "bad": "Esperas que confíe de nuevo sin haber cambiado tu forma de reaccionar en público."
+  },
+  {
+    "q": "Tras comparar su vida social con la de su hermano/a, ahora evita las fiestas familiares.",
+    "good": "Valoras sus propias formas de socializar sin comparaciones futuras.",
+    "bad": "Sigues resaltando la facilidad de su hermano/a esperando que no le afecte."
+  },
+  {
+    "q": "Después de acusarlo/a de buscar atención con sus crisis, ahora oculta cuando está mal.",
+    "good": "Respondes con atención genuina y consistente ante nuevas señales de malestar.",
+    "bad": "Sigues dudando de cada crisis nueva pese a haberte disculpado antes."
+  },
+  {
+    "q": "Tras exigir 'verse normal' en fotos de eventos, ahora evita las cámaras familiares.",
+    "good": "Dejas de exigir poses forzadas en cada evento futuro.",
+    "bad": "Insistes en 'una foto más' esperando que coopere igual."
+  },
+  {
+    "q": "Después de ignorar su necesidad de silencio en el hospital, ahora se resiste a ir a citas médicas.",
+    "good": "Preparas ambientes más silenciosos o tranquilos para citas médicas futuras.",
+    "bad": "Esperas que tolere las esperas ruidosas sin ningún ajuste nuevo."
+  },
+  {
+    "q": "Tras acusarlo/a de flojera escolar, ahora oculta cuando la escuela le agobia.",
+    "good": "Indagas con curiosidad genuina las causas reales de su resistencia escolar.",
+    "bad": "Sigues presionando para que 'se esfuerce más' sin indagar más a fondo."
+  },
+  {
+    "q": "Después de cambiar planes de vacaciones sin avisar, ahora pregunta ansioso/a por cada detalle del viaje.",
+    "good": "Anticipas y compartes los planes de viaje de forma consistente.",
+    "bad": "Le dices que 'confíe en que todo saldrá bien' sin dar más anticipación."
+  },
+  {
+    "q": "Tras burlarte de su objeto de apoyo, ahora lo esconde antes de salir contigo.",
+    "good": "Muestras aceptación abierta de ese objeto en cada salida futura.",
+    "bad": "Esperas que lo use libremente sin haber cambiado tu actitud hacia él."
+  },
+  {
+    "q": "Después de acusarlo/a de inventar excusas escolares, ahora minimiza sus propias dificultades.",
+    "good": "Le crees de forma consistente ante nuevas dificultades escolares que mencione.",
+    "bad": "Sigues sospechando de cada excusa nueva pese a las disculpas dadas."
+  },
+  {
+    "q": "Tras no defenderlo/a de un conocido, ahora evita esas reuniones sociales contigo.",
+    "good": "Estableces límites claros y sostenidos frente a comentarios similares futuros.",
+    "bad": "Esperas que vuelva a esas reuniones sin haber cambiado tu actitud protectora."
+  },
+  {
+    "q": "Después de improvisar cambios en vacaciones sin avisar, ahora se estresa antes de cada viaje.",
+    "good": "Sostienes planificación anticipada y compartida en cada viaje futuro.",
+    "bad": "Le pides que 'aprenda a improvisar' sin dar más anticipación real."
+  },
+  {
+    "q": "Tras compararlo/a frente a un maestro, ahora oculta sus dificultades escolares de ti.",
+    "good": "Reaccionas con apoyo genuino y consistente ante cada dificultad que comparta.",
+    "bad": "Sigues comparándolo/a con otros esperando que esta vez no le afecte."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

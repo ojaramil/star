@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Respetar Tiempos de Recuperación</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #10b981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #10b981, #10b981cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #10b981cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+      <span>Regulación y Co-regulación</span>
+    </span>
+    <h1>⏳ Respetar Tiempos de Recuperación</h1>
+    <p>No forzar la conversación mientras el sistema nervioso se recupera.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "respetar-tiempos-recuperacion";
+const SITUACIONES = [
+  {
+    "q": "Tu hijo/a se encierra en su cuarto tras llegar del colegio.",
+    "good": "Le das el tiempo que necesita y te muestras disponible sin invadir.",
+    "bad": "Entras a exigir explicaciones de inmediato."
+  },
+  {
+    "q": "Después de una crisis, tu hijo/a queda en silencio largo rato.",
+    "good": "Respetas ese silencio como parte de su recuperación natural.",
+    "bad": "Le exiges que hable de lo ocurrido de inmediato."
+  },
+  {
+    "q": "Tu hijo/a se aleja tras un conflicto con un hermano/a.",
+    "good": "Le permites ese espacio antes de intentar mediar entre ambos.",
+    "bad": "Lo obligas a reconciliarse de inmediato sin dar tiempo."
+  },
+  {
+    "q": "Tras una sobrecarga sensorial, tu hijo/a parece 'apagado/a'.",
+    "good": "Le das tiempo de recuperación sin exigir actividad inmediata.",
+    "bad": "Le pides que 'reaccione' y participe enseguida."
+  },
+  {
+    "q": "Después de llorar mucho, tu hijo/a no quiere hablar del tema.",
+    "good": "Respetas que no quiera hablar ahora y dejas la puerta abierta para después.",
+    "bad": "Insistes en 'aclarar las cosas ya' aunque no esté listo/a."
+  },
+  {
+    "q": "Tu hijo/a necesita un rato a solas después de una fiesta.",
+    "good": "Le das ese tiempo antes de pedirle que cuente cómo le fue.",
+    "bad": "Le preguntas de inmediato con muchos detalles sobre la fiesta."
+  },
+  {
+    "q": "Tras un examen difícil, tu hijo/a llega en silencio.",
+    "good": "Esperas a que él/ella inicie la conversación sobre el examen.",
+    "bad": "Le preguntas insistentemente cómo le fue apenas llega."
+  },
+  {
+    "q": "Después de un berrinche, tu hijo/a tarda en volver a la normalidad.",
+    "good": "Le das el tiempo necesario sin apurar el regreso a la actividad.",
+    "bad": "Le exiges retomar la actividad de inmediato 'como si nada'."
+  },
+  {
+    "q": "Tu hijo/a se queda callado/a tras una discusión contigo.",
+    "good": "Le das espacio antes de retomar el tema en otro momento más calmado.",
+    "bad": "Sigues hablando del tema aunque él/ella ya se cerró."
+  },
+  {
+    "q": "Tras un día muy demandante, tu hijo/a rechaza toda interacción social en casa.",
+    "good": "Respetas su necesidad de aislarse temporalmente para recuperarse.",
+    "bad": "Insistes en actividades familiares porque 'ya llegó a casa'."
+  },
+  {
+    "q": "Después de una crisis en público, tu hijo/a necesita tiempo antes de volver a hablar de eso.",
+    "good": "Evitas mencionar el episodio hasta que él/ella esté listo/a.",
+    "bad": "Comentas lo ocurrido con otros delante de él/ella poco después."
+  },
+  {
+    "q": "Tu hijo/a queda muy quieto/a tras un cambio de planes brusco.",
+    "good": "Le das tiempo sin exigir que procese la noticia de inmediato.",
+    "bad": "Le pides una reacción o respuesta inmediata al cambio."
+  },
+  {
+    "q": "Después de una pelea con un amigo, tu hijo/a no quiere hablar del tema esa noche.",
+    "good": "Respetas el silencio y retomas el tema cuando él/ella lo traiga.",
+    "bad": "Insistes en hablarlo esa misma noche para 'resolverlo pronto'."
+  },
+  {
+    "q": "Tu hijo/a necesita tiempo extra en la mañana tras una noche de mal dormir.",
+    "good": "Ajustas el ritmo matutino dándole ese margen de recuperación.",
+    "bad": "Mantienes el mismo ritmo exigente de siempre."
+  },
+  {
+    "q": "Tras un cambio de colegio, tu hijo/a tarda semanas en adaptarse emocionalmente.",
+    "good": "Aceptas que el proceso de recuperación toma su propio tiempo.",
+    "bad": "Esperas una adaptación rápida y te frustras si tarda."
+  },
+  {
+    "q": "Después de una visita médica difícil, tu hijo/a queda muy sensible el resto del día.",
+    "good": "Reduces las demandas del resto del día para darle margen de recuperación.",
+    "bad": "Continúas con la agenda normal como si nada hubiera pasado."
+  },
+  {
+    "q": "Tu hijo/a se retira de una reunión familiar sin avisar.",
+    "good": "Le das el espacio y verificas después, con calma, que esté bien.",
+    "bad": "Lo persigues de inmediato exigiendo que regrese al grupo."
+  },
+  {
+    "q": "Tras un conflicto escolar, tu hijo/a no quiere que le preguntes nada al llegar.",
+    "good": "Respetas su pedido y esperas que él/ella decida cuándo hablar.",
+    "bad": "Le preguntas igual insistiendo en que 'hablar ayuda'."
+  },
+  {
+    "q": "Después de una rabieta, tu hijo/a tarda en aceptar un abrazo.",
+    "good": "Esperas a que él/ella lo busque, sin forzar el contacto físico.",
+    "bad": "Insistes en abrazarlo/a de inmediato aunque se resista."
+  },
+  {
+    "q": "Tu hijo/a necesita un día completo de descanso tras un viaje largo.",
+    "good": "Ajustas los planes siguientes para darle ese día de recuperación.",
+    "bad": "Mantienes actividades exigentes el mismo día de la llegada."
+  },
+  {
+    "q": "Tras un cumpleaños con muchos invitados, tu hijo/a se acuesta antes de lo habitual sin explicación.",
+    "good": "Respetas la necesidad de dormir temprano como parte de su recuperación tras el estímulo social.",
+    "bad": "Insistes en que se quede despierto/a para 'aprovechar la noche'."
+  },
+  {
+    "q": "Después de una mudanza, tu hijo/a tarda días en volver a jugar con normalidad.",
+    "good": "Aceptas que el proceso de asentarse toma su propio tiempo sin presionar.",
+    "bad": "Esperas que retome sus juegos de inmediato como si nada hubiera cambiado."
+  },
+  {
+    "q": "Tras un día de exámenes finales, tu hijo/a adolescente no quiere planear nada el fin de semana.",
+    "good": "Respetas su necesidad de no tener planes como forma de recuperación.",
+    "bad": "Le organizas actividades igual porque 'ya terminaron los exámenes'."
+  },
+  {
+    "q": "Después de una cirugía menor, tu hijo/a queda más irritable de lo normal por varios días.",
+    "good": "Ajustas tus expectativas de comportamiento sabiendo que está en recuperación física y emocional.",
+    "bad": "Le exiges el mismo buen humor de siempre pese a la recuperación."
+  },
+  {
+    "q": "Tras perder una competencia importante, tu hijo/a no quiere hablar de deporte por unos días.",
+    "good": "Evitas mencionar el tema hasta que él/ella lo traiga de nuevo.",
+    "bad": "Le preguntas repetidamente 'qué pasó' en los días siguientes."
+  },
+  {
+    "q": "Después de un campamento de una semana, tu hijo/a adulto joven pasa el primer día solo/a en casa.",
+    "good": "Respetas ese día de descompresión antes de esperar que retome su rutina social.",
+    "bad": "Le organizas una salida con amigos apenas regresa 'para que no pierda el ritmo'."
+  },
+  {
+    "q": "Tras un cambio de terapeuta, tu hijo/a se muestra más cerrado/a en las sesiones siguientes.",
+    "good": "Aceptas que el proceso de confianza toma tiempo, sin forzar la apertura.",
+    "bad": "Le exiges 'hablar más' en la nueva terapia desde la primera sesión."
+  },
+  {
+    "q": "Después de una discusión fuerte con un amigo/a, tu hijo/a no quiere ir a la escuela al día siguiente.",
+    "good": "Le das el espacio de un día si es posible, coordinando con la escuela, para procesar el conflicto.",
+    "bad": "Lo obligas a ir de inmediato 'para no perder clases' sin considerar su estado."
+  },
+  {
+    "q": "Tras una crisis sensorial en el cine, tu hijo/a no quiere volver a ese lugar por semanas.",
+    "good": "Respetas el tiempo que necesita antes de proponer regresar, sin presionar fechas.",
+    "bad": "Lo llevas de nuevo pronto 'para que se le pase el miedo'."
+  },
+  {
+    "q": "Después de conocer a una nueva pareja de un familiar, tu hijo/a se muestra distante varios días.",
+    "good": "Le das tiempo para procesar la novedad sin forzar cercanía con la nueva persona.",
+    "bad": "Insistes en que 'sea más amable' con la nueva pareja del familiar."
+  },
+  {
+    "q": "Tras un accidente de tránsito menor sin heridos, tu hijo/a se muestra ansioso/a al subir al auto por días.",
+    "good": "Respetas ese proceso de recuperación del susto, ajustando los viajes cuando sea posible.",
+    "bad": "Lo obligas a subir al auto normalmente 'porque no pasó nada grave'."
+  },
+  {
+    "q": "Después de una fiesta de fin de año escolar, tu hijo/a adolescente duerme hasta tarde varios días seguidos.",
+    "good": "Permites ese descanso extendido como parte de la recuperación del período escolar intenso.",
+    "bad": "Lo despiertas temprano igual 'para no perder la rutina'."
+  },
+  {
+    "q": "Tras separarse temporalmente de su mascota por una visita al veterinario, tu hijo/a queda callado/a el resto del día.",
+    "good": "Respetas su silencio y le das espacio para procesar la preocupación por la mascota.",
+    "bad": "Le insistes en hablar de otros temas para 'distraerlo/a'."
+  },
+  {
+    "q": "Después de mudarse de habitación en casa, tu hijo/a tarda en sentirse cómodo/a durmiendo ahí.",
+    "good": "Aceptas que la adaptación al nuevo espacio toma su tiempo, sin apurar el proceso.",
+    "bad": "Le dices que 'ya debería estar acostumbrado/a' tras pocos días."
+  },
+  {
+    "q": "Tras un desacuerdo fuerte con su pareja, tu hijo/a adulto joven no contesta llamadas por un par de días.",
+    "good": "Respetas su necesidad de espacio, dejando saber que estás disponible cuando quiera hablar.",
+    "bad": "Insistes en llamarlo/a repetidamente para 'saber qué pasó'."
+  },
+  {
+    "q": "Después de un cambio de médico, tu hijo/a se muestra más callado/a en las citas siguientes.",
+    "good": "Le das tiempo para generar confianza con el nuevo profesional sin forzar la comunicación.",
+    "bad": "Le exiges que 'hable más' con el nuevo médico desde la primera cita."
+  },
+  {
+    "q": "Tras perder su primer diente sin darse cuenta cómo, tu hijo/a queda inquieto/a esa noche.",
+    "good": "Le das tiempo y compañía extra esa noche sin exigir que 'ya lo supere'.",
+    "bad": "Le dices que 'no es nada' y esperas que duerma como siempre."
+  },
+  {
+    "q": "Después de un examen médico invasivo, tu hijo/a rechaza el contacto físico por el resto del día.",
+    "good": "Respetas esa necesidad de espacio corporal sin insistir en abrazos o cercanía.",
+    "bad": "Insistes en abrazarlo/a para 'consolarlo/a' aunque lo rechace."
+  },
+  {
+    "q": "Tras una discusión entre sus padres, tu hijo/a se muestra distante contigo por un par de días.",
+    "good": "Le das el tiempo que necesita para procesar, mostrándote disponible sin presionar.",
+    "bad": "Le exiges que 'hable normal' contigo de inmediato."
+  },
+  {
+    "q": "Después de un cambio de trabajo, tu hijo/a adulto joven llega a casa y se aísla varias noches seguidas.",
+    "good": "Respetas ese proceso de adaptación al nuevo entorno laboral sin cuestionar el aislamiento.",
+    "bad": "Le insistes en salir o socializar 'para distraerse' del cambio."
+  },
+  {
+    "q": "Tras un viaje escolar de varios días, tu hijo/a tarda en volver a hablar de sus amigos como antes.",
+    "good": "Aceptas que necesita procesar la experiencia a su ritmo antes de compartirla.",
+    "bad": "Le preguntas insistentemente detalles del viaje apenas llega."
+  },
+  {
+    "q": "Después de perder una mascota, tu hijo/a no quiere hablar de tener una nueva por meses.",
+    "good": "Respetas ese tiempo de duelo sin proponer una mascota nueva antes de que esté listo/a.",
+    "bad": "Le sugieres 'reemplazar' a la mascota poco después de la pérdida."
+  },
+  {
+    "q": "Tras un cambio de horario de terapia, tu hijo/a llega más cansado/a los días siguientes.",
+    "good": "Ajustas las actividades de esos días para darle margen de recuperación.",
+    "bad": "Mantienes la misma carga de actividades esperando que se adapte rápido."
+  },
+  {
+    "q": "Después de una mudanza de ciudad, tu hijo/a adolescente evita hacer nuevos amigos por semanas.",
+    "good": "Aceptas que el proceso social lleva su tiempo, sin presionar a socializar rápido.",
+    "bad": "Le organizas encuentros sociales forzados 'para que se integre ya'."
+  },
+  {
+    "q": "Tras una hospitalización breve, tu hijo/a necesita dormir con la luz prendida por un tiempo.",
+    "good": "Permites ese ajuste temporal sin insistir en volver a la oscuridad de inmediato.",
+    "bad": "Le apagas la luz diciendo que 'ya no hay motivo para tener miedo'."
+  },
+  {
+    "q": "Después de un examen de admisión importante, tu hijo/a adolescente no quiere hablar de resultados por días.",
+    "good": "Esperas a que él/ella mencione el tema cuando esté listo/a.",
+    "bad": "Le preguntas por los resultados cada día insistentemente."
+  },
+  {
+    "q": "Tras un cambio de compañero de trabajo, tu hijo/a adulto joven llega más callado/a las primeras semanas.",
+    "good": "Le das espacio para adaptarse a la nueva dinámica laboral sin exigir que comparta detalles.",
+    "bad": "Le insistes en contar todo lo que pasa en el trabajo cada día."
+  },
+  {
+    "q": "Después de una pelea física entre hermanos, ambos necesitan tiempo separados antes de estar en la misma habitación.",
+    "good": "Respetas ese tiempo de separación antes de intentar cualquier reconciliación.",
+    "bad": "Los sientas juntos de inmediato para 'resolverlo ya'."
+  },
+  {
+    "q": "Tras un simulacro de sismo en la escuela, tu hijo/a queda más alerta y ansioso/a esa tarde.",
+    "good": "Reduces las exigencias de la tarde y le das espacio para procesar la experiencia.",
+    "bad": "Continúas con la tarde normal sin considerar el impacto del simulacro."
+  },
+  {
+    "q": "Después de conocer a sus nuevos compañeros de clase, tu hijo/a llega agotado/a los primeros días.",
+    "good": "Ajustas la rutina de la tarde para darle tiempo de recuperación sensorial.",
+    "bad": "Mantienes actividades extra esos días 'para aprovechar el tiempo'."
+  },
+  {
+    "q": "Tras un desacuerdo con un profesor, tu hijo/a no quiere hablar del colegio esa noche.",
+    "good": "Respetas su silencio y dejas la conversación para cuando esté listo/a.",
+    "bad": "Insistes en resolver el tema esa misma noche."
+  },
+  {
+    "q": "Después de un chequeo dental con extracción, tu hijo/a queda muy sensible al tacto en la cara por días.",
+    "good": "Evitas el contacto físico en esa zona hasta que él/ella lo permita de nuevo.",
+    "bad": "Le tocas la cara para 'revisar cómo va' sin pedir permiso."
+  },
+  {
+    "q": "Tras un cambio de rutina de ejercicio impuesto por el colegio, tu hijo/a llega agotado/a varias tardes.",
+    "good": "Ajustas la tarde para darle tiempo de recuperación física antes de otras exigencias.",
+    "bad": "Mantienes las mismas tareas de siempre esperando el mismo rendimiento."
+  },
+  {
+    "q": "Después de participar en una obra de teatro escolar, tu hijo/a queda muy callado/a esa noche.",
+    "good": "Respetas el silencio como parte de bajar la adrenalina de la actuación.",
+    "bad": "Le pides que cuente cómo estuvo la obra apenas terminó."
+  },
+  {
+    "q": "Tras enterarse de una noticia familiar difícil, tu hijo/a adulto joven necesita unos días antes de hablar del tema.",
+    "good": "Le das ese margen, mostrándote disponible sin presionar la conversación.",
+    "bad": "Le insistes en 'hablar de sentimientos' antes de que esté listo/a."
+  },
+  {
+    "q": "Después de una competencia de matemáticas exigente, tu hijo/a no quiere estudiar nada por unos días.",
+    "good": "Permites esa pausa como parte natural de la recuperación mental.",
+    "bad": "Le exiges retomar el estudio de inmediato 'para no perder el ritmo'."
+  },
+  {
+    "q": "Tras un cambio de dieta por indicación médica, tu hijo/a se muestra irritable en las comidas por semanas.",
+    "good": "Aceptas que el ajuste alimentario toma tiempo y ajustas tus expectativas de comportamiento en la mesa.",
+    "bad": "Le exiges buena actitud en cada comida desde el primer día del cambio."
+  },
+  {
+    "q": "Después de un examen de manejo reprobado, tu hijo/a adulto joven no quiere hablar de conducir por semanas.",
+    "good": "Respetas ese tiempo antes de proponer una nueva fecha de examen.",
+    "bad": "Le insistes en programar el siguiente examen de inmediato."
+  },
+  {
+    "q": "Tras una noche sin poder dormir por ansiedad, tu hijo/a necesita una mañana más lenta al día siguiente.",
+    "good": "Ajustas el ritmo matutino permitiendo ese margen extra de recuperación.",
+    "bad": "Mantienes el mismo horario exigente de siempre esa mañana."
+  },
+  {
+    "q": "Después de un conflicto grupal en un equipo deportivo, tu hijo/a no quiere ir al entrenamiento la semana siguiente.",
+    "good": "Le das ese espacio antes de insistir en el regreso al equipo.",
+    "bad": "Lo obligas a ir de inmediato 'para no generar más problemas'."
+  },
+  {
+    "q": "Tras el nacimiento de un hermano/a, tu hijo/a mayor se muestra más necesitado/a de atención por semanas.",
+    "good": "Aceptas que el ajuste a la nueva dinámica familiar toma su tiempo y le das esa atención extra.",
+    "bad": "Le dices que 'ya está grande' para necesitar tanta atención."
+  },
+  {
+    "q": "Después de un cambio de terapia ocupacional, tu hijo/a se muestra más resistente a las actividades por unas sesiones.",
+    "good": "Aceptas que necesita tiempo para adaptarse al nuevo enfoque sin forzar la participación.",
+    "bad": "Esperas la misma disposición de siempre desde la primera sesión nueva."
+  },
+  {
+    "q": "Tras perder el celular, tu hijo/a adolescente queda muy alterado/a el resto del día.",
+    "good": "Le das espacio para procesar la pérdida antes de hablar de soluciones o reemplazo.",
+    "bad": "Le das un sermón sobre responsabilidad mientras aún está alterado/a por la pérdida."
+  },
+  {
+    "q": "Después de un cambio de aula por reparaciones, tu hijo/a llega más cansado/a de lo normal esas semanas.",
+    "good": "Reduces las exigencias en casa esos días para darle margen de recuperación.",
+    "bad": "Mantienes la misma carga de tareas esperando el mismo rendimiento de siempre."
+  },
+  {
+    "q": "Tras una crisis de pánico en un centro comercial, tu hijo/a no quiere volver a ese lugar por meses.",
+    "good": "Respetas ese tiempo, sin forzar el regreso hasta que él/ella lo proponga.",
+    "bad": "Lo llevas de nuevo pronto 'para superar el miedo de una vez'."
+  },
+  {
+    "q": "Después de una operación dental con anestesia, tu hijo/a queda desorientado/a y necesita reposo esa tarde.",
+    "good": "Cancelas otras actividades del día para darle el reposo que necesita.",
+    "bad": "Mantienes los planes del día 'porque ya pasó lo peor'."
+  },
+  {
+    "q": "Tras enterarse de que sus padres se van a divorciar, tu hijo/a necesita semanas antes de hacer preguntas.",
+    "good": "Le das ese tiempo, dejando claro que puede preguntar cuando esté listo/a.",
+    "bad": "Le exiges hablar del tema para 'aclarar todo de una vez'."
+  },
+  {
+    "q": "Después de un cambio de escuela a mitad de año, tu hijo/a tarda meses en sentirse parte del grupo.",
+    "good": "Aceptas ese ritmo de adaptación social sin comparar con otros cambios anteriores.",
+    "bad": "Te frustras porque 'ya debería estar adaptado/a' tras pocas semanas."
+  },
+  {
+    "q": "Tras un examen médico con resultados inciertos, tu hijo/a adulto joven necesita procesar la espera en soledad.",
+    "good": "Respetas su necesidad de espacio durante la espera de resultados.",
+    "bad": "Le llamas repetidamente 'para ver cómo está' durante la espera."
+  },
+  {
+    "q": "Después de una discusión pública con un amigo en la calle, tu hijo/a no quiere salir de casa por días.",
+    "good": "Le das ese tiempo, ofreciendo salidas opcionales sin presionar.",
+    "bad": "Lo obligas a salir 'para no quedarse encerrado/a'."
+  },
+  {
+    "q": "Tras un cambio de rutina por vacaciones de otro familiar en casa, tu hijo/a se muestra más irritable esos días.",
+    "good": "Ajustas expectativas sabiendo que el cambio de dinámica familiar afecta su regulación.",
+    "bad": "Le exiges el mismo comportamiento de siempre pese al cambio en casa."
+  },
+  {
+    "q": "Después de una crisis en la piscina por miedo al agua, tu hijo/a no quiere volver a nadar por meses.",
+    "good": "Respetas ese tiempo antes de proponer un regreso gradual a la piscina.",
+    "bad": "Lo obligas a entrar de nuevo pronto 'para no quedarse con el miedo'."
+  },
+  {
+    "q": "Tras un desacuerdo con abuelos sobre crianza, tu hijo/a queda confundido/a y callado/a por días.",
+    "good": "Le das espacio para procesar la confusión sin forzar una postura inmediata.",
+    "bad": "Le exiges 'tomar partido' de inmediato en el desacuerdo familiar."
+  },
+  {
+    "q": "Después de una mudanza de país, tu hijo/a adolescente tarda meses en volver a mostrar interés social.",
+    "good": "Aceptas que el duelo migratorio y social toma su propio tiempo.",
+    "bad": "Te frustras porque 'ya lleva tiempo aquí y debería estar mejor'."
+  },
+  {
+    "q": "Tras un cambio de médico especialista, tu hijo/a se muestra más ansioso/a antes de cada cita por un tiempo.",
+    "good": "Reconoces que la confianza con el nuevo especialista toma tiempo en construirse.",
+    "bad": "Le exiges 'confiar' en el nuevo médico desde la primera visita."
+  },
+  {
+    "q": "Después de perder un objeto de valor sentimental, tu hijo/a queda triste por semanas.",
+    "good": "Respetas ese duelo sin apurar que 'lo supere' o minimizar el apego al objeto.",
+    "bad": "Le dices que 'era solo un objeto' para que deje de estar triste."
+  },
+  {
+    "q": "Tras un cambio de rutina por enfermedad prolongada, tu hijo/a necesita semanas para retomar su energía habitual.",
+    "good": "Ajustas las expectativas de actividad mientras su cuerpo se recupera gradualmente.",
+    "bad": "Esperas el mismo nivel de energía de antes apenas 'se cura'."
+  },
+  {
+    "q": "Después de un examen de admisión a la universidad, tu hijo/a adulto joven no quiere hablar de planes futuros por semanas.",
+    "good": "Respetas esa pausa antes de retomar conversaciones sobre el futuro.",
+    "bad": "Le insistes en planear los siguientes pasos de inmediato tras el examen."
+  },
+  {
+    "q": "Tras una crisis de ira que rompió un objeto en casa, tu hijo/a evita esa habitación por días.",
+    "good": "Respetas esa evitación como parte de su proceso de recuperación emocional.",
+    "bad": "Lo obligas a entrar a la habitación 'para enfrentar lo que pasó'."
+  },
+  {
+    "q": "Después de un cambio de rutina por un viaje de trabajo tuyo, tu hijo/a se muestra más apegado/a al volver.",
+    "good": "Aceptas ese apego extra como necesidad temporal de reconexión, sin apurar la independencia.",
+    "bad": "Le dices que 'ya es grande' para necesitar tanto apego tras tu ausencia."
+  },
+  {
+    "q": "Tras un examen físico deportivo exigente, tu hijo/a necesita todo el fin de semana de descanso.",
+    "good": "Ajustas los planes del fin de semana para darle ese descanso completo.",
+    "bad": "Programas actividades exigentes igual 'porque ya pasó la prueba'."
+  },
+  {
+    "q": "Después de una crisis migrañosa, tu hijo/a adolescente necesita el resto del día en silencio y oscuridad.",
+    "good": "Respetas ese ambiente de recuperación sin exigir actividad ni conversación.",
+    "bad": "Enciendes luces y sigues con el plan del día como si nada."
+  },
+  {
+    "q": "Tras un desacuerdo laboral serio, tu hijo/a adulto joven no quiere hablar de trabajo los fines de semana por un tiempo.",
+    "good": "Respetas ese límite temporal, evitando el tema en esos días.",
+    "bad": "Sacas el tema del trabajo igual 'para que no se acumule'."
+  },
+  {
+    "q": "Después de un evento traumático menor en la calle, como un susto con un perro, tu hijo/a evita esa cuadra por semanas.",
+    "good": "Aceptas esa evitación temporal y buscas rutas alternativas sin presionar.",
+    "bad": "Lo haces pasar por esa cuadra igual 'para superar el miedo rápido'."
+  },
+  {
+    "q": "Tras un cambio de rutina alimentaria por alergia recién diagnosticada, tu hijo/a se muestra más ansioso/a en las comidas por semanas.",
+    "good": "Aceptas que la adaptación a la nueva normalidad alimentaria toma su tiempo.",
+    "bad": "Esperas que se acostumbre 'de inmediato' a los nuevos límites de comida."
+  },
+  {
+    "q": "Después de un cambio de compañero de banca impuesto por el colegio, tu hijo/a tarda semanas en sentirse cómodo/a de nuevo.",
+    "good": "Aceptas ese proceso de readaptación social sin comparar con la situación anterior.",
+    "bad": "Le dices que 'ya debería estar acostumbrado/a' tras pocos días."
+  },
+  {
+    "q": "Tras una crisis de ansiedad antes de un vuelo, tu hijo/a necesita el resto del viaje para recuperarse del episodio.",
+    "good": "Ajustas el ritmo de las actividades del viaje para darle ese margen de recuperación.",
+    "bad": "Continúas con el itinerario exigente como si el episodio no hubiera pasado."
+  },
+  {
+    "q": "Después de un desacuerdo con su entrenador/a, tu hijo/a no quiere hablar de deporte en la cena esa noche.",
+    "good": "Respetas ese silencio y evitas el tema durante la cena.",
+    "bad": "Sacas el tema igual en la mesa 'para resolverlo pronto'."
+  },
+  {
+    "q": "Tras un cambio de habitación de hospital durante una internación, tu hijo/a queda más inquieto/a por días.",
+    "good": "Aceptas que el nuevo entorno necesita tiempo de adaptación y ofreces objetos familiares.",
+    "bad": "Esperas que se adapte de inmediato al nuevo cuarto sin ningún apoyo extra."
+  },
+  {
+    "q": "Después de perder contra su mejor amigo/a en una competencia, tu hijo/a evita quedar con él/ella por unos días.",
+    "good": "Respetas esa distancia temporal sin forzar el reencuentro inmediato.",
+    "bad": "Organizas una salida juntos de inmediato 'para que hagan las paces ya'."
+  },
+  {
+    "q": "Tras un cambio de médico de cabecera, tu hijo/a adulto joven pospone citas médicas por semanas.",
+    "good": "Respetas ese tiempo de ajuste sin presionar para agendar de inmediato.",
+    "bad": "Le insistes en agendar la cita cuanto antes sin considerar su resistencia."
+  },
+  {
+    "q": "Después de un examen oral que salió mal, tu hijo/a no quiere participar en clase por unos días según cuenta el profesor.",
+    "good": "Aceptas ese retraimiento temporal, coordinando con el colegio sin presionar la participación.",
+    "bad": "Le exiges 'volver a participar normal' de inmediato en clase."
+  },
+  {
+    "q": "Tras un cambio de ciudad por trabajo tuyo, tu hijo/a adolescente tarda meses en abrirse a nuevos amigos.",
+    "good": "Aceptas el ritmo propio de adaptación social sin comparar con mudanzas anteriores.",
+    "bad": "Te frustras comparando con lo rápido que se adaptó en una mudanza anterior."
+  },
+  {
+    "q": "Después de un golpe emocional por una broma pesada de compañeros, tu hijo/a evita el grupo de chat por semanas.",
+    "good": "Respetas esa distancia digital como parte de su proceso de recuperación.",
+    "bad": "Le insistes en 'no ser rencoroso/a' y volver al chat de inmediato."
+  },
+  {
+    "q": "Tras una crisis por sobrecarga en un concierto, tu hijo/a no quiere ir a eventos con mucha gente por meses.",
+    "good": "Respetas ese límite temporal, ofreciendo alternativas de menor estímulo mientras tanto.",
+    "bad": "Lo llevas a otro evento similar pronto 'para que se acostumbre'."
+  },
+  {
+    "q": "Después de un cambio de rutina de sueño por un viaje con diferencia horaria, tu hijo/a necesita días para reajustarse.",
+    "good": "Ajustas expectativas de rendimiento sabiendo que el cuerpo necesita ese tiempo de reajuste.",
+    "bad": "Esperas el mismo rendimiento escolar o de comportamiento desde el primer día de regreso."
+  },
+  {
+    "q": "Tras una crisis de llanto en una boda familiar, tu hijo/a no quiere ver las fotos del evento por semanas.",
+    "good": "Respetas esa evitación sin forzar que 'vea lo bonito que salió' el evento.",
+    "bad": "Le muestras las fotos igual insistiendo en que 'se le pasó rápido'."
+  },
+  {
+    "q": "Después de un cambio de rutina por reformas en casa, tu hijo/a tarda semanas en sentirse cómodo/a en los espacios nuevos.",
+    "good": "Aceptas que la adaptación al espacio remodelado toma su tiempo propio.",
+    "bad": "Esperas que se sienta cómodo/a de inmediato porque 'la reforma quedó mejor'."
+  },
+  {
+    "q": "Tras un examen médico con múltiples pinchazos, tu hijo/a evita el contacto con jeringas o dibujos de ellas por meses.",
+    "good": "Respetas esa sensibilidad prolongada sin forzar exposiciones para 'superarlo rápido'.",
+    "bad": "Le muestras jeringas en juegos o dibujos 'para desensibilizarlo/a' sin su consentimiento."
+  },
+  {
+    "q": "Después de un desacuerdo serio con su mejor amigo/a de toda la vida, tu hijo/a adulto joven necesita meses antes de retomar el contacto.",
+    "good": "Respetas ese proceso largo de duelo de la amistad sin presionar una reconciliación rápida.",
+    "bad": "Le insistes en 'perdonar y seguir adelante' antes de que esté listo/a."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

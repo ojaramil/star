@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Co-regular Antes de Corregir</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #10b981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #10b981, #10b981cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #10b981cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+      <span>Regulación y Co-regulación</span>
+    </span>
+    <h1>🌊 Co-regular Antes de Corregir</h1>
+    <p>Bajar el nivel de activación conjunta antes de abordar la conducta.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "co-regular-antes-de-corregir";
+const SITUACIONES = [
+  {
+    "q": "Tu hijo/a grita después de que algo no salió como esperaba.",
+    "good": "Bajas tu propio tono, te acercas con calma y esperas que se regule antes de hablar de lo ocurrido.",
+    "bad": "Le exiges una explicación inmediata mientras sigue alterado/a."
+  },
+  {
+    "q": "Tu hijo/a tira un objeto con frustración.",
+    "good": "Te mantienes calmado/a físicamente cerca, sin sermonear en el momento de mayor activación.",
+    "bad": "Lo regañas fuerte de inmediato, sumando más activación."
+  },
+  {
+    "q": "Ambos están alterados tras una discusión.",
+    "good": "Te tomas un momento para bajar tu propia activación antes de continuar la conversación.",
+    "bad": "Sigues discutiendo mientras ambos están activados."
+  },
+  {
+    "q": "Tu hijo/a llora fuerte tras un cambio de planes.",
+    "good": "Te sientas cerca en silencio, ofreciendo presencia calmada antes de explicar nada.",
+    "bad": "Le explicas la lógica del cambio mientras aún llora fuerte."
+  },
+  {
+    "q": "Tu hijo/a se pone rígido/a y no responde a lo que le dices.",
+    "good": "Bajas la voz, reduces las palabras y esperas con paciencia su regulación.",
+    "bad": "Repites la pregunta cada vez más alto esperando respuesta."
+  },
+  {
+    "q": "Hay un grito en medio de una tienda por algo que quería y no obtuvo.",
+    "good": "Te agachas a su altura, bajas el tono y esperas que se calme antes de hablar de la regla.",
+    "bad": "Lo regañas en público exigiendo que se calme ya."
+  },
+  {
+    "q": "Tu hijo/a empieza a respirar agitado/a tras un conflicto con un hermano/a.",
+    "good": "Modelas respiración calmada cerca de él/ella sin exigir que la copie de inmediato.",
+    "bad": "Le dices 'respira' de forma brusca y sigues discutiendo el conflicto."
+  },
+  {
+    "q": "Tu hijo/a se enoja contigo por poner un límite.",
+    "good": "Mantienes tu calma corporal mientras sostienes el límite sin escalar el tono.",
+    "bad": "Subes la voz para igualar su intensidad emocional."
+  },
+  {
+    "q": "Notas que ambos están al borde de una discusión acalorada.",
+    "good": "Propones una pausa breve para ambos antes de seguir hablando del tema.",
+    "bad": "Insistes en resolverlo todo de inmediato mientras crece la tensión."
+  },
+  {
+    "q": "Tu hijo/a llora por una frustración escolar al llegar a casa.",
+    "good": "Te sientas con él/ella en silencio antes de preguntar detalles.",
+    "bad": "Le pides que 'deje de llorar' para poder hablar con calma."
+  },
+  {
+    "q": "Tu hijo/a se pone a gritar en medio de una tarea difícil.",
+    "good": "Bajas tu propio volumen para no sumar activación al ambiente.",
+    "bad": "Le gritas para que 'se calme' con el mismo tono elevado."
+  },
+  {
+    "q": "Un cambio inesperado provoca llanto intenso en tu hijo/a.",
+    "good": "Ofreces contacto físico calmado si lo acepta, sin exigir explicación inmediata.",
+    "bad": "Le exiges que 'actúe con madurez' en medio del llanto."
+  },
+  {
+    "q": "Tu hijo/a golpea la mesa con frustración durante la tarea.",
+    "good": "Te acercas con calma, bajas la exigencia de la tarea temporalmente.",
+    "bad": "Le exiges que continúe la tarea 'sin hacer drama'."
+  },
+  {
+    "q": "Ambos llegan alterados de un día difícil y chocan por algo pequeño.",
+    "good": "Reconoces tu propio estado y te regulas antes de responder a su conducta.",
+    "bad": "Reaccionas desde tu propio cansancio, escalando la situación."
+  },
+  {
+    "q": "Tu hijo/a se cierra y no quiere hablar tras un conflicto.",
+    "good": "Respetas el silencio, ofreciendo tu presencia disponible sin presionar.",
+    "bad": "Insistes en que hable de inmediato para 'resolverlo ya'."
+  },
+  {
+    "q": "Tu hijo/a llora al perder en un juego familiar.",
+    "good": "Te quedas cerca en calma, permitiendo la emoción antes de hablar de deportividad.",
+    "bad": "Le das un sermón sobre perder mientras aún llora."
+  },
+  {
+    "q": "Notas que tu propio tono ya subió durante una discusión con tu hijo/a.",
+    "good": "Te detienes, respiras y bajas tu propio tono conscientemente.",
+    "bad": "Sigues subiendo el tono porque 'él/ella empezó'."
+  },
+  {
+    "q": "Tu hijo/a se frustra armando algo y quiere tirarlo todo.",
+    "good": "Te acercas con calma y ofreces ayuda sin tomar el control inmediato.",
+    "bad": "Le quitas el objeto de las manos bruscamente."
+  },
+  {
+    "q": "Tu hijo/a llora por una decepción social con amigos.",
+    "good": "Te sientas con la emoción junto a él/ella antes de dar consejos.",
+    "bad": "Le das consejos de inmediato sin validar primero la emoción."
+  },
+  {
+    "q": "Hay un momento de tensión antes de salir de casa y ambos están apurados.",
+    "good": "Reconoces la prisa compartida y bajas el ritmo un momento antes de seguir.",
+    "bad": "Aumentas la presión de tiempo, subiendo la tensión de ambos."
+  },
+  {
+    "q": "Tu hijo/a pequeño se tira al piso llorando porque no quiere bañarse.",
+    "good": "Te sientas a su lado en el piso, bajas tu voz y esperas que la ola de llanto baje antes de hablar del baño.",
+    "bad": "Lo levantas a la fuerza mientras le explicas por qué debe bañarse."
+  },
+  {
+    "q": "Tu hijo/a adolescente azota la puerta después de una mala nota.",
+    "good": "Le das un momento, luego tocas suavemente y ofreces tu presencia sin exigir hablar de la nota.",
+    "bad": "Entras de inmediato exigiendo que explique la nota."
+  },
+  {
+    "q": "En medio de un berrinche en el parque, tu hijo/a grita que 'todos son malos'.",
+    "good": "Te agachas a su altura, mantienes tu tono bajo y esperas sin corregir la frase mientras está activado/a.",
+    "bad": "Le corriges la frase de inmediato diciendo que 'eso no es cierto'."
+  },
+  {
+    "q": "Tu hijo/a adulto joven llega furioso/a tras un problema en el trabajo.",
+    "good": "Le ofreces escuchar sin dar consejos ni juzgar la reacción, solo acompañar la descarga inicial.",
+    "bad": "Le das consejos de inmediato sobre cómo debió manejar la situación laboral."
+  },
+  {
+    "q": "Durante una tarea escolar, tu hijo/a rompe la hoja con frustración.",
+    "good": "Te acercas en silencio, sin comentar la hoja rota, hasta que su respiración se calme.",
+    "bad": "Le reclamas por 'desperdiciar papel' en medio de su frustración."
+  },
+  {
+    "q": "Tu hijo/a llora al despedirse de un amigo que se muda.",
+    "good": "Te quedas con la tristeza junto a él/ella, sin apurar el proceso ni minimizar la pérdida.",
+    "bad": "Le dices que 'hará nuevos amigos' mientras aún está llorando."
+  },
+  {
+    "q": "Tu hijo/a grita 'te odio' en medio de una discusión.",
+    "good": "Mantienes tu calma corporal, no tomas la frase de forma personal y esperas que baje la intensidad.",
+    "bad": "Respondes con la misma intensidad emocional, discutiendo la frase de inmediato."
+  },
+  {
+    "q": "Un hermano rompe un juguete de tu hijo/a y este/a empieza a gritar sin parar.",
+    "good": "Te pones a su altura, validas la molestia con calma antes de mediar el conflicto entre hermanos.",
+    "bad": "Exiges que 'se calme ya' para poder resolver el conflicto entre hermanos."
+  },
+  {
+    "q": "Tu hijo/a se pone a llorar durante una llamada con un familiar por videollamada.",
+    "good": "Pausas la llamada brevemente y te quedas con él/ella hasta que se calme antes de continuar.",
+    "bad": "Sigues la llamada pidiéndole que 'sonría para la cámara'."
+  },
+  {
+    "q": "Tu hijo/a adolescente llora tras terminar una relación de pareja.",
+    "good": "Te sientas cerca sin hablar del tema hasta que esté listo/a para compartir.",
+    "bad": "Le dices de inmediato que 'hay más peces en el mar' mientras llora."
+  },
+  {
+    "q": "Tu hijo/a grita de frustración al no poder armar un rompecabezas.",
+    "good": "Bajas tu voz, te sientas cerca sin tocar las piezas, esperando que se calme antes de ofrecer ayuda.",
+    "bad": "Le quitas las piezas diciendo que 'así no se hace'."
+  },
+  {
+    "q": "En una fila del supermercado, tu hijo/a empieza a llorar fuerte por cansancio.",
+    "good": "Te agachas, hablas bajo y te quedas presente sin exigir que 'se comporte' en público.",
+    "bad": "Le susurras con enojo que 'está avergonzando a la familia'."
+  },
+  {
+    "q": "Tu hijo/a adulto joven llega llorando tras una decepción amorosa.",
+    "good": "Le ofreces estar disponible en silencio, sin analizar la situación de inmediato.",
+    "bad": "Empiezas a analizar 'qué hizo mal' en la relación mientras aún llora."
+  },
+  {
+    "q": "Durante una tarea de matemáticas, tu hijo/a lanza el lápiz con frustración.",
+    "good": "Recoges el lápiz en silencio y esperas que su respiración se normalice antes de continuar.",
+    "bad": "Le exiges recoger el lápiz de inmediato y seguir con la tarea."
+  },
+  {
+    "q": "Tu hijo/a grita al perder el control remoto de un juego con amigos.",
+    "good": "Te acercas con calma, sin corregir su reacción frente a sus amigos, y esperas que se regule.",
+    "bad": "Lo regañas delante de sus amigos por 'ser mal perdedor'."
+  },
+  {
+    "q": "Tu hijo/a adolescente golpea la almohada tras una pelea con un amigo.",
+    "good": "Te quedas cerca sin comentar el golpe, ofreciendo tu presencia calmada.",
+    "bad": "Le dices que 'así no se resuelven los problemas' en medio del golpe."
+  },
+  {
+    "q": "Tu hijo/a llora al no poder ir a una fiesta por estar enfermo/a.",
+    "good": "Validas la decepción con calma, sin minimizarla ni apurar que 'lo supere'.",
+    "bad": "Le dices que 'no es para tanto' mientras llora por la fiesta perdida."
+  },
+  {
+    "q": "Tu hijo/a grita frustrado/a durante una clase de música en casa.",
+    "good": "Bajas el volumen de tu propia voz y esperas antes de retomar la práctica musical.",
+    "bad": "Subes la voz para 'motivarlo' a seguir practicando de inmediato."
+  },
+  {
+    "q": "Tu hijo/a se enoja y avienta los cubiertos en la mesa.",
+    "good": "Te mantienes en calma, retiras los cubiertos con suavidad sin sermonear en el momento.",
+    "bad": "Lo regañas fuerte por el gesto en plena mesa familiar."
+  },
+  {
+    "q": "Tu hijo/a llora al ver que su mascota está enferma.",
+    "good": "Te sientas con la tristeza junto a él/ella antes de hablar de soluciones o el veterinario.",
+    "bad": "Le explicas de inmediato el plan médico mientras aún está llorando."
+  },
+  {
+    "q": "Tu hijo/a adulto joven se frustra armando un mueble nuevo.",
+    "good": "Le preguntas con calma si quiere ayuda, sin insistir ni tomar el control de inmediato.",
+    "bad": "Le quitas las herramientas diciendo 'yo lo hago mejor' en medio de su frustración."
+  },
+  {
+    "q": "Tu hijo/a grita en el auto por quedar atrapado en el tráfico.",
+    "good": "Bajas tu propio tono de voz y ofreces algo calmante (música suave, silencio) sin exigir que se calme ya.",
+    "bad": "Le dices 'ya basta' con tono elevado mientras conduces."
+  },
+  {
+    "q": "Tu hijo/a llora tras no ser elegido/a para un equipo deportivo.",
+    "good": "Te quedas con la decepción presente, sin minimizarla ni pasar rápido a la solución.",
+    "bad": "Le dices de inmediato que 'lo logrará el próximo año' sin validar el dolor actual."
+  },
+  {
+    "q": "Tu hijo/a se pone a gritar durante una tormenta eléctrica.",
+    "good": "Te acercas físicamente, bajas tu voz y ofreces contención sin explicar la ciencia del rayo en ese momento.",
+    "bad": "Le explicas por qué no hay peligro mientras sigue gritando de miedo."
+  },
+  {
+    "q": "Tu hijo/a adolescente llora tras ser excluido/a de un grupo de chat.",
+    "good": "Validas el dolor social sin minimizarlo, esperando que esté listo/a para hablar más.",
+    "bad": "Le dices que 'son cosas de adolescentes' restando importancia al dolor."
+  },
+  {
+    "q": "Tu hijo/a grita de frustración al perder en un videojuego.",
+    "good": "Te sientas cerca sin comentar el resultado del juego, esperando que baje la intensidad.",
+    "bad": "Le apagas la consola de inmediato diciendo que 'así no se juega'."
+  },
+  {
+    "q": "Tu hijo/a llora al enterarse de que se cancela un paseo.",
+    "good": "Validas la decepción con calma antes de explicar el motivo del cambio.",
+    "bad": "Explicas el motivo del cambio de inmediato sin validar primero la tristeza."
+  },
+  {
+    "q": "Tu hijo/a adulto joven se enoja tras un desacuerdo con su pareja.",
+    "good": "Le ofreces escuchar sin opinar sobre la pareja mientras aún está alterado/a.",
+    "bad": "Das tu opinión sobre la pareja de inmediato, sumando más tensión."
+  },
+  {
+    "q": "Tu hijo/a llora fuerte al despertar de una pesadilla.",
+    "good": "Te quedas a su lado en silencio, ofreciendo contacto físico calmante antes de preguntar detalles.",
+    "bad": "Le preguntas de inmediato qué soñó, exigiendo que hable pese al susto."
+  },
+  {
+    "q": "Tu hijo/a se frustra y llora al no poder atarse los cordones.",
+    "good": "Te sientas cerca en calma, esperando que la frustración baje antes de ofrecer ayuda.",
+    "bad": "Le atas los cordones bruscamente sin dejarlo/a intentarlo de nuevo."
+  },
+  {
+    "q": "Tu hijo/a grita tras un desacuerdo con un primo/a en una reunión familiar.",
+    "good": "Bajas tu tono y te acercas a ambos con calma antes de mediar el conflicto.",
+    "bad": "Regañas a los dos en voz alta frente a toda la familia."
+  },
+  {
+    "q": "Tu hijo/a adolescente llora al ser corregido/a públicamente por un profesor.",
+    "good": "Le das espacio para procesar la vergüenza antes de hablar de lo sucedido en clase.",
+    "bad": "Le preguntas de inmediato 'qué hiciste' apenas te enteras."
+  },
+  {
+    "q": "Tu hijo/a golpea el suelo con los pies con frustración durante una espera larga.",
+    "good": "Te agachas a su nivel, bajas tu voz y esperas antes de pedirle que se detenga.",
+    "bad": "Le exiges que 'deje de patalear' con tono elevado."
+  },
+  {
+    "q": "Tu hijo/a llora tras un examen que sintió que le fue mal.",
+    "good": "Te sientas con la angustia junto a él/ella antes de hablar de estrategias de estudio.",
+    "bad": "Le das consejos de estudio de inmediato mientras aún está angustiado/a."
+  },
+  {
+    "q": "Tu hijo/a adulto joven llega alterado/a tras un problema con el auto.",
+    "good": "Le ofreces presencia calmada, dejando que descargue la frustración antes de resolver el problema.",
+    "bad": "Empiezas a resolver el problema del auto de inmediato sin atender su estado emocional."
+  },
+  {
+    "q": "Tu hijo/a grita al no encontrar su juguete favorito.",
+    "good": "Bajas tu voz, acompañas la búsqueda con calma sin apurar el momento.",
+    "bad": "Le dices que 'deje de gritar' mientras buscas el juguete con prisa."
+  },
+  {
+    "q": "Tu hijo/a llora al ver que perdió una competencia deportiva.",
+    "good": "Te quedas con la tristeza cerca de él/ella antes de hablar de lo aprendido en la competencia.",
+    "bad": "Le das un análisis de lo que hizo mal mientras aún está llorando."
+  },
+  {
+    "q": "Tu hijo/a se enoja al ser interrumpido mientras juega, y grita fuerte.",
+    "good": "Bajas tu tono, reconoces la interrupción como causa y esperas que se calme antes de explicar.",
+    "bad": "Le dices que 'no es para tanto' con tono impaciente."
+  },
+  {
+    "q": "Tu hijo/a adolescente llora tras un comentario hiriente de un compañero.",
+    "good": "Validas el dolor sin minimizarlo, esperando que quiera compartir más detalles.",
+    "bad": "Le dices que 'no le dé importancia' a lo que dijo el compañero."
+  },
+  {
+    "q": "Tu hijo/a grita frustrado/a porque no entiende una instrucción de un juego de mesa.",
+    "good": "Bajas la voz, simplificas la instrucción con calma, sin corregir su reacción.",
+    "bad": "Le repites la misma instrucción más fuerte y más rápido."
+  },
+  {
+    "q": "Tu hijo/a llora al ver una película triste.",
+    "good": "Te quedas con la emoción cerca de él/ella, sin apagar la película de inmediato ni minimizar el llanto.",
+    "bad": "Le dices que 'es solo una película' mientras llora."
+  },
+  {
+    "q": "Tu hijo/a adulto joven se frustra intentando aprender a manejar.",
+    "good": "Mantienes tu propio tono calmado al volante, sin corregir cada error mientras está tenso/a.",
+    "bad": "Corriges cada error de manejo con tono impaciente, aumentando su tensión."
+  },
+  {
+    "q": "Tu hijo/a llora al equivocarse en una presentación escolar frente a la clase.",
+    "good": "Le das espacio para procesar la vergüenza antes de hablar de la presentación.",
+    "bad": "Le explicas de inmediato qué hizo mal en la presentación."
+  },
+  {
+    "q": "Tu hijo/a se enoja porque su comida favorita no está disponible en el restaurante.",
+    "good": "Bajas tu tono, validas la decepción antes de ofrecer alternativas del menú.",
+    "bad": "Le dices que 'no sea difícil' y elige por él/ella de inmediato."
+  },
+  {
+    "q": "Tu hijo/a llora tras un pinchazo de vacuna.",
+    "good": "Te quedas cerca ofreciendo contención física, sin apurar que 'ya pasó' de inmediato.",
+    "bad": "Le dices que 'ya fue, no es nada' apenas empieza a llorar."
+  },
+  {
+    "q": "Tu hijo/a adolescente grita tras perder el acceso a su celular por una regla incumplida.",
+    "good": "Mantienes tu calma sosteniendo el límite, sin escalar el tono ante su enojo.",
+    "bad": "Subes la voz para igualar su reacción ante la consecuencia."
+  },
+  {
+    "q": "Tu hijo/a llora al no poder resolver un cubo de Rubik después de intentarlo mucho.",
+    "good": "Te sientas cerca en silencio, validando el esfuerzo antes de ofrecer alguna pista.",
+    "bad": "Le resuelves el cubo tú mismo/a diciendo que 'así se hace'."
+  },
+  {
+    "q": "Tu hijo/a se frustra y grita durante una clase de natación.",
+    "good": "Hablas con el instructor para dar espacio de calma antes de retomar el ejercicio.",
+    "bad": "Le exiges continuar el ejercicio de inmediato pese al grito."
+  },
+  {
+    "q": "Tu hijo/a llora al recibir una crítica de un familiar sobre su comportamiento.",
+    "good": "Te acercas en calma, validando el dolor antes de hablar del comentario del familiar.",
+    "bad": "Defiendes al familiar de inmediato sin atender la emoción de tu hijo/a."
+  },
+  {
+    "q": "Tu hijo/a adulto joven llega enojado/a tras un conflicto con un compañero de piso.",
+    "good": "Escuchas su frustración sin tomar partido de inmediato ni dar soluciones apresuradas.",
+    "bad": "Le dices de inmediato qué debería haber hecho diferente con su compañero."
+  },
+  {
+    "q": "Tu hijo/a llora porque se le cayó su helado en la calle.",
+    "good": "Validas la tristeza real del momento, sin decir que 'es solo un helado'.",
+    "bad": "Le dices que 'no es para tanto' y sigues caminando de inmediato."
+  },
+  {
+    "q": "Tu hijo/a se enoja al no poder terminar un dibujo como quería.",
+    "good": "Te sientas cerca en silencio, sin corregir el dibujo mientras está frustrado/a.",
+    "bad": "Le arreglas el dibujo tú mismo/a sin que lo pida."
+  },
+  {
+    "q": "Tu hijo/a adolescente grita tras enterarse de que canceló un plan con amigos por lluvia.",
+    "good": "Validas la frustración por el plan perdido antes de ofrecer alternativas.",
+    "bad": "Le dices que 'ya lo hará otro día' sin validar la frustración presente."
+  },
+  {
+    "q": "Tu hijo/a llora al ver que un compañero se burló de su trabajo escolar.",
+    "good": "Te quedas con el dolor emocional antes de hablar de qué hacer con la situación en el colegio.",
+    "bad": "Llamas al colegio de inmediato sin antes acompañar la emoción de tu hijo/a."
+  },
+  {
+    "q": "Tu hijo/a grita porque no logra abrir un frasco.",
+    "good": "Te acercas con calma ofreciendo ayuda sin quitarle el frasco de las manos bruscamente.",
+    "bad": "Le arrebatas el frasco diciendo 'dámelo, yo lo hago'."
+  },
+  {
+    "q": "Tu hijo/a adulto joven llora tras recibir una noticia médica preocupante de un amigo.",
+    "good": "Te quedas presente escuchando sin minimizar ni dar soluciones inmediatas.",
+    "bad": "Cambias rápido de tema para 'no ponerse triste'."
+  },
+  {
+    "q": "Tu hijo/a se frustra y grita durante el armado de una manualidad escolar.",
+    "good": "Bajas tu voz y ofreces simplificar un paso sin tomar el control total.",
+    "bad": "Terminas la manualidad tú mismo/a para 'que quede bien'."
+  },
+  {
+    "q": "Tu hijo/a llora al perder su lugar favorito en la mesa por un cambio de asientos.",
+    "good": "Validas la molestia por el cambio antes de explicar el motivo del nuevo orden.",
+    "bad": "Le dices que 'no importa dónde se siente' sin validar su malestar."
+  },
+  {
+    "q": "Tu hijo/a grita tras no poder resolver un problema de matemáticas en clase online.",
+    "good": "Bajas tu tono y ofreces una pausa antes de retomar el problema juntos.",
+    "bad": "Le explicas el problema con impaciencia mientras sigue frustrado/a."
+  },
+  {
+    "q": "Tu hijo/a llora tras una llamada telefónica difícil con un abuelo/a enfermo/a.",
+    "good": "Te quedas con la tristeza cerca de él/ella sin apurar que hable de lo que sintió.",
+    "bad": "Le preguntas de inmediato detalles de la llamada mientras aún está llorando."
+  },
+  {
+    "q": "Tu hijo/a adolescente grita al descubrir que un amigo compartió algo privado suyo.",
+    "good": "Validas la traición sentida antes de pensar juntos en qué hacer al respecto.",
+    "bad": "Minimizas diciendo que 'no es tan grave' lo que compartió el amigo."
+  },
+  {
+    "q": "Tu hijo/a se enoja y grita al perder en un juego de cartas familiar.",
+    "good": "Mantienes tu calma, sin sermonear sobre 'saber perder' en el momento del enojo.",
+    "bad": "Le das un sermón sobre deportividad mientras aún está enojado/a."
+  },
+  {
+    "q": "Tu hijo/a llora al notar que olvidó su tarea en casa el día de la entrega.",
+    "good": "Te quedas con su angustia antes de pensar juntos en una solución con el colegio.",
+    "bad": "Le reclamas de inmediato por 'descuidado/a' sumando más angustia."
+  },
+  {
+    "q": "Tu hijo/a adulto joven se frustra al no conseguir empleo tras varias entrevistas.",
+    "good": "Escuchas su desánimo sin ofrecer soluciones apresuradas ni comparaciones con otros.",
+    "bad": "Le comparas con otros que 'ya encontraron trabajo' en medio de su desánimo."
+  },
+  {
+    "q": "Tu hijo/a grita frustrado/a porque el wifi se cae durante un videojuego con amigos.",
+    "good": "Bajas tu tono y ofreces ayudar con calma sin minimizar la frustración tecnológica.",
+    "bad": "Le dices que 'son solo videojuegos' restando importancia a su frustración."
+  },
+  {
+    "q": "Tu hijo/a llora al ver que llovió el día de su paseo escolar.",
+    "good": "Validas la decepción real antes de buscar una actividad alternativa.",
+    "bad": "Le dices de inmediato 'ya habrá otro paseo' sin validar la tristeza actual."
+  },
+  {
+    "q": "Tu hijo/a se frustra y grita durante el armado de una pista de carreras de juguete.",
+    "good": "Te sientas cerca ofreciendo ayuda solo si la pide, manteniendo la calma.",
+    "bad": "Armas la pista tú mismo/a diciendo que 'así se hace más rápido'."
+  },
+  {
+    "q": "Tu hijo/a llora tras enterarse de que un familiar no podrá visitar como esperaba.",
+    "good": "Te quedas con la decepción antes de explicar los motivos del cambio de planes.",
+    "bad": "Explicas los motivos de inmediato sin validar primero la tristeza."
+  },
+  {
+    "q": "Tu hijo/a adolescente grita al sentir que no fue escuchado/a en una discusión familiar.",
+    "good": "Bajas tu tono, reconoces que quiere ser escuchado/a y esperas antes de responder.",
+    "bad": "Sigues hablando por encima de sus gritos para 'terminar de explicar'."
+  },
+  {
+    "q": "Tu hijo/a llora al ver que se rompió un dibujo que había hecho con esfuerzo.",
+    "good": "Te quedas con la tristeza real del momento, sin decir que 'se puede hacer otro' de inmediato.",
+    "bad": "Le dices que 'no es nada, haz otro' apenas ves el dibujo roto."
+  },
+  {
+    "q": "Tu hijo/a se enoja al perder una partida de ajedrez contra ti.",
+    "good": "Mantienes tu calma sin explicar la jugada ganadora mientras sigue enojado/a.",
+    "bad": "Le explicas de inmediato en qué se equivocó, aumentando su frustración."
+  },
+  {
+    "q": "Tu hijo/a adulto joven llora tras un desacuerdo fuerte contigo por un tema económico.",
+    "good": "Bajas tu propio tono y esperas que ambos se calmen antes de seguir hablando del tema.",
+    "bad": "Insistes en resolver el tema económico de inmediato mientras ambos están alterados."
+  },
+  {
+    "q": "Tu hijo/a grita frustrado/a al no poder abrir la mochila con el cierre atascado.",
+    "good": "Te acercas con calma ofreciendo ayudar, sin quitarle la mochila de las manos bruscamente.",
+    "bad": "Le arrebatas la mochila diciendo 'dámela, la abro yo'."
+  },
+  {
+    "q": "Tu hijo/a llora al ver que su equipo deportivo favorito perdió un partido importante.",
+    "good": "Te quedas con la tristeza deportiva junto a él/ella sin minimizarla.",
+    "bad": "Le dices que 'es solo un juego' mientras aún está llorando."
+  },
+  {
+    "q": "Tu hijo/a se enoja porque le tocó el asiento de en medio en un viaje familiar largo.",
+    "good": "Validas la incomodidad antes de buscar una solución de turnos para los asientos.",
+    "bad": "Le dices que 'deje de quejarse' y que se aguante todo el viaje."
+  },
+  {
+    "q": "Tu hijo/a adolescente grita al enterarse de que canceló su publicación en redes por privacidad.",
+    "good": "Bajas tu tono, escuchas su frustración antes de explicar el motivo de la decisión.",
+    "bad": "Explicas el motivo de inmediato sin dar espacio a su enojo primero."
+  },
+  {
+    "q": "Tu hijo/a llora al no poder terminar un rompecabezas antes de la hora de dormir.",
+    "good": "Validas la frustración por dejarlo inconcluso, ofreciendo continuar al día siguiente con calma.",
+    "bad": "Le dices que 'ya es tarde, se acabó' sin validar su frustración."
+  },
+  {
+    "q": "Tu hijo/a se frustra y grita durante un ensayo de baile para un evento escolar.",
+    "good": "Bajas tu tono, ofreces un descanso breve antes de retomar el ensayo.",
+    "bad": "Le exiges repetir el paso de baile de inmediato pese a la frustración."
+  },
+  {
+    "q": "Tu hijo/a adulto joven llora tras recibir una crítica dura de un jefe/a en el trabajo.",
+    "good": "Escuchas su dolor sin analizar de inmediato si la crítica fue justa o no.",
+    "bad": "Le das tu opinión sobre si la crítica del jefe fue merecida mientras aún llora."
+  },
+  {
+    "q": "Tu hijo/a grita al ver que se acabó su programa favorito justo antes del final.",
+    "good": "Validas la frustración por el corte inesperado antes de buscar cómo ver el final después.",
+    "bad": "Le dices que 'no es tan importante' un programa de televisión."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

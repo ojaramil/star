@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Detectar Sesgos Neurotípicos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #f59e0b, #f59e0bcc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #f59e0b, #f59e0bcc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+      <span>Flexibilidad Cognitiva del Padre</span>
+    </span>
+    <h1>🪞 Detectar Sesgos Neurotípicos</h1>
+    <p>Reconocer cuándo se juzga la conducta desde una única forma de ser "normal".</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "detectar-sesgos-neurotipicos";
+const SITUACIONES = [
+  {
+    "q": "Piensas que tu hijo/a 'debería' hacer amigos como los demás niños.",
+    "good": "Te preguntas si esa expectativa viene de una norma social, no de una necesidad real de tu hijo/a.",
+    "bad": "Presionas para que socialice 'como todos' sin cuestionar el estándar."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a hable en tercera persona o de forma inusual.",
+    "good": "Reconoces que esa forma de hablar no es 'incorrecta', solo distinta.",
+    "bad": "Lo corriges constantemente para que hable 'normal'."
+  },
+  {
+    "q": "Esperas que tu hijo/a mire a los ojos al hablar, como 'debe ser'.",
+    "good": "Cuestionas de dónde viene esa regla y si es realmente necesaria para él/ella.",
+    "bad": "Insistes en el contacto visual porque 'así se hace'."
+  },
+  {
+    "q": "Te frustra que tu hijo/a no disfrute actividades 'típicas' de su edad.",
+    "good": "Revisas si tu frustración viene de una comparación social más que de su bienestar real.",
+    "bad": "Lo empujas a esas actividades para que 'encaje'."
+  },
+  {
+    "q": "Piensas que jugar solo/a mucho tiempo 'no es sano'.",
+    "good": "Te informas sobre si esa creencia aplica igual a un perfil neurodivergente.",
+    "bad": "Interrumpes su juego solitario asumiendo que algo anda mal."
+  },
+  {
+    "q": "Te preocupa lo que otros piensen del comportamiento de tu hijo/a en público.",
+    "good": "Reconoces que esa preocupación es sobre la mirada social, no sobre su bienestar.",
+    "bad": "Corriges su conducta en público principalmente por el qué dirán."
+  },
+  {
+    "q": "Esperas que tu hijo/a exprese emociones de la forma convencional (llorar, abrazar).",
+    "good": "Aceptas que su expresión emocional puede verse distinta sin ser menos válida.",
+    "bad": "Le dices que 'no siente' porque no expresa como esperas."
+  },
+  {
+    "q": "Comparas el desarrollo de tu hijo/a con tablas estándar de hitos.",
+    "good": "Contextualizas esas tablas como promedios neurotípicos, no como única meta válida.",
+    "bad": "Te alarmas solo por no cumplir el hito exacto en el tiempo esperado."
+  },
+  {
+    "q": "Sientes vergüenza cuando tu hijo/a hace stimming en público.",
+    "good": "Examinas de dónde viene esa vergüenza y la separas del bienestar de tu hijo/a.",
+    "bad": "Le pides que pare el stimming solo por la mirada ajena."
+  },
+  {
+    "q": "Piensas que un interés intenso y específico es 'obsesivo' en tono negativo.",
+    "good": "Reconoces que ese interés puede ser una fortaleza, no una anomalía a corregir.",
+    "bad": "Intentas reducir el tiempo dedicado a su interés porque 'no es normal'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje el cambio con la misma facilidad que otros niños.",
+    "good": "Ajustas la expectativa reconociendo que la flexibilidad ante el cambio varía por perfil.",
+    "bad": "Te enojas porque 'otros niños se adaptan más rápido'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no tenga 'suficientes' amigos.",
+    "good": "Evalúas la calidad de sus vínculos según sus propios términos, no una cantidad estándar.",
+    "bad": "Presionas para que tenga más amigos por presión social externa."
+  },
+  {
+    "q": "Piensas que necesitar rutinas fijas es un signo de 'debilidad'.",
+    "good": "Reconoces que la previsibilidad es una herramienta legítima de regulación.",
+    "bad": "Intentas 'curarlo/a' de la necesidad de rutina forzando cambios constantes."
+  },
+  {
+    "q": "Sientes que debes disculparte con otros por la forma de ser de tu hijo/a.",
+    "good": "Te preguntas si esa necesidad de disculpa refleja un sesgo social más que un problema real.",
+    "bad": "Te disculpas constantemente frente a otros por su forma natural de ser."
+  },
+  {
+    "q": "Esperas que tu hijo/a disfrute el mismo tipo de diversión que sus hermanos.",
+    "good": "Reconoces que el disfrute puede verse distinto según su perfil sensorial e intereses.",
+    "bad": "Lo obligas a participar en las mismas diversiones 'para que sea como los demás'."
+  },
+  {
+    "q": "Te incomoda cuando tu hijo/a corrige detalles técnicos en una conversación casual.",
+    "good": "Reconoces que esa precisión es parte de su forma de procesar, no una falta de tacto.",
+    "bad": "Le dices que 'deje de ser tan quisquilloso' con los detalles."
+  },
+  {
+    "q": "Piensas que debería 'superar' su necesidad de objetos de apoyo sensorial.",
+    "good": "Cuestionas si esa expectativa responde a una edad estándar más que a su necesidad real.",
+    "bad": "Le retiras el objeto porque 'ya está grande para eso'."
+  },
+  {
+    "q": "Sientes que un profesional 'normaliza demasiado' cuando valida a tu hijo/a.",
+    "good": "Te abres a considerar que el enfoque afirmativo puede ser más útil que el enfoque de corrección.",
+    "bad": "Descartas el enfoque neuroafirmativo porque 'no exige suficiente cambio'."
+  },
+  {
+    "q": "Esperas que tu hijo/a disfrute el contacto físico igual que el resto de la familia.",
+    "good": "Respetas su nivel propio de comodidad con el contacto físico.",
+    "bad": "Insistes en abrazos y besos porque 'así se demuestra cariño en la familia'."
+  },
+  {
+    "q": "Piensas que hablar mucho de un tema específico es 'falta de habilidad social'.",
+    "good": "Reconoces que puede ser su forma genuina de conectar y compartir entusiasmo.",
+    "bad": "Le interrumpes constantemente para 'enseñarle a socializar mejor'."
+  },
+  {
+    "q": "Tu hijo/a pequeño/a prefiere alinear sus juguetes en vez de jugar 'a hacer de cuenta'.",
+    "good": "Reconoces que el juego funcional es igual de válido que el juego simbólico convencional.",
+    "bad": "Le enseñas insistentemente a jugar 'a la casita' porque 'así juegan los niños normales'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a adolescente prefiera escribir mensajes en vez de llamar por teléfono.",
+    "good": "Te preguntas si tu incomodidad viene de tu propia costumbre, no de una necesidad real de él/ella.",
+    "bad": "Le exiges que llame porque 'los mensajes son de flojos'."
+  },
+  {
+    "q": "Esperas que tu hijo/a adulto/a joven quiera vivir solo/a apenas cumpla la mayoría de edad.",
+    "good": "Cuestionas si esa expectativa responde a una norma social más que a su bienestar real.",
+    "bad": "Le presionas a mudarse 'porque ya es hora, así se hace'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no muestre interés en la moda o el vestuario de sus compañeros.",
+    "good": "Reconoces que su despreocupación por la apariencia no es un problema a corregir.",
+    "bad": "Insistes en que 'se arregle mejor' para encajar con el grupo."
+  },
+  {
+    "q": "Piensas que tu hijo/a 'debería' disfrutar una fiesta sorpresa como cualquier niño.",
+    "good": "Consideras que la sorpresa puede generarle ansiedad en vez de alegría, y ajustas la idea.",
+    "bad": "Organizas la sorpresa igual, esperando que reaccione con el entusiasmo esperado."
+  },
+  {
+    "q": "Te molesta que tu hijo/a no se ría de los chistes familiares en la sobremesa.",
+    "good": "Aceptas que su sentido del humor puede no coincidir con el de la familia sin que eso sea un fallo.",
+    "bad": "Le dices que 'no tiene sentido del humor' delante de todos."
+  },
+  {
+    "q": "Piensas que un adolescente 'debería' querer salir de fiesta los fines de semana.",
+    "good": "Reconoces que su forma de disfrutar el tiempo libre puede ser distinta sin ser un problema.",
+    "bad": "Le insistes en salir 'para que tenga vida social como cualquier joven'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a hable con un tono de voz monótono en las llamadas familiares.",
+    "good": "Separas tu incomodidad de la idea de que algo anda mal en él/ella.",
+    "bad": "Le pides que 'ponga más entusiasmo en la voz' cuando habla con la familia."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a quiera compartir sus juguetes espontáneamente con otros niños.",
+    "good": "Reconoces que compartir puede costarle más y no es un signo de mal carácter.",
+    "bad": "Lo obligas a prestar sus juguetes 'para que aprenda a compartir como todos'."
+  },
+  {
+    "q": "Piensas que hablar solo/a en voz baja mientras juega es preocupante.",
+    "good": "Te informas y reconoces que el habla autodirigida puede ser parte de su forma de procesar.",
+    "bad": "Le dices que 'deje de hablar solo' porque 'se ve raro'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a adolescente no quiera tener pareja romántica todavía.",
+    "good": "Reconoces que el interés romántico en su propio tiempo no es un retraso a corregir.",
+    "bad": "Le insinúas que 'ya debería estar saliendo con alguien' a su edad."
+  },
+  {
+    "q": "Esperas que tu hijo/a disfrute los deportes de equipo por el compañerismo.",
+    "good": "Aceptas que puede preferir el movimiento individual sin que eso sea una carencia social.",
+    "bad": "Lo inscribes igual en el equipo 'para que aprenda a trabajar en grupo'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a no quiera sonreír para la foto familiar de fin de año.",
+    "good": "Reconoces que su expresión facial en fotos no define su bienestar real.",
+    "bad": "Insistes varias veces en que sonría 'como se debe' hasta lograrlo."
+  },
+  {
+    "q": "Piensas que necesitar el mismo peluche a los diez años es 'demasiado infantil'.",
+    "good": "Cuestionas de dónde viene esa idea de edad límite y respetas su necesidad actual.",
+    "bad": "Le retiras el peluche porque 'ya no tiene edad para eso'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no quiera opinar en los debates de sobremesa familiares.",
+    "good": "Reconoces que participar en voz alta no es la única forma de estar presente e involucrado.",
+    "bad": "Lo presionas a dar su opinión 'para que se anime como los demás'."
+  },
+  {
+    "q": "Esperas que tu hijo/a pruebe con entusiasmo la comida típica de un país que visitan.",
+    "good": "Aceptas que su cautela alimentaria en viajes es parte de su perfil sensorial, no mala educación.",
+    "bad": "Le insistes en probar todo 'para no quedar mal' frente a los anfitriones."
+  },
+  {
+    "q": "Piensas que un adolescente 'debería' querer sacar la licencia de conducir apenas puede.",
+    "good": "Reconoces que el ritmo para asumir esa independencia puede variar sin ser un atraso.",
+    "bad": "Le presionas a tramitar la licencia 'porque ya todos sus amigos la tienen'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a evite las fiestas de fin de año con muchos invitados.",
+    "good": "Separas tu propia expectativa social del bienestar real que él/ella necesita.",
+    "bad": "Lo obligas a quedarse toda la fiesta 'porque hay que ser sociable en Navidad'."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a te cuente su día espontáneamente al salir del colegio.",
+    "good": "Aceptas que puede necesitar tiempo y silencio antes de poder compartir, sin forzarlo.",
+    "bad": "Le exiges que hable de inmediato porque 'los niños normales cuentan su día'."
+  },
+  {
+    "q": "Piensas que necesitar que le repitan una instrucción varias veces es 'no escuchar'.",
+    "good": "Reconoces que el procesamiento auditivo puede requerir repetición sin ser falta de atención.",
+    "bad": "Le dices que 'nunca escucha' y subes el tono cada vez que repites."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a adolescente pase mucho tiempo en su cuarto en vez de con la familia.",
+    "good": "Consideras que ese tiempo a solas puede ser su forma de recargarse, no rechazo familiar.",
+    "bad": "Le exiges 'bajar más' porque 'aislarse tanto no es sano'."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda una indirecta social sin que se la expliquen.",
+    "good": "Reconoces que comunicar de forma directa es más justo para su forma de procesar.",
+    "bad": "Te frustras porque 'ya debería captar las indirectas a su edad'."
+  },
+  {
+    "q": "Piensas que un niño que prefiere hablar con adultos antes que con niños de su edad tiene un problema.",
+    "good": "Consideras que puede sentirse más cómodo con esas conversaciones sin que sea preocupante.",
+    "bad": "Le insistes en jugar con niños de su edad 'porque así corresponde'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a no quiera abrazar a los abuelos al llegar de visita.",
+    "good": "Respetas su límite de contacto físico y ofreces un saludo alternativo, sin obligarlo.",
+    "bad": "Le dices 'dale un abrazo a la abuela' delante de todos hasta que cede."
+  },
+  {
+    "q": "Esperas que tu hijo/a adulto/a joven tenga un trabajo de oficina tradicional de tiempo completo.",
+    "good": "Reconoces que el bienestar laboral puede lograrse fuera de ese molde específico.",
+    "bad": "Le insistes en buscar 'un trabajo serio y estable' descartando otras opciones."
+  },
+  {
+    "q": "Piensas que necesitar auriculares en una fiesta familiar es 'antisocial'.",
+    "good": "Reconoces que es una herramienta de regulación sensorial, no un rechazo a la familia.",
+    "bad": "Le pides que se los quite 'porque parece que no quiere estar con nosotros'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no quiera aprender a manejar redes sociales como sus compañeros.",
+    "good": "Aceptas que su interés por la tecnología social puede ser distinto sin que sea un atraso.",
+    "bad": "Le insistes en abrir cuentas 'para que no quede afuera de su generación'."
+  },
+  {
+    "q": "Esperas que un niño pequeño juegue a las peleas o luchas como otros niños de su edad.",
+    "good": "Reconoces que su desinterés por ese tipo de juego es simplemente una preferencia, no debilidad.",
+    "bad": "Lo empujas a jugar bruscamente 'para que sea más varonil o fuerte'."
+  },
+  {
+    "q": "Piensas que evitar el contacto visual en videollamadas familiares es descortesía.",
+    "good": "Reconoces que puede procesar mejor la conversación sin mirar directamente la pantalla.",
+    "bad": "Le insistes en 'mirar a la cámara' durante toda la llamada."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a no disfrute de deportes de comparación o competencia.",
+    "good": "Valoras que puede disfrutar el movimiento sin necesidad de competir contra otros.",
+    "bad": "Lo inscribes en competencias igual 'para que aprenda a ganar y perder'."
+  },
+  {
+    "q": "Esperas que tu hijo/a necesite el mismo asiento en la mesa siempre porque 'ya se acostumbrará' a cambiar.",
+    "good": "Reconoces que ese lugar fijo le da una previsibilidad real y necesaria, no un capricho.",
+    "bad": "Le cambias el lugar a propósito 'para que se flexibilice'."
+  },
+  {
+    "q": "Piensas que un adolescente 'debería' querer un trabajo de medio tiempo como sus amigos.",
+    "good": "Consideras que su ritmo hacia la independencia laboral puede ser distinto sin ser un fracaso.",
+    "bad": "Le presionas a buscar trabajo 'porque a su edad ya deberías estar generando dinero'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a se quede en silencio largos ratos durante una sesión de terapia.",
+    "good": "Reconoces que el silencio también puede ser parte de su proceso, no falta de compromiso.",
+    "bad": "Le exiges 'hablar más' en terapia porque 'para eso estás pagando'."
+  },
+  {
+    "q": "Esperas que tu hijo/a disfrute actividades multitudinarias como conciertos o ferias.",
+    "good": "Aceptas que su forma de disfrutar puede requerir menos estímulo y multitud.",
+    "bad": "Lo llevas igual esperando que 'se acostumbre si va seguido'."
+  },
+  {
+    "q": "Piensas que necesitar permiso explícito para cada decisión pequeña es inmadurez.",
+    "good": "Reconoces que la necesidad de claridad explícita reduce su ansiedad, no señala inmadurez.",
+    "bad": "Le dices que 'ya debería decidir solo cosas tan simples'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a no capte un chiste visual o una broma gestual en la tele.",
+    "good": "Le explicas el chiste con gusto sin juzgar que 'no lo entendió'.",
+    "bad": "Te burlas frente a otros de que 'nunca entiende nada'."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a juegue en el parque con otros niños en vez de solo/a en un rincón.",
+    "good": "Reconoces que jugar solo/a también es una forma legítima de disfrutar el parque.",
+    "bad": "Lo empujas hacia el grupo de niños diciendo que 'así no se hacen amigos'."
+  },
+  {
+    "q": "Piensas que evitar deportes de contacto físico es cobardía.",
+    "good": "Reconoces que su elección responde a preferencia sensorial, no a falta de valentía.",
+    "bad": "Le insistes en anotarse en un deporte de contacto 'para que se haga más fuerte'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a adolescente no quiera compartir su vida en redes sociales.",
+    "good": "Respetas su elección de privacidad como una decisión válida y no un problema social.",
+    "bad": "Le insistes en publicar más 'porque así se hace amigos hoy en día'."
+  },
+  {
+    "q": "Esperas que un hijo pequeño disfrute Halloween disfrazándose y saliendo a pedir dulces.",
+    "good": "Ofreces alternativas si la actividad tradicional le resulta abrumadora, sin imponerla.",
+    "bad": "Lo obligas a participar completo 'porque a todos los niños les encanta Halloween'."
+  },
+  {
+    "q": "Piensas que tu hijo/a 'debería' entender las reglas no escritas del vestuario social en cada evento.",
+    "good": "Le explicas explícitamente qué se espera en cada ocasión en vez de asumir que lo intuirá.",
+    "bad": "Te avergüenzas de su ropa 'inapropiada' sin haberle explicado antes qué se esperaba."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a necesite listas escritas para tareas simples de la casa.",
+    "good": "Reconoces que ese apoyo visual es una herramienta legítima, no una señal de déficit.",
+    "bad": "Le dices que 'ya debería acordarse solo, sin listas, a su edad'."
+  },
+  {
+    "q": "Esperas que tu hijo/a disfrute el fútbol o el deporte que sigue el resto de la familia.",
+    "good": "Aceptas que sus intereses deportivos pueden ser distintos sin que eso decepcione tu vínculo con él/ella.",
+    "bad": "Le insistes en 'hacerse hincha' del mismo equipo familiar por tradición."
+  },
+  {
+    "q": "Piensas que el bajo interés de tu hijo/a adolescente por el teléfono es raro para su generación.",
+    "good": "Reconoces que no encajar en ese patrón generacional no es un problema a resolver.",
+    "bad": "Le insistes en 'usarlo más' porque 'todos los jóvenes están pegados al celular'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no quiera jugar a disfrazarse o representar personajes.",
+    "good": "Aceptas que el juego imaginativo puede no ser su forma preferida de disfrutar.",
+    "bad": "Le compras disfraces igual insistiendo en que 'juegue como los demás niños'."
+  },
+  {
+    "q": "Esperas que un hijo adulto joven quiera formar pareja y casarse en algún momento.",
+    "good": "Reconoces que su plan de vida puede no incluir esos hitos convencionales y aun así ser pleno.",
+    "bad": "Le preguntas insistentemente 'cuándo vas a sentar cabeza' comparándolo con sus primos."
+  },
+  {
+    "q": "Piensas que necesitar el mismo trayecto exacto al colegio todos los días es una manía a corregir.",
+    "good": "Reconoces que esa previsibilidad reduce su ansiedad diaria de forma real.",
+    "bad": "Cambias la ruta a propósito 'para que se acostumbre a lo distinto'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a no muestre curiosidad por probar restaurantes nuevos en un viaje.",
+    "good": "Planificas alternativas conocidas para él/ella sin forzar la experiencia nueva.",
+    "bad": "Insistes en que 'tiene que abrirse a cosas nuevas' en cada comida del viaje."
+  },
+  {
+    "q": "Esperas que tu hijo/a exprese alegría visible al abrir un regalo, como el resto de primos.",
+    "good": "Reconoces que su expresión de alegría puede ser más contenida sin ser menos genuina.",
+    "bad": "Le dices 'muéstrate más feliz' delante de la familia que regaló."
+  },
+  {
+    "q": "Piensas que jugar con niños más pequeños que él/ella es un signo de inmadurez.",
+    "good": "Reconoces que puede sentirse más cómodo con esa dinámica sin que sea un retroceso.",
+    "bad": "Le prohíbes jugar con los más chicos 'para que se junte con los de su edad'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no quiera compartir su cuarto con visitas en una reunión familiar.",
+    "good": "Respetas su espacio como una necesidad legítima, no un gesto egoísta.",
+    "bad": "Le exiges ceder su cuarto 'porque así se comparte en familia'."
+  },
+  {
+    "q": "Esperas que un adolescente disfrute discutir política o actualidad como el resto de adultos en la mesa.",
+    "good": "Aceptas que su interés en esos temas puede ser distinto sin que sea un déficit social.",
+    "bad": "Lo presionas a opinar 'para que aprenda a debatir como un adulto'."
+  },
+  {
+    "q": "Piensas que necesitar el mismo menú en cada comida es 'una manía de crianza mal manejada'.",
+    "good": "Reconoces que la selectividad alimentaria puede tener una base sensorial real.",
+    "bad": "Culpas tu propia crianza y fuerzas variedad en cada comida para 'corregirlo'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a hable con mucho entusiasmo de temas que a los demás no interesan.",
+    "good": "Reconoces que compartir su interés intenso es su forma genuina de vincularse.",
+    "bad": "Le pides que 'cambie de tema' porque 'aburre a todo el mundo'."
+  },
+  {
+    "q": "Esperas que tu hijo/a se emocione igual que tú en un funeral familiar.",
+    "good": "Aceptas que su procesamiento del duelo puede verse distinto sin ser frialdad.",
+    "bad": "Le dices que 'no le importó nada' porque no lloró como esperabas."
+  },
+  {
+    "q": "Piensas que tu hijo/a 'debería' disfrutar de los deportes de invierno como el resto de la familia.",
+    "good": "Reconoces que su sensibilidad al frío o al movimiento puede ser distinta, sin forzarlo.",
+    "bad": "Lo obligas a esquiar 'porque en esta familia todos esquían'."
+  },
+  {
+    "q": "Te preocupa que un hijo adulto joven prefiera vivir con sus padres más tiempo del esperado.",
+    "good": "Evalúas su bienestar real en vez de compararlo con una edad social estándar de independencia.",
+    "bad": "Le presionas a irse 'porque a tu edad ya deberías estar solo'."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a disfrute los juegos de manos y canciones infantiles grupales.",
+    "good": "Aceptas que puede preferir observar desde el margen sin participar activamente.",
+    "bad": "Lo tomas de la mano a la fuerza para que participe 'como los demás niños'."
+  },
+  {
+    "q": "Piensas que necesitar el mismo horario de sueño incluso en vacaciones es rigidez excesiva.",
+    "good": "Reconoces que mantener el horario le da estabilidad real durante el viaje.",
+    "bad": "Rompes su horario a propósito 'porque en vacaciones hay que relajar las reglas'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a no quiera compartir detalles de su vida amorosa contigo.",
+    "good": "Respetas su privacidad como una elección válida y no un distanciamiento preocupante.",
+    "bad": "Le insistes en que te cuente todo 'porque en esta familia no hay secretos'."
+  },
+  {
+    "q": "Esperas que tu hijo/a disfrute ir de compras de ropa como una salida divertida.",
+    "good": "Reconoces que la experiencia sensorial de probadores y multitudes puede resultarle agotadora.",
+    "bad": "Lo arrastras a varias tiendas seguidas esperando que 'le tome el gusto'."
+  },
+  {
+    "q": "Piensas que tu hijo/a adolescente 'debería' querer un grupo grande de amigos en el colegio.",
+    "good": "Valoras la calidad de sus vínculos actuales sin medirlos por cantidad.",
+    "bad": "Le preguntas insistentemente por qué 'no tiene más amigos' en cada charla."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no reaccione con entusiasmo visible ante un logro deportivo propio.",
+    "good": "Reconoces que su satisfacción interna puede no mostrarse con gestos efusivos.",
+    "bad": "Le dices que 'debería estar más contento' por algo que a ti te emociona tanto."
+  },
+  {
+    "q": "Esperas que un niño pequeño disfrute las atracciones ruidosas de un parque de diversiones.",
+    "good": "Planificas paradas de descanso sensorial en vez de forzar la exposición completa.",
+    "bad": "Insistes en subirlo a todos los juegos 'porque para eso vinieron'."
+  },
+  {
+    "q": "Piensas que necesitar guiones o frases preparadas para conversaciones sociales es artificial.",
+    "good": "Reconoces que esos apoyos le permiten participar socialmente con menos ansiedad.",
+    "bad": "Le dices que 'hable natural, sin prepararse tanto'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a no quiera sentarse a la mesa con toda la familia extendida en Navidad.",
+    "good": "Ofreces un espacio alternativo cómodo cerca, sin forzar su presencia total en la mesa.",
+    "bad": "Lo obligas a sentarse ahí 'porque en Navidad se come todos juntos'."
+  },
+  {
+    "q": "Esperas que tu hijo/a disfrute aprender a bailar en una fiesta familiar.",
+    "good": "Aceptas que el baile grupal puede no ser su forma de disfrute, sin insistir.",
+    "bad": "Lo sacas a bailar a la fuerza 'para que se suelte un poco'."
+  },
+  {
+    "q": "Piensas que un hijo adulto joven que prefiere un trabajo manual en vez de uno intelectual 'desperdicia su potencial'.",
+    "good": "Reconoces que su bienestar y satisfacción laboral no dependen del tipo de trabajo elegido.",
+    "bad": "Le insistes en 'aspirar a algo mejor' descalificando su elección real."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no quiera participar en la actuación escolar frente al público.",
+    "good": "Buscas junto al colegio una forma alternativa de participar que respete su comodidad.",
+    "bad": "Le exiges subir al escenario 'porque todos los niños deben participar'."
+  },
+  {
+    "q": "Esperas que tu hijo/a mantenga el mismo círculo de amigos de la infancia toda la vida.",
+    "good": "Aceptas que sus vínculos pueden cambiar con el tiempo sin que eso sea preocupante.",
+    "bad": "Le insistes en 'no perder' esas amistades como si fuera obligatorio mantenerlas."
+  },
+  {
+    "q": "Piensas que tu hijo/a 'debería' disfrutar más de las vacaciones en la playa con la familia extendida.",
+    "good": "Reconoces que la sobreestimulación sensorial de la playa puede pesar más que el disfrute social.",
+    "bad": "Le dices que 'se está quejando por gusto' de un lugar que 'a todos les encanta'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a no quiera hablar de sus sentimientos apenas te ve después del colegio.",
+    "good": "Le das tiempo y espacio antes de esperar que comparta, respetando su ritmo emocional.",
+    "bad": "Insistes en preguntar 'qué te pasa' de forma repetida hasta obtener respuesta."
+  },
+  {
+    "q": "Esperas que un adolescente disfrute manejar dinero y hacer compras solo como sus pares.",
+    "good": "Reconoces que su ritmo para asumir esa independencia puede requerir más apoyo, sin ser un atraso.",
+    "bad": "Lo dejas solo con esa responsabilidad 'porque a su edad ya debería poder'."
+  },
+  {
+    "q": "Piensas que necesitar el mismo tipo de saludo (choque de manos en vez de abrazo) es frialdad.",
+    "good": "Reconoces que ese saludo es su forma genuina y cómoda de conectar con otros.",
+    "bad": "Le insistes en abrazar a las visitas 'porque un choque de manos es muy frío'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no quiera ir a un campamento de verano como sus compañeros.",
+    "good": "Evalúas si esa actividad realmente encaja con sus necesidades, sin presionarlo por 'lo típico del verano'.",
+    "bad": "Lo anotas igual esperando que 'se le pase la resistencia una vez allá'."
+  },
+  {
+    "q": "Esperas que tu hijo/a se entusiasme con la misma serie o juego que sus primos.",
+    "good": "Aceptas que sus intereses pueden ser distintos sin que eso lo aleje de la familia.",
+    "bad": "Le insistes en 'ponerse al día' con lo que ven los primos para 'tener de qué hablar'."
+  },
+  {
+    "q": "Piensas que un niño que necesita que le avisen con anticipación de una visita al médico es exagerado.",
+    "good": "Reconoces que la anticipación reduce genuinamente su ansiedad ante lo desconocido.",
+    "bad": "Le avisas de último momento 'porque no hay para qué hacer drama antes'."
+  },
+  {
+    "q": "Te incomoda que tu hijo/a adolescente no quiera festejar su cumpleaños con una fiesta grande.",
+    "good": "Le preguntas qué celebración prefiere y la respetas, aunque sea distinta a la que imaginabas.",
+    "bad": "Organizas la fiesta grande igual porque 'así se festeja bien un cumpleaños'."
+  },
+  {
+    "q": "Te preocupa que tu hijo/a no quiera compartir su cuarto de hospital con la energía habitual.",
+    "good": "Reconoces que el ambiente médico puede sobrecargarlo más de lo visible, y ajustas tu expectativa.",
+    "bad": "Le pides que 'sea valiente y sonría' para las visitas en el hospital."
+  },
+  {
+    "q": "Esperas que tu hijo/a adulto/a joven celebre las fechas festivas exactamente como se celebraban en tu infancia.",
+    "good": "Aceptas que puede construir sus propias formas de celebrar, distintas a la tradición familiar.",
+    "bad": "Le exiges seguir las mismas costumbres 'porque así se ha hecho siempre en la familia'."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

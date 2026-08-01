@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Rutinas Colaborativas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ef4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #ef4444, #ef4444cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #ef4444cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Vida Cotidiana Compartida</span>
+    </span>
+    <h1>📆 Rutinas Colaborativas</h1>
+    <p>Construir rutinas junto al hijo/a en lugar de imponerlas.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "rutinas-colaborativas";
+const SITUACIONES = [
+  {
+    "q": "Quieres establecer una nueva rutina matutina.",
+    "good": "Le preguntas qué orden de pasos le resulta más cómodo y la construyen juntos.",
+    "bad": "Impones el orden que a ti te parece más lógico sin consultarle."
+  },
+  {
+    "q": "La rutina de tareas del hogar genera resistencia constante.",
+    "good": "Revisan juntos la lista y ajustan según sus preferencias e intereses.",
+    "bad": "Mantienes la misma lista impuesta esperando que 'se acostumbre'."
+  },
+  {
+    "q": "Tu hijo/a quiere cambiar el orden de su rutina de la tarde.",
+    "good": "Exploras con él/ella si el nuevo orden funciona igual de bien.",
+    "bad": "Rechazas el cambio porque 'siempre se ha hecho así'."
+  },
+  {
+    "q": "La rutina de higiene genera conflicto cada noche.",
+    "good": "Le preguntas qué parte le incomoda y ajustan la secuencia juntos.",
+    "bad": "Repites la misma exigencia sin explorar el motivo del conflicto."
+  },
+  {
+    "q": "Quieres introducir una rutina de estudio en casa.",
+    "good": "Le muestras opciones y decide junto contigo el formato que prefiere.",
+    "bad": "Impones un método de estudio sin considerar su forma de aprender."
+  },
+  {
+    "q": "Tu hijo/a propone una rutina distinta para el fin de semana.",
+    "good": "La consideras seriamente y prueban su propuesta.",
+    "bad": "Descartas su propuesta porque 'la rutina de siempre funciona bien'."
+  },
+  {
+    "q": "La rutina de las comidas genera tensión diaria.",
+    "good": "Acuerdan juntos horarios y estructura que reduzcan la fricción.",
+    "bad": "Mantienes el mismo horario rígido sin negociar ajustes."
+  },
+  {
+    "q": "Quieres que participe en la construcción del calendario semanal.",
+    "good": "Le das voz activa en decidir actividades y horarios del calendario.",
+    "bad": "Armas el calendario completo sin incluir su opinión."
+  },
+  {
+    "q": "La rutina de irse a dormir se ha vuelto una lucha constante.",
+    "good": "Conversan juntos qué pasos ayudarían a hacerla más llevadera.",
+    "bad": "Repites la misma rutina fallida esperando un resultado distinto."
+  },
+  {
+    "q": "Tu hijo/a quiere incluir su interés especial en la rutina diaria.",
+    "good": "Incorporas ese interés como parte motivadora de la rutina.",
+    "bad": "Excluyes su interés de la rutina por considerarlo 'distracción'."
+  },
+  {
+    "q": "La rutina de vestirse en las mañanas toma mucho tiempo.",
+    "good": "Simplifican juntos los pasos o el orden para hacerla más eficiente.",
+    "bad": "Apuras el proceso sin buscar ajustes reales a la rutina."
+  },
+  {
+    "q": "Tu hijo/a se resiste a una rutina de ejercicio impuesta.",
+    "good": "Buscan juntos un tipo de movimiento que sí disfrute.",
+    "bad": "Mantienes el mismo ejercicio impuesto pese a su rechazo constante."
+  },
+  {
+    "q": "Quieres coordinar una rutina familiar de fin de semana.",
+    "good": "Incluyes las preferencias de cada miembro, incluido tu hijo/a, en el plan.",
+    "bad": "Decides la rutina familiar sin consultar a nadie más."
+  },
+  {
+    "q": "La rutina de las tareas escolares en casa no está funcionando.",
+    "good": "Revisan juntos qué momento y lugar del día le funciona mejor para estudiar.",
+    "bad": "Insistes en el mismo horario de estudio aunque no rinda ahí."
+  },
+  {
+    "q": "Tu hijo/a propone usar apoyos visuales para su rutina diaria.",
+    "good": "Incorporas esa herramienta como parte de la construcción conjunta.",
+    "bad": "Descartas la idea porque 'ya es grande para pictogramas'."
+  },
+  {
+    "q": "La rutina del baño genera resistencia sensorial.",
+    "good": "Ajustan juntos temperatura, productos o duración según su comodidad.",
+    "bad": "Mantienes la misma rutina de baño sin considerar su sensibilidad."
+  },
+  {
+    "q": "Quieres que tu hijo/a participe en preparar su propia mochila escolar.",
+    "good": "Construyen juntos una lista o checklist que él/ella pueda usar solo/a.",
+    "bad": "Preparas tú la mochila sin involucrarlo en el proceso."
+  },
+  {
+    "q": "La rutina de actividades extraescolares se siente sobrecargada.",
+    "good": "Revisan juntos qué actividades mantener según su energía real.",
+    "bad": "Mantienes todas las actividades decididas sin revisar la carga total."
+  },
+  {
+    "q": "Tu hijo/a quiere marcar su progreso en la rutina con algún sistema propio.",
+    "good": "Diseñan juntos un sistema de seguimiento que le resulte motivador.",
+    "bad": "Impones tu propio sistema de seguimiento sin considerar su preferencia."
+  },
+  {
+    "q": "La rutina de despedida al salir de casa genera ansiedad.",
+    "good": "Crean juntos un ritual breve de despedida que le dé seguridad.",
+    "bad": "Apresuras la salida sin dar espacio a un ritual que lo tranquilice."
+  },
+  {
+    "q": "Quieres organizar la rutina de lavar la ropa sucia semanalmente.",
+    "good": "Acuerdan juntos qué día y quién separa la ropa.",
+    "bad": "Fijas el día y el método sin preguntarle su opinión."
+  },
+  {
+    "q": "La rutina de ordenar su cuarto genera resistencia.",
+    "good": "Definen juntos qué nivel de orden es razonable para ambos.",
+    "bad": "Exiges tu propio estándar de orden sin negociar."
+  },
+  {
+    "q": "Quieres establecer horarios de pantallas entre semana.",
+    "good": "Acuerdan juntos los bloques de tiempo según sus prioridades.",
+    "bad": "Impones el horario de pantallas sin explicarlo ni consultarlo."
+  },
+  {
+    "q": "Tu hijo/a adopta una mascota y necesita rutina de cuidado.",
+    "good": "Diseñan juntos quién alimenta y pasea al animal cada día.",
+    "bad": "Asignas tú solo/a las tareas de la mascota sin su participación."
+  },
+  {
+    "q": "Debe tomar una medicación diaria y le cuesta recordarlo.",
+    "good": "Crean juntos un recordatorio o sistema que le funcione a él/ella.",
+    "bad": "Le recuerdas tú cada vez sin ayudarlo a construir su propio sistema."
+  },
+  {
+    "q": "Se acerca un viaje familiar y hay que planear el empaque.",
+    "good": "Elaboran juntos la lista de lo que cada uno llevará.",
+    "bad": "Empacas tú todo sin involucrarlo en la planificación."
+  },
+  {
+    "q": "Los hermanos deben repartirse las tareas del hogar.",
+    "good": "Negocian juntos la repartición según gustos y habilidades de cada uno.",
+    "bad": "Repartes tú las tareas sin consultar preferencias de nadie."
+  },
+  {
+    "q": "Quieres que ayude a hacer la lista del supermercado.",
+    "good": "Construyen la lista juntos según lo que a cada uno le gusta comer.",
+    "bad": "Haces la lista tú solo/a sin preguntarle qué necesita o quiere."
+  },
+  {
+    "q": "La rutina de cepillarse los dientes se hace corta y apurada.",
+    "good": "Acuerdan juntos un método o tiempo que sea más efectivo.",
+    "bad": "Le exiges cumplir el tiempo sin explorar qué falla en la rutina."
+  },
+  {
+    "q": "Quieres fijar una hora de despertar los días de colegio.",
+    "good": "Conversan juntos qué hora le permite sentirse descansado/a.",
+    "bad": "Fijas la hora que a ti te conviene sin considerar su descanso."
+  },
+  {
+    "q": "Los sábados hay tareas domésticas pendientes.",
+    "good": "Deciden juntos qué tareas hacer primero y cómo repartirlas.",
+    "bad": "Le asignas la lista completa de tareas sin negociar el orden."
+  },
+  {
+    "q": "Quieres introducir una rutina de cocinar juntos los fines de semana.",
+    "good": "Le preguntas qué platos le gustaría aprender a preparar.",
+    "bad": "Eliges tú las recetas sin considerar su interés."
+  },
+  {
+    "q": "La rutina de lectura antes de dormir se ha vuelto aburrida para él/ella.",
+    "good": "Exploran juntos nuevos formatos o libros que le interesen.",
+    "bad": "Mantienes el mismo libro o formato pese a su desinterés evidente."
+  },
+  {
+    "q": "Necesita una pausa sensorial estructurada durante el día escolar.",
+    "good": "Coordinan juntos con el colegio cuándo y cómo tomar esa pausa.",
+    "bad": "Decides tú el esquema de pausas sin consultarlo a él/ella."
+  },
+  {
+    "q": "Quieres establecer una rutina para ir y volver del colegio.",
+    "good": "Conversan juntos qué medio de transporte le da más seguridad.",
+    "bad": "Decides el medio de transporte sin explicarle ni preguntarle."
+  },
+  {
+    "q": "La merienda después del colegio no tiene un formato claro.",
+    "good": "Acuerdan juntos opciones de merienda que pueda preparar solo/a.",
+    "bad": "Preparas tú la merienda cada día sin involucrarlo en la elección."
+  },
+  {
+    "q": "Quieres organizar una reunión familiar semanal para hablar de la semana.",
+    "good": "Le preguntas qué formato de reunión le resultaría cómodo.",
+    "bad": "Impones el formato de reunión sin preguntar su opinión."
+  },
+  {
+    "q": "Tu hijo/a recibe una mesada y no sabe cómo administrarla.",
+    "good": "Acuerdan juntos un sistema simple de ahorro y gasto.",
+    "bad": "Le impones tu propio sistema de ahorro sin explicar el porqué."
+  },
+  {
+    "q": "Se acerca el inicio de la práctica deportiva y hay que ajustar horarios.",
+    "good": "Revisan juntos el calendario semanal para acomodar la práctica.",
+    "bad": "Ajustas tú solo/a el calendario familiar sin avisarle antes."
+  },
+  {
+    "q": "Quiere personalizar su rutina de la mañana los fines de semana.",
+    "good": "Le das flexibilidad para decidir el orden en esos días.",
+    "bad": "Mantienes la misma rutina rígida también los fines de semana."
+  },
+  {
+    "q": "La rutina de cargar los dispositivos electrónicos genera desorden.",
+    "good": "Acuerdan juntos un lugar y horario fijo para cargarlos.",
+    "bad": "Le recriminas el desorden sin proponer una solución conjunta."
+  },
+  {
+    "q": "Quieres que participe en armar el itinerario de las vacaciones.",
+    "good": "Le das voz en elegir algunas actividades del itinerario.",
+    "bad": "Armas tú todo el itinerario sin pedir su opinión."
+  },
+  {
+    "q": "La rutina de poner y quitar la mesa genera quejas constantes.",
+    "good": "Rotan juntos la tarea y ajustan según lo que cada uno prefiere.",
+    "bad": "Le asignas la misma tarea siempre sin considerar sus quejas."
+  },
+  {
+    "q": "Empieza el año escolar y hay que definir nuevas rutinas.",
+    "good": "Conversan juntos qué ajustes necesita la rutina de este año.",
+    "bad": "Aplicas la misma rutina del año anterior sin revisarla con él/ella."
+  },
+  {
+    "q": "Tu hijo/a adolescente empieza su primer trabajo de medio tiempo.",
+    "good": "Ajustan juntos la rutina familiar para acomodar su nuevo horario.",
+    "bad": "Esperas que ajuste solo/a su vida al horario familiar existente."
+  },
+  {
+    "q": "Quiere decorar y organizar su propio escritorio de estudio.",
+    "good": "Le das libertad de organizarlo a su manera, ofreciendo ideas si las pide.",
+    "bad": "Organizas tú el escritorio según lo que te parece más práctico."
+  },
+  {
+    "q": "La rutina de bañar y cuidar a la mascota genera conflicto entre hermanos.",
+    "good": "Acuerdan juntos un calendario rotativo claro para todos.",
+    "bad": "Decides tú quién hace qué sin consultar a los involucrados."
+  },
+  {
+    "q": "Se acerca una celebración familiar y hay que definir su rol.",
+    "good": "Le preguntas qué le gustaría hacer o preparar para la ocasión.",
+    "bad": "Le asignas un rol en la celebración sin preguntarle su interés."
+  },
+  {
+    "q": "Tu hijo/a joven adulto vive semi-independiente y define sus propias rutinas.",
+    "good": "Respetas su proceso y ofreces ayuda solo si la pide.",
+    "bad": "Sigues imponiendo tus rutinas aunque ya no vive bajo las mismas reglas."
+  },
+  {
+    "q": "Quieres introducir una rutina de ejercicio familiar los fines de semana.",
+    "good": "Buscan juntos una actividad física que disfruten todos.",
+    "bad": "Eliges tú la actividad sin considerar los gustos de los demás."
+  },
+  {
+    "q": "La rutina de guardar la ropa de temporada genera desorganización.",
+    "good": "Deciden juntos un sistema simple de guardado que puedan mantener.",
+    "bad": "Organizas tú solo/a la ropa sin enseñarle el sistema."
+  },
+  {
+    "q": "Quiere tener su propio calendario o planificador semanal.",
+    "good": "Lo/la ayudas a diseñar un formato que le funcione a él/ella.",
+    "bad": "Le das el mismo planificador que usas tú sin considerar sus necesidades."
+  },
+  {
+    "q": "La rutina antes de una cita médica genera ansiedad.",
+    "good": "Acuerdan juntos qué pasos previos le ayudan a sentirse más tranquilo/a.",
+    "bad": "Repites la misma rutina que le genera ansiedad sin ajustarla."
+  },
+  {
+    "q": "Quieres coordinar quién lo/la recoge cada día de la semana.",
+    "good": "Construyen juntos un calendario claro de encargados por día.",
+    "bad": "Decides tú solo/a el calendario de recogida sin comunicárselo con tiempo."
+  },
+  {
+    "q": "La rutina de práctica de un instrumento musical genera resistencia.",
+    "good": "Acuerdan juntos horario y duración que sean sostenibles para él/ella.",
+    "bad": "Mantienes el mismo horario impuesto pese a la resistencia constante."
+  },
+  {
+    "q": "Tu hijo/a quiere ayudar a planear el menú semanal familiar.",
+    "good": "Incluyes sus preferencias al armar el menú de la semana.",
+    "bad": "Armas el menú completo sin preguntarle qué le gustaría comer."
+  },
+  {
+    "q": "La rutina de organizar la mochila para el día siguiente se olvida seguido.",
+    "good": "Crean juntos un checklist visual que pueda revisar cada noche.",
+    "bad": "Le recuerdas tú cada noche sin ayudarlo a construir su propio sistema."
+  },
+  {
+    "q": "Se acerca una mudanza a otra ciudad y hay que reorganizar rutinas.",
+    "good": "Conversan juntos qué rutinas quiere mantener en el nuevo lugar.",
+    "bad": "Decides tú todas las rutinas nuevas sin consultar su opinión."
+  },
+  {
+    "q": "Quiere un sistema propio para recordar sus tareas escolares.",
+    "good": "Exploran juntos aplicaciones o métodos que le resulten útiles.",
+    "bad": "Le impones la agenda de papel que a ti te funciona sin considerar su preferencia."
+  },
+  {
+    "q": "La rutina de higiene del cabello genera resistencia sensorial.",
+    "good": "Ajustan juntos productos y método según su sensibilidad.",
+    "bad": "Mantienes el mismo método pese a su rechazo constante."
+  },
+  {
+    "q": "Tu hijo/a quiere participar en decidir las reglas de convivencia en casa.",
+    "good": "Construyen juntos las reglas familiares con su aporte incluido.",
+    "bad": "Fijas las reglas familiares sin darle espacio para opinar."
+  },
+  {
+    "q": "La rutina de repasar el día antes de dormir se siente forzada.",
+    "good": "Le preguntas qué formato de conversación nocturna le acomoda más.",
+    "bad": "Insistes en el mismo formato de conversación aunque no le funcione."
+  },
+  {
+    "q": "Quiere ayudar a organizar el clóset o armario de su cuarto.",
+    "good": "Diseñan juntos un sistema de organización que él/ella pueda mantener.",
+    "bad": "Organizas tú el clóset a tu manera sin involucrarlo en el proceso."
+  },
+  {
+    "q": "Se acerca el inicio de clases y hay que comprar útiles escolares.",
+    "good": "Van juntos a elegir los útiles según su gusto y necesidad.",
+    "bad": "Compras tú los útiles sin llevarlo ni preguntarle sus preferencias."
+  },
+  {
+    "q": "La rutina de cuidar las plantas de la casa genera desinterés.",
+    "good": "Le ofreces elegir qué planta cuidar según su propio interés.",
+    "bad": "Le asignas una planta al azar sin preguntar si le interesa."
+  },
+  {
+    "q": "Tu hijo/a quiere definir su propia rutina de fin de semana con amigos.",
+    "good": "Conversan juntos los límites y ella/él arma el resto del plan.",
+    "bad": "Defines tú toda la rutina del fin de semana sin dejarle espacio."
+  },
+  {
+    "q": "La rutina de repaso antes de un examen genera estrés.",
+    "good": "Acuerdan juntos un método de estudio que reduzca su ansiedad.",
+    "bad": "Impones tu propio método de repaso sin considerar cómo aprende."
+  },
+  {
+    "q": "Quiere ser parte de la decisión sobre el destino de las vacaciones familiares.",
+    "good": "Consideran sus preferencias junto con las de toda la familia.",
+    "bad": "Decides el destino de vacaciones sin preguntar su opinión."
+  },
+  {
+    "q": "La rutina matutina de un hermano menor interfiere con la suya.",
+    "good": "Ajustan juntos los horarios para que ambos puedan cumplir su rutina.",
+    "bad": "Priorizas la rutina del hermano menor sin negociar con él/ella."
+  },
+  {
+    "q": "Tu hijo/a quiere un sistema de recompensas para las tareas del hogar.",
+    "good": "Diseñan juntos un sistema de recompensas que le resulte motivador.",
+    "bad": "Impones un sistema de recompensas que a ti te parece adecuado."
+  },
+  {
+    "q": "La rutina de organizar el baño compartido con hermanos genera conflicto.",
+    "good": "Acuerdan juntos turnos y horarios claros para todos.",
+    "bad": "Decides tú los turnos del baño sin consultar a los involucrados."
+  },
+  {
+    "q": "Quiere ayudar a planear las compras de ropa de temporada.",
+    "good": "Lo llevas a elegir y decidir junto contigo qué comprar.",
+    "bad": "Compras tú la ropa sin llevarlo ni considerar su gusto."
+  },
+  {
+    "q": "La rutina de guardar los juguetes o materiales de su interés especial genera fricción.",
+    "good": "Acuerdan juntos un sistema de guardado que respete ese interés.",
+    "bad": "Guardas tú sus materiales sin considerar cómo los organiza él/ella."
+  },
+  {
+    "q": "Tu hijo/a joven adulto quiere definir su propia rutina de búsqueda de empleo.",
+    "good": "Ofreces apoyo si lo pide, respetando su propio ritmo y método.",
+    "bad": "Le impones tu método de búsqueda de empleo sin preguntar el suyo."
+  },
+  {
+    "q": "La rutina de repartir el tiempo entre tareas y descanso no está clara.",
+    "good": "Construyen juntos un balance de tiempo que le resulte sostenible.",
+    "bad": "Impones tú la proporción de tiempo entre tarea y descanso."
+  },
+  {
+    "q": "Quiere participar en decidir el horario de visitas a la familia extendida.",
+    "good": "Conversan juntos la frecuencia e incluyen su opinión en la decisión.",
+    "bad": "Decides tú el calendario de visitas sin considerar su preferencia."
+  },
+  {
+    "q": "La rutina de organizar el material escolar cada domingo se posterga siempre.",
+    "good": "Acuerdan juntos un momento fijo de la semana para hacerlo juntos.",
+    "bad": "Le exiges hacerlo solo/a sin ofrecer apoyo ni horario conjunto."
+  },
+  {
+    "q": "Tu hijo/a quiere rediseñar su rutina de ejercicio o deporte semanal.",
+    "good": "Exploran juntos qué actividad física le motiva realmente.",
+    "bad": "Mantienes la misma actividad impuesta aunque ya no le interese."
+  },
+  {
+    "q": "La rutina de repartir el uso del computador familiar genera peleas.",
+    "good": "Acuerdan juntos un horario justo de uso para todos los hermanos.",
+    "bad": "Decides tú el horario de uso sin negociar con los involucrados."
+  },
+  {
+    "q": "Quiere participar en la organización de su propia fiesta de cumpleaños.",
+    "good": "Construyen juntos el plan según lo que a él/ella le ilusiona.",
+    "bad": "Organizas tú toda la fiesta sin considerar sus preferencias."
+  },
+  {
+    "q": "La rutina de cuidado personal empieza a ser relevante en la adolescencia.",
+    "good": "Le enseñas el proceso y acuerdan juntos cuándo y cómo practicarlo.",
+    "bad": "Impones tu propio criterio de cuidado personal sin dejarlo explorar."
+  },
+  {
+    "q": "Tu hijo/a quiere ajustar la rutina de estudio durante exámenes finales.",
+    "good": "Revisan juntos qué cambios necesita la rutina en esa etapa.",
+    "bad": "Mantienes la rutina habitual sin considerar la carga extra de exámenes."
+  },
+  {
+    "q": "La rutina de organizar el cuarto compartido con un hermano genera tensión.",
+    "good": "Acuerdan juntos zonas y reglas de orden que respeten a ambos.",
+    "bad": "Impones las mismas reglas de orden sin considerar a ambos hermanos."
+  },
+  {
+    "q": "Quiere participar en decidir el horario de las sesiones de terapia.",
+    "good": "Consideras su opinión sobre horarios que le acomoden mejor.",
+    "bad": "Fijas el horario de terapia sin considerar su rutina o preferencia."
+  },
+  {
+    "q": "La rutina de alimentación de la mascota se olvida cuando hay visitas.",
+    "good": "Acuerdan juntos recordatorios que funcionen incluso en días distintos.",
+    "bad": "Le recriminas el olvido sin ayudar a construir un sistema más firme."
+  },
+  {
+    "q": "Tu hijo/a quiere decidir el orden de las materias al estudiar en casa.",
+    "good": "Le permites decidir el orden según lo que le resulte más manejable.",
+    "bad": "Impones tú el orden de materias sin considerar su preferencia."
+  },
+  {
+    "q": "La rutina de las tardes de verano no tiene estructura y genera aburrimiento.",
+    "good": "Construyen juntos un plan flexible de actividades para el verano.",
+    "bad": "Impones una agenda rígida de verano sin consultar sus intereses."
+  },
+  {
+    "q": "Quiere participar en organizar el plan de actividades familiares del año.",
+    "good": "Le das espacio real de opinión en el plan anual familiar.",
+    "bad": "Decides tú solo/a el plan anual sin considerar su participación."
+  },
+  {
+    "q": "La rutina de dejar el cuarto ordenado antes de salir de vacaciones genera estrés.",
+    "good": "Acuerdan juntos una lista simple de lo que hay que dejar listo.",
+    "bad": "Le exiges dejar todo perfecto sin definir juntos qué implica eso."
+  },
+  {
+    "q": "Tu hijo/a quiere una rutina propia para cuidar su salud mental.",
+    "good": "Lo apoyas explorando qué formato le resulta útil a él/ella.",
+    "bad": "Le impones una práctica que a ti te funciona sin considerar su preferencia."
+  },
+  {
+    "q": "La rutina de recoger a los hermanos de distintas actividades genera caos.",
+    "good": "Organizan juntos un calendario que considere las necesidades de todos.",
+    "bad": "Decides tú el orden de recogida sin explicar el porqué a ninguno."
+  },
+  {
+    "q": "Quiere ajustar su rutina de sueño para rendir mejor en el colegio.",
+    "good": "Conversan juntos qué cambios de horario podrían ayudarle realmente.",
+    "bad": "Impones una hora de dormir sin explorar juntos qué necesita realmente."
+  },
+  {
+    "q": "La rutina de organizar el clóset de temporada de toda la familia se acumula.",
+    "good": "Acuerdan juntos un día para hacerlo entre todos los miembros.",
+    "bad": "Terminas haciéndolo tú solo/a sin pedir ayuda ni involucrar a nadie."
+  },
+  {
+    "q": "Tu hijo/a quiere decidir cómo distribuir su tiempo libre después del colegio.",
+    "good": "Le das autonomía real para estructurar ese bloque de tiempo.",
+    "bad": "Llenas tú su tiempo libre con actividades sin consultarlo."
+  },
+  {
+    "q": "La rutina de cuidar a un hermano menor mientras los padres trabajan genera tensión.",
+    "good": "Acuerdan juntos límites claros y compensaciones justas para esa tarea.",
+    "bad": "Le exiges la tarea de cuidado sin negociar límites ni reconocerlo."
+  },
+  {
+    "q": "Quiere rediseñar la rutina de la mañana para adaptarse a un nuevo horario escolar.",
+    "good": "Revisan juntos los tiempos y ajustan la rutina a la nueva realidad.",
+    "bad": "Mantienes la rutina anterior esperando que se adapte solo/a al cambio."
+  },
+  {
+    "q": "La rutina para prepararse antes de una entrevista o presentación genera nerviosismo.",
+    "good": "Practican juntos y acuerdan pasos que le den más seguridad.",
+    "bad": "Le dices que 'solo tiene que hacerlo' sin construir apoyo previo."
+  },
+  {
+    "q": "Tu hijo/a quiere tener voz en cómo se reparten los quehaceres durante vacaciones en casa de familiares.",
+    "good": "Conversas con los familiares para incluir su opinión en la repartición.",
+    "bad": "Aceptas la repartición que proponen los familiares sin considerar su opinión."
+  },
+  {
+    "q": "La rutina de organizar sus propias pertenencias antes de un cambio de colegio genera ansiedad.",
+    "good": "Construyen juntos un plan paso a paso para esa organización.",
+    "bad": "Organizas tú todo antes del cambio sin involucrarlo en el proceso."
+  },
+  {
+    "q": "Quiere ajustar la rutina familiar de domingo para incluir tiempo con amigos.",
+    "good": "Revisan juntos el domingo familiar para dejar espacio a esa necesidad.",
+    "bad": "Mantienes la rutina de domingo intacta sin considerar su petición."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

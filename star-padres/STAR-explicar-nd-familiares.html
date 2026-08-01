@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Explicar la Neurodivergencia a Familiares</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ec4899;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #ec4899, #ec4899cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #ec4899, #ec4899cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>
+      <span>Defensa y Colaboración</span>
+    </span>
+    <h1>👨‍👩‍👧 Explicar la Neurodivergencia a Familiares</h1>
+    <p>Traducir la doble empatía para abuelos, tíos y otros cuidadores.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 90</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "explicar-nd-familiares";
+const SITUACIONES = [
+  {
+    "q": "Un abuelo dice que tu hijo/a 'solo necesita más disciplina'.",
+    "good": "Explicas con calma y ejemplos concretos por qué esa disciplina no aborda la necesidad real.",
+    "bad": "Evitas el tema para no generar conflicto familiar, dejando pasar la idea errónea."
+  },
+  {
+    "q": "Un tío hace comentarios sobre que tu hijo/a 'ya se le va a pasar'.",
+    "good": "Compartes información breve y clara sobre qué es realmente la neurodivergencia.",
+    "bad": "Te ríes incómodamente sin corregir la idea equivocada."
+  },
+  {
+    "q": "Un familiar insiste en abrazar a tu hijo/a aunque él/ella se resista.",
+    "good": "Explicas con firmeza y respeto que su límite corporal debe respetarse.",
+    "bad": "Permites el abrazo forzado 'para no ofender' al familiar."
+  },
+  {
+    "q": "Un abuelo compara a tu hijo/a con cómo era otro nieto a su edad.",
+    "good": "Explicas que cada perfil neurológico tiene su propio desarrollo, sin ser mejor o peor.",
+    "bad": "Te quedas callado/a dejando que la comparación quede sin corregir."
+  },
+  {
+    "q": "Un familiar pregunta genuinamente cómo puede ayudar mejor a tu hijo/a.",
+    "good": "Aprovechas la apertura para compartir información concreta y práctica.",
+    "bad": "Respondes vagamente sin dar herramientas concretas de apoyo."
+  },
+  {
+    "q": "Un tío hace un comentario sobre que 'antes esto no existía'.",
+    "good": "Explicas con calma que siempre existió, solo que ahora se comprende mejor.",
+    "bad": "Evitas la conversación para no entrar en un debate incómodo."
+  },
+  {
+    "q": "Un familiar se ofende porque tu hijo/a no quiso saludarlo con un beso.",
+    "good": "Explicas que su forma de saludar es distinta, sin significar rechazo personal.",
+    "bad": "Obligas a tu hijo/a a saludar así 'para no ofender' al familiar."
+  },
+  {
+    "q": "Un abuelo insiste en que tu hijo/a 'está mimado' por tus adaptaciones.",
+    "good": "Explicas la diferencia entre adaptación necesaria y sobreprotección.",
+    "bad": "Dejas de aplicar las adaptaciones frente a ese familiar por presión social."
+  },
+  {
+    "q": "Un familiar pregunta si la neurodivergencia 'se cura'.",
+    "good": "Explicas con paciencia que no es algo a curar, sino una forma distinta de funcionar.",
+    "bad": "Evitas responder claramente para no profundizar en el tema."
+  },
+  {
+    "q": "Un tío hace comentarios sobre el 'comportamiento raro' de tu hijo/a delante de él.",
+    "good": "Corriges el comentario en el momento, con respeto pero con firmeza.",
+    "bad": "Ignoras el comentario delante de tu hijo/a, validándolo con tu silencio."
+  },
+  {
+    "q": "Un familiar quiere ayudar pero no sabe cómo interactuar con tu hijo/a.",
+    "good": "Le das indicaciones concretas y sencillas de qué funciona bien.",
+    "bad": "Asumes que 'ya debería saber' sin dar ninguna orientación práctica."
+  },
+  {
+    "q": "Un abuelo minimiza una crisis de tu hijo/a diciendo que 'todos los niños hacen eso'.",
+    "good": "Explicas la diferencia entre una rabieta típica y una crisis de sobrecarga real.",
+    "bad": "Dejas pasar el comentario sin aclarar la diferencia real."
+  },
+  {
+    "q": "Un familiar presiona para que tu hijo/a participe en una tradición familiar que le genera ansiedad.",
+    "good": "Explicas el motivo y proponen una forma adaptada de participar.",
+    "bad": "Obligas a tu hijo/a a participar igual 'por respeto a la tradición'."
+  },
+  {
+    "q": "Un tío hace bromas sobre los intereses intensos de tu hijo/a.",
+    "good": "Explicas con calma el valor de esos intereses y pides respeto hacia ellos.",
+    "bad": "Te ríes de la broma para 'no hacer drama' delante de la familia."
+  },
+  {
+    "q": "Un familiar cuestiona por qué tu hijo/a usa auriculares o protección sensorial en reuniones.",
+    "good": "Explicas brevemente la función real de esos apoyos sensoriales.",
+    "bad": "Le pides a tu hijo/a que no los use para 'no llamar la atención'."
+  },
+  {
+    "q": "Un abuelo dice que 'en su época esto se resolvía con más mano dura'.",
+    "good": "Explicas con respeto por qué ese enfoque no ayuda al perfil de tu hijo/a.",
+    "bad": "Evitas el enfrentamiento dejando que la idea quede sin cuestionar."
+  },
+  {
+    "q": "Un familiar pregunta si puede leer más sobre el tema para entender mejor.",
+    "good": "Le compartes recursos concretos y accesibles sobre neurodivergencia.",
+    "bad": "Le dices que 'no hace falta que se complique' sin ofrecer información."
+  },
+  {
+    "q": "Un tío se frustra porque tu hijo/a no reacciona como esperaba a un chiste.",
+    "good": "Explicas que el procesamiento del humor puede ser distinto, sin ser un desaire.",
+    "bad": "Le pides a tu hijo/a que 'finja reír' para no incomodar al tío."
+  },
+  {
+    "q": "Un familiar insiste en que 'hablando fuerte' tu hijo/a entenderá mejor.",
+    "good": "Explicas que el volumen alto genera sobrecarga, no mejor comprensión.",
+    "bad": "Permites que el familiar siga hablando fuerte 'para que aprenda a tolerarlo'."
+  },
+  {
+    "q": "Un abuelo se emociona al entender mejor la experiencia de su nieto/a.",
+    "good": "Agradeces su apertura y refuerzas la información compartida con calidez.",
+    "bad": "Minimizas el momento sin reconocer su esfuerzo genuino por entender."
+  },
+  {
+    "q": "Una suegra dice que 'en su familia nadie tuvo eso'.",
+    "good": "Explicas con calma que antes no se diagnosticaba igual, no que no existiera.",
+    "bad": "Evitas el comentario para no generar tensión con la suegra."
+  },
+  {
+    "q": "Una prima pregunta por qué tu hijo/a usa una tablet para comunicarse.",
+    "good": "Explicas que es su forma de comunicación, tan válida como hablar.",
+    "bad": "Minimizas el dispositivo diciendo que 'es solo para entretenerlo'."
+  },
+  {
+    "q": "Un tío bromea diciendo que tu hijo/a 'vive en su mundo'.",
+    "good": "Corriges la broma explicando su forma real de procesar el entorno.",
+    "bad": "Te ríes también para no incomodar al tío."
+  },
+  {
+    "q": "Una abuela insiste en cambiar los planes de última hora sin avisar a tu hijo/a.",
+    "good": "Le explicas por qué el aviso previo es importante para él/ella.",
+    "bad": "Dejas que improvise los cambios sin decir nada."
+  },
+  {
+    "q": "Un cuñado cuestiona por qué 'necesita tantas rutinas' tu hijo/a.",
+    "good": "Explicas cómo las rutinas le dan seguridad y reducen su ansiedad.",
+    "bad": "Te disculpas por las rutinas como si fueran un capricho."
+  },
+  {
+    "q": "Un familiar comenta que 'de grande se le va a quitar lo tímido'.",
+    "good": "Aclaras que no es timidez sino una forma distinta de socializar.",
+    "bad": "Asientes sin corregir la idea equivocada."
+  },
+  {
+    "q": "Una tía se sorprende de que tu hijo/a adolescente aún necesite apoyo para ciertas tareas.",
+    "good": "Explicas que la independencia se desarrolla a su propio ritmo.",
+    "bad": "Te disculpas como si fuera un retraso vergonzoso."
+  },
+  {
+    "q": "Un familiar pregunta por qué llevas siempre auriculares o snacks especiales para tu hijo/a.",
+    "good": "Explicas brevemente para qué sirve cada apoyo que llevas.",
+    "bad": "Escondes esos elementos por vergüenza a la pregunta."
+  },
+  {
+    "q": "Un primo comenta en el grupo familiar que 'todos los niños de hoy están sobre-diagnosticados'.",
+    "good": "Respondes con información basada en evidencia, con calma.",
+    "bad": "Ignoras el mensaje en el chat para evitar el conflicto."
+  },
+  {
+    "q": "Una abuela le habla a tu hijo/a en tercera persona delante de él/ella.",
+    "good": "Corriges con amabilidad, pidiendo que le hable directamente.",
+    "bad": "Dejas que continúe así sin decir nada frente a tu hijo/a."
+  },
+  {
+    "q": "Un familiar quiere que tu hijo/a use cubiertos 'normales' en una cena formal.",
+    "good": "Explicas su necesidad sensorial y priorizas su comodidad.",
+    "bad": "Le exiges que use lo mismo que todos 'por educación'."
+  },
+  {
+    "q": "Un tío pregunta si 'algo que hicieron mal' causó la neurodivergencia.",
+    "good": "Aclaras con calma que no es causada por errores de crianza.",
+    "bad": "Te sientes culpado/a y evitas responder con claridad."
+  },
+  {
+    "q": "Una familiar mayor no entiende por qué tu hijo/a no quiere ir a la iglesia/misa larga.",
+    "good": "Explicas el impacto sensorial y buscan juntos una alternativa breve.",
+    "bad": "Lo/la obligas a asistir completo 'por respeto a la familia'."
+  },
+  {
+    "q": "Un cuñado hace comentarios sobre que 'ya debería hablar mejor' a su edad.",
+    "good": "Explicas el desarrollo real del lenguaje de tu hijo/a con información concreta.",
+    "bad": "Te disculpas avergonzado/a sin explicar nada."
+  },
+  {
+    "q": "Una tía insiste en que tu hijo/a 'solo busca atención' con sus conductas.",
+    "good": "Explicas la diferencia entre buscar atención y comunicar una necesidad.",
+    "bad": "Regañas a tu hijo/a delante de la tía para 'corregir' la conducta."
+  },
+  {
+    "q": "Un familiar comparte un artículo de dudosa fuente sobre 'curas milagrosas'.",
+    "good": "Agradeces la intención y compartes información basada en evidencia.",
+    "bad": "Ignoras el mensaje sin dar ninguna respuesta."
+  },
+  {
+    "q": "Una abuela quiere premiar a tu hijo/a solo cuando 'se comporta normal'.",
+    "good": "Explicas por qué ese enfoque no ayuda y propones otro tipo de refuerzo.",
+    "bad": "Dejas que el sistema de premios siga funcionando así."
+  },
+  {
+    "q": "Un tío pregunta si tu hijo/a 'algún día podrá vivir solo'.",
+    "good": "Respondes con honestidad sobre el proceso de autonomía real.",
+    "bad": "Evitas la pregunta cambiando de tema por incomodidad."
+  },
+  {
+    "q": "Un familiar dice que 'todos somos un poco autistas hoy en día'.",
+    "good": "Explicas la diferencia entre rasgos aislados y un perfil neurodivergente real.",
+    "bad": "Dejas pasar el comentario que minimiza la experiencia de tu hijo/a."
+  },
+  {
+    "q": "Una prima no entiende por qué tu hijo/a lleva la misma ropa varios días seguidos.",
+    "good": "Explicas su necesidad sensorial de texturas conocidas.",
+    "bad": "Fuerzas cambios de ropa 'para que no se note' ante la familia."
+  },
+  {
+    "q": "Un abuelo cuestiona la decisión de compartir el diagnóstico abiertamente con la familia.",
+    "good": "Explicas por qué la transparencia ayuda más que el silencio.",
+    "bad": "Dejas de mencionar el diagnóstico para evitar el conflicto con el abuelo."
+  },
+  {
+    "q": "Un familiar pregunta si puede 'corregir' a tu hijo/a cuando esté a su cuidado.",
+    "good": "Le das pautas claras de qué apoyar y qué evitar corregir.",
+    "bad": "Le dices 'haz lo que creas mejor' sin ninguna orientación."
+  },
+  {
+    "q": "Una tía compara el diagnóstico con una moda pasajera.",
+    "good": "Compartes información seria y respetuosa sobre lo que realmente implica.",
+    "bad": "Te ríes incómodamente para cerrar el tema rápido."
+  },
+  {
+    "q": "Un primo mayor pregunta si tu hijo/a 'algún día será como los demás'.",
+    "good": "Explicas que el objetivo no es que sea 'como los demás' sino que esté bien siendo quien es.",
+    "bad": "Respondes esperanzado/a que 'algún día se le note menos'."
+  },
+  {
+    "q": "Un familiar se queja de que las reuniones ahora 'giran en torno' a las necesidades de tu hijo/a.",
+    "good": "Explicas que los ajustes buscan inclusión, no favoritismo.",
+    "bad": "Reduces las adaptaciones para que la familia no se queje más."
+  },
+  {
+    "q": "Una abuela se preocupa de que 'etiquetar' a tu hijo/a le hará daño.",
+    "good": "Explicas cómo el diagnóstico le da comprensión y recursos, no un daño.",
+    "bad": "Evitas usar el término del diagnóstico frente a ella."
+  },
+  {
+    "q": "Un tío pregunta por qué evitas ciertos lugares ruidosos en las reuniones familiares.",
+    "good": "Explicas la sobrecarga sensorial real que esos lugares generan.",
+    "bad": "Inventas otra excusa para no explicar la verdadera razón."
+  },
+  {
+    "q": "Un familiar dice que tu hijo/a 'no parece' tener esa condición.",
+    "good": "Explicas que la neurodivergencia no siempre se nota a simple vista.",
+    "bad": "Te sientes presionado/a a 'demostrar' que el diagnóstico es real."
+  },
+  {
+    "q": "Una prima joven pregunta directamente a tu hijo/a por qué 'actúa raro'.",
+    "good": "Intervienes con calma explicando de forma apropiada para su edad.",
+    "bad": "Dejas que tu hijo/a responda solo/a esa pregunta incómoda."
+  },
+  {
+    "q": "Un abuelo insiste en llevar a tu hijo/a a lugares con mucha gente 'para que se acostumbre'.",
+    "good": "Explicas que la exposición forzada no genera adaptación, sino estrés.",
+    "bad": "Aceptas la exposición forzada 'para no contradecir' al abuelo."
+  },
+  {
+    "q": "Un familiar pregunta si el diagnóstico es 'de por vida'.",
+    "good": "Explicas que es una forma de ser, no una condición temporal a resolver.",
+    "bad": "Respondes con incertidumbre para evitar profundizar en el tema."
+  },
+  {
+    "q": "Una tía menciona que ella 'también es así un poco' y minimiza la experiencia de tu hijo/a.",
+    "good": "Validas su comentario pero distingues la intensidad real del perfil de tu hijo/a.",
+    "bad": "Dejas que la comparación reduzca la seriedad de sus necesidades."
+  },
+  {
+    "q": "Un familiar critica que le compres ropa sin etiquetas por ser 'demasiado especial'.",
+    "good": "Explicas la sensibilidad táctil real detrás de esa elección.",
+    "bad": "Dejas de comprar esa ropa frente a esa familia por vergüenza."
+  },
+  {
+    "q": "Un abuelo pregunta si debería hablar más lento con tu hijo/a.",
+    "good": "Le das indicaciones concretas y sencillas sobre cómo comunicarse mejor.",
+    "bad": "Le dices 'habla normal, no hace falta cambiar nada' sin orientación real."
+  },
+  {
+    "q": "Un familiar comenta que 'está de moda' ser neurodivergente hoy en día.",
+    "good": "Respondes con datos que muestran que siempre existió, solo se comprende mejor ahora.",
+    "bad": "Evitas el comentario por no querer discutir el tema."
+  },
+  {
+    "q": "Una tía se enoja porque tu hijo/a no la mira mientras habla con ella.",
+    "good": "Explicas que el contacto visual no indica falta de atención o interés.",
+    "bad": "Le pides a tu hijo/a que la mire 'por respeto' en el momento."
+  },
+  {
+    "q": "Un primo pregunta si puede 'jugarle una broma' sensorial a tu hijo/a (sonido fuerte sorpresa).",
+    "good": "Explicas por qué ese tipo de bromas puede ser muy dañino para él/ella.",
+    "bad": "Permites la broma pensando que 'no pasa nada'."
+  },
+  {
+    "q": "Un familiar insiste en que 'el problema es la pantalla', no la neurodivergencia.",
+    "good": "Explicas la diferencia y el rol regulador que cumplen las pantallas para tu hijo/a.",
+    "bad": "Reduces el uso de pantallas frente a esa familia para evitar el juicio."
+  },
+  {
+    "q": "Una abuela pregunta si 'algún día dejará de necesitar' las adaptaciones actuales.",
+    "good": "Explicas que las necesidades cambian, pero siempre existirán en alguna forma.",
+    "bad": "Prometes que 'pronto ya no las necesitará' sin certeza real."
+  },
+  {
+    "q": "Un tío dice que tu hijo/a 'elige' tener crisis para salirse con la suya.",
+    "good": "Explicas la diferencia entre una crisis real de sobrecarga y una manipulación.",
+    "bad": "Castigas a tu hijo/a frente al tío para 'demostrar' que no es así."
+  },
+  {
+    "q": "Un familiar pregunta por qué no corriges el aleteo de manos (stimming) de tu hijo/a.",
+    "good": "Explicas que es una forma de autorregulación, no algo que deba corregirse.",
+    "bad": "Le pides a tu hijo/a que deje de hacerlo frente a esa familia."
+  },
+  {
+    "q": "Una prima quiere organizarle una fiesta sorpresa a tu hijo/a.",
+    "good": "Explicas por qué las sorpresas le generan estrés y propones una alternativa avisada.",
+    "bad": "Dejas que organice la sorpresa igual, sin advertir el riesgo."
+  },
+  {
+    "q": "Un abuelo compara el diagnóstico actual con 'cosas que antes se llamaban de otra forma'.",
+    "good": "Aclaras la terminología actualizada con respeto hacia su experiencia previa.",
+    "bad": "Lo corriges de forma brusca sin explicar el contexto histórico."
+  },
+  {
+    "q": "Un familiar pregunta si debería 'hablar del tema' delante de tu hijo/a o evitarlo.",
+    "good": "Le explicas que hablar abiertamente ayuda más que evitar el tema.",
+    "bad": "Le pides que nunca mencione el tema, generando un secreto incómodo."
+  },
+  {
+    "q": "Una tía dice que 'todos los niños hacen berrinches, no es para tanto'.",
+    "good": "Explicas la diferencia entre un berrinche típico y una crisis de sobrecarga sensorial.",
+    "bad": "Minimizas tú también la situación para coincidir con la tía."
+  },
+  {
+    "q": "Un familiar pregunta cómo puede prepararse mejor antes de una visita a casa.",
+    "good": "Compartes pautas claras sobre rutinas y sensibilidades a respetar.",
+    "bad": "Le dices que 'no hace falta preparar nada especial'."
+  },
+  {
+    "q": "Un primo adulto comparte que también sospecha ser neurodivergente tras conocer a tu hijo/a.",
+    "good": "Escuchas con apertura y compartes recursos si los pide.",
+    "bad": "Minimizas su reflexión diciendo que 'está exagerando'."
+  },
+  {
+    "q": "Un abuelo se resiste a usar el nombre correcto del diagnóstico y usa términos anticuados.",
+    "good": "Le explicas con paciencia la terminología actual y por qué importa.",
+    "bad": "Dejas que use términos desactualizados sin ninguna corrección."
+  },
+  {
+    "q": "Un familiar cuestiona por qué permites que tu hijo/a coma los mismos alimentos siempre.",
+    "good": "Explicas la selectividad alimentaria como parte real de su perfil sensorial.",
+    "bad": "Fuerzas variedad en la comida delante de la familia para 'que no se note'."
+  },
+  {
+    "q": "Una tía dice que deberías 'ser más estricto/a' como ella lo fue con sus hijos.",
+    "good": "Explicas por qué ese enfoque no funciona para el perfil de tu hijo/a.",
+    "bad": "Adoptas ese enfoque frente a la tía solo para complacerla."
+  },
+  {
+    "q": "Un familiar pregunta si el diagnóstico afecta la inteligencia de tu hijo/a.",
+    "good": "Explicas que neurodivergencia e inteligencia son cosas distintas.",
+    "bad": "Evitas el tema por no saber cómo aclararlo correctamente."
+  },
+  {
+    "q": "Un primo comparte contenido de redes sociales con estereotipos sobre neurodivergencia.",
+    "good": "Conversas en privado ofreciendo una perspectiva más informada.",
+    "bad": "Ignoras el contenido aunque perpetúe estereotipos dañinos."
+  },
+  {
+    "q": "Un abuelo insiste en tomarle fotos a tu hijo/a en momentos de crisis 'para el recuerdo'.",
+    "good": "Explicas por qué eso vulnera su dignidad y pides que no lo haga.",
+    "bad": "Permites las fotos por no querer generar un conflicto en el momento."
+  },
+  {
+    "q": "Un familiar dice que 'en otros países esto no se diagnostica tanto'.",
+    "good": "Explicas que el acceso a diagnóstico varía, no la existencia de la condición.",
+    "bad": "Dejas el comentario sin ninguna aclaración."
+  },
+  {
+    "q": "Una tía pregunta si debería dejar de invitarte a reuniones 'para no complicarte'.",
+    "good": "Agradeces la intención y explicas qué ajustes harían posible la asistencia.",
+    "bad": "Aceptas dejar de ir, perdiendo la conexión familiar por evitar el tema."
+  },
+  {
+    "q": "Un familiar joven (primo adolescente) pregunta con curiosidad genuina sobre la ND de tu hijo/a.",
+    "good": "Aprovechas la apertura para compartir información apropiada para su edad.",
+    "bad": "Le dices que 'es un tema de adultos' y cierras la conversación."
+  },
+  {
+    "q": "Un abuelo insiste en que el diagnóstico 'viene de la familia materna/paterna' como reproche.",
+    "good": "Rediriges la conversación hacia el apoyo presente, sin entrar en culpas.",
+    "bad": "Entras en la discusión de 'de qué lado viene' sin resolver nada útil."
+  },
+  {
+    "q": "Un familiar no entiende por qué tu hijo/a necesita anticipación para cada visita.",
+    "good": "Explicas cómo la anticipación reduce su ansiedad ante lo desconocido.",
+    "bad": "Dejas de avisar los detalles, esperando que 'se acostumbre' a la sorpresa."
+  },
+  {
+    "q": "Una tía insiste en cargar o alzar a tu hijo/a aunque él/ella se aleje.",
+    "good": "Explicas con firmeza que su señal de alejarse debe respetarse.",
+    "bad": "Permites que lo alce igual 'para no ofenderla'."
+  },
+  {
+    "q": "Un familiar pregunta si conviene que tu hijo/a 'oculte' el diagnóstico al crecer.",
+    "good": "Explicas los pros y contras de la divulgación, dejando la decisión a su hijo/a.",
+    "bad": "Decides tú solo/a que debe ocultarlo sin considerar su opinión."
+  },
+  {
+    "q": "Un primo se burla del interés intenso de tu hijo/a frente a otros niños.",
+    "good": "Intervienes explicando el valor de ese interés y pidiendo respeto.",
+    "bad": "Le pides a tu hijo/a que 'no hable tanto de eso' para evitar burlas."
+  },
+  {
+    "q": "Un abuelo pregunta si la alimentación 'distinta' tiene relación con el diagnóstico.",
+    "good": "Explicas la conexión sensorial real entre alimentación y neurodivergencia.",
+    "bad": "Dejas que piense que es solo 'mala costumbre' sin corregirlo."
+  },
+  {
+    "q": "Un familiar comenta que tu hijo/a 'parece mal educado' al no responder saludos.",
+    "good": "Explicas que procesar y responder puede tomarle más tiempo del esperado.",
+    "bad": "Presionas a tu hijo/a a responder rápido para 'quedar bien'."
+  },
+  {
+    "q": "Una tía pregunta si deberías haber esperado más antes de buscar un diagnóstico.",
+    "good": "Explicas por qué el diagnóstico temprano ayudó a entender mejor a tu hijo/a.",
+    "bad": "Dudas en voz alta frente a la familia si 'hiciste bien' en diagnosticarlo."
+  },
+  {
+    "q": "Un familiar sugiere 'probar' dejar sin apoyos a tu hijo/a durante una visita 'a ver cómo le va'.",
+    "good": "Explicas con firmeza que los apoyos no son opcionales ni un experimento.",
+    "bad": "Aceptas la propuesta 'para complacer' a esa familia por un día."
+  },
+  {
+    "q": "Un abuelo pregunta si el diagnóstico de tu hijo/a significa que 'no podrá tener pareja/familia'.",
+    "good": "Explicas que la neurodivergencia no limita esas posibilidades futuras.",
+    "bad": "Evitas responder por no saber cómo abordar el tema con el abuelo."
+  },
+  {
+    "q": "Un familiar mayor confunde neurodivergencia con discapacidad intelectual.",
+    "good": "Aclaras con respeto la diferencia entre ambos conceptos.",
+    "bad": "Dejas la confusión sin corregir para no parecer 'quisquilloso/a'."
+  },
+  {
+    "q": "Un primo pregunta si tu hijo/a 'finge' no entender ciertas bromas o sarcasmo.",
+    "good": "Explicas cómo el procesamiento del lenguaje figurado puede ser distinto.",
+    "bad": "Le exiges a tu hijo/a que 'entienda la broma' para no incomodar al primo."
+  },
+  {
+    "q": "Un familiar propone hablar del diagnóstico solo en privado, nunca frente a otros parientes.",
+    "good": "Explicas por qué la naturalidad frente a la familia ayuda más que el secreto.",
+    "bad": "Aceptas mantenerlo en secreto absoluto, generando tensión innecesaria."
+  },
+  {
+    "q": "Un abuelo, tras mucho diálogo, empieza a usar el lenguaje correcto de forma espontánea.",
+    "good": "Reconoces y agradeces ese esfuerzo genuino de adaptación.",
+    "bad": "No notas ni valoras el cambio, dejando pasar la oportunidad de reforzarlo."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

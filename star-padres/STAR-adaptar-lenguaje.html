@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Adaptar el Lenguaje</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #8b5cf6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #8b5cf6, #8b5cf6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #8b5cf6, #8b5cf6cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+      <span>Comunicación Bidireccional</span>
+    </span>
+    <h1>🗣️ Adaptar el Lenguaje</h1>
+    <p>Literalidad, claridad, una instrucción cada vez, evitar ambigüedad.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "adaptar-lenguaje";
+const SITUACIONES = [
+  {
+    "q": "Le dices a tu hijo/a 'ya casi' y se enoja al ver que pasan 20 minutos.",
+    "good": "Aprendes a dar tiempos concretos ('en 10 minutos') en vez de expresiones vagas.",
+    "bad": "Insistes en usar 'ya casi' y te frustras porque 'no entiende'."
+  },
+  {
+    "q": "Le pides que 'ordene su cuarto' y no sabe por dónde empezar.",
+    "good": "Divides la instrucción en pasos concretos: primero la ropa, luego los juguetes.",
+    "bad": "Repites 'ordena tu cuarto' cada vez más fuerte."
+  },
+  {
+    "q": "Usas una expresión idiomática y tu hijo/a la toma literal.",
+    "good": "Le explicas el significado real y evitas esa expresión en el futuro con él/ella.",
+    "bad": "Te ríes de que 'no entendió' sin explicarle."
+  },
+  {
+    "q": "Le das dos instrucciones seguidas y solo cumple una.",
+    "good": "Das una instrucción a la vez y confirmas antes de dar la siguiente.",
+    "bad": "Le repites las dos juntas cada vez más rápido."
+  },
+  {
+    "q": "Dices 'compórtate' sin especificar qué esperas.",
+    "good": "Nombras la conducta concreta que esperas ver.",
+    "bad": "Sigues usando 'compórtate' y te enojas porque no cambia nada."
+  },
+  {
+    "q": "Le preguntas '¿cómo te fue?' y responde con una sola palabra.",
+    "good": "Haces preguntas más específicas y concretas sobre su día.",
+    "bad": "Insistes con la misma pregunta amplia esperando más detalle."
+  },
+  {
+    "q": "Usas sarcasmo y tu hijo/a responde tomándolo literal.",
+    "good": "Aclaras que era sarcasmo y ajustas tu forma de hablarle.",
+    "bad": "Le dices que 'debería entender' el sarcasmo a su edad."
+  },
+  {
+    "q": "Le dices 'en un rato' para algo que en realidad es en una hora.",
+    "good": "Das el tiempo exacto para reducir la ansiedad de la espera.",
+    "bad": "Sigues siendo impreciso con los tiempos."
+  },
+  {
+    "q": "Le explicas una tarea con muchos detalles a la vez.",
+    "good": "Simplificas la explicación en pasos cortos y secuenciales.",
+    "bad": "Repites la explicación completa y larga otra vez."
+  },
+  {
+    "q": "Le dices 'no tardes' sin definir un límite claro.",
+    "good": "Defines un tiempo específico ('20 minutos') en vez de algo ambiguo.",
+    "bad": "Te frustras porque 'no tardes' no fue suficientemente claro para él/ella."
+  },
+  {
+    "q": "Usas una metáfora que tu hijo/a no capta.",
+    "good": "La reemplazas por una descripción literal y directa.",
+    "bad": "Insistes en la metáfora esperando que la entienda con el tiempo."
+  },
+  {
+    "q": "Le pides que 'se apure un poco' y no cambia el ritmo.",
+    "good": "Le das una instrucción concreta como 'termina en 5 minutos'.",
+    "bad": "Repites 'apúrate' cada vez con más urgencia en la voz."
+  },
+  {
+    "q": "Le dices que algo fue 'una película buenísima' esperando entusiasmo similar.",
+    "good": "Aceptas que su reacción puede ser distinta a la esperada sin forzarla.",
+    "bad": "Insistes en que debería reaccionar como tú esperabas."
+  },
+  {
+    "q": "Das una instrucción con doble sentido sin darte cuenta.",
+    "good": "Reformulas de forma directa cuando notas la confusión.",
+    "bad": "Repites la misma frase ambigua pensando que se aclarará sola."
+  },
+  {
+    "q": "Le dices 'pórtate bien en la fiesta' sin más contexto.",
+    "good": "Especificas 2-3 comportamientos concretos esperados en esa fiesta.",
+    "bad": "Repites la frase genérica y esperas que la interprete solo/a."
+  },
+  {
+    "q": "Usas un tono de voz irónico que tu hijo/a no distingue del literal.",
+    "good": "Ajustas tu tono para ser más claro y directo con él/ella.",
+    "bad": "Sigues usando ironía y te frustras si no la capta."
+  },
+  {
+    "q": "Le explicas una regla nueva usando muchas palabras abstractas.",
+    "good": "La traduces a ejemplos concretos y situaciones específicas.",
+    "bad": "Repites la explicación abstracta esperando que 'algún día' la entienda."
+  },
+  {
+    "q": "Le dices 'vamos a salir en cualquier momento' y se pone ansioso/a.",
+    "good": "Le das una hora aproximada concreta para reducir la incertidumbre.",
+    "bad": "Mantienes la frase vaga aunque notes su ansiedad."
+  },
+  {
+    "q": "Le haces una pregunta abierta muy amplia y no responde.",
+    "good": "La reformulas de forma más específica y acotada.",
+    "bad": "Repites la misma pregunta amplia insistentemente."
+  },
+  {
+    "q": "Le dices 'ten cuidado' sin especificar con qué.",
+    "good": "Nombras el riesgo concreto ('cuidado con el escalón').",
+    "bad": "Sigues usando advertencias vagas y te frustras si no reacciona."
+  },
+  {
+    "q": "Le dices a tu hijo/a 'nos vamos en un ratito' antes de salir de viaje.",
+    "good": "Le das una hora exacta ('a las 4') para reducir la incertidumbre.",
+    "bad": "Repites 'un ratito' aunque notes que se pone ansioso/a."
+  },
+  {
+    "q": "Le pides a tu hijo/a que 'se comporte' en la boda de un familiar.",
+    "good": "Le nombras 2 o 3 conductas concretas esperadas en ese evento.",
+    "bad": "Repites 'pórtate bien' esperando que lo interprete solo/a."
+  },
+  {
+    "q": "Usas la frase 'cuesta un ojo de la cara' y tu hijo/a se preocupa literalmente.",
+    "good": "Le explicas que es una forma de decir que algo es caro.",
+    "bad": "Te burlas de que 'no entendió' sin aclararle nada."
+  },
+  {
+    "q": "Le dices 'vamos a ver' ante una petición, sin comprometerte a nada claro.",
+    "good": "Le das una respuesta concreta: sí, no, o cuándo lo sabrás.",
+    "bad": "Sigues usando 'vamos a ver' y te frustras si insiste en preguntar."
+  },
+  {
+    "q": "Le explicas las reglas de un juego de mesa nuevo con mucho detalle de golpe.",
+    "good": "Divides la explicación en rondas cortas, jugando mientras explicas.",
+    "bad": "Repites todo el reglamento de una vez esperando que lo retenga."
+  },
+  {
+    "q": "Le dices 'dale, como quieras' de forma sarcástica ante su insistencia.",
+    "good": "Le das una respuesta clara y directa sobre lo que decides.",
+    "bad": "Usas sarcasmo y te frustras porque lo toma como un sí literal."
+  },
+  {
+    "q": "Le pides que 'se apure con el desayuno' sin especificar cuánto tiempo tiene.",
+    "good": "Le dices un tiempo concreto: 'termina en 10 minutos'.",
+    "bad": "Repites 'apúrate' cada vez con más urgencia en la voz."
+  },
+  {
+    "q": "Le explicas una tarea usando la expresión 'no es ciencia espacial'.",
+    "good": "Evitas la expresión y explicas los pasos de forma literal.",
+    "bad": "Insistes en la frase aunque notes que la tomó al pie de la letra."
+  },
+  {
+    "q": "Le dices 'te llamo en cinco minutos' y en realidad tardas media hora.",
+    "good": "Ajustas tu comunicación a tiempos reales que puedas cumplir.",
+    "bad": "Sigues dando tiempos que no cumples, generando desconfianza."
+  },
+  {
+    "q": "Le pides que 'se vista rápido' para el colegio sin dar una secuencia clara.",
+    "good": "Le das el orden concreto: primero la ropa interior, luego el pantalón.",
+    "bad": "Repites 'rápido, rápido' sin dar pasos concretos."
+  },
+  {
+    "q": "Usas la expresión 'me costó sangre, sudor y lágrimas' y tu hijo/a se alarma.",
+    "good": "Le explicas que es una forma de decir que fue muy difícil.",
+    "bad": "Sigues usando la expresión sin notar su confusión literal."
+  },
+  {
+    "q": "Le dices 'siéntate como la gente' sin especificar qué postura esperas.",
+    "good": "Le muestras o nombras la postura concreta que esperas.",
+    "bad": "Repites la frase genérica esperando que la interprete solo/a."
+  },
+  {
+    "q": "Le explicas un cambio de rutina usando muchas condicionales ('si pasa esto, entonces...').",
+    "good": "Simplificas a una secuencia lineal y concreta de pasos.",
+    "bad": "Mantienes las condicionales complejas y se confunde más."
+  },
+  {
+    "q": "Le dices 'ahorita' para algo que en realidad harás en la tarde.",
+    "good": "Reemplazas 'ahorita' por un momento concreto del día.",
+    "bad": "Sigues usando 'ahorita' aunque genere confusión repetida."
+  },
+  {
+    "q": "Le pides que 'ponga atención' en clase sin decir qué conducta específica esperas.",
+    "good": "Nombras conductas concretas: mirar al pizarrón, escribir lo importante.",
+    "bad": "Repites 'pon atención' sin dar ninguna referencia concreta."
+  },
+  {
+    "q": "Usas la frase 'estoy que exploto' y tu hijo/a se asusta pensando que literalmente pasará algo.",
+    "good": "Aclaras que es una forma de decir que estás muy frustrado/a, sin peligro real.",
+    "bad": "Sigues usando la frase notando su miedo, sin aclarar nada."
+  },
+  {
+    "q": "Le explicas un itinerario de vacaciones con muchos detalles verbales seguidos.",
+    "good": "Le muestras un calendario visual simple con las actividades por día.",
+    "bad": "Repites el itinerario completo de forma oral, una y otra vez."
+  },
+  {
+    "q": "Le dices 'no hagas tanto drama' ante una reacción que a ti te parece exagerada.",
+    "good": "Nombras la emoción que ves y preguntas qué la generó.",
+    "bad": "Repites 'drama' cada vez que expresa una emoción intensa."
+  },
+  {
+    "q": "Usas la palabra 'luego' para referirte a momentos muy distintos del día.",
+    "good": "Especificas el momento exacto cada vez que la usas.",
+    "bad": "Sigues usando 'luego' de forma ambigua y genérica."
+  },
+  {
+    "q": "Le dices 'ya sabes lo que tienes que hacer' sin haberlo explicitado antes.",
+    "good": "Repites la instrucción concreta, aunque ya se haya dicho antes.",
+    "bad": "Asumes que 'ya debería saberlo' y no aclaras nada."
+  },
+  {
+    "q": "Le explicas una receta de cocina con pasos mezclados y fuera de orden.",
+    "good": "Ordenas los pasos de forma secuencial y numerada.",
+    "bad": "Repites los pasos desordenados esperando que los reorganice solo/a."
+  },
+  {
+    "q": "Usas la expresión 'me lavo las manos' sobre un tema y tu hijo/a lo toma literal.",
+    "good": "Aclaras que significa que ya no te vas a involucrar en el tema.",
+    "bad": "Sigues con la expresión sin notar la confusión que genera."
+  },
+  {
+    "q": "Le pides que 'sea considerado/a' con su hermano sin decir qué acción esperas.",
+    "good": "Nombras la conducta concreta: 'comparte el juguete cinco minutos'.",
+    "bad": "Repites 'sé considerado' esperando que lo entienda solo/a."
+  },
+  {
+    "q": "Le dices 'en cualquier momento llega tu tía' antes de una visita.",
+    "good": "Le das una hora aproximada concreta para reducir la espera ansiosa.",
+    "bad": "Mantienes la frase vaga aunque notes que se pone nervioso/a."
+  },
+  {
+    "q": "Le explicas una emergencia médica con vocabulario técnico complejo.",
+    "good": "Traduces la información a frases simples y directas según su edad.",
+    "bad": "Usas el mismo vocabulario técnico esperando que lo entienda igual."
+  },
+  {
+    "q": "Le dices 'no te hagas el difícil' ante su resistencia a algo.",
+    "good": "Le preguntas qué parte específica le cuesta de la situación.",
+    "bad": "Repites la frase acusatoria sin explorar la dificultad real."
+  },
+  {
+    "q": "Usas la expresión 'se me fue el avión' y tu hijo/a busca un avión real.",
+    "good": "Le explicas que significa que te distrajiste u olvidaste algo.",
+    "bad": "Te ríes de su confusión sin aclararle el significado."
+  },
+  {
+    "q": "Le dices 'aguanta un poco más' durante una fila larga sin dar tiempo estimado.",
+    "good": "Le das un cálculo aproximado del tiempo que falta.",
+    "bad": "Repites 'aguanta' sin dar ninguna referencia de tiempo."
+  },
+  {
+    "q": "Le explicas un examen con instrucciones ambiguas sobre el formato.",
+    "good": "Aclaras exactamente qué se espera: número de preguntas, tiempo, formato.",
+    "bad": "Repites la instrucción ambigua esperando que la deduzca solo/a."
+  },
+  {
+    "q": "Le dices 'no es para tanto' cuando reacciona fuerte ante un cambio de planes.",
+    "good": "Describes el cambio de forma concreta y ofreces información clara.",
+    "bad": "Repites 'no es para tanto' sin dar más claridad sobre la situación."
+  },
+  {
+    "q": "Usas la frase 'tira la toalla' y tu hijo/a busca literalmente una toalla.",
+    "good": "Le explicas que significa rendirse o dejar de intentarlo.",
+    "bad": "Sigues usando la expresión sin explicarle el significado."
+  },
+  {
+    "q": "Le pides que 'no exagere' al describir una molestia sensorial.",
+    "good": "Le preguntas detalles concretos sobre lo que siente, sin descalificar.",
+    "bad": "Repites 'no exageres' sin indagar en lo que describe."
+  },
+  {
+    "q": "Le explicas un cambio de colegio con lenguaje muy abstracto sobre 'nuevas oportunidades'.",
+    "good": "Describes concretamente qué cambiará: edificio, horario, compañeros.",
+    "bad": "Repites frases abstractas esperando que reduzcan su ansiedad."
+  },
+  {
+    "q": "Le dices 'con calma' cuando está muy alterado/a, sin dar pasos concretos.",
+    "good": "Le ofreces una acción concreta: respirar contando hasta cinco contigo.",
+    "bad": "Repites 'cálmate' sin ofrecer ninguna herramienta concreta."
+  },
+  {
+    "q": "Usas la expresión 'estar en la luna' y tu hijo/a pregunta si viajaste al espacio.",
+    "good": "Le explicas que significa estar distraído/a pensando en otra cosa.",
+    "bad": "Te burlas de la pregunta sin aclarar el significado."
+  },
+  {
+    "q": "Le pides que 'no se pase de la raya' sin definir cuál es el límite exacto.",
+    "good": "Nombras la conducta específica que no debe repetir.",
+    "bad": "Repites la frase figurada esperando que entienda el límite implícito."
+  },
+  {
+    "q": "Le explicas los horarios de vacaciones con referencias relativas ('el día después de mañana').",
+    "good": "Usas un calendario visual con fechas y días concretos marcados.",
+    "bad": "Sigues usando referencias relativas que le cuesta calcular."
+  },
+  {
+    "q": "Le dices 'ya deberías saber esto' ante una duda que vuelve a tener.",
+    "good": "Respondes la duda de nuevo con la misma paciencia que la primera vez.",
+    "bad": "Repites 'ya deberías saberlo' generando que evite preguntar."
+  },
+  {
+    "q": "Usas la frase 'me quedé de piedra' y tu hijo/a se preocupa pensando que te transformaste.",
+    "good": "Le explicas que significa que te sorprendiste mucho.",
+    "bad": "Sigues usando la expresión sin aclarar su significado literal."
+  },
+  {
+    "q": "Le pides que 'hable más claro' sin decir qué parte no entendiste.",
+    "good": "Le repites la parte específica que no captaste para que la reformule.",
+    "bad": "Repites 'habla más claro' sin señalar qué no se entendió."
+  },
+  {
+    "q": "Le explicas una mudanza con frases largas sobre 'un nuevo capítulo en la vida'.",
+    "good": "Describes en términos concretos qué cambiará en su rutina diaria.",
+    "bad": "Repites metáforas abstractas sin bajar a detalles concretos."
+  },
+  {
+    "q": "Le dices 'no me hagas repetir las cosas' ante su necesidad de confirmar de nuevo.",
+    "good": "Repites la información con calma, entendiendo su necesidad de certeza.",
+    "bad": "Te frustras y repites la frase de reproche en vez de la información."
+  },
+  {
+    "q": "Usas la expresión 'me quitaste un peso de encima' y tu hijo/a busca el peso físico.",
+    "good": "Le explicas que significa que te sentiste aliviado/a.",
+    "bad": "Sigues con la expresión sin aclarar qué significa realmente."
+  },
+  {
+    "q": "Le pides que 'termine rápido' la tarea sin dar un tiempo específico.",
+    "good": "Le das un tiempo concreto como referencia: '15 minutos más'.",
+    "bad": "Repites 'rápido' cada vez con más impaciencia en el tono."
+  },
+  {
+    "q": "Le explicas un procedimiento del hospital con palabras vagas como 'te van a revisar'.",
+    "good": "Describes en detalle concreto qué va a pasar, paso a paso.",
+    "bad": "Mantienes la explicación vaga aunque notes su ansiedad creciente."
+  },
+  {
+    "q": "Usas la frase 'no hay para tanto' ante su reacción a un ruido fuerte.",
+    "good": "Nombras el sonido concreto y ofreces una solución práctica (tapones, salir).",
+    "bad": "Repites 'no hay para tanto' sin ofrecer ninguna alternativa."
+  },
+  {
+    "q": "Le pides que 'se controle' en una fiesta sin decir qué conducta esperas.",
+    "good": "Nombras 2 o 3 conductas concretas antes de entrar a la fiesta.",
+    "bad": "Repites 'contrólate' sin dar ninguna referencia concreta."
+  },
+  {
+    "q": "Usas la expresión 'eso no tiene ni pies ni cabeza' y tu hijo/a se confunde.",
+    "good": "Le explicas que significa que algo no tiene sentido lógico.",
+    "bad": "Sigues usando la expresión sin aclarar su significado."
+  },
+  {
+    "q": "Le explicas las reglas de convivencia familiar con conceptos abstractos como 'respeto'.",
+    "good": "Traduces 'respeto' a acciones concretas y observables.",
+    "bad": "Repites el concepto abstracto esperando que lo deduzca solo/a."
+  },
+  {
+    "q": "Le dices 'te dije mil veces' ante un olvido repetido.",
+    "good": "Repites la instrucción de forma clara, sin el reproche añadido.",
+    "bad": "Sigues sumando el reproche cada vez que debes repetir algo."
+  },
+  {
+    "q": "Usas la frase 'no muerdas más de lo que puedes masticar' y tu hijo/a se confunde.",
+    "good": "Le explicas de forma literal que significa no comprometerse a más de lo posible.",
+    "bad": "Sigues usando la expresión sin aclarar su sentido figurado."
+  },
+  {
+    "q": "Le pides que 'se relaje' antes de un examen sin dar ninguna técnica concreta.",
+    "good": "Le ofreces un ejercicio de respiración concreto para practicar juntos.",
+    "bad": "Repites 'relájate' sin dar ninguna herramienta práctica."
+  },
+  {
+    "q": "Le explicas una cita médica usando la palabra 'pronto' de forma repetida.",
+    "good": "Le das la fecha y hora exacta de la cita con anticipación.",
+    "bad": "Sigues usando 'pronto' aunque aumente su ansiedad anticipatoria."
+  },
+  {
+    "q": "Usas la expresión 'esto es pan comido' y tu hijo/a pregunta por el pan.",
+    "good": "Le explicas que significa que la tarea será fácil de hacer.",
+    "bad": "Te ríes de la confusión sin aclarar el significado."
+  },
+  {
+    "q": "Le dices 'compórtate como tu hermano mayor' sin especificar qué conducta imitar.",
+    "good": "Nombras la conducta concreta que esperas, sin usar comparaciones.",
+    "bad": "Repites la comparación sin especificar ninguna conducta concreta."
+  },
+  {
+    "q": "Le explicas el reglamento de un deporte nuevo con reglas todas juntas de una vez.",
+    "good": "Introduces las reglas de a poco, mientras practican en la cancha.",
+    "bad": "Explicas el reglamento completo de golpe esperando que lo retenga."
+  },
+  {
+    "q": "Usas la frase 'ponte las pilas' y tu hijo/a busca pilas reales para colocarse.",
+    "good": "Le explicas que significa que necesita esforzarse o activarse más.",
+    "bad": "Sigues con la expresión sin aclarar su sentido figurado."
+  },
+  {
+    "q": "Le dices 'no seas tan intenso' ante su forma directa de expresar entusiasmo.",
+    "good": "Reconoces su forma de expresión sin pedirle que la cambie.",
+    "bad": "Repites 'baja el tono' sin validar su forma natural de ser."
+  },
+  {
+    "q": "Le explicas un cambio de horario escolar usando fechas relativas confusas.",
+    "good": "Usas un calendario con el nuevo horario escrito día por día.",
+    "bad": "Repites las fechas relativas esperando que las calcule solo/a."
+  },
+  {
+    "q": "Usas la expresión 'me suena a chino' y tu hijo/a pregunta por qué mencionas China.",
+    "good": "Le explicas que significa que algo es difícil de entender.",
+    "bad": "Sigues usando la expresión sin aclarar su significado real."
+  },
+  {
+    "q": "Le pides que 'no se pase de listo/a' ante una broma que hizo.",
+    "good": "Nombras la conducta específica que te molestó, de forma directa.",
+    "bad": "Repites la expresión figurada sin explicar qué conducta corregir."
+  },
+  {
+    "q": "Le explicas una salida familiar con la frase 'nos organizamos sobre la marcha'.",
+    "good": "Defines con anticipación al menos los puntos clave del plan.",
+    "bad": "Mantienes la improvisación total aunque le genere ansiedad."
+  },
+  {
+    "q": "Usas la frase 'eso me suena a excusa' ante su explicación de por qué no hizo algo.",
+    "good": "Le preguntas más detalles concretos antes de descalificar su razón.",
+    "bad": "Repites 'es una excusa' sin explorar la explicación que dio."
+  },
+  {
+    "q": "Le pides que 'piense antes de hablar' sin decir qué necesitas específicamente.",
+    "good": "Le explicas la conducta concreta que esperas en ese momento.",
+    "bad": "Repites la frase genérica sin dar ninguna guía concreta."
+  },
+  {
+    "q": "Le explicas un viaje en avión usando términos técnicos sobre 'turbulencia' sin contexto.",
+    "good": "Describes en términos simples y concretos qué se siente y por qué pasa.",
+    "bad": "Usas terminología técnica sin adaptarla a su comprensión."
+  },
+  {
+    "q": "Usas la expresión 'se armó la grande' y tu hijo/a se confunde sobre qué se armó.",
+    "good": "Le explicas que significa que hubo un problema o desorden grande.",
+    "bad": "Sigues con la expresión sin aclarar su significado real."
+  },
+  {
+    "q": "Le pides que 'no te hagas problema' ante algo que a él/ella sí le genera angustia real.",
+    "good": "Reconoces la angustia y le das información concreta sobre la situación.",
+    "bad": "Repites 'no te hagas problema' invalidando lo que siente."
+  },
+  {
+    "q": "Le explicas una regla nueva de convivencia usando condicionales encadenadas y complejas.",
+    "good": "Simplificas la regla a una frase corta y directa.",
+    "bad": "Repites la explicación compleja esperando que la entienda igual."
+  },
+  {
+    "q": "Usas la frase 'no des más vueltas' ante su forma de explicar algo con muchos detalles.",
+    "good": "Le das tiempo para terminar su explicación a su propio ritmo.",
+    "bad": "Repites 've al grano' cortando su forma natural de contar."
+  },
+  {
+    "q": "Le pides que 'se le baje la espuma' ante su entusiasmo por algo.",
+    "good": "Validas su entusiasmo sin pedirle que lo module artificialmente.",
+    "bad": "Repites la expresión sin explicar qué conducta específica esperas."
+  },
+  {
+    "q": "Le explicas un trámite (pasaporte, documento) con lenguaje burocrático complejo.",
+    "good": "Traduces el trámite a pasos simples y concretos, uno por uno.",
+    "bad": "Usas el lenguaje burocrático completo esperando que lo entienda."
+  },
+  {
+    "q": "Usas la expresión 'no hay que darle tantas vueltas' ante su necesidad de procesar una decisión.",
+    "good": "Le das el tiempo y la información concreta que necesita para decidir.",
+    "bad": "Repites la expresión apresurando una decisión que aún no está lista."
+  },
+  {
+    "q": "Le pides que 'se ponga en los zapatos del otro' de forma abstracta.",
+    "good": "Le das un ejemplo concreto de cómo se sentiría la otra persona.",
+    "bad": "Repites la expresión abstracta sin dar ningún ejemplo concreto."
+  },
+  {
+    "q": "Le explicas la mudanza de cuarto usando la frase 'vamos a darle una vuelta a todo'.",
+    "good": "Describes en detalle concreto qué muebles y objetos cambiarán de lugar.",
+    "bad": "Repites la frase vaga sin especificar qué cambiará realmente."
+  },
+  {
+    "q": "Usas la expresión 'eso es la gota que colma el vaso' y tu hijo/a busca un vaso real.",
+    "good": "Le explicas que significa que ya fueron demasiadas cosas juntas.",
+    "bad": "Sigues con la expresión sin aclarar su sentido figurado."
+  },
+  {
+    "q": "Le pides que 'no te tomes todo tan literal' ante su interpretación de una broma.",
+    "good": "Reconoces que su forma de procesar el lenguaje es distinta y ajustas tu forma de hablar.",
+    "bad": "Le exiges que cambie su forma natural de interpretar el lenguaje."
+  },
+  {
+    "q": "Le explicas un cambio de actividad extraescolar con información parcial y ambigua.",
+    "good": "Le das toda la información concreta disponible antes de que decida.",
+    "bad": "Le das información a medias esperando que 'se acostumbre' después."
+  },
+  {
+    "q": "Usas la frase 'no hagas tormentas en un vaso de agua' ante su reacción a algo.",
+    "good": "Le preguntas qué le genera esa reacción antes de minimizarla con una frase hecha.",
+    "bad": "Repites la expresión sin indagar en lo que realmente le afecta."
+  },
+  {
+    "q": "Le pides que 'se aguante' un rato más en una situación sensorialmente incómoda.",
+    "good": "Le das un tiempo concreto y un plan claro para salir de la situación.",
+    "bad": "Repites 'aguántate' sin dar ninguna referencia de tiempo o salida."
+  },
+  {
+    "q": "Le dices 'no seas tan quisquilloso/a' ante su rechazo a una comida por su textura.",
+    "good": "Nombras la textura concreta que le molesta y buscas alternativas similares.",
+    "bad": "Repites 'no seas quisquilloso' sin identificar la molestia sensorial real."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

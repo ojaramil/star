@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.T.A.R Padres · Escucha Neuroinclusiva</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #8b5cf6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #8b5cf6, #8b5cf6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #8b5cf6, #8b5cf6cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+      <span>Comunicación Bidireccional</span>
+    </span>
+    <h1>👂 Escucha Neuroinclusiva</h1>
+    <p>Escuchar antes de corregir.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "escucha-neuroafirmativa";
+const SITUACIONES = [
+  {
+    "q": "Tu hijo/a se queja de que el colegio 'es horrible' otra vez.",
+    "good": "Le preguntas qué pasó específicamente hoy antes de dar tu opinión.",
+    "bad": "Le dices que exagera y que el colegio no puede ser tan malo."
+  },
+  {
+    "q": "Te cuenta que un compañero lo/la molestó pero de forma confusa.",
+    "good": "Escuchas toda la historia sin interrumpir para entender su versión.",
+    "bad": "Concluyes rápido lo que pasó sin dejarlo terminar de contar."
+  },
+  {
+    "q": "Tu hijo/a repite una queja sobre la misma persona varias veces.",
+    "good": "Entiendes que necesita procesarlo repitiéndolo y lo acompañas con paciencia.",
+    "bad": "Le dices 'ya me contaste eso' y cambias de tema."
+  },
+  {
+    "q": "Te dice que no quiere ir a cierta actividad sin dar razones claras.",
+    "good": "Le preguntas con calma qué le preocupa antes de decidir por él/ella.",
+    "bad": "Asumes que es capricho y lo obligas a ir igual."
+  },
+  {
+    "q": "Tu hijo/a se frustra tratando de explicar algo que le pasó.",
+    "good": "Le das tiempo, sin apurarlo, para encontrar las palabras.",
+    "bad": "Terminas la frase por él/ella impacientemente."
+  },
+  {
+    "q": "Comparte una opinión distinta a la tuya sobre algo importante.",
+    "good": "La escuchas completa antes de responder o corregir.",
+    "bad": "Lo interrumpes para decirle que está equivocado."
+  },
+  {
+    "q": "Tu hijo/a llega llorando sin explicar de inmediato qué pasó.",
+    "good": "Le das espacio y validas su emoción antes de pedir detalles.",
+    "bad": "Exiges que te explique de inmediato para poder 'solucionarlo'."
+  },
+  {
+    "q": "Te dice que un profesor 'lo trata mal'.",
+    "good": "Investigas con preguntas abiertas antes de descartar o confirmar su percepción.",
+    "bad": "Le dices que seguro exagera porque los profesores 'no hacen eso'."
+  },
+  {
+    "q": "Tu hijo/a te cuenta un logro que a ti te parece pequeño.",
+    "good": "Celebras genuinamente lo que es importante para él/ella.",
+    "bad": "Minimizas el logro comparándolo con algo 'más grande'."
+  },
+  {
+    "q": "Expresa miedo a algo que a ti te parece irracional.",
+    "good": "Validas que el miedo es real para él/ella, sin descalificarlo.",
+    "bad": "Le dices que 'eso no da miedo' y lo ignoras."
+  },
+  {
+    "q": "Tu hijo/a intenta contarte algo mientras estás distraído/a.",
+    "good": "Pausas lo que haces y le das atención completa por un momento.",
+    "bad": "Respondes con monosílabos sin mirarlo mientras sigue hablando."
+  },
+  {
+    "q": "Te dice que no le gustó un regalo que le diste.",
+    "good": "Preguntas qué hubiera preferido sin ofenderte por su honestidad.",
+    "bad": "Te enojas y le dices que es un malagradecido."
+  },
+  {
+    "q": "Tu hijo/a comparte una idea poco convencional para resolver un problema.",
+    "good": "La consideras seriamente antes de sugerir la tuya.",
+    "bad": "Descartas la idea de inmediato por 'poco práctica'."
+  },
+  {
+    "q": "Te dice que se siente diferente a sus compañeros.",
+    "good": "Le preguntas cómo se siente al respecto sin apresurarte a tranquilizarlo.",
+    "bad": "Le dices rápido que 'todos son iguales' para cerrar el tema."
+  },
+  {
+    "q": "Tu hijo/a se queja de una regla de la casa.",
+    "good": "Escuchas su argumento antes de reafirmar o ajustar la regla.",
+    "bad": "Repites la regla sin explicar ni escuchar su punto."
+  },
+  {
+    "q": "Comparte que algo le dio vergüenza en público.",
+    "good": "Validas el sentimiento sin restarle importancia.",
+    "bad": "Le dices que 'no fue nada' y sigues con lo tuyo."
+  },
+  {
+    "q": "Tu hijo/a insiste en que algo sensorial le molesta y tú no lo notas.",
+    "good": "Confías en su percepción aunque no la compartas.",
+    "bad": "Le dices que 'no puede ser tan molesto' porque tú no lo sientes."
+  },
+  {
+    "q": "Te pregunta lo mismo varias veces sobre un plan futuro.",
+    "good": "Respondes con la misma paciencia cada vez, entendiendo su necesidad de certeza.",
+    "bad": "Le dices con fastidio que deje de preguntar lo mismo."
+  },
+  {
+    "q": "Tu hijo/a expresa enojo hacia una decisión familiar.",
+    "good": "Escuchas el enojo sin descalificarlo, aunque la decisión no cambie.",
+    "bad": "Le dices que no tiene derecho a enojarse por eso."
+  },
+  {
+    "q": "Comparte una observación inusual sobre algo cotidiano.",
+    "good": "Muestras curiosidad genuina por su forma particular de ver las cosas.",
+    "bad": "Le dices que 'piensa raro' y cambias de tema."
+  },
+  {
+    "q": "Tu hijo/a de 4 años llega del jardín diciendo 'no quiero volver nunca más'.",
+    "good": "Le preguntas con calma qué pasó hoy en vez de asumir que exagera.",
+    "bad": "Le dices que tiene que ir igual sin indagar más."
+  },
+  {
+    "q": "Tu hijo/a adolescente escribe 'todo está mal' y luego no responde más mensajes.",
+    "good": "Esperas su momento y le preguntas después con calma qué ocurrió.",
+    "bad": "Le respondes de inmediato con soluciones sin saber qué pasó."
+  },
+  {
+    "q": "Tu hijo/a de primaria dice que 'la maestra nueva no le cae bien' sin dar detalles.",
+    "good": "Le haces preguntas abiertas para entender qué le incomoda específicamente.",
+    "bad": "Le dices que debe llevarse bien con todos los maestros."
+  },
+  {
+    "q": "Tu hijo/a adulto joven llama y dice 'el trabajo es un desastre' y corta rápido.",
+    "good": "Lo llamas de vuelta más tarde y lo dejas contar con calma.",
+    "bad": "Le das consejos de inmediato sin conocer el contexto."
+  },
+  {
+    "q": "En el auto, tu hijo/a empieza a contarte algo importante justo al llegar a destino.",
+    "good": "Te quedas unos minutos más en el auto para que termine de contarte.",
+    "bad": "Le dices que hablen después porque ya llegaron."
+  },
+  {
+    "q": "Tu hijo/a te interrumpe para contarte algo mientras hablas por teléfono.",
+    "good": "Le haces una seña de 'un momento' y vuelves a él/ella apenas puedas.",
+    "bad": "Lo mandas a callar bruscamente sin reconocer que necesitaba algo."
+  },
+  {
+    "q": "Tu hijo/a adolescente te cuenta que discutió con su mejor amigo/a, con el relato desordenado.",
+    "good": "Sigues el hilo de su historia sin apurarlo a 'ir al grano'.",
+    "bad": "Le pides que resuma rápido porque no tienes tiempo."
+  },
+  {
+    "q": "Tu hijo/a de 5 años te cuenta un sueño confuso con mucho detalle innecesario para ti.",
+    "good": "Lo escuchas completo, mostrando interés por su mundo interno.",
+    "bad": "Le dices que 'era solo un sueño' y cambias de tema rápido."
+  },
+  {
+    "q": "Tu hijo/a te dice que le tiene miedo a un compañero nuevo sin explicar por qué.",
+    "good": "Le preguntas qué le genera esa sensación antes de restarle importancia.",
+    "bad": "Le dices que 'no puede tenerle miedo a alguien que no conoce'."
+  },
+  {
+    "q": "Tu hijo/a preadolescente cuenta algo sobre su día mientras hace otra cosa a la vez.",
+    "good": "Le das atención aunque el relato sea fragmentado o disperso.",
+    "bad": "Le dices que te hable 'de una vez, sin tantas vueltas'."
+  },
+  {
+    "q": "Tu hijo/a te dice que un juego de la escuela 'no fue justo' sin más contexto.",
+    "good": "Le pides que te explique la situación completa antes de opinar.",
+    "bad": "Le dices que 'así es la vida' y sigues con lo tuyo."
+  },
+  {
+    "q": "Tu hijo/a adulto joven menciona que terminó una relación de pareja, casi de pasada.",
+    "good": "Le preguntas con calma cómo se siente, sin apurar el tema.",
+    "bad": "Cambias de tema rápido para no 'incomodar'."
+  },
+  {
+    "q": "Tu hijo/a de primaria llega angustiado/a por un examen que salió mal.",
+    "good": "Lo dejas hablar de lo que sintió antes de hablar de la nota.",
+    "bad": "Le preguntas de inmediato qué nota sacó, ignorando su angustia."
+  },
+  {
+    "q": "Tu hijo/a te cuenta que un profesor sustituto 'hace todo distinto' y eso le molesta.",
+    "good": "Exploras con preguntas qué parte del cambio le cuesta más.",
+    "bad": "Le dices que 'se tiene que adaptar' sin más conversación."
+  },
+  {
+    "q": "Tu hijo/a adolescente comparte que se siente diferente por su forma de pensar.",
+    "good": "Le preguntas cómo se siente con eso, sin apresurarte a corregir su percepción.",
+    "bad": "Le dices rápido que 'no es para tanto' y cierras el tema."
+  },
+  {
+    "q": "Tu hijo/a te cuenta, entre risas nerviosas, que algo le dio mucha vergüenza en el recreo.",
+    "good": "Escuchas el relato completo sin minimizar la vergüenza que sintió.",
+    "bad": "Te ríes con él/ella sin detenerte a validar cómo se sintió."
+  },
+  {
+    "q": "Tu hijo/a de 6 años insiste en contarte los mismos detalles de un paseo escolar.",
+    "good": "Lo escuchas de nuevo con paciencia, sabiendo que necesita procesarlo así.",
+    "bad": "Le dices 'eso ya me lo contaste' y te vas."
+  },
+  {
+    "q": "Tu hijo/a preadolescente menciona que un grupo de WhatsApp 'se puso raro' hoy.",
+    "good": "Le preguntas con calma qué pasó exactamente en el grupo.",
+    "bad": "Le quitas el celular sin escuchar antes qué ocurrió."
+  },
+  {
+    "q": "Tu hijo/a te cuenta que extraña a un amigo/a que se mudó de ciudad.",
+    "good": "Validas su tristeza escuchando cuánto significaba esa amistad.",
+    "bad": "Le dices que 'hará nuevos amigos' y cierras el tema rápido."
+  },
+  {
+    "q": "Tu hijo/a adulto joven te cuenta sobre una entrevista de trabajo que no salió como esperaba.",
+    "good": "Le preguntas cómo vivió el proceso antes de analizar qué falló.",
+    "bad": "Le das feedback inmediato sobre qué hizo mal."
+  },
+  {
+    "q": "Tu hijo/a se queja de que 'nadie lo entiende' en la escuela.",
+    "good": "Le preguntas qué situación específica lo llevó a sentir eso.",
+    "bad": "Le dices que 'todos se sienten así a veces' y sigues de largo."
+  },
+  {
+    "q": "Tu hijo/a de primaria te cuenta con mucho detalle sobre un videojuego mientras tú tienes prisa.",
+    "good": "Le dices que quieres escucharlo con calma en unos minutos, y cumples.",
+    "bad": "Lo cortas diciendo que 'eso no importa ahora'."
+  },
+  {
+    "q": "Tu hijo/a adolescente te cuenta que un profesor le llamó la atención frente a la clase.",
+    "good": "Escuchas su versión completa antes de suponer que hizo algo malo.",
+    "bad": "Asumes que el profesor tenía razón sin escuchar su parte."
+  },
+  {
+    "q": "Tu hijo/a te dice que un animal en el zoológico 'se veía triste'.",
+    "good": "Muestras interés genuino en su observación sin descartarla.",
+    "bad": "Le dices que 'los animales no sienten eso' y avanzas."
+  },
+  {
+    "q": "Tu hijo/a comparte que le teme a una inyección que tiene programada.",
+    "good": "Escuchas su miedo completo antes de tranquilizarlo con información.",
+    "bad": "Le dices que 'no duele nada' sin dejarlo expresar el miedo."
+  },
+  {
+    "q": "Tu hijo/a de secundaria menciona sentirse agotado/a 'sin motivo' después de clases.",
+    "good": "Le preguntas más sobre su día para entender el agotamiento.",
+    "bad": "Le dices que 'no hizo nada como para estar tan cansado'."
+  },
+  {
+    "q": "Tu hijo/a te cuenta que un compañero se burló de su forma de hablar.",
+    "good": "Escuchas todo el relato antes de decidir cómo actuar.",
+    "bad": "Minimizas diciendo que 'los niños siempre se molestan entre ellos'."
+  },
+  {
+    "q": "Tu hijo/a adulto joven te llama solo para 'desahogarse' del día, sin pedir consejo.",
+    "good": "Lo dejas hablar sin interrumpir con soluciones no pedidas.",
+    "bad": "Lo interrumpes cada minuto con consejos que no pidió."
+  },
+  {
+    "q": "Tu hijo/a te dice que no quiere ir al cumpleaños de un primo sin explicar por qué.",
+    "good": "Le preguntas con calma qué le preocupa de esa fiesta en particular.",
+    "bad": "Asumes que es capricho y lo obligas a ir sin escucharlo."
+  },
+  {
+    "q": "Tu hijo/a de 7 años te interrumpe con una pregunta sobre dinosaurios en medio de una tarea urgente.",
+    "good": "Le dices que en un momento le prestarás toda tu atención, y lo cumples.",
+    "bad": "Le respondes con fastidio sin registrar lo que preguntó."
+  },
+  {
+    "q": "Tu hijo/a comparte que sintió que un amigo lo dejó de lado en el recreo.",
+    "good": "Le haces preguntas para entender bien la situación antes de opinar.",
+    "bad": "Le dices que 'seguro fue sin querer' sin haber escuchado más."
+  },
+  {
+    "q": "Tu hijo/a preadolescente cuenta, con muchas idas y vueltas, un conflicto con su hermano.",
+    "good": "Sigues su relato sin apurar el orden en que cuenta las cosas.",
+    "bad": "Le pides que 'vaya al punto' cortando su forma de narrar."
+  },
+  {
+    "q": "Tu hijo/a menciona que un doctor 'le dio miedo' en la última consulta.",
+    "good": "Le preguntas qué parte de la visita le generó esa sensación.",
+    "bad": "Le dices que 'los doctores no dan miedo' y cambias de tema."
+  },
+  {
+    "q": "Tu hijo/a adolescente comparte una duda sobre su identidad o vocación.",
+    "good": "Escuchas sin apresurarte a dar una respuesta definitiva.",
+    "bad": "Le dices de inmediato qué 'debería' pensar o decidir."
+  },
+  {
+    "q": "Tu hijo/a te cuenta que un profesor cambió las reglas del salón sin avisar.",
+    "good": "Le preguntas cómo le afectó ese cambio antes de justificar al profesor.",
+    "bad": "Le dices que 'los profesores pueden cambiar lo que quieran'."
+  },
+  {
+    "q": "Tu hijo/a de primaria dice que 'la comida del comedor escolar es asquerosa' cada día.",
+    "good": "Le preguntas qué específicamente le desagrada de la comida.",
+    "bad": "Le dices que 'coma lo que hay' sin explorar más."
+  },
+  {
+    "q": "Tu hijo/a comparte que se siente triste sin saber explicar exactamente por qué.",
+    "good": "Le das espacio para que hable sin exigir una razón clara.",
+    "bad": "Insistes en que 'debe haber una razón' y lo presionas a encontrarla."
+  },
+  {
+    "q": "Tu hijo/a adulto joven menciona que está dudando de seguir la carrera que eligió.",
+    "good": "Escuchas sus dudas completas antes de opinar sobre su decisión.",
+    "bad": "Le dices de inmediato que 'no puede cambiar de idea ahora'."
+  },
+  {
+    "q": "Tu hijo/a te cuenta que un vecino le gritó por jugar en la calle.",
+    "good": "Escuchas su versión completa antes de decidir cómo abordarlo.",
+    "bad": "Asumes que el vecino tenía razón sin escucharlo primero."
+  },
+  {
+    "q": "Tu hijo/a preadolescente comparte que un grupo de amigos lo excluyó de un plan.",
+    "good": "Le preguntas cómo se sintió y qué pasó exactamente.",
+    "bad": "Le dices que 'no será para tanto' sin dejarlo contar más."
+  },
+  {
+    "q": "Tu hijo/a te cuenta con entusiasmo algo sobre un tema que a ti no te interesa mucho.",
+    "good": "Le prestas atención genuina el tiempo que necesita para contarlo.",
+    "bad": "Lo cortas diciendo que 'ya hablamos mucho de eso'."
+  },
+  {
+    "q": "Tu hijo/a dice que se sintió 'raro' en una fiesta familiar sin dar más detalles.",
+    "good": "Le preguntas con calma qué parte de la fiesta le generó eso.",
+    "bad": "Le dices que 'ahí estaba toda la familia, no puede sentirse raro'."
+  },
+  {
+    "q": "Tu hijo/a adolescente te cuenta que peleó con su pareja, con detalles que no comprendes del todo.",
+    "good": "Escuchas sin juzgar la relación, solo acompañando su relato.",
+    "bad": "Opinas de inmediato sobre quién tuvo la culpa."
+  },
+  {
+    "q": "Tu hijo/a te dice que no quiere que le tomen fotos en el evento familiar.",
+    "good": "Le preguntas por qué antes de insistir en la foto grupal.",
+    "bad": "Lo obligas a la foto diciendo que 'no pasa nada por una foto'."
+  },
+  {
+    "q": "Tu hijo/a de primaria comenta que 'el recreo es lo peor del día'.",
+    "good": "Indagas con calma qué ocurre específicamente en el recreo.",
+    "bad": "Le dices que 'el recreo es para divertirse' sin más preguntas."
+  },
+  {
+    "q": "Tu hijo/a comparte que sintió que lo compararon con su hermano en una reunión familiar.",
+    "good": "Escuchas cómo le afectó esa comparación antes de restarle importancia.",
+    "bad": "Le dices que 'no fue para tanto' y minimizas su malestar."
+  },
+  {
+    "q": "Tu hijo/a adulto joven te cuenta que discutió con un compañero de piso.",
+    "good": "Escuchas los detalles del conflicto sin tomar partido de inmediato.",
+    "bad": "Le das la razón automáticamente sin conocer la otra versión."
+  },
+  {
+    "q": "Tu hijo/a menciona que un juguete se rompió y parece afectarlo más de lo esperado.",
+    "good": "Validas que ese objeto tenía un significado importante para él/ella.",
+    "bad": "Le dices que 'es solo un juguete' y no le das importancia."
+  },
+  {
+    "q": "Tu hijo/a preadolescente comparte que se siente presionado/a por las notas.",
+    "good": "Le preguntas qué específicamente le genera esa presión.",
+    "bad": "Le dices que 'las notas son lo más importante ahora' sin escuchar más."
+  },
+  {
+    "q": "Tu hijo/a te cuenta que tuvo una pesadilla y quiere contarte todos los detalles.",
+    "good": "Escuchas el relato completo aunque sea tarde y estés cansado/a.",
+    "bad": "Le dices que 'ya pasó, vuelve a dormir' cortando el relato."
+  },
+  {
+    "q": "Tu hijo/a dice que no le gustó cómo lo trataron en una tienda.",
+    "good": "Le preguntas qué pasó exactamente antes de restarle importancia.",
+    "bad": "Le dices que 'seguro fue un malentendido' sin escuchar más."
+  },
+  {
+    "q": "Tu hijo/a adolescente comparte una opinión política o social que te sorprende.",
+    "good": "La escuchas completa antes de dar tu propia postura.",
+    "bad": "Lo interrumpes para corregir su opinión de inmediato."
+  },
+  {
+    "q": "Tu hijo/a te cuenta que se sintió excluido/a en un trabajo grupal escolar.",
+    "good": "Le preguntas cómo fue la dinámica del grupo con calma.",
+    "bad": "Le dices que 'tiene que aprender a integrarse mejor'."
+  },
+  {
+    "q": "Tu hijo/a comparte que algo en el hospital lo asustó durante una visita médica.",
+    "good": "Le das espacio para expresar el miedo antes de tranquilizarlo.",
+    "bad": "Le dices que 'ya pasó' sin dejarlo procesar lo vivido."
+  },
+  {
+    "q": "Tu hijo/a de primaria te dice que 'ya no quiere ir más a fútbol' sin explicar por qué.",
+    "good": "Le preguntas con curiosidad qué cambió en su interés por el deporte.",
+    "bad": "Le dices que 'ya pagamos la inscripción, tiene que seguir'."
+  },
+  {
+    "q": "Tu hijo/a adulto joven comenta que se siente estancado/a en su vida.",
+    "good": "Lo escuchas con atención completa sin apresurarte a dar soluciones.",
+    "bad": "Le das una lista de 'lo que debería hacer' sin dejarlo hablar más."
+  },
+  {
+    "q": "Tu hijo/a menciona que sintió que un familiar favoreció a un primo en un juego.",
+    "good": "Validas su percepción escuchando qué observó exactamente.",
+    "bad": "Le dices que 'está exagerando' sin indagar en lo que vio."
+  },
+  {
+    "q": "Tu hijo/a preadolescente te dice que no entiende por qué sus papás se separaron.",
+    "good": "Le das espacio para expresar sus dudas y sentimientos sin apurar respuestas.",
+    "bad": "Le das una explicación rápida para 'cerrar el tema'."
+  },
+  {
+    "q": "Tu hijo/a comparte que le teme a la oscuridad, aunque antes no le pasaba.",
+    "good": "Le preguntas si algo cambió recientemente que explique ese miedo.",
+    "bad": "Le dices que 'ya es grande para tenerle miedo a eso'."
+  },
+  {
+    "q": "Tu hijo/a adolescente cuenta que un video en redes sociales lo hizo sentir mal con su cuerpo.",
+    "good": "Escuchas cómo le afectó ese contenido antes de opinar.",
+    "bad": "Le dices que 'no debería ver esas cosas' sin explorar cómo se siente."
+  },
+  {
+    "q": "Tu hijo/a te dice que extraña a una mascota que falleció, meses después.",
+    "good": "Validas que el duelo puede seguir presente, escuchándolo con paciencia.",
+    "bad": "Le dices que 'ya debería haberlo superado'."
+  },
+  {
+    "q": "Tu hijo/a comparte que se sintió avergonzado/a al no entender un chiste grupal.",
+    "good": "Escuchas cómo se sintió sin restarle importancia al momento.",
+    "bad": "Le dices que 'no es para tanto, era solo un chiste'."
+  },
+  {
+    "q": "Tu hijo/a de primaria menciona que un compañero nuevo 'habla distinto' y le da curiosidad.",
+    "good": "Escuchas su observación con interés, sin corregirlo de inmediato.",
+    "bad": "Le dices que 'no debe fijarse en eso' cortando la conversación."
+  },
+  {
+    "q": "Tu hijo/a adulto joven comparte que dudó de renunciar a su primer trabajo.",
+    "good": "Escuchas sus razones completas antes de dar tu opinión.",
+    "bad": "Le dices de inmediato que 'no puede renunciar tan rápido'."
+  },
+  {
+    "q": "Tu hijo/a comenta que sintió que un maestro no lo escuchó cuando pidió ayuda.",
+    "good": "Le preguntas los detalles antes de decidir si hablar con el colegio.",
+    "bad": "Le dices que 'seguro el maestro estaba ocupado' sin más preguntas."
+  },
+  {
+    "q": "Tu hijo/a preadolescente te cuenta que un grupo de redes sociales lo hizo sentir presionado/a.",
+    "good": "Escuchas la situación completa antes de tomar medidas.",
+    "bad": "Le quitas el acceso a redes sin escuchar primero qué pasó."
+  },
+  {
+    "q": "Tu hijo/a menciona que le gustaría cambiar de colegio, sin dar razones de inmediato.",
+    "good": "Le preguntas con calma qué le lleva a pensar en ese cambio.",
+    "bad": "Descartas la idea de plano sin explorar sus motivos."
+  },
+  {
+    "q": "Tu hijo/a comparte que sintió miedo durante una tormenta, más que otras veces.",
+    "good": "Le preguntas si algo distinto pasó esta vez que aumentó su miedo.",
+    "bad": "Le dices que 'ya sabe que las tormentas no hacen nada'."
+  },
+  {
+    "q": "Tu hijo/a adolescente te cuenta que discutió con un profesor por una nota.",
+    "good": "Escuchas ambas partes de la historia antes de tomar postura.",
+    "bad": "Le das la razón al profesor sin escuchar la versión de tu hijo/a."
+  },
+  {
+    "q": "Tu hijo/a comenta que sintió que lo dejaron de lado en una foto grupal familiar.",
+    "good": "Validas su sentimiento escuchando qué notó exactamente.",
+    "bad": "Le dices que 'está viendo cosas donde no las hay'."
+  },
+  {
+    "q": "Tu hijo/a de primaria te dice que no quiere ir a natación 'nunca más'.",
+    "good": "Le preguntas qué pasó en la última clase antes de decidir algo.",
+    "bad": "Le dices que 'ya invertimos en las clases, tiene que seguir'."
+  },
+  {
+    "q": "Tu hijo/a comparte que sintió nervios extremos antes de una presentación escolar.",
+    "good": "Escuchas sus nervios completos sin apurarte a decir 'todo saldrá bien'.",
+    "bad": "Le dices que 'no hay nada que temer' sin dejarlo expresar más."
+  },
+  {
+    "q": "Tu hijo/a adulto joven te cuenta que se siente inseguro/a viviendo solo/a por primera vez.",
+    "good": "Escuchas sus preocupaciones completas antes de minimizarlas.",
+    "bad": "Le dices que 'ya es adulto, tiene que resolverlo solo'."
+  },
+  {
+    "q": "Tu hijo/a menciona que un compañero de equipo 'no lo pasa la pelota' nunca.",
+    "good": "Le preguntas más detalles antes de sacar una conclusión.",
+    "bad": "Le dices que 'seguro está exagerando' sin escuchar más."
+  },
+  {
+    "q": "Tu hijo/a comparte que sintió que un familiar lo trató como 'niño chico' en una reunión.",
+    "good": "Validas su molestia escuchando qué situación específica lo generó.",
+    "bad": "Le dices que 'no puede ofenderse por cariño familiar'."
+  },
+  {
+    "q": "Tu hijo/a preadolescente te cuenta que se siente confundido/a con sus propias emociones.",
+    "good": "Le das espacio para hablar de esa confusión sin apurar respuestas.",
+    "bad": "Le dices que 'a su edad todos se sienten así' cerrando el tema."
+  },
+  {
+    "q": "Tu hijo/a comparte que un examen médico le generó mucha ansiedad anticipada.",
+    "good": "Escuchas su ansiedad completa antes de explicar el procedimiento.",
+    "bad": "Le explicas el procedimiento sin antes validar su ansiedad."
+  },
+  {
+    "q": "Tu hijo/a te cuenta que sintió que un amigo lo traicionó al compartir un secreto.",
+    "good": "Escuchas toda la situación antes de opinar sobre la amistad.",
+    "bad": "Le dices que 'así son los amigos a veces' sin profundizar."
+  },
+  {
+    "q": "Tu hijo/a adolescente comparte que duda de su orientación o identidad.",
+    "good": "Escuchas con apertura genuina, sin apurar conclusiones ni etiquetas.",
+    "bad": "Le dices que 'es solo una fase' cortando la conversación."
+  },
+  {
+    "q": "Tu hijo/a comenta que se sintió mal al no ser elegido/a para un equipo escolar.",
+    "good": "Le das espacio para expresar la decepción antes de animarlo.",
+    "bad": "Le dices rápido que 'la próxima vez será' sin dejarlo procesar."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

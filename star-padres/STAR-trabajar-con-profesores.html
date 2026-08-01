@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Trabajar con Profesores</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ec4899;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #ec4899, #ec4899cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #ec4899, #ec4899cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>
+      <span>Defensa y Colaboración</span>
+    </span>
+    <h1>🏫 Trabajar con Profesores</h1>
+    <p>Comunicar necesidades y coordinar ajustes en el colegio.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 90</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "trabajar-con-profesores";
+const SITUACIONES = [
+  {
+    "q": "Un profesor reporta que tu hijo/a 'no presta atención' en clase.",
+    "good": "Compartes información sobre su perfil de atención y sugieres ajustes concretos juntos.",
+    "bad": "Asumes que el profesor tiene razón y presionas a tu hijo/a sin más contexto."
+  },
+  {
+    "q": "El colegio propone una sanción estándar para una conducta que es una necesidad sensorial.",
+    "good": "Explicas el contexto neurológico y propones una alternativa más adecuada.",
+    "bad": "Aceptas la sanción sin cuestionar si es apropiada para su perfil."
+  },
+  {
+    "q": "Un profesor no conoce bien qué significa el perfil de tu hijo/a.",
+    "good": "Ofreces compartir información concreta y práctica sobre cómo apoyarlo/a en clase.",
+    "bad": "Asumes que el profesor 'debería saberlo' y no compartes nada."
+  },
+  {
+    "q": "El colegio sugiere una evaluación adicional para tu hijo/a.",
+    "good": "Te informas y participas activamente en el proceso, colaborando con el equipo.",
+    "bad": "Rechazas la evaluación por miedo a una etiqueta, sin informarte primero."
+  },
+  {
+    "q": "Un maestro compara públicamente a tu hijo/a con otros estudiantes.",
+    "good": "Conversas en privado con el profesor explicando el impacto de esa comparación.",
+    "bad": "Ignoras la situación esperando que 'no vuelva a pasar' sin decir nada."
+  },
+  {
+    "q": "El colegio necesita ajustar la evaluación de un examen para tu hijo/a.",
+    "good": "Propones ajustes concretos (tiempo extra, formato) basados en su perfil real.",
+    "bad": "Esperas que el colegio proponga los ajustes sin dar tu propia información."
+  },
+  {
+    "q": "Un profesor nuevo no conoce el historial de tu hijo/a.",
+    "good": "Preparas un resumen breve y práctico para compartir al inicio del año.",
+    "bad": "Asumes que la información ya fue transmitida por el colegio sin confirmarlo."
+  },
+  {
+    "q": "El colegio organiza una actividad sensorialmente intensa (feria, asamblea).",
+    "good": "Coordinas con anticipación adaptaciones o alternativas para tu hijo/a.",
+    "bad": "Dejas que tu hijo/a enfrente la actividad sin ninguna adaptación previa."
+  },
+  {
+    "q": "Un profesor malinterpreta una conducta de tu hijo/a como falta de respeto.",
+    "good": "Explicas el trasfondo neurológico de esa conducta con ejemplos concretos.",
+    "bad": "Le pides a tu hijo/a que 'se comporte mejor' sin abordarlo con el profesor."
+  },
+  {
+    "q": "El colegio propone un plan de apoyo (PEI/adaptación curricular).",
+    "good": "Participas activamente revisando y ajustando el plan según conoces a tu hijo/a.",
+    "bad": "Firmas el plan sin revisarlo, delegando toda la decisión al colegio."
+  },
+  {
+    "q": "Un profesor reporta una crisis en clase sin mucho contexto.",
+    "good": "Preguntas detalles específicos para entender qué la desencadenó.",
+    "bad": "Asumes automáticamente que tu hijo/a hizo algo mal sin más información."
+  },
+  {
+    "q": "El colegio no tiene un espacio tranquilo disponible para momentos de sobrecarga.",
+    "good": "Propones colaborativamente crear o designar un espacio de ese tipo.",
+    "bad": "Aceptas que 'no hay recursos' sin proponer ninguna alternativa."
+  },
+  {
+    "q": "Un profesor pregunta cómo manejar mejor una conducta específica en clase.",
+    "good": "Compartes estrategias concretas que funcionan en casa, adaptadas al aula.",
+    "bad": "Le dices que 'es su trabajo saber cómo manejarlo' sin colaborar."
+  },
+  {
+    "q": "El colegio organiza una reunión sobre el progreso de tu hijo/a.",
+    "good": "Llegas preparado/a con observaciones concretas y preguntas específicas.",
+    "bad": "Asistes sin preparación, aceptando pasivamente lo que se te informa."
+  },
+  {
+    "q": "Un profesor sugiere una intervención que no encaja con el enfoque neuroafirmativo.",
+    "good": "Explicas con respeto por qué prefieres un enfoque distinto y propones alternativas.",
+    "bad": "Aceptas la intervención sin cuestionarla para 'no generar conflicto'."
+  },
+  {
+    "q": "El colegio reporta mejoras que tú no ves reflejadas en casa.",
+    "good": "Compartes esa diferencia para entender juntos el contexto de cada entorno.",
+    "bad": "Asumes que uno de los dos entornos 'está mintiendo' sobre el progreso."
+  },
+  {
+    "q": "Un profesor plantea dudas sobre si tu hijo/a debería estar en aula regular.",
+    "good": "Exploras la conversación con datos concretos y buscas la mejor solución conjunta.",
+    "bad": "Reaccionas a la defensiva sin escuchar realmente la preocupación planteada."
+  },
+  {
+    "q": "El colegio cambia de metodología sin avisar con anticipación a las familias.",
+    "good": "Solicitas información anticipada para poder preparar a tu hijo/a en casa.",
+    "bad": "Te enteras tarde y no tienes tiempo de preparar a tu hijo/a para el cambio."
+  },
+  {
+    "q": "Un profesor destaca solo las dificultades de tu hijo/a en las reuniones.",
+    "good": "Pides equilibrar la conversación incluyendo también sus fortalezas.",
+    "bad": "Aceptas el enfoque negativo sin pedir una visión más completa."
+  },
+  {
+    "q": "El colegio necesita coordinar con un especialista externo que atiende a tu hijo/a.",
+    "good": "Facilitas activamente la comunicación entre ambas partes.",
+    "bad": "Dejas que cada parte trabaje por separado sin conectar la información."
+  },
+  {
+    "q": "El colegio organiza un examen sorpresa sin previo aviso.",
+    "good": "Solicitas que te avisen con anticipación por el impacto que genera en tu hijo/a.",
+    "bad": "Aceptas que los exámenes sorpresa sigan ocurriendo sin decir nada."
+  },
+  {
+    "q": "Un profesor cambia la disposición del aula sin avisar a las familias.",
+    "good": "Preguntas cómo afecta el cambio a tu hijo/a y compartes su necesidad de previsibilidad.",
+    "bad": "Descubres el cambio por tu hijo/a y no dices nada al profesor."
+  },
+  {
+    "q": "El colegio quiere retirar el apoyo de un asistente/paraprofesional.",
+    "good": "Pides una reunión para revisar juntos si esa decisión sigue siendo adecuada.",
+    "bad": "Aceptas el retiro del apoyo sin pedir datos que lo justifiquen."
+  },
+  {
+    "q": "Un profesor de educación física exige que tu hijo/a participe en un deporte de contacto.",
+    "good": "Propones una alternativa que respete sus límites sensoriales.",
+    "bad": "Obligas a tu hijo/a a participar igual para 'no destacar' entre compañeros."
+  },
+  {
+    "q": "El colegio programa una salida educativa sin información sensorial previa.",
+    "good": "Solicitas detalles del entorno para preparar a tu hijo/a con anticipación.",
+    "bad": "Envías a tu hijo/a sin preguntar nada sobre el lugar o el itinerario."
+  },
+  {
+    "q": "Un profesor sustituto no conoce las necesidades de tu hijo/a.",
+    "good": "Dejas una nota breve y clara con la información esencial para el día.",
+    "bad": "Asumes que el profesor titular ya avisó, sin confirmarlo."
+  },
+  {
+    "q": "El colegio decide cambiar a tu hijo/a de aula a mitad de año.",
+    "good": "Preguntas el motivo y evalúas juntos el impacto de ese cambio.",
+    "bad": "Aceptas el cambio sin preguntar cómo se preparará a tu hijo/a."
+  },
+  {
+    "q": "Un profesor sugiere que tu hijo/a repita el año escolar.",
+    "good": "Pides datos concretos y una reunión para decidir informadamente.",
+    "bad": "Rechazas la idea de inmediato sin escuchar los argumentos del profesor."
+  },
+  {
+    "q": "El colegio organiza fotos escolares con un horario rígido y fila larga.",
+    "good": "Solicitas un horario alternativo o menos espera para tu hijo/a.",
+    "bad": "Dejas que tu hijo/a espere en fila larga sin pedir ningún ajuste."
+  },
+  {
+    "q": "Un profesor pide que tu hijo/a lea en voz alta frente a la clase.",
+    "good": "Explicas su preferencia y propones una alternativa cómoda para él/ella.",
+    "bad": "Dejas que se sienta expuesto/a sin hablar con el profesor."
+  },
+  {
+    "q": "Un profesor de infantil pregunta por qué tu hijo/a no juega con otros niños en el recreo.",
+    "good": "Compartes cómo prefiere jugar y qué apoyos ayudan a iniciar interacción.",
+    "bad": "Dices que 'ya se le pasará' sin dar información útil."
+  },
+  {
+    "q": "El colegio propone eliminar el tiempo de descanso sensorial que tu hijo/a tiene asignado.",
+    "good": "Explicas por qué ese tiempo sigue siendo necesario con ejemplos recientes.",
+    "bad": "Aceptas quitarlo para 'no pedir más de la cuenta'."
+  },
+  {
+    "q": "Un profesor de secundaria penaliza a tu hijo/a por llegar tarde debido a su rutina matutina.",
+    "good": "Coordinas con el colegio una solución realista para las mañanas.",
+    "bad": "Dejas que las sanciones se acumulen sin hablarlo con nadie."
+  },
+  {
+    "q": "El colegio quiere iniciar el proceso de transición a la vida adulta sin consultarte primero.",
+    "good": "Pides participar activamente desde el inicio del proceso.",
+    "bad": "Dejas que el colegio decida solo, sin tu perspectiva como padre/madre."
+  },
+  {
+    "q": "Un profesor te pide 'más paciencia en casa' ante una dificultad que observa en clase.",
+    "good": "Le explicas qué estrategias usas en casa y cuáles podrían servir también en el aula.",
+    "bad": "Te sientes juzgado/a y evitas seguir hablando con ese profesor."
+  },
+  {
+    "q": "El colegio organiza un simulacro de incendio sin preparar a tu hijo/a para el ruido de la alarma.",
+    "good": "Solicitas protección auditiva o aviso previo antes del simulacro.",
+    "bad": "Dejas que enfrente la alarma sin ninguna preparación."
+  },
+  {
+    "q": "Un profesor de música exige que todos toquen un instrumento ruidoso en grupo.",
+    "good": "Propones una alternativa o protección auditiva para tu hijo/a.",
+    "bad": "Obligas a tu hijo/a a participar igual, aunque le genere malestar."
+  },
+  {
+    "q": "El colegio decide no renovar el plan de apoyo de tu hijo/a sin revisión previa.",
+    "good": "Solicitas una reunión de seguimiento antes de cualquier cambio.",
+    "bad": "Te enteras del cambio después de que ya se aplicó."
+  },
+  {
+    "q": "Un profesor comenta que tu hijo/a 'interrumpe demasiado' en clase.",
+    "good": "Exploras juntos si es impulsividad y qué estrategia puede ayudar.",
+    "bad": "Le pides a tu hijo/a que 'se controle más' sin investigar la causa."
+  },
+  {
+    "q": "El colegio pide que tu hijo/a participe en una obra de teatro frente a todo el colegio.",
+    "good": "Preguntas si existe un rol alternativo menos expuesto que le sea cómodo.",
+    "bad": "Lo/la inscribes igual sin preguntar sus preferencias."
+  },
+  {
+    "q": "El colegio decide cambiar el horario del recreo sensorial sin avisar.",
+    "good": "Pides que te informen los cambios con anticipación por su rutina.",
+    "bad": "Te enteras por tu hijo/a y no dices nada al colegio."
+  },
+  {
+    "q": "Un profesor de arte insiste en que use ciertos materiales que le generan rechazo sensorial.",
+    "good": "Propones materiales alternativos que cumplan el mismo objetivo.",
+    "bad": "Dejas que use el material igual, aunque le incomode."
+  },
+  {
+    "q": "El colegio quiere derivarlo/a a un aula especial sin explorar antes otras opciones.",
+    "good": "Pides conocer todas las alternativas antes de decidir.",
+    "bad": "Aceptas la derivación de inmediato, sin cuestionar el proceso."
+  },
+  {
+    "q": "Un profesor de secundaria no permite el uso de audífonos con cancelación de ruido en clase.",
+    "good": "Presentas la necesidad con información concreta al profesor.",
+    "bad": "Le pides a tu hijo/a que los deje en casa para 'evitar problemas'."
+  },
+  {
+    "q": "El colegio programa la graduación con luces y sonido muy intensos.",
+    "good": "Solicitas con anticipación ajustes de sonido o un lugar más tranquilo.",
+    "bad": "Asistes sin pedir nada, esperando que tu hijo/a lo tolere igual."
+  },
+  {
+    "q": "Un profesor de primaria reporta que tu hijo/a 'se aísla' en el recreo.",
+    "good": "Compartes si ese aislamiento es elección o necesidad, y qué apoyo ayuda.",
+    "bad": "Asumes automáticamente que hay un problema social sin más contexto."
+  },
+  {
+    "q": "Un profesor decide cambiar el sistema de recompensas sin avisarte.",
+    "good": "Preguntas cómo funciona el nuevo sistema y si encaja con el enfoque en casa.",
+    "bad": "Dejas que el nuevo sistema opere sin entender su lógica."
+  },
+  {
+    "q": "El colegio no tiene protocolo claro para una crisis sensorial en el comedor.",
+    "good": "Propones junto al colegio un protocolo concreto para esos momentos.",
+    "bad": "Aceptas que 'se resolverá como se pueda' sin protocolo."
+  },
+  {
+    "q": "Un profesor universitario no conoce el servicio de accesibilidad del centro.",
+    "good": "Acompañas a tu hijo/a a conectar con la oficina de accesibilidad correspondiente.",
+    "bad": "Dejas que enfrente solo/a la situación sin orientación."
+  },
+  {
+    "q": "El colegio organiza una jornada de puertas abiertas con mucho ruido y gente.",
+    "good": "Preparas con anticipación una salida o pausa para tu hijo/a.",
+    "bad": "Lo/la llevas sin ningún plan de salida si se sobrecarga."
+  },
+  {
+    "q": "Un profesor de primaria malinterpreta el contacto visual evitado como falta de atención.",
+    "good": "Explicas que el procesamiento no depende del contacto visual.",
+    "bad": "Le exiges a tu hijo/a que mire a los ojos para 'parecer atento'."
+  },
+  {
+    "q": "El colegio no informa a tiempo sobre un cambio de profesor a mitad de curso.",
+    "good": "Pides que te avisen con antelación los cambios de personal relevantes.",
+    "bad": "Tu hijo/a se entera del cambio el mismo día, sin preparación."
+  },
+  {
+    "q": "Un profesor de secundaria asigna trabajos grupales sin considerar dificultades sociales de tu hijo/a.",
+    "good": "Propones ajustes en la formación de grupos o el rol asignado.",
+    "bad": "Dejas que se las arregle solo/a sin plantear nada al profesor."
+  },
+  {
+    "q": "El colegio cuestiona la necesidad de un intérprete o apoyo de comunicación.",
+    "good": "Presentas evidencia concreta de por qué ese apoyo es necesario.",
+    "bad": "Aceptas que 'puede arreglárselas sin eso' sin más argumento."
+  },
+  {
+    "q": "Un profesor de arte plástica no permite descansos durante actividades largas.",
+    "good": "Solicitas pausas cortas programadas según su necesidad de regulación.",
+    "bad": "Dejas que aguante toda la actividad sin ninguna pausa."
+  },
+  {
+    "q": "El colegio decide suspender el recreo como castigo colectivo.",
+    "good": "Explicas el impacto desproporcionado que eso tiene en tu hijo/a.",
+    "bad": "Aceptas la sanción colectiva sin plantear el caso particular."
+  },
+  {
+    "q": "Un profesor de tecnología prohíbe el uso de un dispositivo de comunicación aumentativa.",
+    "good": "Aclaras que es una herramienta esencial, no un dispositivo recreativo.",
+    "bad": "Dejas que se lo retiren sin explicar su función real."
+  },
+  {
+    "q": "El colegio quiere evaluar el comportamiento de tu hijo/a sin observarlo en su entorno natural.",
+    "good": "Sugieres que la evaluación incluya observación directa en el aula.",
+    "bad": "Aceptas los resultados de una evaluación descontextualizada sin cuestionarla."
+  },
+  {
+    "q": "Un profesor comenta en redes sociales del colegio una anécdota de tu hijo/a sin permiso.",
+    "good": "Conversas en privado sobre el límite de compartir información sin consentimiento.",
+    "bad": "Dejas pasar la situación aunque te incomodó."
+  },
+  {
+    "q": "El colegio organiza una competencia deportiva con eliminación pública.",
+    "good": "Propones un formato menos expuesto o alternativas de participación.",
+    "bad": "Dejas que participe en un formato que sabes le genera ansiedad."
+  },
+  {
+    "q": "Un profesor de primaria pide que 'hable con más confianza' en clase.",
+    "good": "Explicas que su comunicación puede tomar otras formas válidas.",
+    "bad": "Presionas a tu hijo/a en casa para que hable 'como los demás'."
+  },
+  {
+    "q": "El colegio decide cambiar el proveedor del comedor sin considerar la selectividad alimentaria.",
+    "good": "Coordinas con el nuevo servicio opciones compatibles con su alimentación.",
+    "bad": "Dejas que se quede sin comer adecuado por no preguntar antes."
+  },
+  {
+    "q": "El colegio organiza el examen de admisión a secundaria en un ambiente muy ruidoso.",
+    "good": "Solicitas una sala alternativa más tranquila para el examen.",
+    "bad": "Dejas que rinda el examen en las condiciones estándar sin pedir nada."
+  },
+  {
+    "q": "Un profesor de biología exige disecciones sin alternativa para sensibilidades sensoriales.",
+    "good": "Propones una alternativa educativa equivalente sin esa exposición.",
+    "bad": "Obligas a tu hijo/a a participar igual, aunque le resulte insoportable."
+  },
+  {
+    "q": "El colegio decide no avisar sobre un cambio de aula el día del examen.",
+    "good": "Pides que los cambios importantes se comuniquen con antelación siempre.",
+    "bad": "Tu hijo/a llega confundido/a el día del examen sin previo aviso."
+  },
+  {
+    "q": "Un profesor de inglés no permite el uso de pictogramas de apoyo en clase.",
+    "good": "Explicas que son una herramienta de comprensión, no una ventaja injusta.",
+    "bad": "Dejas que se los quiten sin defender su uso."
+  },
+  {
+    "q": "El colegio plantea expulsar temporalmente a tu hijo/a por una crisis sensorial.",
+    "good": "Pides revisar el protocolo y proponer alternativas a la expulsión.",
+    "bad": "Aceptas la expulsión sin cuestionar si fue la respuesta adecuada."
+  },
+  {
+    "q": "Un profesor de primaria minimiza el acoso que sufre tu hijo/a por parte de compañeros.",
+    "good": "Documentas los hechos y exiges una respuesta concreta del colegio.",
+    "bad": "Aceptas que 'son cosas de niños' sin exigir ninguna acción."
+  },
+  {
+    "q": "El colegio decide implementar un sistema de puntos por buena conducta para toda la clase.",
+    "good": "Preguntas cómo ese sistema afecta a tu hijo/a en particular.",
+    "bad": "Dejas que el sistema opere sin evaluar su impacto específico."
+  },
+  {
+    "q": "Un profesor de historia asigna una presentación oral obligatoria sin alternativas.",
+    "good": "Propones un formato alternativo (grabación, escrito) que cumpla el objetivo.",
+    "bad": "Dejas que enfrente la presentación oral sin ningún ajuste."
+  },
+  {
+    "q": "El colegio no informa sobre el protocolo de emergencia adaptado para tu hijo/a.",
+    "good": "Solicitas conocer y participar en la elaboración de ese protocolo.",
+    "bad": "Asumes que el colegio ya tiene todo resuelto sin confirmarlo."
+  },
+  {
+    "q": "Un profesor de secundaria descarta el diagnóstico de tu hijo/a por 'no notarlo' en clase.",
+    "good": "Compartes información y ejemplos concretos de cómo se manifiesta.",
+    "bad": "Dejas de mencionar el diagnóstico para evitar la discusión."
+  },
+  {
+    "q": "El colegio organiza el primer día de clases sin anticipar el cambio de rutina.",
+    "good": "Solicitas información previa (horarios, profesores) para preparar a tu hijo/a.",
+    "bad": "Llega el primer día sin ninguna preparación previa."
+  },
+  {
+    "q": "Un profesor de química exige que tu hijo/a use materiales con olores fuertes sin alternativa.",
+    "good": "Propones una adaptación que reduzca la exposición sensorial.",
+    "bad": "Dejas que participe igual, aunque le cause malestar físico."
+  },
+  {
+    "q": "Un profesor de educación física obliga a cambiarse en vestuario grupal sin privacidad.",
+    "good": "Solicitas una alternativa de privacidad para el cambio de ropa.",
+    "bad": "Dejas que use el vestuario grupal aunque le genere ansiedad."
+  },
+  {
+    "q": "El colegio plantea un viaje de fin de curso sin considerar necesidades de tu hijo/a.",
+    "good": "Coordinas con anticipación las adaptaciones necesarias para el viaje.",
+    "bad": "Decides que no participe sin explorar antes las alternativas."
+  },
+  {
+    "q": "El colegio decide que tu hijo/a curse una materia optativa sin considerar sus intereses.",
+    "good": "Solicitas participar en la elección considerando su perfil.",
+    "bad": "Aceptas la asignación sin cuestionar si es la mejor opción."
+  },
+  {
+    "q": "Un profesor solicita que dejes de 'sobreproteger' con las adaptaciones que pides.",
+    "good": "Explicas con datos por qué esas adaptaciones no son sobreprotección.",
+    "bad": "Reduces las solicitudes de adaptación por ese comentario."
+  },
+  {
+    "q": "El colegio no permite que tu hijo/a lleve su objeto de regulación (fidget, peluche) a clase.",
+    "good": "Explicas su función reguladora y negocias su uso apropiado.",
+    "bad": "Dejas que se lo prohíban sin explicar para qué sirve."
+  },
+  {
+    "q": "Un profesor de secundaria penaliza la letra desprolija de tu hijo/a en los exámenes.",
+    "good": "Solicitas evaluación por contenido con apoyo de escritura si es necesario.",
+    "bad": "Aceptas que baje la nota por motricidad fina sin cuestionarlo."
+  },
+  {
+    "q": "Un profesor de secundaria descarta las notas de la reunión anterior sobre tu hijo/a.",
+    "good": "Llevas un resumen escrito de los acuerdos previos a cada reunión.",
+    "bad": "Confías en que todo se recuerde sin dejar nada por escrito."
+  },
+  {
+    "q": "El colegio decide implementar un cambio de metodología de lectura sin previo aviso.",
+    "good": "Pides información anticipada para reforzar en casa la transición.",
+    "bad": "Descubres el cambio cuando tu hijo/a ya está confundido/a en clase."
+  },
+  {
+    "q": "Un profesor de primaria exige contacto físico (tomarse de manos) en una actividad grupal.",
+    "good": "Propones una alternativa que respete su límite corporal.",
+    "bad": "Obligas a tu hijo/a a participar igual, ignorando su malestar."
+  },
+  {
+    "q": "El colegio no considera el diagnóstico de tu hijo/a al asignar la carga de deberes.",
+    "good": "Solicitas ajustar la cantidad de deberes según su capacidad real.",
+    "bad": "Dejas que la sobrecarga de deberes continúe sin decir nada."
+  },
+  {
+    "q": "Un profesor sugiere que tu hijo/a 'finja estar bien' para pasar desapercibido/a.",
+    "good": "Explicas por qué enmascarar constantemente le genera agotamiento.",
+    "bad": "Apoyas esa sugerencia esperando que evite conflictos así."
+  },
+  {
+    "q": "El colegio decide cambiar el sistema de comunicación con las familias (app nueva) sin explicación clara.",
+    "good": "Pides una demostración o guía clara del nuevo sistema.",
+    "bad": "Dejas de recibir información importante por no entender el nuevo sistema."
+  },
+  {
+    "q": "Un profesor de secundaria no adapta el ritmo de dictado a la velocidad de escritura de tu hijo/a.",
+    "good": "Solicitas una adaptación concreta (grabación, fotocopias) para el dictado.",
+    "bad": "Dejas que se quede atrás en cada clase sin proponer nada."
+  },
+  {
+    "q": "El colegio decide combinar dos grupos con distinta dinámica sin evaluar el impacto.",
+    "good": "Solicitas conocer cómo se planea manejar esa combinación con tu hijo/a.",
+    "bad": "Aceptas la fusión de grupos sin preguntar nada al respecto."
+  },
+  {
+    "q": "Un profesor de secundaria no permite reprogramar un examen tras una crisis reciente.",
+    "good": "Solicitas formalmente una fecha alternativa con respaldo si es necesario.",
+    "bad": "Dejas que rinda el examen igual, en un mal momento emocional."
+  },
+  {
+    "q": "El colegio plantea que tu hijo/a curse el último año a distancia sin consultar tu opinión.",
+    "good": "Pides participar en la decisión evaluando pros y contras juntos.",
+    "bad": "Aceptas la decisión del colegio sin dar tu perspectiva como familia."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

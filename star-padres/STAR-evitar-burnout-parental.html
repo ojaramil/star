@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Evitar Burnout Parental</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #6366f1;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #6366f1, #6366f1cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #6366f1cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <span>Bienestar Parental</span>
+    </span>
+    <h1>🔋 Evitar Burnout Parental</h1>
+    <p>Reconocer señales de agotamiento y pedir apoyo a tiempo.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 80</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "evitar-burnout-parental";
+const SITUACIONES = [
+  {
+    "q": "Notas que te sientes irritable con todo, no solo con tu hijo/a.",
+    "good": "Reconoces esa señal de agotamiento y buscas apoyo o descanso concreto.",
+    "bad": "Ignoras la señal y sigues exigiéndote al mismo ritmo."
+  },
+  {
+    "q": "Llevas semanas sin ningún momento de descanso propio.",
+    "good": "Organizas activamente un espacio de descanso, aunque sea breve.",
+    "bad": "Postergas indefinidamente tu propio descanso 'porque no hay tiempo'."
+  },
+  {
+    "q": "Sientes que ya no disfrutas momentos que antes te gustaban con tu hijo/a.",
+    "good": "Reconoces esa anhedonia como señal de agotamiento y buscas apoyo.",
+    "bad": "Te culpas por 'no disfrutar como debería' sin buscar ayuda."
+  },
+  {
+    "q": "Notas que te cuesta concentrarte en tareas simples del día a día.",
+    "good": "Identificas el agotamiento acumulado como causa probable y ajustas tu carga.",
+    "bad": "Te exiges más concentración sin considerar el agotamiento real."
+  },
+  {
+    "q": "Sientes que ya no tienes paciencia para nada, ni siquiera cosas pequeñas.",
+    "good": "Tomas esa señal en serio y buscas reducir demandas temporalmente.",
+    "bad": "Sigues funcionando igual, esperando que la paciencia 'vuelva sola'."
+  },
+  {
+    "q": "Te sientes culpable cada vez que piensas en pedir ayuda.",
+    "good": "Reconoces que pedir ayuda es parte de sostener el rol, no un fracaso.",
+    "bad": "Evitas pedir ayuda por la culpa, aumentando tu propio desgaste."
+  },
+  {
+    "q": "Notas que duermes mal por la carga mental de la crianza.",
+    "good": "Buscas estrategias concretas o apoyo profesional para mejorar el descanso.",
+    "bad": "Aceptas el mal sueño como 'parte normal' sin buscar ninguna solución."
+  },
+  {
+    "q": "Sientes que tu red de apoyo (familia, amigos) se ha reducido mucho.",
+    "good": "Haces un esfuerzo activo por reconectar con esa red de apoyo.",
+    "bad": "Te aíslas cada vez más sin buscar reconectar con nadie."
+  },
+  {
+    "q": "Notas que te cuesta recordar la última vez que hiciste algo solo para ti.",
+    "good": "Planificas activamente un espacio propio, aunque sea pequeño.",
+    "bad": "Sigues posponiendo cualquier espacio personal indefinidamente."
+  },
+  {
+    "q": "Sientes que cada pequeño imprevisto te desborda más de lo habitual.",
+    "good": "Reconoces ese umbral bajo como señal de agotamiento y buscas apoyo.",
+    "bad": "Te exiges manejar todo igual de bien sin reconocer el desgaste."
+  },
+  {
+    "q": "Un amigo o familiar te ofrece ayuda concreta con el cuidado de tu hijo/a.",
+    "good": "Aceptas la ayuda ofrecida, reconociendo que la necesitas.",
+    "bad": "Rechazas la ayuda por orgullo o por sentir que 'debes poder sola/o'."
+  },
+  {
+    "q": "Notas que evitas actividades sociales por puro agotamiento.",
+    "good": "Reconoces la necesidad de recarga social propia y buscas un espacio breve para ello.",
+    "bad": "Te aíslas completamente sin buscar ningún tipo de conexión social."
+  },
+  {
+    "q": "Sientes que ya no tienes paciencia para escuchar a tu pareja o amigos.",
+    "good": "Reconoces que necesitas descanso emocional antes de sostener más conversaciones.",
+    "bad": "Descargas irritabilidad en esas conversaciones sin reconocer tu agotamiento."
+  },
+  {
+    "q": "Te sientes agotado/a de tomar todas las decisiones de crianza tú solo/a.",
+    "good": "Buscas compartir decisiones con tu pareja o red de apoyo cercana.",
+    "bad": "Sigues cargando todas las decisiones solo/a sin buscar compartir el peso."
+  },
+  {
+    "q": "Notas que te enfermas físicamente con más frecuencia que antes.",
+    "good": "Reconoces el estrés acumulado como posible causa y buscas atención médica y descanso.",
+    "bad": "Ignoras las señales físicas y sigues al mismo ritmo exigente."
+  },
+  {
+    "q": "Sientes que ya no tienes espacio mental para pensar en nada más que la crianza.",
+    "good": "Buscas activamente un espacio de desconexión, aunque sea breve.",
+    "bad": "Aceptas que 'así es la crianza' sin buscar ningún alivio."
+  },
+  {
+    "q": "Un profesional te sugiere buscar apoyo psicológico para ti.",
+    "good": "Consideras la sugerencia seriamente y buscas ese apoyo.",
+    "bad": "Descartas la sugerencia porque 'el que necesita ayuda es mi hijo/a, no yo'."
+  },
+  {
+    "q": "Notas que te comparas negativamente con otros padres que 'parecen manejarlo mejor'.",
+    "good": "Reconoces que cada familia enfrenta desafíos distintos e invisibles.",
+    "bad": "Te exiges igualar una imagen externa que no conoces en profundidad."
+  },
+  {
+    "q": "Sientes que has perdido tu identidad fuera del rol de padre/madre.",
+    "good": "Buscas activamente reconectar con algún interés o actividad propia.",
+    "bad": "Aceptas la pérdida de identidad como algo permanente e inevitable."
+  },
+  {
+    "q": "Notas que llevas mucho tiempo sin hablar con nadie de cómo te sientes realmente.",
+    "good": "Buscas un espacio de conversación honesta, con alguien de confianza o un profesional.",
+    "bad": "Sigues guardando todo para ti, sin ningún espacio de desahogo."
+  },
+  {
+    "q": "Te saltas comidas seguido porque no encuentras tiempo para ti.",
+    "good": "Reconoces la señal y organizas horarios fijos para comer bien.",
+    "bad": "Sigues saltándote comidas 'porque no hay tiempo'."
+  },
+  {
+    "q": "Dejas de lado un hobby que antes disfrutabas por falta de tiempo.",
+    "good": "Reconoces la pérdida y buscas retomarlo aunque sea en pequeñas dosis.",
+    "bad": "Aceptas que ese hobby 'ya no es para esta etapa de tu vida' sin buscar espacio."
+  },
+  {
+    "q": "Sigues trabajando incluso cuando el cuerpo te pide descanso.",
+    "good": "Reconoces la señal física y te permites una pausa real.",
+    "bad": "Ignoras el cansancio físico y sigues exigiéndote igual."
+  },
+  {
+    "q": "Sientes que no tienes ni un momento de espacio propio, ni de noche.",
+    "good": "Buscas activamente un momento, aunque sea breve, solo para ti.",
+    "bad": "Aceptas que 'ya no hay espacio para ti' de forma permanente."
+  },
+  {
+    "q": "Lloras sin razón clara en medio del día.",
+    "good": "Reconoces esa señal emocional y buscas apoyo o descanso.",
+    "bad": "Ignoras el llanto como si no significara nada importante."
+  },
+  {
+    "q": "Sientes temor de que llegue el día siguiente antes de que termine el actual.",
+    "good": "Reconoces ese temor como señal de agotamiento y ajustas tu carga.",
+    "bad": "Sigues igual sin prestar atención a esa señal de alerta."
+  },
+  {
+    "q": "Descargas irritación con la mascota de la familia sin razón real.",
+    "good": "Reconoces que esa irritación viene del agotamiento acumulado y buscas descanso.",
+    "bad": "Ignoras la señal y sigues descargando tensión en quien esté cerca."
+  },
+  {
+    "q": "Dejas de ducharte o comer con regularidad por la carga de cuidado.",
+    "good": "Reconoces que esas señales indican agotamiento serio y buscas apoyo.",
+    "bad": "Normalizas descuidar tu propio cuidado básico indefinidamente."
+  },
+  {
+    "q": "Sientes dolores de cuerpo que antes no tenías, sin causa médica clara.",
+    "good": "Reconoces que pueden ser señal de estrés acumulado y buscas atención.",
+    "bad": "Ignoras el dolor físico asumiendo que 'es normal a estas alturas'."
+  },
+  {
+    "q": "Usas el celular para desconectar por horas sin realmente descansar.",
+    "good": "Reconoces que necesitas un descanso más real y buscas otra forma de recargar.",
+    "bad": "Sigues usando la pantalla como único escape sin buscar descanso genuino."
+  },
+  {
+    "q": "Cancelas tu propia terapia varias veces seguidas por la agenda familiar.",
+    "good": "Reconoces que tu terapia es prioritaria y la reprogramas activamente.",
+    "bad": "Sigues posponiendo tu terapia indefinidamente 'por falta de tiempo'."
+  },
+  {
+    "q": "Sientes que ya nada te emociona, ni lo bueno ni lo malo.",
+    "good": "Reconoces esa señal de agotamiento emocional y buscas apoyo profesional.",
+    "bad": "Ignoras la sensación de vacío asumiendo que 'ya se te pasará'."
+  },
+  {
+    "q": "Postergas pagar cuentas o hacer trámites simples por falta de energía mental.",
+    "good": "Reconoces la sobrecarga mental y pides ayuda para organizar esas tareas.",
+    "bad": "Dejas que se acumulen sin reconocer que reflejan tu agotamiento real."
+  },
+  {
+    "q": "Sientes envidia de amigos sin hijos que tienen más tiempo libre.",
+    "good": "Reconoces ese sentimiento sin culpa y lo usas como señal para buscar espacio propio.",
+    "bad": "Te culpas por sentir envidia en vez de atender lo que revela."
+  },
+  {
+    "q": "Te alejas físicamente de tu pareja por puro agotamiento acumulado.",
+    "good": "Reconoces la señal y buscas un espacio de conexión, aunque sea breve.",
+    "bad": "Dejas que la distancia crezca sin nombrar el agotamiento de por medio."
+  },
+  {
+    "q": "Olvidas tu propio cumpleaños en medio de la carga de crianza.",
+    "good": "Reconoces que mereces celebrar y te das un espacio, aunque pequeño.",
+    "bad": "Dejas pasar la fecha sin ningún reconocimiento propio."
+  },
+  {
+    "q": "Sigues funcionando en el trabajo a pesar de sentirte agotado/a en casa.",
+    "good": "Reconoces que el agotamiento parental afecta también tu trabajo y buscas apoyo.",
+    "bad": "Ignoras la señal esperando que 'se resuelva solo' con el tiempo."
+  },
+  {
+    "q": "Recurres a mucha cafeína para sostener el ritmo diario.",
+    "good": "Reconoces que es una señal de fondo y buscas ajustar tu descanso real.",
+    "bad": "Sigues aumentando la cafeína sin atender la causa del cansancio."
+  },
+  {
+    "q": "Sientes que pedir un fin de semana libre es imposible para ti.",
+    "good": "Reconoces que mereces ese descanso y buscas organizarlo activamente.",
+    "bad": "Descartas la idea sin siquiera intentar buscar una solución posible."
+  },
+  {
+    "q": "Sientes culpa por desear un tiempo lejos de tu hijo/a.",
+    "good": "Reconoces que ese deseo es humano y no te resta como padre/madre.",
+    "bad": "Te castigas por ese deseo en vez de atender la necesidad real."
+  },
+  {
+    "q": "Sales agotado/a de una reunión larga de colegio defendiendo apoyos para tu hijo/a.",
+    "good": "Reconoces el desgaste de esa gestión y te das un espacio de recuperación después.",
+    "bad": "Sigues con el resto del día igual, sin reconocer ese desgaste extra."
+  },
+  {
+    "q": "La presión económica de terapias y apoyos se suma a tu carga diaria.",
+    "good": "Reconoces esa presión como parte del agotamiento y buscas apoyo o alivio concreto.",
+    "bad": "Sigues absorbiendo la presión económica en silencio sin buscar ayuda."
+  },
+  {
+    "q": "Sientes que estás 'siempre alerta', incluso cuando tu hijo/a duerme.",
+    "good": "Reconoces esa hipervigilancia como señal de agotamiento y buscas soltarla un poco.",
+    "bad": "Aceptas la alerta constante como algo que 'ya no puedes cambiar'."
+  },
+  {
+    "q": "No logras relajarte en los pocos ratos libres que tienes.",
+    "good": "Reconoces esa dificultad como señal de agotamiento profundo y buscas apoyo para procesarla.",
+    "bad": "Te frustras contigo mismo/a por 'no poder ni descansar bien'."
+  },
+  {
+    "q": "Te sientes innecesario/a cuando tu hijo/a no te busca tanto, y lo ignoras.",
+    "good": "Reconoces ese sentimiento y aprovechas el espacio para tu propio descanso real.",
+    "bad": "Ignoras la oportunidad de descanso sintiéndote solo el vacío emocional."
+  },
+  {
+    "q": "Sigues llevando a tu hijo/a a todas las terapias sin ningún respiro para ti.",
+    "good": "Evalúas si puedes compartir esa carga o pedir apoyo puntual.",
+    "bad": "Sigues sosteniendo todo tú solo/a sin buscar ninguna alternativa."
+  },
+  {
+    "q": "Minimizas tu agotamiento diciendo que 'solo estás cansado/a'.",
+    "good": "Reconoces que puede ser más que cansancio y buscas evaluarlo con calma.",
+    "bad": "Sigues restándole importancia hasta que se vuelve insostenible."
+  },
+  {
+    "q": "Tu pareja no parece notar cuánto te está costando sostener el ritmo actual.",
+    "good": "Comunicas abiertamente tu agotamiento en vez de esperar que lo note solo/a.",
+    "bad": "Guardas silencio esperando que tu pareja 'lo note por sí misma'."
+  },
+  {
+    "q": "La familia extendida espera que sigas organizando reuniones a pesar de tu cansancio.",
+    "good": "Pones un límite claro reconociendo tu propio agotamiento actual.",
+    "bad": "Sigues organizando todo igual, ignorando tu propio límite."
+  },
+  {
+    "q": "Tu propio terapeuta te advierte señales de agotamiento que has minimizado.",
+    "good": "Tomas en serio la advertencia y ajustas tu ritmo de vida.",
+    "bad": "Descartas la advertencia asumiendo que 'puedes con todo'."
+  },
+  {
+    "q": "Sientes opresión en el pecho o dolores de cabeza frecuentes últimamente.",
+    "good": "Reconoces que puede ser estrés acumulado y buscas atención médica.",
+    "bad": "Ignoras el síntoma físico asumiendo que 'no es nada'."
+  },
+  {
+    "q": "Te sientes desconectado/a incluso durante el juego con tu hijo/a.",
+    "good": "Reconoces esa desconexión como señal de agotamiento y buscas descanso real.",
+    "bad": "Te culpas por 'no disfrutar' sin buscar la causa de fondo."
+  },
+  {
+    "q": "Sonríes en público aunque por dentro sientes un agotamiento profundo.",
+    "good": "Reconoces la máscara que sostienes y buscas un espacio honesto para desahogarte.",
+    "bad": "Sigues fingiendo bienestar sin buscar ningún espacio real de desahogo."
+  },
+  {
+    "q": "Temes que llegue el fin de semana porque no representa ningún descanso real.",
+    "good": "Reconoces esa señal y planificas activamente algún alivio en el fin de semana.",
+    "bad": "Aceptas que los fines de semana 'ya no son descanso' sin buscar cambiarlo."
+  },
+  {
+    "q": "La temporada navideña suma más demandas logísticas y emocionales de las habituales.",
+    "good": "Ajustas tus expectativas y pides ayuda concreta para esta temporada.",
+    "bad": "Intentas sostener todas las demandas extra sin pedir ningún apoyo."
+  },
+  {
+    "q": "El regreso a clases trae una carga logística que te desborda cada año.",
+    "good": "Planificas con anticipación y delegas tareas donde sea posible.",
+    "bad": "Sostienes toda la logística tú solo/a, agotándote cada inicio de año."
+  },
+  {
+    "q": "Las vacaciones escolares llegan sin ningún apoyo de cuidado disponible.",
+    "good": "Buscas activamente opciones de apoyo o descanso durante ese periodo.",
+    "bad": "Sostienes solo/a todo el periodo sin buscar ninguna alternativa."
+  },
+  {
+    "q": "Te agotas lidiando con trámites de seguros o apoyos administrativos.",
+    "good": "Reconoces ese desgaste específico y buscas ayuda o asesoría para esos trámites.",
+    "bad": "Sigues absorbiendo esa carga administrativa sin buscar ningún apoyo."
+  },
+  {
+    "q": "Pospones tu propio chequeo médico anual por falta de tiempo.",
+    "good": "Reconoces que tu salud también sostiene la crianza y agendas el chequeo.",
+    "bad": "Sigues posponiendo indefinidamente tu propio cuidado médico."
+  },
+  {
+    "q": "Te cuesta terminar un solo pensamiento completo por las interrupciones constantes.",
+    "good": "Reconoces esa fragmentación como señal de sobrecarga y buscas ajustar tu carga.",
+    "bad": "Te frustras contigo mismo/a por 'no poder concentrarte' sin ver la causa real."
+  },
+  {
+    "q": "Dejaste por completo una pasión antigua desde que empezó la crianza intensiva.",
+    "good": "Reconoces esa pérdida y buscas retomarla aunque sea en formato reducido.",
+    "bad": "Aceptas que esa pasión 'ya no volverá' sin intentar retomarla nunca."
+  },
+  {
+    "q": "Te despiertas ya agotado/a, incluso después de dormir varias horas.",
+    "good": "Reconoces que puede ser agotamiento acumulado más que falta de sueño puntual.",
+    "bad": "Ignoras la señal asumiendo que 'dormir más' arreglará todo por sí solo."
+  },
+  {
+    "q": "Sientes resentimiento creciente hacia familiares que no ayudan lo suficiente.",
+    "good": "Reconoces el resentimiento y buscas conversarlo o pedir ayuda directamente.",
+    "bad": "Guardas el resentimiento en silencio hasta que explota en otro momento."
+  },
+  {
+    "q": "Evitas redes sociales porque te duele ver la aparente facilidad de otros padres.",
+    "good": "Reconoces que esa comparación te agota y ajustas tu consumo de esas redes.",
+    "bad": "Sigues exponiéndote a esa comparación sin poner ningún límite."
+  },
+  {
+    "q": "Necesitas apoyo de cuidado temporal (respiro) pero no te animas a pedirlo.",
+    "good": "Reconoces la necesidad real y buscas activamente ese apoyo de respiro.",
+    "bad": "Sigues sin pedir el apoyo por vergüenza o culpa."
+  },
+  {
+    "q": "Faltas repetidamente a eventos importantes de amigos por la carga de cuidado.",
+    "good": "Reconoces el costo social y buscas alguna forma de sostener esos vínculos.",
+    "bad": "Aceptas el aislamiento social como algo inevitable sin buscar alternativas."
+  },
+  {
+    "q": "Sales agotado/a de cada reunión escolar donde debes abogar por tu hijo/a.",
+    "good": "Reconoces ese desgaste específico y te das un espacio de recuperación después.",
+    "bad": "Sigues con el resto del día igual, ignorando el costo emocional de esas reuniones."
+  },
+  {
+    "q": "Te sientes emocionalmente entumecido/a al pensar en el futuro por el cansancio actual.",
+    "good": "Reconoces ese entumecimiento como señal de agotamiento y buscas apoyo emocional.",
+    "bad": "Ignoras la señal asumiendo que 'ya pasará con el tiempo'."
+  },
+  {
+    "q": "Usas el humor para restar importancia a tu agotamiento cuando alguien pregunta cómo estás.",
+    "good": "Te permites responder con honestidad cuando alguien de confianza pregunta.",
+    "bad": "Sigues minimizando con bromas sin nunca mostrar cómo estás realmente."
+  },
+  {
+    "q": "Rechazas invitaciones sociales de forma automática sin siquiera considerarlas.",
+    "good": "Reconoces el patrón y evalúas caso por caso si podrías aceptar alguna.",
+    "bad": "Sigues rechazando todo automáticamente sin cuestionar el patrón."
+  },
+  {
+    "q": "Sientes que cuidar de ti mismo/a es un acto egoísta frente a las necesidades de tu hijo/a.",
+    "good": "Reconoces que tu bienestar sostiene también el de tu hijo/a a largo plazo.",
+    "bad": "Sigues posponiendo tu autocuidado por considerarlo egoísta."
+  },
+  {
+    "q": "Sientes un temor difuso cada mañana antes de que empiece el día.",
+    "good": "Reconoces esa señal como agotamiento acumulado y buscas apoyo para procesarla.",
+    "bad": "Ignoras el temor diario asumiendo que 'es normal sentirse así'."
+  },
+  {
+    "q": "Solo te conectas con otros padres para quejarte, sin buscar apoyo real.",
+    "good": "Buscas también espacios de apoyo genuino, no solo de desahogo puntual.",
+    "bad": "Sigues solo desahogándote sin construir ningún apoyo real y sostenido."
+  },
+  {
+    "q": "Evitas buscar servicios de respiro por sentir culpa de 'delegar' el cuidado.",
+    "good": "Reconoces que el respiro es parte de sostener el rol, no un fracaso.",
+    "bad": "Sigues evitando esos servicios, aumentando tu propio agotamiento."
+  },
+  {
+    "q": "Te sientes agotado/a de ser el punto de contacto único para todos los profesionales.",
+    "good": "Buscas compartir esa coordinación con tu pareja o red cercana.",
+    "bad": "Sigues siendo el único punto de contacto sin buscar compartir la carga."
+  },
+  {
+    "q": "Notas que ya no tienes energía ni para conversaciones triviales con amigos.",
+    "good": "Reconoces esa señal y te permites reducir temporalmente ciertas exigencias sociales.",
+    "bad": "Te fuerzas a sostener todas las conversaciones igual, aumentando tu desgaste."
+  },
+  {
+    "q": "Sientes que cada semana se parece a la anterior sin ningún respiro real.",
+    "good": "Buscas introducir algún cambio o pausa concreta en la rutina semanal.",
+    "bad": "Aceptas la monotonía agotadora como algo permanente e inevitable."
+  },
+  {
+    "q": "Te cuesta pedir a tu pareja que se haga cargo una noche para que tú descanses.",
+    "good": "Pides ese espacio directamente, reconociendo que lo necesitas.",
+    "bad": "Sigues sin pedirlo, esperando que tu pareja lo ofrezca sin decir nada."
+  },
+  {
+    "q": "Notas que ya casi no recuerdas cómo se siente estar realmente descansado/a.",
+    "good": "Tomas esa señal en serio y buscas un cambio concreto en tu rutina de descanso.",
+    "bad": "Aceptas esa sensación como 'lo normal de ser padre/madre' sin buscar cambiarlo."
+  },
+  {
+    "q": "Sientes que ya no tienes margen para ningún imprevisto más.",
+    "good": "Reconoces que ese margen bajo es señal de agotamiento y buscas aligerar tu carga.",
+    "bad": "Sigues sumando responsabilidades sin reconocer que tu margen ya está agotado."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

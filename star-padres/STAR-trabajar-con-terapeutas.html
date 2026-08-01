@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Trabajar con Terapeutas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ec4899;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #ec4899, #ec4899cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #ec4899, #ec4899cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>
+      <span>Defensa y Colaboración</span>
+    </span>
+    <h1>🩺 Trabajar con Terapeutas</h1>
+    <p>Alinear estrategias entre casa y consulta clínica.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 90</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "trabajar-con-terapeutas";
+const SITUACIONES = [
+  {
+    "q": "El terapeuta sugiere una estrategia que no has probado en casa.",
+    "good": "La implementas con curiosidad genuina y das seguimiento en la próxima sesión.",
+    "bad": "La ignoras porque 'en casa las cosas son distintas' sin intentarlo."
+  },
+  {
+    "q": "Notas que una técnica de terapia no está funcionando en el día a día.",
+    "good": "Comunicas esa observación concreta al terapeuta para ajustar el enfoque.",
+    "bad": "Dejas de aplicarla en silencio sin informar al terapeuta."
+  },
+  {
+    "q": "El terapeuta pide información detallada sobre una conducta específica.",
+    "good": "Llevas un registro concreto de la conducta para compartir información útil.",
+    "bad": "Respondes de memoria con generalidades poco específicas."
+  },
+  {
+    "q": "Sientes que el enfoque del terapeuta no encaja con tu filosofía neuroafirmativa.",
+    "good": "Conversas abiertamente con el terapeuta sobre ese posible desajuste.",
+    "bad": "Continúas la terapia en silencio sin expresar tu desacuerdo."
+  },
+  {
+    "q": "El terapeuta sugiere que tú también apliques ciertas pautas en casa.",
+    "good": "Preguntas cómo adaptarlas a tu contexto familiar real.",
+    "bad": "Asumes que 'eso es trabajo del terapeuta' y no participas activamente."
+  },
+  {
+    "q": "Notas mejoras en terapia que no se generalizan a casa.",
+    "good": "Compartes esa brecha con el terapeuta para ajustar la generalización.",
+    "bad": "Asumes que el progreso 'no es real' porque no lo ves en casa."
+  },
+  {
+    "q": "El terapeuta pregunta cómo reaccionó tu hijo/a ante una situación específica.",
+    "good": "Describes la situación con detalle, incluyendo el contexto completo.",
+    "bad": "Das una respuesta vaga que no aporta información útil."
+  },
+  {
+    "q": "Sientes que las sesiones de terapia agotan mucho a tu hijo/a.",
+    "good": "Comunicas esa observación para ajustar duración o frecuencia si es necesario.",
+    "bad": "Mantienes el mismo ritmo de sesiones sin comunicar el agotamiento observado."
+  },
+  {
+    "q": "El terapeuta sugiere un cambio de enfoque tras varias sesiones sin avance.",
+    "good": "Consideras el cambio con apertura, evaluando juntos el progreso real.",
+    "bad": "Insistes en el mismo enfoque por costumbre, aunque no esté funcionando."
+  },
+  {
+    "q": "Tu hijo/a expresa que no le gusta cierta actividad terapéutica.",
+    "good": "Compartes esa preferencia con el terapeuta para explorar alternativas.",
+    "bad": "Obligas a continuar la actividad sin comunicar su malestar al terapeuta."
+  },
+  {
+    "q": "El terapeuta te pide participar en una sesión conjunta con tu hijo/a.",
+    "good": "Aceptas y te preparas para participar activamente en el proceso.",
+    "bad": "Evitas participar dejando toda la responsabilidad en el especialista."
+  },
+  {
+    "q": "Notas contradicciones entre lo que indica un terapeuta y otro.",
+    "good": "Facilitas la comunicación directa entre ambos profesionales para alinear enfoques.",
+    "bad": "Sigues ambas indicaciones por separado sin coordinar entre ellas."
+  },
+  {
+    "q": "El terapeuta sugiere reducir la frecuencia de sesiones al notar progreso.",
+    "good": "Consideras la sugerencia con confianza en la evaluación profesional.",
+    "bad": "Insistes en mantener la misma frecuencia por inseguridad propia."
+  },
+  {
+    "q": "Sientes que no entiendes bien la jerga técnica que usa el terapeuta.",
+    "good": "Pides que te lo explique en términos más simples y concretos.",
+    "bad": "Asientes sin entender realmente, para no parecer desinformado/a."
+  },
+  {
+    "q": "El terapeuta pregunta por la dinámica familiar completa, no solo por tu hijo/a.",
+    "good": "Compartes honestamente el contexto familiar relevante.",
+    "bad": "Minimizas la información familiar pensando que 'no es relevante para la terapia'."
+  },
+  {
+    "q": "Notas que cierta tarea terapéutica para casa genera mucho estrés familiar.",
+    "good": "Comunicas ese impacto para ajustar la tarea a algo más sostenible.",
+    "bad": "Sigues forzando la tarea porque 'el terapeuta lo indicó'."
+  },
+  {
+    "q": "El terapeuta sugiere involucrar más al colegio en el proceso.",
+    "good": "Facilitas activamente esa coordinación entre terapia y colegio.",
+    "bad": "Consideras que son procesos separados que no necesitan conectarse."
+  },
+  {
+    "q": "Sientes que has perdido la motivación para continuar cierta terapia.",
+    "good": "Conversas esa sensación abiertamente con el terapeuta antes de abandonar.",
+    "bad": "Dejas de asistir sin ninguna conversación previa sobre el motivo."
+  },
+  {
+    "q": "El terapeuta destaca un avance que a ti te parece pequeño.",
+    "good": "Confías en la evaluación profesional del significado de ese avance.",
+    "bad": "Minimizas el avance comparándolo con expectativas propias no informadas."
+  },
+  {
+    "q": "Notas que necesitas apoyo terapéutico también para ti como cuidador/a.",
+    "good": "Buscas activamente ese espacio de apoyo personal en paralelo.",
+    "bad": "Postergas indefinidamente tu propio apoyo por priorizar solo el de tu hijo/a."
+  },
+  {
+    "q": "Un nuevo terapeuta pide el historial completo de terapias anteriores.",
+    "good": "Preparas un resumen ordenado con lo relevante de cada etapa.",
+    "bad": "Llegas sin ninguna información previa organizada."
+  },
+  {
+    "q": "El terapeuta ocupacional sugiere una dieta sensorial para aplicar en casa.",
+    "good": "La implementas con constancia y das seguimiento de resultados.",
+    "bad": "La aplicas solo cuando te acuerdas, sin constancia real."
+  },
+  {
+    "q": "Un logopeda plantea usar un sistema de comunicación aumentativa.",
+    "good": "Te informas y participas activamente para reforzarlo en casa.",
+    "bad": "Dejas que solo se use en consulta, sin practicarlo en casa."
+  },
+  {
+    "q": "El psiquiatra propone iniciar una evaluación para posible medicación.",
+    "good": "Preguntas con calma los pros, contras y alternativas antes de decidir.",
+    "bad": "Rechazas la idea de inmediato solo por miedo generalizado."
+  },
+  {
+    "q": "Un terapeuta de alimentación pide que registres lo que come tu hijo/a cada día.",
+    "good": "Llevas un registro detallado y honesto para compartir en sesión.",
+    "bad": "Improvisas la información en la consulta sin haber llevado registro."
+  },
+  {
+    "q": "El psicólogo detecta ansiedad que no habías identificado en casa.",
+    "good": "Te abres a explorar esa posibilidad con curiosidad genuina.",
+    "bad": "Descartas la observación porque 'en casa no se ve así'."
+  },
+  {
+    "q": "Un terapeuta sugiere reducir estímulos en el hogar durante una etapa sensible.",
+    "good": "Haces los ajustes sugeridos y compartes cómo van funcionando.",
+    "bad": "Ignoras la sugerencia por considerarla poco práctica sin intentarla."
+  },
+  {
+    "q": "El terapeuta de conducta usa refuerzos que no coinciden con tus valores de crianza.",
+    "good": "Conversas para encontrar un enfoque que respete ambas partes.",
+    "bad": "Sigues el plan sin decir nada, aunque te incomode."
+  },
+  {
+    "q": "Un especialista en sueño pide detalles de la rutina nocturna completa.",
+    "good": "Describes la rutina con precisión, incluso los detalles incómodos.",
+    "bad": "Minimizas detalles que crees que 'no son relevantes'."
+  },
+  {
+    "q": "El terapeuta de tu hijo/a adolescente pide hablar a solas con él/ella.",
+    "good": "Respetas ese espacio de confidencialidad terapéutica.",
+    "bad": "Insistes en estar presente en toda la sesión, sin dar espacio."
+  },
+  {
+    "q": "Un fisioterapeuta sugiere ejercicios diarios que tu hijo/a rechaza hacer.",
+    "good": "Comunicas el rechazo para ajustar el enfoque de manera realista.",
+    "bad": "Fuerzas los ejercicios diariamente sin informar la resistencia."
+  },
+  {
+    "q": "El terapeuta pregunta cómo describirías tú mismo/a tu nivel de estrés como cuidador/a.",
+    "good": "Respondes con honestidad, sin minimizar tu propia carga.",
+    "bad": "Respondes que 'todo está bien' para no desviar el foco de tu hijo/a."
+  },
+  {
+    "q": "Un neuropsicólogo pide completar cuestionarios extensos sobre el comportamiento diario.",
+    "good": "Los completas con atención y ejemplos concretos recientes.",
+    "bad": "Los llenas rápido y de memoria, sin pensar en ejemplos reales."
+  },
+  {
+    "q": "El terapeuta sugiere invitar al profesor del colegio a una sesión conjunta.",
+    "good": "Coordinas activamente esa reunión entre ambas partes.",
+    "bad": "Consideras que 'no es necesario mezclar' ambos espacios."
+  },
+  {
+    "q": "Un terapeuta cambia de clínica y te pide decidir si continuar con él/ella o con otro.",
+    "good": "Conversas con tu hijo/a sobre su preferencia antes de decidir.",
+    "bad": "Decides tú solo/a sin considerar la opinión de tu hijo/a."
+  },
+  {
+    "q": "El terapeuta plantea que cierto avance requiere más tiempo del previsto.",
+    "good": "Ajustas tus expectativas con la nueva información compartida.",
+    "bad": "Te frustras y cuestionas la capacidad del terapeuta sin más diálogo."
+  },
+  {
+    "q": "Un especialista en integración sensorial pide instalar equipo específico en casa.",
+    "good": "Investigas opciones accesibles y las implementas gradualmente.",
+    "bad": "Descartas la sugerencia por el costo, sin explorar alternativas."
+  },
+  {
+    "q": "El terapeuta de tu hijo/a pequeño/a sugiere terapia de juego en lugar de conversación directa.",
+    "good": "Confías en el enfoque profesional adecuado para su edad.",
+    "bad": "Insistes en un enfoque más 'verbal' porque te parece más serio."
+  },
+  {
+    "q": "Un psiquiatra ajusta la dosis de medicación y pide observación cercana.",
+    "good": "Llevas un registro diario de cambios para la siguiente cita.",
+    "bad": "No registras nada y respondes de memoria en la siguiente consulta."
+  },
+  {
+    "q": "El terapeuta pregunta si notas efectos secundarios de la medicación.",
+    "good": "Describes con precisión cualquier cambio físico o emocional notado.",
+    "bad": "Minimizas síntomas por miedo a que suspendan la medicación."
+  },
+  {
+    "q": "Un terapeuta de habilidades sociales pide que expongas a tu hijo/a a más situaciones grupales.",
+    "good": "Buscas oportunidades graduales y las comunicas en sesión.",
+    "bad": "Evitas exponerlo/a a grupos por sobreprotección, sin decirlo."
+  },
+  {
+    "q": "El equipo terapéutico sugiere una reunión con todos los profesionales involucrados.",
+    "good": "Organizas activamente esa coordinación entre especialistas.",
+    "bad": "Dejas que cada uno trabaje aislado sin conectar la información."
+  },
+  {
+    "q": "Un terapeuta ocupacional pregunta por las texturas de ropa que tu hijo/a tolera.",
+    "good": "Compartes detalles concretos basados en la experiencia diaria.",
+    "bad": "Respondes de forma genérica sin detalles útiles."
+  },
+  {
+    "q": "El terapeuta plantea discutir un posible diagnóstico adicional (comorbilidad).",
+    "good": "Te abres a explorar la posibilidad con la información disponible.",
+    "bad": "Rechazas la idea por sentir que 'ya es suficiente etiqueta'."
+  },
+  {
+    "q": "Un especialista pide observar a tu hijo/a en su entorno natural (casa o colegio).",
+    "good": "Facilitas esa visita u observación con apertura.",
+    "bad": "Te resistes a la observación por sentirte juzgado/a."
+  },
+  {
+    "q": "El terapeuta de lenguaje sugiere reducir preguntas cerradas al hablar con tu hijo/a.",
+    "good": "Practicas conscientemente ese cambio en casa.",
+    "bad": "Sigues con el mismo estilo de siempre, sin ajustar nada."
+  },
+  {
+    "q": "Un terapeuta pregunta cómo reacciona tu hijo/a ante los cambios de rutina en casa.",
+    "good": "Describes ejemplos recientes y concretos de esas reacciones.",
+    "bad": "Generalizas diciendo que 'se adapta bien a todo'."
+  },
+  {
+    "q": "El psicólogo sugiere trabajar también la autoestima de tu hijo/a, no solo la conducta.",
+    "good": "Aceptas ampliar el enfoque terapéutico con esa perspectiva.",
+    "bad": "Insistes en que solo se enfoque en 'corregir' comportamientos."
+  },
+  {
+    "q": "Un terapeuta plantea que cierta actividad extraescolar interfiere con el proceso terapéutico.",
+    "good": "Evalúas juntos prioridades y ajustas el calendario si hace falta.",
+    "bad": "Mantienes todo igual sin considerar el conflicto de horarios."
+  },
+  {
+    "q": "El terapeuta de conducta pide que dejes de usar cierto castigo en casa.",
+    "good": "Te informas sobre alternativas y las pruebas con apertura.",
+    "bad": "Continúas con el castigo porque 'siempre lo has hecho así'."
+  },
+  {
+    "q": "Un especialista pregunta por el impacto del divorcio/separación en la terapia de tu hijo/a.",
+    "good": "Compartes honestamente esa información relevante.",
+    "bad": "Ocultas la situación familiar pensando que no afecta la terapia."
+  },
+  {
+    "q": "El terapeuta sugiere que tu hijo/a participe en un grupo con pares de edad similar.",
+    "good": "Te informas y facilitas la incorporación al grupo.",
+    "bad": "Rechazas la idea por miedo a que se comparen entre ellos."
+  },
+  {
+    "q": "Un terapeuta plantea reducir el número de terapias simultáneas por sobrecarga.",
+    "good": "Evalúas honestamente cuáles priorizar según el bienestar de tu hijo/a.",
+    "bad": "Mantienes todas las terapias para 'no perder ningún avance'."
+  },
+  {
+    "q": "El especialista pide tu opinión sobre qué objetivo terapéutico priorizar primero.",
+    "good": "Participas activamente, aportando tu conocimiento como cuidador/a.",
+    "bad": "Dejas toda la decisión al profesional sin dar tu perspectiva."
+  },
+  {
+    "q": "Un terapeuta detecta que cierto material que usan en sesión le genera ansiedad.",
+    "good": "Informas de antemano sensibilidades conocidas para prevenir el malestar.",
+    "bad": "Dejas que el terapeuta lo descubra en el momento, sin previo aviso."
+  },
+  {
+    "q": "El terapeuta pregunta cómo maneja tu hijo/a la frustración fuera de terapia.",
+    "good": "Das ejemplos reales, incluyendo los momentos difíciles.",
+    "bad": "Describes solo los momentos positivos para 'quedar bien'."
+  },
+  {
+    "q": "Un especialista sugiere iniciar terapia también para un hermano/a impactado por la dinámica familiar.",
+    "good": "Consideras esa opción con apertura genuina.",
+    "bad": "Descartas la idea pensando que 'el problema es solo' tu hijo/a con ND."
+  },
+  {
+    "q": "El terapeuta plantea trabajar la identidad y autoconocimiento de tu hijo/a adolescente.",
+    "good": "Apoyas ese proceso aunque incluya temas incómodos para ti.",
+    "bad": "Intentas dirigir la conversación hacia lo que tú prefieres tratar."
+  },
+  {
+    "q": "Un terapeuta de conducta pide grabar en video ciertas interacciones en casa.",
+    "good": "Aceptas y compartes el material de forma honesta.",
+    "bad": "Te niegas por incomodidad, aunque ayudaría al proceso."
+  },
+  {
+    "q": "El especialista sugiere una pausa en la terapia por vacaciones o descanso.",
+    "good": "Aceptas la pausa confiando en el criterio profesional.",
+    "bad": "Insistes en mantener las sesiones por miedo a perder continuidad."
+  },
+  {
+    "q": "Un terapeuta pregunta si tu hijo/a ha mostrado señales de autolesión.",
+    "good": "Respondes con total honestidad, aunque sea un tema difícil.",
+    "bad": "Minimizas o evitas mencionar señales de alerta observadas."
+  },
+  {
+    "q": "El terapeuta de integración sensorial pide adaptar el vehículo o transporte a la sesión.",
+    "good": "Consideras ajustes prácticos para reducir el estrés del traslado.",
+    "bad": "Mantienes el mismo transporte incómodo por costumbre."
+  },
+  {
+    "q": "Un especialista sugiere trabajar habilidades de autodefensa/autoadvocacy con tu hijo/a mayor.",
+    "good": "Apoyas ese proceso aunque implique que exprese desacuerdo contigo.",
+    "bad": "Te sientes amenazado/a por esa autonomía creciente y la frenas."
+  },
+  {
+    "q": "El terapeuta pregunta por tus propias expectativas sobre el progreso de tu hijo/a.",
+    "good": "Reflexionas honestamente si tus expectativas son realistas.",
+    "bad": "Insistes en metas que el profesional considera poco realistas."
+  },
+  {
+    "q": "Un terapeuta ocupacional pide reorganizar espacios sensoriales en casa.",
+    "good": "Haces los cambios sugeridos de forma gradual y consistente.",
+    "bad": "Pospones los cambios indefinidamente por comodidad propia."
+  },
+  {
+    "q": "El especialista sugiere evaluar la visión o audición antes de continuar cierta terapia.",
+    "good": "Agendas esas evaluaciones adicionales sin demora.",
+    "bad": "Descartas la sugerencia por parecer un trámite innecesario."
+  },
+  {
+    "q": "Un terapeuta plantea que cierto avance depende también de consistencia en el colegio.",
+    "good": "Coordinas activamente con el colegio para alinear los enfoques.",
+    "bad": "Asumes que es solo responsabilidad del colegio, sin coordinar nada."
+  },
+  {
+    "q": "El psiquiatra pregunta sobre antecedentes familiares de salud mental.",
+    "good": "Compartes la información honestamente, aunque sea sensible.",
+    "bad": "Omites antecedentes relevantes por incomodidad o vergüenza."
+  },
+  {
+    "q": "Un terapeuta sugiere trabajar la regulación emocional también contigo como modelo.",
+    "good": "Te abres a ese trabajo conjunto con humildad.",
+    "bad": "Consideras que la terapia 'es solo para tu hijo/a', no para ti."
+  },
+  {
+    "q": "El especialista plantea el alta terapéutica al alcanzar los objetivos propuestos.",
+    "good": "Revisas juntos si realmente están cubiertas todas las necesidades.",
+    "bad": "Te resistes al alta por miedo, sin evaluar objetivamente el progreso."
+  },
+  {
+    "q": "Un terapeuta de conducta usa un lenguaje que a ti te suena patologizante.",
+    "good": "Expresas tu incomodidad y buscas un lenguaje más respetuoso juntos.",
+    "bad": "Sigues escuchando ese lenguaje sin decir nada, aunque te moleste."
+  },
+  {
+    "q": "El terapeuta pregunta cómo responde tu hijo/a ante figuras de autoridad distintas a ti.",
+    "good": "Compartes ejemplos concretos de distintos contextos.",
+    "bad": "Respondes solo pensando en cómo te responde a ti."
+  },
+  {
+    "q": "Un especialista en alimentación sugiere involucrar a toda la familia en el proceso.",
+    "good": "Coordinas la participación de todos en casa según lo sugerido.",
+    "bad": "Dejas que solo tú manejes el tema sin involucrar al resto."
+  },
+  {
+    "q": "El terapeuta plantea trabajar límites y consentimiento corporal con tu hijo/a.",
+    "good": "Refuerzas esos mismos conceptos de forma consistente en casa.",
+    "bad": "Consideras el tema innecesario para su edad o perfil."
+  },
+  {
+    "q": "Un terapeuta pregunta por el impacto económico de las terapias en la familia.",
+    "good": "Compartes la situación real para ajustar el plan de forma sostenible.",
+    "bad": "Ocultas la dificultad económica hasta que se vuelve insostenible."
+  },
+  {
+    "q": "El especialista sugiere telehealth por una temporada en lugar de sesiones presenciales.",
+    "good": "Te adaptas probando el formato con apertura genuina.",
+    "bad": "Rechazas la opción sin intentarla, asumiendo que 'no funcionará'."
+  },
+  {
+    "q": "Un terapeuta plantea revisar el diagnóstico original tras varios años de seguimiento.",
+    "good": "Te abres al proceso con curiosidad, sin aferrarte a una etiqueta fija.",
+    "bad": "Te resistes a cualquier revisión por miedo a perder recursos actuales."
+  },
+  {
+    "q": "El terapeuta de tu hijo/a adulto joven sugiere iniciar servicios de transición a vida independiente.",
+    "good": "Participas apoyando ese proceso sin tomar el control por él/ella.",
+    "bad": "Te resistes al proceso, prolongando la dependencia por miedo."
+  },
+  {
+    "q": "Un especialista pide tu consentimiento para compartir información con otro profesional.",
+    "good": "Das el consentimiento entendiendo el beneficio de la coordinación.",
+    "bad": "Niegas el consentimiento por desconfianza sin más información."
+  },
+  {
+    "q": "El terapeuta pregunta si notas diferencias en el comportamiento según quién esté presente.",
+    "good": "Describes con detalle esas diferencias observadas en distintos contextos.",
+    "bad": "Aseguras que 'es igual siempre' sin haberlo observado realmente."
+  },
+  {
+    "q": "Un terapeuta sugiere reducir la cantidad de pantallas antes de las sesiones.",
+    "good": "Ajustas la rutina para llegar en mejores condiciones a terapia.",
+    "bad": "Mantienes la misma rutina de pantallas sin considerar el efecto."
+  },
+  {
+    "q": "El especialista plantea trabajar la transición de un terapeuta infantil a uno de adultos.",
+    "good": "Inicias ese proceso con anticipación, involucrando a tu hijo/a.",
+    "bad": "Esperas hasta el último momento para buscar un nuevo profesional."
+  },
+  {
+    "q": "Un terapeuta pregunta por tus propias creencias sobre la neurodivergencia antes de empezar.",
+    "good": "Reflexionas honestamente y compartes tu perspectiva actual.",
+    "bad": "Respondes lo que crees que el terapeuta 'quiere escuchar'."
+  },
+  {
+    "q": "El terapeuta sugiere una segunda opinión ante un diagnóstico complejo.",
+    "good": "Buscas esa segunda opinión con apertura, sin sentirlo como desconfianza.",
+    "bad": "Te niegas a buscarla por lealtad al primer profesional."
+  },
+  {
+    "q": "Un terapeuta pide involucrar a la pareja o co-cuidador en próximas sesiones.",
+    "good": "Coordinas la participación activa de ambos cuidadores.",
+    "bad": "Asistes siempre solo/a, dejando al otro cuidador desinformado."
+  },
+  {
+    "q": "El especialista plantea trabajar el duelo por expectativas no cumplidas como padre/madre.",
+    "good": "Te abres a ese proceso emocional con honestidad.",
+    "bad": "Evitas el tema insistiendo en que 'estás bien' sin explorarlo."
+  },
+  {
+    "q": "Un terapeuta pregunta cómo describirías la relación actual con tu hijo/a.",
+    "good": "Respondes con honestidad, incluyendo tensiones reales presentes.",
+    "bad": "Describes una relación idealizada que no refleja la realidad."
+  },
+  {
+    "q": "El terapeuta sugiere ajustar el objetivo terapéutico porque el actual ya no aplica.",
+    "good": "Revisas juntos y actualizas el plan según la etapa actual.",
+    "bad": "Insistes en mantener objetivos ya superados por costumbre."
+  },
+  {
+    "q": "Un especialista plantea derivar a tu hijo/a a un centro con lista de espera larga.",
+    "good": "Te informas de alternativas mientras gestionas activamente esa derivación.",
+    "bad": "Esperas pasivamente sin buscar ningún apoyo mientras tanto."
+  },
+  {
+    "q": "El terapeuta pregunta si el enfoque actual sigue siendo neuroafirmativo para ti.",
+    "good": "Reflexionas honestamente y lo conversas abiertamente si algo cambió.",
+    "bad": "Evitas la pregunta por no saber cómo responder con sinceridad."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

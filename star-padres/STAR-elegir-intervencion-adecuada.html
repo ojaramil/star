@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Elegir la Intervención Adecuada</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #10b981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #10b981, #10b981cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #10b981cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+      <span>Regulación y Co-regulación</span>
+    </span>
+    <h1>🎯 Elegir la Intervención Adecuada</h1>
+    <p>Distinguir cuándo actuar, cuándo esperar y cuándo simplemente acompañar.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "elegir-intervencion-adecuada";
+const SITUACIONES = [
+  {
+    "q": "Tu hijo/a está en medio de una crisis sensorial en un lugar público.",
+    "good": "Priorizas sacarlo/a del estímulo antes que corregir su conducta.",
+    "bad": "Le das un sermón sobre comportamiento en medio de la crisis."
+  },
+  {
+    "q": "Tu hijo/a comete un error menor sin consecuencias graves.",
+    "good": "Decides no intervenir y dejar que lo resuelva solo/a.",
+    "bad": "Intervienes en cada detalle aunque no sea necesario."
+  },
+  {
+    "q": "Notas una posible crisis empezando a formarse.",
+    "good": "Intervienes temprano con una pausa antes de que escale.",
+    "bad": "Esperas a que la crisis sea total para recién actuar."
+  },
+  {
+    "q": "Tu hijo/a está resolviendo un conflicto leve con un hermano/a.",
+    "good": "Observas primero si pueden resolverlo solos antes de mediar.",
+    "bad": "Intervienes de inmediato sin darles oportunidad de resolverlo."
+  },
+  {
+    "q": "Tu hijo/a está muy alterado/a y necesita contención física segura.",
+    "good": "Reconoces cuándo es momento de acompañar físicamente con calma.",
+    "bad": "Te mantienes distante cuando realmente necesita tu cercanía."
+  },
+  {
+    "q": "Tu hijo/a repite un error que ya se habló antes.",
+    "good": "Evalúas si necesita un recordatorio suave o simplemente más práctica.",
+    "bad": "Reaccionas con el mismo enojo cada vez, sin ajustar la estrategia."
+  },
+  {
+    "q": "Hay una situación de riesgo físico inmediato.",
+    "good": "Actúas de inmediato para garantizar seguridad, sin esperar explicaciones.",
+    "bad": "Te detienes a discutir el porqué mientras el riesgo continúa."
+  },
+  {
+    "q": "Tu hijo/a está simplemente procesando una emoción sin pedir ayuda.",
+    "good": "Te mantienes disponible sin intervenir hasta que la pida.",
+    "bad": "Interrumpes su proceso emocional queriendo 'arreglarlo' ya."
+  },
+  {
+    "q": "Notas que la situación mejoraría más dejando que tu hijo/a se frustre un poco resolviendo algo solo/a.",
+    "good": "Permites la frustración productiva sin rescatarlo/a de inmediato.",
+    "bad": "Intervienes ante la primera señal de dificultad."
+  },
+  {
+    "q": "Tu hijo/a pide ayuda explícita con una tarea.",
+    "good": "Respondes a su pedido directo de ayuda sin demorar.",
+    "bad": "Le dices que 'lo resuelva solo' cuando pidió apoyo genuino."
+  },
+  {
+    "q": "Hay un conflicto entre reglas de la casa y una necesidad sensorial puntual.",
+    "good": "Evalúas el contexto específico antes de aplicar la regla rígidamente.",
+    "bad": "Aplicas la regla sin considerar la necesidad real del momento."
+  },
+  {
+    "q": "Tu hijo/a está en shutdown y no responde a estímulos verbales.",
+    "good": "Reduces exigencias y esperas en silencio su regreso gradual.",
+    "bad": "Insistes con preguntas y estímulos esperando una reacción rápida."
+  },
+  {
+    "q": "Notas que corregir ahora empeoraría la situación emocional.",
+    "good": "Pospones la corrección para un momento más calmado.",
+    "bad": "Corriges de inmediato aunque el momento no sea el adecuado."
+  },
+  {
+    "q": "Tu hijo/a enfrenta una decisión pequeña que puede tomar solo/a.",
+    "good": "Le das espacio para decidir sin intervenir innecesariamente.",
+    "bad": "Tomas la decisión por él/ella para 'ahorrar tiempo'."
+  },
+  {
+    "q": "Hay una situación de bullying o maltrato real hacia tu hijo/a.",
+    "good": "Intervienes activamente y buscas apoyo externo si es necesario.",
+    "bad": "Esperas que 'se resuelva solo' en una situación de daño real."
+  },
+  {
+    "q": "Tu hijo/a comete un error que puede aprender a corregir con la experiencia.",
+    "good": "Permites que viva la consecuencia natural sin rescatarlo/a.",
+    "bad": "Evitas cualquier consecuencia natural para que no sufra."
+  },
+  {
+    "q": "Notas que tu hijo/a necesita más estructura externa en este momento.",
+    "good": "Aumentas temporalmente el apoyo y la claridad de instrucciones.",
+    "bad": "Mantienes el mismo nivel de independencia esperado siempre."
+  },
+  {
+    "q": "Tu hijo/a está gestionando bien una situación difícil por su cuenta.",
+    "good": "Te mantienes en segundo plano, listo/a para intervenir solo si lo pide.",
+    "bad": "Intervienes innecesariamente interrumpiendo su manejo autónomo."
+  },
+  {
+    "q": "Hay una crisis médica o de seguridad urgente.",
+    "good": "Actúas con prioridad absoluta en la seguridad antes que en la regulación emocional.",
+    "bad": "Te enfocas primero en calmar antes de atender el riesgo real."
+  },
+  {
+    "q": "Tu hijo/a pide que simplemente lo/la acompañes en silencio.",
+    "good": "Respetas ese pedido y te quedas presente sin hablar de más.",
+    "bad": "Insistes en conversar o dar consejos que no fueron pedidos."
+  },
+  {
+    "q": "Tu hijo/a se traba armando una oración para un mensaje de texto importante.",
+    "good": "Le preguntas si quiere ayuda antes de intervenir, dejando que decida el nivel de apoyo.",
+    "bad": "Le escribes el mensaje completo sin que lo pida."
+  },
+  {
+    "q": "Notas que tu hijo/a está a punto de tomar una decisión arriesgada pero no peligrosa.",
+    "good": "Le permites intentarlo, ofreciendo tu opinión solo si la pide.",
+    "bad": "Le impides intentarlo por miedo a que se equivoque."
+  },
+  {
+    "q": "Tu hijo/a discute con un compañero de equipo sobre las reglas de un juego.",
+    "good": "Observas desde lejos, interviniendo solo si el conflicto escala a agresión.",
+    "bad": "Intervienes de inmediato dictando cómo deben jugar."
+  },
+  {
+    "q": "Notas que tu hijo/a adolescente está manejando una decepción amorosa solo/a en su cuarto.",
+    "good": "Le avisas que estás disponible y esperas a que busque hablar.",
+    "bad": "Entras a su cuarto insistiendo en hablar del tema ya."
+  },
+  {
+    "q": "Tu hijo/a se enreda tratando de armar un experimento de ciencias para el colegio.",
+    "good": "Evalúas si necesita una pista puntual o simplemente más tiempo, sin resolverlo por él/ella.",
+    "bad": "Terminas el experimento tú mismo/a para 'que quede bien'."
+  },
+  {
+    "q": "Notas que tu hijo/a está en medio de una discusión verbal, no física, con un hermano/a.",
+    "good": "Esperas un momento a ver si pueden resolverlo antes de mediar.",
+    "bad": "Interrumpes de inmediato imponiendo una solución."
+  },
+  {
+    "q": "Tu hijo/a adulto joven te pide opinión sobre una decisión de carrera.",
+    "good": "Le das tu perspectiva cuando la pide, dejando claro que la decisión final es suya.",
+    "bad": "Le dices exactamente qué debe hacer sin dejar espacio a su propia decisión."
+  },
+  {
+    "q": "Notas que tu hijo/a está teniendo una crisis de ansiedad leve antes de un examen.",
+    "good": "Ofreces una técnica breve de respiración sin insistir si no la quiere en ese momento.",
+    "bad": "Le das un discurso motivacional largo justo antes de entrar al examen."
+  },
+  {
+    "q": "Tu hijo/a se frustra con un juguete que no funciona como espera.",
+    "good": "Esperas un momento para ver si se autorregula antes de ofrecer ayuda.",
+    "bad": "Le cambias el juguete de inmediato ante la primera señal de frustración."
+  },
+  {
+    "q": "Notas una situación de acoso leve pero repetido hacia tu hijo/a en redes sociales.",
+    "good": "Intervienes activamente documentando y buscando apoyo del colegio o la plataforma.",
+    "bad": "Le dices que 'ignore' el acoso sin tomar ninguna acción concreta."
+  },
+  {
+    "q": "Tu hijo/a está resolviendo un problema de matemáticas complicado, visiblemente concentrado/a.",
+    "good": "No interrumpes su concentración, disponible solo si pide ayuda.",
+    "bad": "Le preguntas cada minuto si necesita ayuda, interrumpiendo su proceso."
+  },
+  {
+    "q": "Notas que tu hijo/a adolescente está gestionando bien un conflicto con un profesor por su cuenta.",
+    "good": "Te mantienes informado/a pero dejas que él/ella lo resuelva primero.",
+    "bad": "Llamas al colegio de inmediato sin darle oportunidad de resolverlo."
+  },
+  {
+    "q": "Tu hijo/a enfrenta un desacuerdo con un amigo sobre planes de fin de semana.",
+    "good": "Lo dejas negociar solo/a, ofreciendo consejo solo si lo pide.",
+    "bad": "Intervienes llamando al otro padre para 'arreglar' el desacuerdo entre niños."
+  },
+  {
+    "q": "Notas que tu hijo/a pequeño está intentando subir un tobogán alto sin ayuda.",
+    "good": "Evalúas el riesgo real antes de decidir intervenir o dejarlo intentarlo.",
+    "bad": "Lo bajas de inmediato sin evaluar si realmente hay peligro."
+  },
+  {
+    "q": "Tu hijo/a adulto joven comete un error financiero pequeño y manejable.",
+    "good": "Le permites experimentar la consecuencia natural sin rescatarlo/a económicamente.",
+    "bad": "Le das el dinero de inmediato para evitar cualquier consecuencia."
+  },
+  {
+    "q": "Notas que tu hijo/a está en shutdown durante una reunión familiar.",
+    "good": "Reduces las exigencias sociales del momento y le das espacio sin exigir participación.",
+    "bad": "Lo animas a 'saludar a todos' pese al shutdown evidente."
+  },
+  {
+    "q": "Tu hijo/a comete el mismo error de organización que ya se habló varias veces.",
+    "good": "Evalúas si necesita un sistema de apoyo diferente en vez de repetir la misma corrección.",
+    "bad": "Repites el mismo regaño de siempre esperando un resultado distinto."
+  },
+  {
+    "q": "Notas una posible situación de riesgo en el agua durante una salida a la playa.",
+    "good": "Actúas de inmediato para garantizar la seguridad física antes que cualquier otra consideración.",
+    "bad": "Esperas a ver 'si de verdad hay peligro' antes de reaccionar."
+  },
+  {
+    "q": "Tu hijo/a está procesando una noticia triste en silencio, sin pedir hablar de ello.",
+    "good": "Te mantienes disponible sin forzar la conversación hasta que él/ella la busque.",
+    "bad": "Le preguntas repetidamente 'qué tiene' interrumpiendo su proceso silencioso."
+  },
+  {
+    "q": "Notas que dejar que tu hijo/a se equivoque en una tarea sencilla podría enseñarle algo valioso.",
+    "good": "Permites el error como aprendizaje, sin corregir antes de que ocurra.",
+    "bad": "Corriges cada posible error antes de que suceda, sin dejar espacio al aprendizaje."
+  },
+  {
+    "q": "Tu hijo/a pide ayuda explícita para resolver un conflicto con un amigo por mensaje.",
+    "good": "Le ayudas a redactar la respuesta cuando la pide, respetando su pedido directo.",
+    "bad": "Le dices que 'lo resuelva solo/a' aunque pidió apoyo genuino."
+  },
+  {
+    "q": "Notas una tensión entre una regla de horario de pantallas y una necesidad puntual de tu hijo/a, como una videollamada con un amigo que se muda.",
+    "good": "Evalúas el contexto específico antes de aplicar la regla de forma rígida.",
+    "bad": "Aplicas la regla del horario sin considerar la situación puntual."
+  },
+  {
+    "q": "Tu hijo/a está en un colapso emocional y no responde a palabras.",
+    "good": "Reduces estímulos y esperas en silencio su regreso gradual, sin insistir verbalmente.",
+    "bad": "Sigues hablándole e insistiendo con preguntas esperando respuesta inmediata."
+  },
+  {
+    "q": "Notas que corregir la postura de tu hijo/a durante una crisis empeoraría la situación.",
+    "good": "Pospones cualquier corrección física o verbal hasta que esté más regulado/a.",
+    "bad": "Corriges la postura de inmediato aunque esté en plena crisis."
+  },
+  {
+    "q": "Tu hijo/a adolescente enfrenta una decisión sobre qué materia optativa elegir.",
+    "good": "Le das espacio para decidir, ofreciendo información solo si la pide.",
+    "bad": "Eliges la materia por él/ella 'porque es mejor para su futuro'."
+  },
+  {
+    "q": "Notas una situación de exclusión social real y sostenida hacia tu hijo/a en el equipo deportivo.",
+    "good": "Intervienes activamente hablando con el entrenador y buscando apoyo si es necesario.",
+    "bad": "Esperas que 'se resuelva solo' en una situación de exclusión sostenida."
+  },
+  {
+    "q": "Tu hijo/a comete un error al cocinar algo simple que puede corregir con la experiencia.",
+    "good": "Permites que experimente el resultado sin corregirlo antes de que termine.",
+    "bad": "Intervienes en cada paso para evitar cualquier error posible."
+  },
+  {
+    "q": "Notas que tu hijo/a necesita más apoyo estructural en las mañanas para no llegar tarde.",
+    "good": "Aumentas temporalmente el apoyo con recordatorios visuales o alarmas.",
+    "bad": "Mantienes el mismo nivel de independencia esperado pese a las llegadas tarde repetidas."
+  },
+  {
+    "q": "Tu hijo/a adulto joven está gestionando bien un conflicto de convivencia con su compañero/a de piso.",
+    "good": "Te mantienes en segundo plano, disponible solo si te pide consejo.",
+    "bad": "Llamas al compañero/a de piso para 'arreglar' el conflicto sin que te lo pidan."
+  },
+  {
+    "q": "Notas una situación de emergencia médica real, como una posible alergia grave, en tu hijo/a.",
+    "good": "Actúas con prioridad absoluta en la seguridad médica antes que en calmar la emoción.",
+    "bad": "Te enfocas primero en tranquilizarlo/a antes de atender la posible emergencia médica."
+  },
+  {
+    "q": "Tu hijo/a pide que simplemente te sientes con él/ella sin hablar tras un mal día.",
+    "good": "Respetas ese pedido y te quedas en silencio, disponible.",
+    "bad": "Insistes en preguntar 'qué pasó' aunque pidió silencio."
+  },
+  {
+    "q": "Notas que tu hijo/a pequeño está intentando ponerse los zapatos solo/a, tardando mucho.",
+    "good": "Le das el tiempo para intentarlo antes de ofrecer ayuda.",
+    "bad": "Le pones los zapatos tú mismo/a para 'no perder tiempo'."
+  },
+  {
+    "q": "Tu hijo/a adolescente enfrenta la decisión de disculparse o no con un amigo tras una pelea.",
+    "good": "Le das espacio para decidir su propio camino, ofreciendo tu perspectiva solo si la pide.",
+    "bad": "Lo obligas a disculparse de inmediato sin que él/ella lo decida."
+  },
+  {
+    "q": "Notas que tu hijo/a está resolviendo bien una frustración leve con un rompecabezas.",
+    "good": "Te mantienes cerca sin intervenir, dejando que complete el proceso por sí mismo/a.",
+    "bad": "Intervienes ante la primera pieza que no encaja fácilmente."
+  },
+  {
+    "q": "Tu hijo/a enfrenta un conflicto entre la necesidad de moverse en clase y la regla de estar sentado/a.",
+    "good": "Evalúas el contexto y buscas un ajuste razonable, como una pelota de asiento o pausas, en vez de aplicar la regla rígidamente.",
+    "bad": "Exiges que cumpla la regla de estar sentado/a sin considerar su necesidad real."
+  },
+  {
+    "q": "Notas una situación de riesgo en internet, como contacto con un desconocido sospechoso, con tu hijo/a.",
+    "good": "Actúas de inmediato revisando la situación y estableciendo medidas de seguridad.",
+    "bad": "Esperas a ver 'si pasa algo más' antes de intervenir en el riesgo digital."
+  },
+  {
+    "q": "Tu hijo/a adulto joven está procesando una decisión difícil de mudarse o no, sin pedir tu opinión.",
+    "good": "Te mantienes disponible sin opinar hasta que te lo pida directamente.",
+    "bad": "Le das tu opinión repetidamente aunque no la haya pedido."
+  },
+  {
+    "q": "Notas que dejar que tu hijo/a maneje solo/a un desacuerdo con un vendedor le enseñaría autonomía.",
+    "good": "Le permites intentar resolverlo solo/a, interviniendo solo si realmente lo necesita.",
+    "bad": "Intervienes de inmediato hablando tú con el vendedor por él/ella."
+  },
+  {
+    "q": "Tu hijo/a está en medio de una rabieta por cansancio extremo en un centro comercial.",
+    "good": "Priorizas sacarlo/a del estímulo y buscar un lugar tranquilo antes que corregir la conducta.",
+    "bad": "Le das un sermón sobre comportamiento en medio de la rabieta por cansancio."
+  },
+  {
+    "q": "Notas que tu hijo/a repite un error de convivencia con hermanos que ya se habló varias veces.",
+    "good": "Evalúas si necesita un recordatorio distinto o una estructura de turnos más clara.",
+    "bad": "Reaccionas con el mismo enojo cada vez sin ajustar la estrategia."
+  },
+  {
+    "q": "Tu hijo/a adolescente enfrenta una decisión sobre a qué universidad aplicar.",
+    "good": "Le das espacio para decidir, disponible para conversar si lo busca.",
+    "bad": "Tomas la decisión de la universidad por él/ella 'para asegurar su futuro'."
+  },
+  {
+    "q": "Notas una situación de riesgo físico inminente al cruzar la calle.",
+    "good": "Actúas de inmediato para garantizar la seguridad sin esperar a explicar nada primero.",
+    "bad": "Te detienes a explicar la regla de cruzar la calle mientras el riesgo continúa."
+  },
+  {
+    "q": "Tu hijo/a está simplemente disfrutando de un momento de calma leyendo, sin pedir interacción.",
+    "good": "Respetas ese momento de calma sin interrumpir con preguntas o tareas.",
+    "bad": "Interrumpes su lectura para 'aprovechar y conversar' sin que lo busque."
+  },
+  {
+    "q": "Notas que la frustración de tu hijo/a armando un mueble de juguete podría ser productiva si no interviene.",
+    "good": "Permites la frustración productiva, ofreciendo ayuda solo si la pide.",
+    "bad": "Intervienes ante la primera señal de dificultad con el mueble."
+  },
+  {
+    "q": "Tu hijo/a pide ayuda explícita para hablar con un maestro sobre una calificación.",
+    "good": "Le ayudas a preparar lo que quiere decir, respondiendo a su pedido directo.",
+    "bad": "Le dices que 'hable solo/a' cuando pidió apoyo genuino para prepararse."
+  },
+  {
+    "q": "Notas un conflicto entre la regla de horario de dormir y una necesidad puntual, como terminar una videollamada emotiva con un amigo lejano.",
+    "good": "Evalúas el contexto puntual antes de aplicar la regla de horario rígidamente.",
+    "bad": "Aplicas el horario sin considerar la situación emocional puntual."
+  },
+  {
+    "q": "Tu hijo/a está en colapso tras una sobrecarga sensorial en un concierto.",
+    "good": "Reduces estímulos de inmediato y esperas en silencio su regreso gradual.",
+    "bad": "Insistes en que 'disfrute' el resto del concierto pese al colapso."
+  },
+  {
+    "q": "Notas que corregir el tono de voz de tu hijo/a en medio de su enojo empeoraría todo.",
+    "good": "Pospones la corrección del tono para un momento más calmado después.",
+    "bad": "Corriges el tono de voz de inmediato en medio del enojo."
+  },
+  {
+    "q": "Tu hijo/a adulto joven enfrenta una decisión sobre terminar o no una relación de pareja.",
+    "good": "Le das espacio para decidir, ofreciendo tu perspectiva solo si la pide explícitamente.",
+    "bad": "Le insistes en tu opinión sobre la relación sin que te la pida."
+  },
+  {
+    "q": "Notas una situación de maltrato real de un entrenador hacia tu hijo/a.",
+    "good": "Intervienes activamente hablando con la institución y buscando apoyo externo si es necesario.",
+    "bad": "Esperas que 'se resuelva solo' en una situación de maltrato real."
+  },
+  {
+    "q": "Tu hijo/a comete un error al organizar su mochila que puede aprender a corregir con la experiencia de olvidar algo.",
+    "good": "Permites que viva la consecuencia natural de olvidar el objeto sin rescatarlo/a llevándoselo después.",
+    "bad": "Le llevas el objeto olvidado a la escuela para evitar cualquier consecuencia."
+  },
+  {
+    "q": "Notas que tu hijo/a necesita más apoyo visual para entender los pasos de una rutina nueva.",
+    "good": "Aumentas temporalmente el apoyo con un cronograma visual claro.",
+    "bad": "Mantienes solo instrucciones verbales esperando que las recuerde igual."
+  },
+  {
+    "q": "Tu hijo/a está gestionando bien una conversación difícil con un abuelo/a por su cuenta.",
+    "good": "Te mantienes en segundo plano, lista/o para intervenir solo si lo necesita.",
+    "bad": "Intervienes en la conversación innecesariamente interrumpiendo su manejo autónomo."
+  },
+  {
+    "q": "Notas una situación de riesgo de seguridad al usar herramientas nuevas, por ejemplo cocinar con fuego.",
+    "good": "Actúas con prioridad en la seguridad física, supervisando de cerca sin dejarlo/a solo/a con el riesgo.",
+    "bad": "Te enfocas en no 'sofocarlo/a' con supervisión y dejas el riesgo sin atender."
+  },
+  {
+    "q": "Tu hijo/a pide que simplemente lo/la acompañes al médico sin hablar mucho en la sala de espera.",
+    "good": "Respetas ese pedido y te quedas presente en silencio.",
+    "bad": "Insistes en conversar para 'distraerlo/a' aunque pidió silencio."
+  },
+  {
+    "q": "Notas que tu hijo/a adolescente está resolviendo bien un desacuerdo de horarios con su empleador a tiempo parcial.",
+    "good": "Observas primero si puede resolverlo solo/a antes de ofrecer intervenir.",
+    "bad": "Llamas al empleador de inmediato sin darle oportunidad de resolverlo."
+  },
+  {
+    "q": "Tu hijo/a enfrenta un conflicto entre la necesidad de silencio y una fiesta familiar ruidosa en casa.",
+    "good": "Buscas un ajuste razonable, como un espacio tranquilo disponible, en vez de exigir que tolere todo el ruido.",
+    "bad": "Le exiges 'aguantar' la fiesta completa sin ofrecer ningún ajuste."
+  },
+  {
+    "q": "Notas una situación de riesgo real de deshidratación durante una actividad al aire libre.",
+    "good": "Actúas de inmediato ofreciendo agua y pausa antes de continuar cualquier actividad.",
+    "bad": "Continúas la actividad planeada sin atender la señal física de riesgo."
+  },
+  {
+    "q": "Tu hijo/a está simplemente procesando una emoción de alegría intensa sin pedir que la valides.",
+    "good": "Disfrutas el momento junto a él/ella sin necesidad de analizar o corregir su expresión.",
+    "bad": "Le pides que 'se calme' porque su alegría es 'demasiado intensa'."
+  },
+  {
+    "q": "Notas que dejar que tu hijo/a resuelva un malentendido con un amigo por mensaje solo/a sería una buena oportunidad de aprendizaje.",
+    "good": "Le permites intentarlo solo/a, disponible si pide revisar el mensaje antes de enviarlo.",
+    "bad": "Escribes tú el mensaje de aclaración sin que te lo pida."
+  },
+  {
+    "q": "Tu hijo/a pide ayuda explícita para calmarse antes de una presentación.",
+    "good": "Le ofreces la técnica de respiración que suele usar, respondiendo directamente a su pedido.",
+    "bad": "Le dices que 'no necesita ayuda' y que debe poder solo/a."
+  },
+  {
+    "q": "Notas un conflicto entre la regla de compartir juguetes y la necesidad puntual de tu hijo/a de tener un objeto de apego en ese momento.",
+    "good": "Evalúas el contexto y permites una excepción razonable para el objeto de apego.",
+    "bad": "Aplicas la regla de compartir sin excepción, ignorando la necesidad puntual."
+  },
+  {
+    "q": "Tu hijo/a está en burnout escolar acumulado tras semanas de exigencia.",
+    "good": "Reduces temporalmente las exigencias académicas y de actividades extra para permitir recuperación.",
+    "bad": "Mantienes el mismo nivel de exigencia esperando que 'aguante un poco más'."
+  },
+  {
+    "q": "Notas que corregir un comentario impulsivo de tu hijo/a justo después de decirlo empeoraría la tensión familiar.",
+    "good": "Esperas un momento de calma para hablar del comentario, en vez de corregir de inmediato.",
+    "bad": "Corriges el comentario en el acto, delante de toda la familia."
+  },
+  {
+    "q": "Tu hijo/a adulto joven enfrenta una decisión sobre aceptar o no una oferta de trabajo.",
+    "good": "Le das espacio para decidir, compartiendo tu perspectiva solo si la pide.",
+    "bad": "Le presionas para que acepte la oferta 'porque es lo más seguro'."
+  },
+  {
+    "q": "Notas una situación de riesgo de estafa en línea dirigida a tu hijo/a adolescente.",
+    "good": "Intervienes de inmediato explicando la situación y bloqueando el contacto sospechoso.",
+    "bad": "Esperas a ver 'si de verdad es una estafa' antes de actuar."
+  },
+  {
+    "q": "Tu hijo/a comete un error menor al elegir su ropa para el día, sin consecuencias reales.",
+    "good": "Decides no intervenir y dejar que use la combinación que eligió.",
+    "bad": "Le exiges cambiarse de ropa por un detalle estético sin importancia real."
+  },
+  {
+    "q": "Notas que tu hijo/a necesita más apoyo emocional en la despedida de un amigo que se muda de país.",
+    "good": "Aumentas tu disponibilidad emocional esos días, sin minimizar la magnitud de la pérdida.",
+    "bad": "Le dices que 'ya hará otros amigos' restando importancia a la despedida."
+  },
+  {
+    "q": "Tu hijo/a está gestionando bien sus emociones tras una decepción deportiva, sin pedir tu intervención.",
+    "good": "Te mantienes disponible en segundo plano, respetando que lo está manejando bien solo/a.",
+    "bad": "Intervienes dándole consejos no solicitados sobre cómo manejar la decepción."
+  },
+  {
+    "q": "Notas una situación de riesgo de aislamiento social sostenido en tu hijo/a adolescente durante meses.",
+    "good": "Intervienes activamente buscando apoyo profesional, sin esperar que 'se le pase solo'.",
+    "bad": "Esperas que la situación se resuelva sola sin buscar ningún apoyo externo."
+  },
+  {
+    "q": "Tu hijo/a comete un error al organizar su tiempo de estudio que puede corregir con la experiencia del resultado.",
+    "good": "Permites que viva el resultado de su organización sin intervenir antes del examen.",
+    "bad": "Rehaces su horario de estudio por él/ella sin que lo pida."
+  },
+  {
+    "q": "Notas que tu hijo/a necesita menos estructura externa ahora que ha ganado más autonomía en una rutina.",
+    "good": "Reduces gradualmente el apoyo externo, confiando en su autonomía creciente.",
+    "bad": "Mantienes el mismo nivel de supervisión de siempre pese al progreso mostrado."
+  },
+  {
+    "q": "Tu hijo/a está gestionando bien un desacuerdo de opiniones políticas con un familiar en una reunión.",
+    "good": "Observas sin intervenir mientras el intercambio se mantenga respetuoso.",
+    "bad": "Interrumpes la conversación de inmediato para evitar cualquier desacuerdo."
+  },
+  {
+    "q": "Notas una situación de riesgo real en una app de citas para tu hijo/a adulto joven.",
+    "good": "Le compartes tu preocupación concreta y ofreces apoyo si decide actuar sobre el riesgo.",
+    "bad": "Le prohíbes usar la app sin conversar primero sobre la situación de riesgo."
+  },
+  {
+    "q": "Tu hijo/a pide que simplemente estés cerca mientras hace su tarea, sin ayudar directamente.",
+    "good": "Respetas ese pedido, quedándote presente sin intervenir en la tarea.",
+    "bad": "Aprovechas para corregir cada respuesta mientras la hace, aunque no lo pidió."
+  },
+  {
+    "q": "Notas que dejar que tu hijo/a maneje solo/a un reclamo en una tienda le daría una buena práctica de autonomía.",
+    "good": "Lo dejas intentarlo primero, interviniendo solo si la situación se complica de verdad.",
+    "bad": "Haces tú el reclamo de inmediato sin darle oportunidad de intentarlo."
+  },
+  {
+    "q": "Tu hijo/a está en medio de una crisis de pánico y necesita contención física segura, no palabras.",
+    "good": "Reconoces la necesidad de cercanía física calmada por encima de cualquier explicación verbal.",
+    "bad": "Te mantienes a distancia dando instrucciones verbales cuando necesita contacto físico."
+  },
+  {
+    "q": "Notas que corregir un error de tu hijo/a frente a sus amigos empeoraría la situación social.",
+    "good": "Pospones la corrección para un momento privado después del encuentro.",
+    "bad": "Corriges el error delante de sus amigos en el momento."
+  },
+  {
+    "q": "Tu hijo/a adulto joven enfrenta una decisión de salud, como empezar o no una terapia, que le corresponde a él/ella.",
+    "good": "Le das espacio para decidir, ofreciendo información si la pide sin presionar la decisión.",
+    "bad": "Le agendas la terapia sin consultarle primero."
+  },
+  {
+    "q": "Notas una situación de riesgo de sobreesfuerzo físico en tu hijo/a durante una actividad deportiva con fiebre leve.",
+    "good": "Actúas priorizando la salud física, deteniendo la actividad pese a su insistencia en continuar.",
+    "bad": "Lo dejas continuar la actividad porque 'insiste en que se siente bien'."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

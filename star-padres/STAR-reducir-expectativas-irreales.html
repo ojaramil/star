@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Reducir Expectativas Irreales</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #f59e0b, #f59e0bcc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #f59e0b, #f59e0bcc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+      <span>Flexibilidad Cognitiva del Padre</span>
+    </span>
+    <h1>📏 Reducir Expectativas Irreales</h1>
+    <p>Ajustar la vara de comparación a las capacidades reales del hijo/a.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "reducir-expectativas-irreales";
+const SITUACIONES = [
+  {
+    "q": "Esperas que tu hijo/a termine la tarea en el mismo tiempo que sus compañeros.",
+    "good": "Ajustas el tiempo esperado según su ritmo real de procesamiento.",
+    "bad": "Lo presionas para igualar el tiempo de otros niños."
+  },
+  {
+    "q": "Esperas que participe en una fiesta larga sin señales de agotamiento.",
+    "good": "Planificas una salida anticipada o pausas, ajustando la expectativa de duración.",
+    "bad": "Esperas que aguante toda la fiesta 'como cualquier niño'."
+  },
+  {
+    "q": "Esperas que recuerde instrucciones complejas dadas una sola vez.",
+    "good": "Ajustas repitiendo o simplificando, aceptando que necesita más apoyo.",
+    "bad": "Te frustras porque 'ya se lo dijiste' y no debería olvidarlo."
+  },
+  {
+    "q": "Esperas que se adapte de inmediato a un cambio de planes.",
+    "good": "Ajustas dando tiempo y anticipación, aceptando que su adaptación es más gradual.",
+    "bad": "Esperas una reacción rápida como la de otros miembros de la familia."
+  },
+  {
+    "q": "Esperas el mismo nivel de independencia que tuvo un hermano/a a su edad.",
+    "good": "Evalúas su propio nivel de desarrollo sin comparar directamente con otro hijo/a.",
+    "bad": "Insistes en la misma independencia 'porque su hermano/a ya lo hacía a esa edad'."
+  },
+  {
+    "q": "Esperas que disfrute de todas las reuniones familiares por igual.",
+    "good": "Aceptas que algunas reuniones le resultan más difíciles y ajustas la participación.",
+    "bad": "Exiges la misma actitud positiva en todas las reuniones sin excepción."
+  },
+  {
+    "q": "Esperas que exprese gratitud de la forma convencional esperada.",
+    "good": "Reconoces otras formas en que expresa agradecimiento, aunque no sean las típicas.",
+    "bad": "Le exiges dar las gracias exactamente como 'se debe'."
+  },
+  {
+    "q": "Esperas que resuelva conflictos sociales solo, sin apoyo.",
+    "good": "Ofreces apoyo y herramientas concretas según su etapa de desarrollo social.",
+    "bad": "Lo dejas solo con el conflicto porque 'ya debería saber resolverlo'."
+  },
+  {
+    "q": "Esperas que mantenga la calma en situaciones que le generan sobrecarga real.",
+    "good": "Ajustas la expectativa reconociendo el límite real de su tolerancia actual.",
+    "bad": "Le exiges 'control' en situaciones objetivamente abrumadoras para él/ella."
+  },
+  {
+    "q": "Esperas que se organice solo con múltiples tareas escolares simultáneas.",
+    "good": "Brindas apoyo de organización acorde a su función ejecutiva actual.",
+    "bad": "Esperas autonomía total 'porque ya tiene edad para organizarse'."
+  },
+  {
+    "q": "Esperas que disfrute actividades sociales tanto como tú disfrutabas a su edad.",
+    "good": "Aceptas que su disfrute social puede ser distinto en forma e intensidad.",
+    "bad": "Mides su bienestar social comparándolo con tu propia experiencia infantil."
+  },
+  {
+    "q": "Esperas una respuesta emocional inmediata tras darle una noticia importante.",
+    "good": "Le das tiempo para procesar antes de esperar una reacción visible.",
+    "bad": "Interpretas la falta de reacción inmediata como indiferencia."
+  },
+  {
+    "q": "Esperas que tenga el mismo umbral de frustración que un adulto.",
+    "good": "Ajustas la expectativa a su etapa de desarrollo y perfil real.",
+    "bad": "Le exiges 'madurez' por encima de lo que es razonable para su edad y perfil."
+  },
+  {
+    "q": "Esperas que memorice reglas sociales implícitas sin explicación directa.",
+    "good": "Le explicas las reglas de forma explícita en vez de asumir que las intuirá.",
+    "bad": "Te frustras porque 'debería saber' cómo comportarse socialmente."
+  },
+  {
+    "q": "Esperas que un logro pequeño para otros sea igual de fácil para tu hijo/a.",
+    "good": "Reconoces el esfuerzo real que le tomó, aunque parezca simple desde fuera.",
+    "bad": "Minimizas su logro porque 'para otros niños es fácil'."
+  },
+  {
+    "q": "Esperas que se adapte a un grupo grande de niños con la misma facilidad que en uno pequeño.",
+    "good": "Ajustas las expectativas de participación social según el tamaño del grupo.",
+    "bad": "Esperas la misma soltura social sin importar cuántas personas haya."
+  },
+  {
+    "q": "Esperas que entienda una broma o ironía sin explicación.",
+    "good": "Le explicas el trasfondo cuando no la capta, sin juzgarlo por ello.",
+    "bad": "Te burlas o insistes en que 'ya debería entender' ese tipo de humor."
+  },
+  {
+    "q": "Esperas que un cambio de rutina no le afecte porque 'ya es grande'.",
+    "good": "Reconoces que la sensibilidad al cambio no depende solo de la edad cronológica.",
+    "bad": "Descartas su malestar por el cambio solo por su edad."
+  },
+  {
+    "q": "Esperas que gestione bien las críticas como lo haría un adulto.",
+    "good": "Ajustas tu forma de dar feedback a su capacidad actual de procesarlo.",
+    "bad": "Das críticas directas esperando la misma tolerancia que tendría un adulto."
+  },
+  {
+    "q": "Esperas que disfrute aprendiendo todas las materias por igual.",
+    "good": "Aceptas que su motivación varía según sus intereses y fortalezas reales.",
+    "bad": "Exiges el mismo entusiasmo en todas las materias escolares por igual."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a se quede quieto durante toda una misa o ceremonia larga.",
+    "good": "Ajustas la expectativa según su capacidad real de permanecer quieto/a a su edad y perfil.",
+    "bad": "Lo regañas repetidamente por moverse durante toda la ceremonia."
+  },
+  {
+    "q": "Esperas que tu hijo/a de primaria haga la tarea sola/o sin ningún acompañamiento.",
+    "good": "Reconoces que aún necesita apoyo para iniciar y sostener la tarea, y se lo brindas.",
+    "bad": "Lo dejas solo/a con la tarea 'porque ya debería poder hacerla sin ayuda'."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente maneje su ansiedad social sin ningún apoyo externo.",
+    "good": "Reconoces que necesita herramientas y acompañamiento concretos para manejarla.",
+    "bad": "Le dices que 'ya es grande' para superar solo esa ansiedad."
+  },
+  {
+    "q": "Esperas que tu hijo/a adulto/a joven administre sus finanzas sin ningún error desde el principio.",
+    "good": "Aceptas que aprender a manejar el dinero es un proceso gradual con apoyo.",
+    "bad": "Te frustras cada vez que comete un error financiero 'porque ya debería saber'."
+  },
+  {
+    "q": "Esperas que tu hijo/a disfrute una salida familiar de todo el día sin señales de cansancio.",
+    "good": "Planificas la salida con descansos, aceptando su límite real de energía.",
+    "bad": "Extiendes la salida esperando que 'aguante como cualquier niño'."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda instrucciones nuevas en el colegio sin apoyo visual adicional.",
+    "good": "Coordinas con el colegio apoyos concretos que se ajusten a su forma de procesar.",
+    "bad": "Asumes que 'ya debería entender igual que los demás sin ayuda extra'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje una mudanza de casa sin ningún periodo de adaptación.",
+    "good": "Anticipas un proceso de adaptación gradual con apoyos durante varias semanas.",
+    "bad": "Esperas que se ajuste de inmediato 'porque los niños se adaptan rápido'."
+  },
+  {
+    "q": "Esperas que tu hijo/a exprese sus necesidades verbalmente sin ayuda en situaciones nuevas.",
+    "good": "Ofreces apoyos alternativos de comunicación cuando lo verbal no fluye en el momento.",
+    "bad": "Esperas que 'hable normal' sin considerar la dificultad real de la situación."
+  },
+  {
+    "q": "Esperas que tu hijo/a tolere una fila larga de espera sin ninguna señal de incomodidad.",
+    "good": "Ajustas tus planes anticipando descansos o distracciones durante la espera.",
+    "bad": "Le exiges 'aguantar como cualquiera' una fila larga sin ningún apoyo."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente resuelva un conflicto de amistad completamente solo/a.",
+    "good": "Ofreces orientación y herramientas concretas sin dejarlo/a completamente solo/a con el conflicto.",
+    "bad": "Le dices que 'ya tiene edad para resolver sus propios problemas' sin ningún apoyo."
+  },
+  {
+    "q": "Esperas que tu hijo/a mantenga la calma en un examen bajo presión de tiempo estricta.",
+    "good": "Solicitas adaptaciones razonables de tiempo si su perfil lo requiere.",
+    "bad": "Esperas el mismo desempeño bajo presión que cualquier otro estudiante."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a comparta juguetes de inmediato sin ningún proceso de transición.",
+    "good": "Le das tiempo y acompañamiento para aprender a compartir a su propio ritmo.",
+    "bad": "Le exiges compartir de inmediato 'porque ya debería saber hacerlo a su edad'."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda de inmediato por qué se pospuso un evento importante para él/ella.",
+    "good": "Le explicas con calma y paciencia, aceptando que necesitará tiempo para procesarlo.",
+    "bad": "Te frustras porque 'no entiende algo tan simple' de inmediato."
+  },
+  {
+    "q": "Esperas que tu hijo/a adulto/a joven consiga trabajo estable apenas termina sus estudios.",
+    "good": "Reconoces que su proceso de inserción laboral puede tomar más tiempo y necesitar apoyo.",
+    "bad": "Le presionas comparando su ritmo con el de otros jóvenes de su edad."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien un cambio de maestro/a a mitad de año sin ningún apoyo.",
+    "good": "Coordinas con el colegio una transición gradual y con información anticipada.",
+    "bad": "Esperas que se adapte solo/a 'porque los cambios de maestro son normales'."
+  },
+  {
+    "q": "Esperas que tu hijo/a duerma toda la noche de corrido igual que sus hermanos.",
+    "good": "Ajustas la expectativa de sueño según su propio patrón real, buscando apoyo si hace falta.",
+    "bad": "Comparas su sueño con el de sus hermanos y te frustras por la diferencia."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda y siga reglas nuevas de un juego sin explicación repetida.",
+    "good": "Repites y ejemplificas las reglas las veces que sea necesario con paciencia.",
+    "bad": "Te impacientas porque 'ya se lo explicaste una vez y debería bastar'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje el estrés de un examen médico sin ninguna preparación previa.",
+    "good": "Anticipas el procedimiento con explicaciones claras y tiempo para procesar antes de la cita.",
+    "bad": "Lo llevas sin preparación 'porque no hay para qué generar ansiedad antes'."
+  },
+  {
+    "q": "Esperas que tu hijo/a se integre de inmediato a un equipo deportivo nuevo sin periodo de adaptación.",
+    "good": "Aceptas que integrarse a un grupo nuevo puede tomarle más tiempo del esperado.",
+    "bad": "Te frustras porque 'después de dos semanas ya debería sentirse parte del equipo'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien las bromas pesadas de compañeros sin apoyo emocional.",
+    "good": "Le ofreces herramientas concretas y apoyo activo para manejar esas situaciones.",
+    "bad": "Le dices que 'aprenda a defenderse solo, así es la vida'."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente controle sus emociones frente a una decepción amorosa como un adulto.",
+    "good": "Ajustas la expectativa emocional a su etapa real de desarrollo y acompañas el proceso.",
+    "bad": "Le exiges 'no hacer drama' por algo que consideras propio de la edad."
+  },
+  {
+    "q": "Esperas que tu hijo/a recuerde una rutina nueva después de habérsela explicado una sola vez.",
+    "good": "Repites la rutina con apoyos visuales hasta que se afiance con el tiempo.",
+    "bad": "Te enojas porque 'ya se lo explicaste y no debería olvidarlo'."
+  },
+  {
+    "q": "Esperas que tu hijo/a participe activamente en una conversación grupal larga sin fatigarse.",
+    "good": "Reconoces su límite real de energía social y planificas pausas o salidas anticipadas.",
+    "bad": "Esperas que aguante toda la conversación 'como cualquier otro miembro de la familia'."
+  },
+  {
+    "q": "Esperas que tu hijo/a use el transporte público solo/a sin ningún entrenamiento previo.",
+    "good": "Practicas la ruta junto a él/ella varias veces antes de dejarlo/a ir solo/a.",
+    "bad": "Lo mandas solo/a de una vez 'porque ya tiene edad para hacerlo sin práctica'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien una fiesta sorpresa sin ningún tipo de anticipación.",
+    "good": "Evitas las sorpresas o le das algo de anticipación adaptada a su necesidad de previsibilidad.",
+    "bad": "Organizas la sorpresa igual esperando que reaccione bien sin aviso previo."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a controle esfínteres exactamente al mismo ritmo que otros niños.",
+    "good": "Respetas su propio ritmo de desarrollo sin comparar con tablas estándar rígidas.",
+    "bad": "Te frustras y comparas su ritmo con el de otros niños de la misma edad."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje una crítica del profesor sin afectarse emocionalmente.",
+    "good": "Reconoces que puede necesitar procesar la crítica con más apoyo emocional del habitual.",
+    "bad": "Le dices que 'no es para tanto' y que 'debería tomarlo con más madurez'."
+  },
+  {
+    "q": "Esperas que tu hijo/a memorice de inmediato los nombres de nuevos familiares políticos.",
+    "good": "Le das tiempo y recordatorios amables sin exigir memorización instantánea.",
+    "bad": "Lo avergüenzas frente a la familia por no recordar un nombre nuevo."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien un vuelo largo sin ningún apoyo sensorial adicional.",
+    "good": "Preparas elementos sensoriales y anticipación para hacer el vuelo más llevadero.",
+    "bad": "Esperas que 'se aguante' el vuelo largo sin ningún apoyo especial."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente organice solo/a sus tiempos de estudio para varios exámenes.",
+    "good": "Ofreces apoyo de planificación mientras desarrolla esa habilidad gradualmente.",
+    "bad": "Lo dejas organizarse solo 'porque ya debería saber planificar a su edad'."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda la gravedad de una situación familiar difícil igual que un adulto.",
+    "good": "Ajustas la explicación y las expectativas emocionales según su capacidad real de comprensión.",
+    "bad": "Le exiges 'entender la seriedad del asunto' sin adaptar tu explicación."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien los cambios de planes de última hora en un viaje.",
+    "good": "Anticipas alternativas y aceptas que necesitará más tiempo para ajustarse al cambio.",
+    "bad": "Esperas que se adapte de inmediato 'porque en los viajes siempre hay imprevistos'."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a distinga bien lo real de lo imaginario en todos los contextos.",
+    "good": "Acompañas esa distinción con paciencia, sabiendo que es un proceso gradual.",
+    "bad": "Te frustras porque 'ya debería distinguir la realidad de la fantasía a su edad'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje sin ayuda una entrevista de trabajo o admisión escolar.",
+    "good": "Practicas juntos y das apoyos concretos antes de la entrevista.",
+    "bad": "Lo envías solo sin preparación 'porque debería poder hacerlo por sí mismo'."
+  },
+  {
+    "q": "Esperas que tu hijo/a tenga la misma resistencia física que sus compañeros en educación física.",
+    "good": "Ajustas la expectativa de rendimiento físico a su capacidad y perfil real.",
+    "bad": "Lo comparas con sus compañeros y le exiges el mismo nivel de resistencia."
+  },
+  {
+    "q": "Esperas que tu hijo/a comprenda de inmediato reglas sociales implícitas en un evento nuevo.",
+    "good": "Le explicas de forma explícita qué se espera antes del evento.",
+    "bad": "Asumes que 'las va a captar sola/o como los demás niños'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien las visitas médicas frecuentes sin ningún apoyo emocional.",
+    "good": "Ofreces acompañamiento y estrategias de calma antes y durante cada visita.",
+    "bad": "Esperas que 'ya se acostumbre' a las visitas médicas sin ningún apoyo adicional."
+  },
+  {
+    "q": "Esperas que tu hijo/a se organice para empacar su propia maleta de viaje sin ninguna guía.",
+    "good": "Le das una lista visual de apoyo mientras aprende a hacerlo con más autonomía.",
+    "bad": "Esperas que empaque solo/a 'porque ya tiene edad para hacerlo perfecto'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien el ruido y el bullicio de un estadio deportivo sin protección sensorial.",
+    "good": "Llevas protección auditiva y planificas una salida anticipada si es necesario.",
+    "bad": "Esperas que 'se aguante' el ruido del estadio sin ningún apoyo."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda por qué debe compartir su tiempo con un hermano/a recién nacido/a.",
+    "good": "Le explicas con anticipación y paciencia, dándole tiempo para adaptarse al cambio.",
+    "bad": "Esperas que 'entienda y acepte' el cambio familiar de inmediato."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje sin apoyo una mudanza de colegio a mitad de año escolar.",
+    "good": "Coordinas con ambos colegios una transición gradual con información anticipada.",
+    "bad": "Esperas que se adapte rápido 'porque los niños se acostumbran fácil a todo'."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente maneje bien una ruptura de amistad sin apoyo adicional.",
+    "good": "Le ofreces espacio para procesar y herramientas concretas para manejar la pérdida del vínculo.",
+    "bad": "Le dices que 'ya se le va a pasar solo' sin ofrecer ningún acompañamiento."
+  },
+  {
+    "q": "Esperas que tu hijo/a use cubiertos y modales de mesa exactamente como el resto desde muy pequeño/a.",
+    "good": "Ajustas la expectativa de modales según su desarrollo motor y sensorial real.",
+    "bad": "Lo corriges constantemente comparándolo con hermanos que ya lo dominan."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien una fila de seguridad en el aeropuerto sin ninguna preparación.",
+    "good": "Le explicas el proceso paso a paso antes de llegar al aeropuerto.",
+    "bad": "Esperas que 'siga las indicaciones como cualquiera' sin ninguna anticipación."
+  },
+  {
+    "q": "Esperas que tu hijo/a recupere el ritmo escolar inmediatamente después de una hospitalización.",
+    "good": "Coordinas una reincorporación gradual, aceptando que necesitará tiempo de ajuste.",
+    "bad": "Esperas que 'se ponga al día enseguida' sin considerar su recuperación real."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda un chiste o doble sentido complejo sin ninguna aclaración.",
+    "good": "Le explicas el trasfondo cuando lo necesite, sin juzgarlo por no entenderlo de inmediato.",
+    "bad": "Te frustras porque 'un chiste tan simple debería entenderlo sin explicación'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien una acampada con mucho ruido natural sin ningún apoyo sensorial.",
+    "good": "Llevas elementos conocidos de casa que le den seguridad durante la acampada.",
+    "bad": "Esperas que 'se adapte a la naturaleza sin quejarse' sin ningún apoyo."
+  },
+  {
+    "q": "Esperas que tu hijo/a adulto/a joven mantenga una rutina laboral de oficina rígida sin ajustes.",
+    "good": "Buscas junto a él/ella adaptaciones razonables en su entorno laboral si las necesita.",
+    "bad": "Le dices que 'todos tienen que adaptarse a las reglas del trabajo, sin excepciones'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje una despedida de un ser querido con la misma expresión emocional que el resto.",
+    "good": "Aceptas que su forma de procesar el duelo puede ser distinta, sin juzgar su reacción.",
+    "bad": "Le exiges 'mostrar más sentimiento' porque 'así se espera en estos momentos'."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a entienda instrucciones abstractas de seguridad vial de inmediato.",
+    "good": "Le enseñas con ejemplos concretos y prácticas repetidas antes de esperar que las aplique solo/a.",
+    "bad": "Le explicas una vez y esperas que 'ya entienda y las aplique siempre'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien un cambio de niñera o cuidador sin ningún periodo de adaptación.",
+    "good": "Planificas una transición gradual con presentaciones previas al cuidador nuevo.",
+    "bad": "Haces el cambio de un día para otro esperando que se adapte de inmediato."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda por qué no puede comprar algo que vio en una tienda sin frustrarse.",
+    "good": "Anticipas la posible frustración y explicas con calma antes de entrar a la tienda.",
+    "bad": "Esperas que 'entienda un no sin problema' como si fuera obvio para él/ella."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien una evaluación psicológica sin ninguna preparación previa.",
+    "good": "Le explicas en qué consiste la evaluación con anticipación y en términos que pueda entender.",
+    "bad": "Lo llevas sin explicación 'para no generar expectativas' y lo dejas sorprendido/a."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente maneje bien la presión de grupo sin ninguna herramienta previa.",
+    "good": "Conversas con anticipación sobre estrategias concretas para manejar esa presión.",
+    "bad": "Le dices que 'aprenda a decir que no solo, así se templa el carácter'."
+  },
+  {
+    "q": "Esperas que tu hijo/a mantenga el mismo nivel de atención en una clase virtual que en una presencial.",
+    "good": "Ajustas la expectativa reconociendo que el formato virtual exige un tipo distinto de atención.",
+    "bad": "Lo comparas con su rendimiento presencial y le exiges igual concentración."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien una celebración con fuegos artificiales sin ningún apoyo sensorial.",
+    "good": "Preparas protección auditiva y una salida anticipada si el ruido lo/la sobrepasa.",
+    "bad": "Esperas que 'se aguante' los fuegos artificiales sin ningún apoyo."
+  },
+  {
+    "q": "Esperas que tu hijo/a organice su propio horario de medicamentos sin ningún recordatorio.",
+    "good": "Usas alarmas o listas visuales de apoyo mientras desarrolla esa autonomía gradualmente.",
+    "bad": "Esperas que 'se acuerde solo/a' sin ningún sistema de apoyo."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien la mudanza de un familiar cercano sin procesarlo emocionalmente.",
+    "good": "Le das espacio y acompañamiento para procesar ese cambio en su propio tiempo.",
+    "bad": "Esperas que 'lo acepte rápido' porque 'a su edad estas cosas no deberían afectarle tanto'."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a entienda por qué debe esperar su turno en un juego sin apoyo.",
+    "good": "Le enseñas con práctica y apoyos visuales el concepto de turnos, con paciencia.",
+    "bad": "Le exiges esperar su turno 'porque ya debería saber compartir' sin ninguna guía."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien un examen médico invasivo sin ninguna preparación sensorial.",
+    "good": "Coordinas con el personal médico estrategias de anticipación y calma antes del procedimiento.",
+    "bad": "Lo llevas sin preparación esperando que 'coopere como cualquier paciente'."
+  },
+  {
+    "q": "Esperas que tu hijo/a adulto/a joven maneje una entrevista social nueva sin ningún apoyo previo.",
+    "good": "Practicas juntos posibles escenarios de conversación antes del encuentro.",
+    "bad": "Lo envías solo/a esperando que 'ya sepa comportarse socialmente sin practicar'."
+  },
+  {
+    "q": "Esperas que tu hijo/a recupere la confianza tras un fracaso escolar con la misma rapidez que otros.",
+    "good": "Aceptas que su proceso de recuperación emocional puede tomar más tiempo real.",
+    "bad": "Le presionas a 'superarlo rápido' comparándolo con la reacción de otros niños."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien un cambio de horario de comidas sin ningún ajuste gradual.",
+    "good": "Introduces el cambio de forma progresiva, respetando su necesidad de rutina.",
+    "bad": "Cambias el horario de golpe esperando que se adapte sin dificultad."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda instrucciones de seguridad en una emergencia real sin práctica previa.",
+    "good": "Practicas simulacros con anticipación para que sepa qué esperar en una emergencia.",
+    "bad": "Esperas que 'reaccione bien' en una emergencia real sin haber practicado antes."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien una celebración religiosa larga sin ningún descanso.",
+    "good": "Planificas pausas o una salida anticipada si la duración le resulta agotadora.",
+    "bad": "Esperas que 'aguante toda la ceremonia como el resto de la familia'."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente maneje bien el rechazo de una solicitud de trabajo sin apoyo emocional.",
+    "good": "Acompañas el proceso de manejar la decepción, dándole herramientas concretas.",
+    "bad": "Le dices que 'así es el mundo laboral, tiene que aguantarse' sin acompañarlo/a."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien un cambio de terapeuta o profesional de apoyo sin ningún proceso.",
+    "good": "Planificas una transición con presentaciones previas y tiempo de adaptación.",
+    "bad": "Haces el cambio abruptamente esperando que 'se acostumbre rápido al nuevo profesional'."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a entienda un 'no' inmediato sin ninguna explicación adicional.",
+    "good": "Le das una breve explicación adaptada a su edad junto con el límite.",
+    "bad": "Te limitas a decir 'no' y esperas obediencia inmediata sin ninguna explicación."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien la transición de la primaria a la secundaria sin ningún apoyo extra.",
+    "good": "Coordinas con ambos colegios una transición gradual con visitas previas si es posible.",
+    "bad": "Esperas que se adapte solo/a 'porque todos los niños pasan por ese cambio'."
+  },
+  {
+    "q": "Esperas que tu hijo/a mantenga la paciencia en una consulta médica larga sin ningún distractor.",
+    "good": "Llevas actividades o elementos que lo ayuden a esperar con más comodidad.",
+    "bad": "Esperas que 'se porte bien y espere' sin ofrecerle ningún apoyo durante la espera."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a aprenda a atarse los cordones al mismo tiempo que sus compañeros.",
+    "good": "Ajustas el ritmo de ese aprendizaje motor fino a su propio desarrollo real.",
+    "bad": "Le exiges practicar más 'porque ya todos en su clase saben hacerlo'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien una reunión con muchos parientes desconocidos sin ninguna anticipación.",
+    "good": "Le muestras fotos y nombres con anticipación para reducir la incertidumbre social.",
+    "bad": "Esperas que 'salude a todos con soltura' sin haberle dado ningún contexto antes."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente controle su ansiedad antes de un examen importante sin ninguna estrategia previa.",
+    "good": "Le enseñas técnicas concretas de manejo de ansiedad antes de la fecha del examen.",
+    "bad": "Le dices que 'se relaje y ya' sin ofrecerle ninguna herramienta concreta."
+  },
+  {
+    "q": "Esperas que tu hijo/a entienda por qué se cambiaron los planes de un viaje sin ninguna explicación visual.",
+    "good": "Usas un calendario o esquema visual para explicar el cambio con claridad.",
+    "bad": "Le explicas una vez de forma verbal y esperas que lo asimile sin más apoyo."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien una primera cita con un nuevo dentista sin ninguna preparación.",
+    "good": "Le explicas el procedimiento con anticipación y, si es posible, visitan el lugar antes.",
+    "bad": "Lo llevas sin preparación esperando que 'coopere igual que cualquier paciente'."
+  },
+  {
+    "q": "Esperas que tu hijo/a adulto/a joven mantenga las mismas normas sociales de saludo en todos los contextos.",
+    "good": "Reconoces que puede necesitar variantes según el contexto y le das margen para ajustarse.",
+    "bad": "Le exiges el mismo protocolo de saludo formal en cualquier situación, sin excepciones."
+  },
+  {
+    "q": "Esperas que tu hijo/a recupere la rutina normal el mismo día de volver de un viaje largo.",
+    "good": "Das uno o dos días de transición antes de retomar las exigencias habituales.",
+    "bad": "Retomas la rutina exacta al día siguiente 'porque ya hay que volver a la normalidad'."
+  },
+  {
+    "q": "Esperas que tu hijo/a maneje bien un simulacro de emergencia escolar sin ninguna preparación previa en casa.",
+    "good": "Conversas en casa sobre qué esperar antes de que ocurra el simulacro en el colegio.",
+    "bad": "Esperas que 'reaccione bien' sin haberle explicado nunca qué es un simulacro."
+  },
+  {
+    "q": "Esperas que tu hijo/a pequeño/a controle su volumen de voz en una biblioteca sin ningún recordatorio previo.",
+    "good": "Le explicas antes de entrar qué se espera, con un recordatorio visual si ayuda.",
+    "bad": "Lo regañas dentro de la biblioteca sin haberle explicado antes la expectativa."
+  },
+  {
+    "q": "Esperas que tu hijo/a adolescente maneje bien una fiesta de graduación larga y ruidosa sin ningún límite anticipado.",
+    "good": "Acuerdan juntos una hora de salida anticipada antes de asistir al evento.",
+    "bad": "Esperas que 'aguante toda la fiesta como los demás egresados'."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

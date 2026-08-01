@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Defender Ajustes Razonables</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ec4899;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #ec4899, #ec4899cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #ec4899, #ec4899cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>
+      <span>Defensa y Colaboración</span>
+    </span>
+    <h1>⚖️ Defender Ajustes Razonables</h1>
+    <p>Abogar por adaptaciones en escuela, salud y entorno social.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 90</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "defender-ajustes-razonables";
+const SITUACIONES = [
+  {
+    "q": "El colegio se niega a dar tiempo extra en un examen.",
+    "good": "Presentas la solicitud formalmente con información y respaldo profesional si es necesario.",
+    "bad": "Aceptas la negativa sin insistir ni presentar más información."
+  },
+  {
+    "q": "Un consultorio médico no tiene sala de espera tranquila para tu hijo/a.",
+    "good": "Solicitas con anticipación una alternativa (esperar afuera, cita a primera hora).",
+    "bad": "Sometes a tu hijo/a a la espera regular sin pedir ningún ajuste."
+  },
+  {
+    "q": "Una actividad extraescolar no permite adaptaciones sensoriales básicas.",
+    "good": "Conversas con los organizadores proponiendo ajustes concretos y razonables.",
+    "bad": "Retiras a tu hijo/a de la actividad sin intentar negociar primero."
+  },
+  {
+    "q": "El colegio no permite que tu hijo/a use auriculares de protección auditiva.",
+    "good": "Presentas la necesidad con información concreta y defiendes su uso.",
+    "bad": "Aceptas la prohibición sin explicar la función real del apoyo."
+  },
+  {
+    "q": "Un evento familiar no considera un espacio tranquilo para retirarse.",
+    "good": "Propones con anticipación designar un espacio así para tu hijo/a.",
+    "bad": "Asistes sin pedir nada, esperando que tu hijo/a 'aguante' igual que siempre."
+  },
+  {
+    "q": "Una aerolínea o transporte no ofrece información clara sobre acomodaciones.",
+    "good": "Contactas con anticipación para solicitar la información y ajustes necesarios.",
+    "bad": "Viajas sin informarte, asumiendo que 'ya se resolverá' en el momento."
+  },
+  {
+    "q": "El colegio considera innecesaria una adaptación que tú sabes que es clave.",
+    "good": "Presentas evidencia concreta (informes, ejemplos) que respalden la necesidad real.",
+    "bad": "Desistes de la solicitud ante la primera negativa del colegio."
+  },
+  {
+    "q": "Un campamento no tiene protocolo para necesidades sensoriales.",
+    "good": "Conversas con los organizadores antes de inscribirlo, proponiendo ajustes concretos.",
+    "bad": "Lo inscribes sin conversar nada, esperando que 'todo salga bien'."
+  },
+  {
+    "q": "Un profesional de salud minimiza la necesidad de un ajuste que pides.",
+    "good": "Insistes con información y, si es necesario, buscas una segunda opinión.",
+    "bad": "Aceptas la minimización sin buscar alternativas ni más información."
+  },
+  {
+    "q": "El colegio exige que tu hijo/a participe en una actividad sin adaptaciones.",
+    "good": "Solicitas formalmente una adaptación razonable respaldada en su perfil.",
+    "bad": "Presionas a tu hijo/a para 'aguantar' la actividad sin ningún ajuste."
+  },
+  {
+    "q": "Un restaurante o lugar público no es flexible con el menú o el ambiente.",
+    "good": "Preguntas con anticipación por opciones o eliges un lugar más adaptado.",
+    "bad": "Fuerzas la visita al mismo lugar esperando que tu hijo/a se adapte solo."
+  },
+  {
+    "q": "Una actividad deportiva no ofrece alternativas para necesidades de comunicación.",
+    "good": "Propones ajustes concretos (instrucciones visuales, tiempo extra) a los entrenadores.",
+    "bad": "Retiras a tu hijo/a de la actividad sin proponer ninguna adaptación."
+  },
+  {
+    "q": "El colegio considera que pedir ajustes es 'sobreprotección'.",
+    "good": "Explicas la diferencia entre ajuste razonable y sobreprotección con ejemplos claros.",
+    "bad": "Dejas de pedir ajustes por miedo a esa etiqueta."
+  },
+  {
+    "q": "Un evento social no considera horarios que respeten la energía de tu hijo/a.",
+    "good": "Propones llegar más tarde o retirarte antes, explicando el motivo con tacto.",
+    "bad": "Asistes al horario completo esperando que tu hijo/a 'aguante' igual que otros."
+  },
+  {
+    "q": "Una institución exige documentación excesiva para un ajuste razonable simple.",
+    "good": "Persistes en el proceso, buscando apoyo si es necesario para agilizarlo.",
+    "bad": "Desistes del ajuste por la carga burocrática que implica."
+  },
+  {
+    "q": "Un familiar cuestiona por qué pides tantos ajustes para tu hijo/a.",
+    "good": "Explicas con calma que son necesidades reales, no privilegios innecesarios.",
+    "bad": "Dejas de pedir ajustes frente a esa familia para evitar el cuestionamiento."
+  },
+  {
+    "q": "El colegio no considera necesario avisar con anticipación los cambios de horario.",
+    "good": "Solicitas formalmente que te avisen con tiempo por el impacto real en tu hijo/a.",
+    "bad": "Aceptas los cambios sin aviso, absorbiendo tú solo/a el impacto en casa."
+  },
+  {
+    "q": "Una actividad grupal no tiene alternativa para quien necesita más tiempo de transición.",
+    "good": "Propones una transición escalonada como ajuste razonable para el grupo.",
+    "bad": "Aceptas que tu hijo/a se quede rezagado/a sin proponer ninguna solución."
+  },
+  {
+    "q": "Un pediatra sugiere que 'ya se le pasará' sin evaluar más a fondo.",
+    "good": "Solicitas una evaluación más completa o una segunda opinión especializada.",
+    "bad": "Aceptas la sugerencia sin buscar más información ni seguimiento."
+  },
+  {
+    "q": "El colegio limita las salidas al baño o pausas sensoriales durante el día.",
+    "good": "Solicitas formalmente flexibilizar esa política según la necesidad real de tu hijo/a.",
+    "bad": "Aceptas la limitación esperando que tu hijo/a 'se aguante' como los demás."
+  },
+  {
+    "q": "Un dentista no ofrece opciones de sedación consciente para procedimientos.",
+    "good": "Solicitas formalmente esa alternativa antes del procedimiento.",
+    "bad": "Sometes a tu hijo/a al procedimiento estándar sin preguntar opciones."
+  },
+  {
+    "q": "Un cine no ofrece funciones con luces encendidas y volumen reducido.",
+    "good": "Buscas o solicitas una función sensorialmente amigable disponible.",
+    "bad": "Llevas a tu hijo/a a la función estándar sin considerar el impacto."
+  },
+  {
+    "q": "Un parque de diversiones no explica bien su pase de acceso prioritario por discapacidad.",
+    "good": "Contactas con anticipación para conocer y solicitar ese pase.",
+    "bad": "Haces las filas regulares sin informarte de las opciones disponibles."
+  },
+  {
+    "q": "Una peluquería no tiene experiencia con clientes con sensibilidad sensorial.",
+    "good": "Buscas un salón con experiencia o negocias ajustes previos (horario, herramientas).",
+    "bad": "Llevas a tu hijo/a al corte estándar esperando que lo tolere igual."
+  },
+  {
+    "q": "Un examen de conducir no contempla tiempo extra para la prueba escrita.",
+    "good": "Solicitas formalmente la adaptación con respaldo profesional.",
+    "bad": "Dejas que rinda el examen en las condiciones estándar sin pedir ajuste."
+  },
+  {
+    "q": "Una universidad no informa claramente sobre su oficina de accesibilidad.",
+    "good": "Contactas directamente para conocer el proceso de registro de adaptaciones.",
+    "bad": "Dejas que tu hijo/a enfrente solo/a los estudios sin ese apoyo."
+  },
+  {
+    "q": "Un hospital programa una cirugía sin considerar necesidades sensoriales previas.",
+    "good": "Solicitas anticipadamente ajustes (horario, sala de espera, explicación visual).",
+    "bad": "Llevas a tu hijo/a sin ninguna preparación ni ajuste solicitado."
+  },
+  {
+    "q": "Una aerolínea niega el embarque prioritario para tu hijo/a.",
+    "good": "Presentas la documentación necesaria e insistes en el proceso formal.",
+    "bad": "Aceptas la negativa y viajas sin ese ajuste esencial."
+  },
+  {
+    "q": "Un gimnasio no permite horarios de menor afluencia para socios con necesidades sensoriales.",
+    "good": "Negocias un horario alternativo con la administración del lugar.",
+    "bad": "Cancelas la membresía sin intentar negociar antes."
+  },
+  {
+    "q": "Una biblioteca pública exige silencio absoluto sin espacio alternativo para estimulación.",
+    "good": "Preguntas por un espacio designado o horario más flexible.",
+    "bad": "Dejas de asistir a la biblioteca sin proponer ninguna solución."
+  },
+  {
+    "q": "Un museo no ofrece horarios de baja estimulación sensorial.",
+    "good": "Consultas si existen horarios especiales o los sugieres como idea.",
+    "bad": "Visitas en horario regular esperando que tu hijo/a lo tolere."
+  },
+  {
+    "q": "Una iglesia o templo no tiene un espacio tranquilo durante el servicio.",
+    "good": "Propones designar un espacio así para las familias que lo necesiten.",
+    "bad": "Asistes al servicio completo sin buscar ninguna alternativa."
+  },
+  {
+    "q": "Un equipo deportivo juvenil no ajusta las instrucciones para necesidades de comunicación.",
+    "good": "Propones instrucciones visuales o escritas al entrenador.",
+    "bad": "Retiras a tu hijo/a del equipo sin proponer ningún ajuste primero."
+  },
+  {
+    "q": "Un grupo scout no tiene protocolo para necesidades sensoriales en actividades al aire libre.",
+    "good": "Conversas con anticipación proponiendo adaptaciones concretas.",
+    "bad": "Inscribes a tu hijo/a sin conversar nada sobre sus necesidades."
+  },
+  {
+    "q": "Un campamento de verano nocturno no permite llevar objetos de regulación personal.",
+    "good": "Solicitas formalmente una excepción explicando su función.",
+    "bad": "Aceptas la norma sin explicar por qué ese objeto es necesario."
+  },
+  {
+    "q": "Una fiesta de cumpleaños infantil no considera el nivel de ruido de la música.",
+    "good": "Pides con tacto bajar el volumen o un espacio más tranquilo.",
+    "bad": "Asistes sin decir nada, esperando que tu hijo/a aguante el ruido."
+  },
+  {
+    "q": "Una boda formal exige que los niños permanezcan sentados toda la ceremonia.",
+    "good": "Negocias con anticipación un lugar donde tu hijo/a pueda moverse si lo necesita.",
+    "bad": "Fuerzas que permanezca sentado/a toda la ceremonia sin ajuste."
+  },
+  {
+    "q": "Un funeral no considera el impacto sensorial y emocional en tu hijo/a.",
+    "good": "Preparas con anticipación una salida o apoyo específico para el momento.",
+    "bad": "Lo/la expones a toda la ceremonia sin ninguna preparación previa."
+  },
+  {
+    "q": "Un control de seguridad aeroportuario no tiene protocolo claro para pasajeros neurodivergentes.",
+    "good": "Contactas con anticipación el programa de asistencia disponible.",
+    "bad": "Pasas por el control estándar sin informarte de alternativas."
+  },
+  {
+    "q": "Un hotel no ofrece habitaciones con menos estímulos sensoriales (ruido, olores).",
+    "good": "Solicitas con anticipación una habitación específica según necesidades.",
+    "bad": "Reservas sin preguntar nada y improvisas al llegar."
+  },
+  {
+    "q": "Un restaurante no permite llevar comida propia pese a la selectividad alimentaria de tu hijo/a.",
+    "good": "Conversas previamente con el lugar para explicar y negociar la excepción.",
+    "bad": "Evitas ese restaurante indefinidamente sin intentar negociar."
+  },
+  {
+    "q": "Un banco o entidad pública tiene tiempos de espera largos sin alternativa.",
+    "good": "Solicitas una cita con horario específico o atención prioritaria.",
+    "bad": "Esperas en fila regular exponiendo a tu hijo/a a sobrecarga innecesaria."
+  },
+  {
+    "q": "Una entrevista de trabajo para tu hijo/a joven no contempla ajustes de comunicación.",
+    "good": "Ayudas a preparar y, si corresponde, solicitar ajustes razonables previos.",
+    "bad": "Dejas que enfrente la entrevista estándar sin ninguna preparación específica."
+  },
+  {
+    "q": "Una universidad no ajusta el formato de un examen final pese al diagnóstico registrado.",
+    "good": "Contactas formalmente a la oficina de accesibilidad para exigir el ajuste.",
+    "bad": "Aceptas que rinda el examen sin las adaptaciones ya aprobadas."
+  },
+  {
+    "q": "Un examen estandarizado (tipo admisión) no ofrece tiempo extra pese a la documentación presentada.",
+    "good": "Apelas formalmente con el respaldo profesional necesario.",
+    "bad": "Aceptas la negativa sin presentar ningún recurso o apelación."
+  },
+  {
+    "q": "Un empleador no permite el uso de auriculares con cancelación de ruido en el puesto de trabajo.",
+    "good": "Presentas la solicitud de ajuste razonable formalmente en recursos humanos.",
+    "bad": "Dejas que tu hijo/a joven acepte la prohibición sin cuestionarla."
+  },
+  {
+    "q": "Un consultorio de un especialista tiene un formulario de admisión que no contempla necesidades de comunicación.",
+    "good": "Solicitas un formato alternativo (verbal, con apoyo) para completar el formulario.",
+    "bad": "Dejas que tu hijo/a luche solo/a con un formulario que no puede completar bien."
+  },
+  {
+    "q": "Una piscina o club deportivo exige duchas grupales sin opción de privacidad.",
+    "good": "Solicitas una alternativa de privacidad para el cambio de ropa.",
+    "bad": "Dejas que use las duchas grupales aunque le genere ansiedad."
+  },
+  {
+    "q": "Un evento comunitario no informa el nivel de ruido y aglomeración esperado.",
+    "good": "Contactas a los organizadores para conocer detalles antes de asistir.",
+    "bad": "Asistes sin información previa, arriesgando una sobrecarga evitable."
+  },
+  {
+    "q": "Un dormitorio universitario asigna compañero de cuarto sin considerar necesidades sensoriales.",
+    "good": "Solicitas formalmente una habitación individual o ajuste de convivencia.",
+    "bad": "Aceptas la asignación estándar sin plantear la necesidad real."
+  },
+  {
+    "q": "Una tienda de ropa no tiene probador con privacidad adecuada para necesidades sensoriales.",
+    "good": "Preguntas por un horario de menor afluencia o alternativa de prueba.",
+    "bad": "Fuerzas la prueba en las condiciones estándar sin pedir ajuste."
+  },
+  {
+    "q": "Un examen de conducir no ofrece instrucciones en formato escrito además de oral.",
+    "good": "Solicitas formalmente el formato combinado que facilite su comprensión.",
+    "bad": "Aceptas rendir solo en el formato estándar sin pedir alternativa."
+  },
+  {
+    "q": "Una aseguradora de salud niega la cobertura de cierta terapia por considerarla 'no esencial'.",
+    "good": "Apelas formalmente con documentación e informes profesionales de respaldo.",
+    "bad": "Aceptas la negativa sin presentar ningún recurso de apelación."
+  },
+  {
+    "q": "Una farmacia de seguro médico cambia la marca de la medicación sin previo aviso.",
+    "good": "Solicitas la excepción formal para mantener la marca que sí funciona.",
+    "bad": "Aceptas el cambio sin cuestionar el impacto en tu hijo/a."
+  },
+  {
+    "q": "Un club de robótica o ajedrez no ajusta el ritmo de las sesiones a las necesidades de tu hijo/a.",
+    "good": "Propones ajustes concretos de tiempo o formato a los organizadores.",
+    "bad": "Retiras a tu hijo/a de la actividad sin proponer ningún ajuste."
+  },
+  {
+    "q": "Un examen médico (resonancia, análisis) requiere quietud prolongada sin preparación sensorial.",
+    "good": "Solicitas anticipadamente sedación leve o técnicas de preparación adecuadas.",
+    "bad": "Sometes a tu hijo/a al procedimiento estándar sin ninguna preparación."
+  },
+  {
+    "q": "Una feria o evento masivo no tiene zona de descompresión sensorial.",
+    "good": "Contactas a los organizadores proponiendo un espacio designado para ese fin.",
+    "bad": "Asistes sin ningún plan de salida o descanso sensorial."
+  },
+  {
+    "q": "Un centro comercial no ofrece horario de 'hora silenciosa' con luces y sonidos reducidos.",
+    "good": "Preguntas si existe esa opción o la sugieres como idea al centro.",
+    "bad": "Haces las compras en horario regular sin considerar el impacto."
+  },
+  {
+    "q": "Una clase de natación obligatoria no permite alternativas para el miedo al agua clorada intensa.",
+    "good": "Propones adaptaciones (gafas, horario, ritmo) a los instructores.",
+    "bad": "Obligas a tu hijo/a a participar igual, ignorando su malestar real."
+  },
+  {
+    "q": "Un examen de admisión a un programa de talentos no contempla formatos alternativos.",
+    "good": "Solicitas formalmente el formato que permita mostrar su verdadero potencial.",
+    "bad": "Aceptas que rinda en un formato que no refleja sus capacidades reales."
+  },
+  {
+    "q": "Una compañía de transporte escolar no informa bien las rutas y horarios con anticipación.",
+    "good": "Solicitas esa información con antelación para preparar a tu hijo/a.",
+    "bad": "Dejas que enfrente cambios de ruta sin ningún aviso previo."
+  },
+  {
+    "q": "Un servicio de atención médica telefónica no ofrece opción de comunicación por escrito.",
+    "good": "Solicitas formalmente esa alternativa de comunicación.",
+    "bad": "Te resignas a la llamada telefónica aunque genere dificultad real."
+  },
+  {
+    "q": "Un programa de prácticas laborales (pasantía) no contempla ajustes de comunicación social.",
+    "good": "Coordinas con el programa ajustes razonables antes de iniciar.",
+    "bad": "Dejas que enfrente el programa estándar sin ninguna preparación."
+  },
+  {
+    "q": "Una tienda no permite el uso de tarjetas de comunicación o dispositivos AAC dentro del local.",
+    "good": "Explicas su función esencial y defiendes su uso ante el personal.",
+    "bad": "Guardas el dispositivo por vergüenza ante la reacción del personal."
+  },
+  {
+    "q": "Un centro de tutorías académicas no ofrece sesiones individuales pese a la necesidad de tu hijo/a.",
+    "good": "Solicitas formalmente esa modalidad como ajuste razonable.",
+    "bad": "Aceptas las sesiones grupales estándar sin plantear la dificultad real."
+  },
+  {
+    "q": "Un evento deportivo escolar exige silencio absoluto de espectadores con necesidades sensoriales propias.",
+    "good": "Solicitas una zona designada más flexible para tu familia.",
+    "bad": "Te vas del evento sin plantear ninguna alternativa antes."
+  },
+  {
+    "q": "Una clase de manejo (autoescuela) no adapta el ritmo de instrucciones para tu hijo/a joven.",
+    "good": "Solicitas formalmente un instructor con experiencia en adaptaciones.",
+    "bad": "Continúas con el mismo instructor pese a las dificultades evidentes."
+  },
+  {
+    "q": "Un consultorio de un especialista tiene sala de espera con TV a volumen alto constante.",
+    "good": "Pides que bajen el volumen o esperar en un lugar alternativo.",
+    "bad": "Soportas la espera con el volumen alto sin decir nada."
+  },
+  {
+    "q": "Una empresa de eventos no permite reconocimiento previo del espacio antes de una celebración.",
+    "good": "Solicitas una visita previa para que tu hijo/a conozca el lugar.",
+    "bad": "Llega al evento sin ninguna familiarización previa con el espacio."
+  },
+  {
+    "q": "Un programa de intercambio estudiantil no contempla apoyos de neurodivergencia en el extranjero.",
+    "good": "Investigas y solicitas formalmente qué apoyos existen antes de aceptar.",
+    "bad": "Aceptas el programa sin informarte de los apoyos disponibles."
+  },
+  {
+    "q": "Una clínica dental exige que el paciente espere solo/a en la sala de procedimientos.",
+    "good": "Solicitas que puedas acompañarlo/a durante el procedimiento.",
+    "bad": "Aceptas la norma general sin plantear la necesidad de acompañamiento."
+  },
+  {
+    "q": "Un examen de certificación profesional no ofrece descansos programados durante la prueba.",
+    "good": "Solicitas formalmente pausas programadas como ajuste razonable.",
+    "bad": "Aceptas rendir el examen completo sin ningún descanso."
+  },
+  {
+    "q": "Una oficina de gobierno exige trámites solo presenciales sin alternativa digital.",
+    "good": "Solicitas formalmente una alternativa o cita con menor tiempo de espera.",
+    "bad": "Te resignas a los trámites presenciales sin pedir ningún ajuste."
+  },
+  {
+    "q": "Un programa de voluntariado juvenil no adapta las tareas a las fortalezas de tu hijo/a.",
+    "good": "Conversas con los coordinadores para encontrar un rol que le beneficie.",
+    "bad": "Dejas que abandone el voluntariado sin intentar ajustar el rol primero."
+  },
+  {
+    "q": "Una tienda de electrónica no permite probar productos antes de comprar por políticas generales.",
+    "good": "Explicas la necesidad sensorial concreta y solicitas una excepción.",
+    "bad": "Compras sin probar, arriesgando una devolución complicada después."
+  },
+  {
+    "q": "Un centro de idiomas exige participación oral obligatoria en cada clase.",
+    "good": "Propones un formato alternativo de evaluación de la práctica oral.",
+    "bad": "Aceptas que participe igual, aunque le genere ansiedad significativa."
+  },
+  {
+    "q": "Un evento corporativo familiar (día del padre/madre en la empresa) no considera necesidades sensoriales.",
+    "good": "Preguntas con anticipación por adaptaciones posibles en el evento.",
+    "bad": "Asistes sin informarte, exponiendo a tu hijo/a a un ambiente abrumador."
+  },
+  {
+    "q": "Una clínica de vacunación no ofrece cita con menor tiempo de espera para casos sensibles.",
+    "good": "Solicitas formalmente una cita a primera hora o con menor espera.",
+    "bad": "Llevas a tu hijo/a en horario de alta demanda sin pedir ajuste."
+  },
+  {
+    "q": "Un centro de idiomas para certificación internacional no permite adaptaciones documentadas.",
+    "good": "Presentas la documentación formal exigiendo el ajuste correspondiente.",
+    "bad": "Aceptas rendir sin adaptaciones, afectando el resultado real."
+  },
+  {
+    "q": "Una discoteca o evento nocturno juvenil no ofrece zona de menor volumen.",
+    "good": "Buscas o sugieres un espacio alternativo dentro del evento.",
+    "bad": "Dejas que tu hijo/a joven evite salir socialmente por falta de esa opción."
+  },
+  {
+    "q": "Un centro de cuidado diurno para adultos jóvenes ND no tiene protocolo sensorial claro.",
+    "good": "Solicitas conocer y ajustar el protocolo antes de inscribirlo.",
+    "bad": "Lo inscribes sin preguntar nada sobre el protocolo existente."
+  },
+  {
+    "q": "Una compañía de seguros de auto no ofrece ajuste en el examen de manejo por perfil sensorial.",
+    "good": "Investigas y solicitas formalmente las opciones de adaptación disponibles.",
+    "bad": "Asumes que no existen opciones sin investigar realmente."
+  },
+  {
+    "q": "Un evento de talentos escolar no permite alternativas al formato de presentación en vivo.",
+    "good": "Propones una grabación previa como formato alternativo válido.",
+    "bad": "Dejas que enfrente el formato en vivo sin ninguna alternativa ofrecida."
+  },
+  {
+    "q": "Una oficina de recursos humanos no informa el proceso para solicitar ajustes razonables laborales.",
+    "good": "Investigas junto a tu hijo/a joven el proceso formal disponible.",
+    "bad": "Asumes que 'pedir ajustes' podría perjudicarlo/a y evitas el tema."
+  },
+  {
+    "q": "Un centro de examen de manejo escrito no permite lector en voz alta pese al diagnóstico.",
+    "good": "Apelas formalmente presentando el respaldo profesional necesario.",
+    "bad": "Aceptas la negativa sin presentar ningún recurso adicional."
+  },
+  {
+    "q": "Una obra de teatro comunitaria no ofrece función relajada (sensory-friendly).",
+    "good": "Sugieres a los organizadores considerar una función con esas características.",
+    "bad": "Asistes a la función estándar sin plantear ninguna alternativa."
+  },
+  {
+    "q": "Un programa de verano universitario no informa sobre apoyos disponibles para estudiantes ND.",
+    "good": "Contactas directamente para conocer los recursos antes de inscribirlo.",
+    "bad": "Lo inscribes sin informarte de los apoyos realmente disponibles."
+  },
+  {
+    "q": "Una competencia de talentos exige ensayo general con público presente sin excepciones.",
+    "good": "Solicitas participar en un ensayo alternativo sin público si lo necesita.",
+    "bad": "Expones a tu hijo/a al ensayo con público sin ningún ajuste."
+  },
+  {
+    "q": "Un centro deportivo de alto rendimiento no contempla comunicación alternativa con el entrenador.",
+    "good": "Coordinas un sistema de señales o comunicación escrita con el equipo técnico.",
+    "bad": "Dejas que la comunicación falle repetidamente sin proponer ninguna solución."
+  },
+  {
+    "q": "Una graduación universitaria exige toga y birrete con materiales sensorialmente incómodos.",
+    "good": "Consultas por materiales alternativos o adaptaciones para la ceremonia.",
+    "bad": "Fuerzas el uso estándar sin preguntar por ninguna alternativa."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

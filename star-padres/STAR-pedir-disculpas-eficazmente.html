@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Pedir Disculpas Eficazmente</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #06b6d4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #06b6d4, #06b6d4cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #06b6d4, #06b6d4cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M16.03 8.3L12.59 13 8.7 16.89c-.61.61-1.59.63-2.22.05l-4.24-3.9 6.27-9.56c.4-.61.35-1.42-.11-1.97-.57-.68-1.59-.72-2.2-.09L.79 6.78c-.53.53-.79 1.25-.79 1.99v3.1c0 1.22.75 2.29 1.88 2.68l7.63 2.63c1.11.38 2.33.05 3.12-.79l4.49-4.49c.6-.61.6-1.59 0-2.2-.6-.59-1.58-.6-2.18-.01l.09.01zM23.11 6.8c-.53-.53-1.39-.53-1.92 0l-1.6 1.6-1.72-1.72c-.59-.59-1.54-.59-2.13 0-.58.59-.58 1.54-.01 2.13l3.34 3.34c.53.53 1.39.53 1.92 0l2.12-2.12c.53-.53.53-1.39 0-1.92z"/></svg>
+      <span>Reparación Relacional</span>
+    </span>
+    <h1>🙏 Pedir Disculpas Eficazmente</h1>
+    <p>Reparar de forma concreta, sin excusas ni minimizar.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 80</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "pedir-disculpas-eficazmente";
+const SITUACIONES = [
+  {
+    "q": "Le gritaste a tu hijo/a por algo que después entendiste que no era su culpa.",
+    "good": "Te disculpas nombrando específicamente lo que hiciste mal, sin excusas.",
+    "bad": "Te disculpas agregando 'pero es que tú también...' restando la disculpa."
+  },
+  {
+    "q": "Prometiste algo y no lo cumpliste.",
+    "good": "Reconoces el incumplimiento directamente y propones cómo repararlo.",
+    "bad": "Te disculpas de forma vaga sin mencionar qué harás distinto."
+  },
+  {
+    "q": "Comparaste a tu hijo/a con otro niño de forma hiriente.",
+    "good": "Te disculpas nombrando el comentario específico y su impacto.",
+    "bad": "Dices 'perdón si te molestó' sin asumir responsabilidad real."
+  },
+  {
+    "q": "Ignoraste una señal clara de que necesitaba tu atención.",
+    "good": "Reconoces que no lo/la escuchaste cuando lo necesitaba y te disculpas por eso.",
+    "bad": "Te disculpas rápido solo para cerrar el tema sin reflexión real."
+  },
+  {
+    "q": "Reaccionaste con sarcasmo ante algo que dijo con sinceridad.",
+    "good": "Te disculpas explicando que el sarcasmo no fue apropiado ahí.",
+    "bad": "Minimizas diciendo 'ya, perdón, no seas tan sensible'."
+  },
+  {
+    "q": "Tomaste una decisión sin consultarlo cuando debiste hacerlo.",
+    "good": "Reconoces el error de no incluirlo y ofreces incluirlo la próxima vez.",
+    "bad": "Te disculpas sin comprometerte a cambiar el patrón futuro."
+  },
+  {
+    "q": "Levantaste la voz de forma desproporcionada.",
+    "good": "Te disculpas por el tono, separándolo del contenido válido si lo había.",
+    "bad": "Justificas el tono alto diciendo que 'no había otra forma de que entendiera'."
+  },
+  {
+    "q": "Olvidaste algo importante que le habías prometido.",
+    "good": "Te disculpas reconociendo el impacto del olvido en su confianza.",
+    "bad": "Restas importancia al olvido diciendo 'no es para tanto'."
+  },
+  {
+    "q": "Corregiste su conducta en público de forma humillante.",
+    "good": "Te disculpas en privado reconociendo específicamente lo que hiciste mal.",
+    "bad": "Te disculpas también en público sumando más exposición incómoda."
+  },
+  {
+    "q": "Mostraste desconfianza sin motivo real hacia algo que dijo.",
+    "good": "Te disculpas reconociendo que no había razón para dudar de su palabra.",
+    "bad": "Te disculpas pero sigues mostrando la misma desconfianza después."
+  },
+  {
+    "q": "Aplicaste una consecuencia desproporcionada a la situación.",
+    "good": "Reconoces la desproporción y ajustas la consecuencia como parte de la disculpa.",
+    "bad": "Te disculpas por el tono pero mantienes la consecuencia injusta igual."
+  },
+  {
+    "q": "Interrumpiste repetidamente mientras trataba de explicarte algo importante.",
+    "good": "Te disculpas por no dejarlo/a terminar y le das espacio para retomarlo.",
+    "bad": "Te disculpas pero sigues interrumpiendo en la misma conversación."
+  },
+  {
+    "q": "Te reíste de algo que para tu hijo/a era serio.",
+    "good": "Te disculpas reconociendo que minimizaste algo importante para él/ella.",
+    "bad": "Te disculpas diciendo 'es que tiene gracia' restando validez a su seriedad."
+  },
+  {
+    "q": "No respetaste su tiempo de recuperación tras una crisis.",
+    "good": "Te disculpas por haber insistido antes de que estuviera listo/a.",
+    "bad": "Te disculpas pero justificas la insistencia por 'necesitabas resolverlo ya'."
+  },
+  {
+    "q": "Hiciste un comentario negativo sobre su interés especial.",
+    "good": "Te disculpas reconociendo el valor real de ese interés para él/ella.",
+    "bad": "Te disculpas pero repites comentarios similares poco después."
+  },
+  {
+    "q": "Rompiste una confidencia que te había compartido en privado.",
+    "good": "Te disculpas reconociendo el quiebre de confianza específico que causaste.",
+    "bad": "Minimizas diciendo que 'no era tan secreto' lo que compartiste."
+  },
+  {
+    "q": "Mostraste favoritismo hacia un hermano/a delante de él/ella.",
+    "good": "Te disculpas reconociendo la diferencia de trato y cómo repararla.",
+    "bad": "Niegas el favoritismo en vez de disculparte por lo ocurrido."
+  },
+  {
+    "q": "Le exigiste algo que no era razonable para su capacidad actual.",
+    "good": "Te disculpas ajustando la expectativa después de reconocer el error.",
+    "bad": "Te disculpas pero mantienes la misma exigencia poco después."
+  },
+  {
+    "q": "Reaccionaste desde tu propio estrés, no por algo que él/ella hizo.",
+    "good": "Te disculpas aclarando que tu reacción no fue por su culpa.",
+    "bad": "Dejas que asuma la culpa de tu propio estrés sin aclarar la disculpa."
+  },
+  {
+    "q": "Cancelaste un plan importante para tu hijo/a sin suficiente aviso.",
+    "good": "Te disculpas reconociendo el impacto de la cancelación tardía.",
+    "bad": "Te disculpas restando importancia porque 'era solo un plan'."
+  },
+  {
+    "q": "Forzaste el contacto visual de tu hijo/a en una reunión familiar y notó tu insistencia.",
+    "good": "Te disculpas nombrando específicamente que no debiste exigir eso.",
+    "bad": "Te disculpas diciendo 'perdón si te incomodó' sin asumir la exigencia real."
+  },
+  {
+    "q": "Te burlaste de la forma en que repetía datos sobre su tema favorito.",
+    "good": "Te disculpas nombrando el comentario exacto y su impacto en él/ella.",
+    "bad": "Dices 'ya, perdón' sin mencionar qué fue lo que hiciste mal."
+  },
+  {
+    "q": "Cambiaste su rutina de sábado sin avisar por una visita inesperada.",
+    "good": "Te disculpas reconociendo que el cambio brusco fue tu responsabilidad.",
+    "bad": "Te disculpas pero agregas que 'de todos modos había que ser flexible'."
+  },
+  {
+    "q": "Le contaste su diagnóstico a un familiar sin pedirle permiso antes.",
+    "good": "Te disculpas reconociendo que esa información era suya para compartir.",
+    "bad": "Te disculpas minimizando: 'era solo familia, no pasa nada'."
+  },
+  {
+    "q": "Lo/la obligaste a saludar de beso a un pariente pese a su incomodidad.",
+    "good": "Te disculpas reconociendo que no respetaste su límite corporal.",
+    "bad": "Te disculpas diciendo 'perdón, pero era solo un saludo'."
+  },
+  {
+    "q": "Llamaste 'capricho' su rechazo a una textura de ropa en la tienda.",
+    "good": "Te disculpas nombrando que su sensación era real, no un capricho.",
+    "bad": "Te disculpas pero repites 'igual eres bastante quisquilloso/a' después."
+  },
+  {
+    "q": "Asumiste que fingía dolor de estómago para no ir a la escuela.",
+    "good": "Te disculpas reconociendo que dudaste de él/ella sin motivo suficiente.",
+    "bad": "Te disculpas solo 'por si acaso' sin reconocer realmente la duda injusta."
+  },
+  {
+    "q": "Grabaste un video de su crisis para mostrárselo después.",
+    "good": "Te disculpas reconociendo que grabarlo/a sin permiso fue invasivo.",
+    "bad": "Te disculpas pero justificas que 'era para que se viera y aprendiera'."
+  },
+  {
+    "q": "Comparaste en voz alta lo fácil que era todo para su hermano/a en la cena.",
+    "good": "Te disculpas nombrando la comparación específica y su efecto en él/ella.",
+    "bad": "Te disculpas diciendo 'no fue mi intención' sin reconocer el impacto real."
+  },
+  {
+    "q": "Forzaste un corte de pelo pese a su angustia sensorial evidente.",
+    "good": "Te disculpas reconociendo que ignoraste una señal clara de malestar.",
+    "bad": "Te disculpas pero añades que 'igual necesitaba el corte'."
+  },
+  {
+    "q": "Le exigiste que 'se comportara normal' para una foto familiar.",
+    "good": "Te disculpas reconociendo que le pediste ocultar cómo se sentía.",
+    "bad": "Te disculpas diciendo 'era solo una foto, no seas tan sensible'."
+  },
+  {
+    "q": "Reaccionaste con dureza ante su stimming en un restaurante lleno.",
+    "good": "Te disculpas reconociendo que tu vergüenza, no su conducta, fue el problema.",
+    "bad": "Te disculpas pero agregas 'es que llamabas mucho la atención'."
+  },
+  {
+    "q": "Asumiste que su crisis fue una estrategia para librarse de las tareas.",
+    "good": "Te disculpas reconociendo que dudaste de su malestar sin razón real.",
+    "bad": "Te disculpas pero dices 'aun así, a veces sí exageras'."
+  },
+  {
+    "q": "No lo/la defendiste cuando un familiar hizo un comentario hiriente.",
+    "good": "Te disculpas reconociendo que tu silencio también le dolió.",
+    "bad": "Te disculpas diciendo 'no quería hacer un problema familiar'."
+  },
+  {
+    "q": "Comparaste su progreso con lo que esperaba el/la terapeuta.",
+    "good": "Te disculpas reconociendo que la expectativa era tuya, no suya.",
+    "bad": "Te disculpas pero insistes en que 'debería esforzarse más igual'."
+  },
+  {
+    "q": "Descartaste su relato de acoso escolar pensando que exageraba.",
+    "good": "Te disculpas reconociendo que no le creíste cuando debías hacerlo.",
+    "bad": "Te disculpas diciendo 'perdón, pero cuentas las cosas de forma exagerada'."
+  },
+  {
+    "q": "Le dijiste que sus problemas de sueño eran solo capricho de horario.",
+    "good": "Te disculpas reconociendo que no indagaste la causa real antes de juzgar.",
+    "bad": "Te disculpas pero repites que 'de todos modos duerme muy tarde'."
+  },
+  {
+    "q": "Interpretaste como desafío algo que era incapacidad real en el momento.",
+    "good": "Te disculpas reconociendo que confundiste 'no puede' con 'no quiere'.",
+    "bad": "Te disculpas pero aclaras que 'a veces sí parece que no quiere nomás'."
+  },
+  {
+    "q": "Le exigiste que hablara de sus sentimientos en el auto sin que estuviera listo/a.",
+    "good": "Te disculpas reconociendo que no respetaste su ritmo emocional.",
+    "bad": "Te disculpas pero insistes en que 'en algún momento tenía que hablar'."
+  },
+  {
+    "q": "Reaccionaste con fastidio al ruido de su stimming mientras conducías.",
+    "good": "Te disculpas reconociendo que tu fastidio fue lo desproporcionado, no su conducta.",
+    "bad": "Te disculpas pero pides que 'trate de hacerlo más bajito la próxima vez'."
+  },
+  {
+    "q": "Le echaste en cara el estrés familiar del mes sin que tuviera responsabilidad real.",
+    "good": "Te disculpas aclarando que ese estrés no era su culpa en absoluto.",
+    "bad": "Te disculpas pero dejas entrever que 'algo sí contribuyó'."
+  },
+  {
+    "q": "Cambiaste una rutina establecida por tu conveniencia sin avisarle antes.",
+    "good": "Te disculpas reconociendo que debiste anticiparle el cambio.",
+    "bad": "Te disculpas diciendo 'fue un cambio pequeño, no entiendo tanto drama'."
+  },
+  {
+    "q": "Te burlaste de su estrategia de afrontamiento delante de sus amigos.",
+    "good": "Te disculpas reconociendo que expusiste algo que lo/la ayuda a sentirse seguro/a.",
+    "bad": "Te disculpas diciendo 'era solo una broma entre todos, cálmate'."
+  },
+  {
+    "q": "Asumiste que fingía enfermedad justo el día de un examen.",
+    "good": "Te disculpas reconociendo que dudaste sin considerar su ansiedad real.",
+    "bad": "Te disculpas pero agregas 'aun así, deberías esforzarte más con los exámenes'."
+  },
+  {
+    "q": "No defendiste a tu hijo/a de un comentario despectivo de un abuelo o tío.",
+    "good": "Te disculpas reconociendo que tu silencio lo/la dejó desprotegido/a.",
+    "bad": "Te disculpas diciendo 'ya sabes cómo es esa generación, no le des tanta importancia'."
+  },
+  {
+    "q": "Le mostraste a otro familiar un video de su crisis sin permiso.",
+    "good": "Te disculpas reconociendo que expusiste un momento vulnerable suyo.",
+    "bad": "Te disculpas pero justificas que 'era solo para que entendieran mejor'."
+  },
+  {
+    "q": "Lo/la comparaste desfavorablemente frente a su propio maestro/a.",
+    "good": "Te disculpas reconociendo el daño de esa comparación pública.",
+    "bad": "Te disculpas diciendo 'era para motivarlo/a, no para lastimarlo/a'."
+  },
+  {
+    "q": "Lo/la presionaste a socializar en una fiesta pese a señales claras de agobio.",
+    "good": "Te disculpas reconociendo que ignoraste su malestar por sostener el plan.",
+    "bad": "Te disculpas pero añades 'ya estando ahí, tampoco era tan grave quedarse'."
+  },
+  {
+    "q": "Llamaste 'manía' una necesidad sensorial real sobre cierta ropa.",
+    "good": "Te disculpas reconociendo que descalificaste algo genuino para él/ella.",
+    "bad": "Te disculpas pero repites que 'es bastante quisquilloso/a con la ropa'."
+  },
+  {
+    "q": "Amenazaste con quitarle su interés especial como castigo.",
+    "good": "Te disculpas reconociendo que usar eso como amenaza fue desproporcionado.",
+    "bad": "Te disculpas pero dices 'era la única forma de que reaccionaras rápido'."
+  },
+  {
+    "q": "Programaste una actividad o terapia nueva sin preguntarle su opinión.",
+    "good": "Te disculpas reconociendo que debiste incluirlo/a en esa decisión.",
+    "bad": "Te disculpas pero aclaras que 'era por su bien, no necesitaba opinar'."
+  },
+  {
+    "q": "Leíste su diario o mensajes privados sin su permiso.",
+    "good": "Te disculpas reconociendo que invadiste un espacio que era solo suyo.",
+    "bad": "Te disculpas pero agregas 'como madre/padre tienes derecho a saber'."
+  },
+  {
+    "q": "Lo/la llevaste a un centro comercial abarrotado pese a señales previas de alerta.",
+    "good": "Te disculpas reconociendo que ignoraste las señales de que sería demasiado.",
+    "bad": "Te disculpas pero justificas que 'había que hacer las compras igual'."
+  },
+  {
+    "q": "Descartaste el feedback de un profesor sobre las necesidades reales de tu hijo/a.",
+    "good": "Te disculpas reconociendo que desestimar esa información fue un error.",
+    "bad": "Te disculpas pero insistes en que 'tú lo/la conoces mejor que el profesor'."
+  },
+  {
+    "q": "Dudaste en voz alta de su propio diagnóstico frente a otras personas.",
+    "good": "Te disculpas reconociendo el daño de expresar esa duda en público.",
+    "bad": "Te disculpas pero agregas 'a veces sí parece que exagera un poco'."
+  },
+  {
+    "q": "Le dijiste 'yo nunca tuve estos problemas' comparando tu infancia con la suya.",
+    "good": "Te disculpas reconociendo que esa comparación invalidó su experiencia.",
+    "bad": "Te disculpas pero insistes en que 'antes los niños eran más fuertes'."
+  },
+  {
+    "q": "Asumiste flojera en tu hijo/a adulto/a joven cuando había agotamiento por enmascaramiento.",
+    "good": "Te disculpas reconociendo que confundiste cansancio real con falta de esfuerzo.",
+    "bad": "Te disculpas pero agregas que 'de todos modos podría esforzarse más'."
+  },
+  {
+    "q": "Exigiste una disculpa performativa inmediata tras una pelea entre hermanos.",
+    "good": "Te disculpas reconociendo que forzar esa disculpa no resolvió nada de fondo.",
+    "bad": "Te disculpas diciendo 'bueno, ya pidieron perdón, quedó arreglado'."
+  },
+  {
+    "q": "Ignoraste una adaptación acordada en la reunión escolar por comodidad propia.",
+    "good": "Te disculpas reconociendo que priorizaste tu comodidad sobre el acuerdo.",
+    "bad": "Te disculpas pero justificas que 'esa adaptación era difícil de sostener'."
+  },
+  {
+    "q": "Le quitaste el dispositivo sin explicación como castigo impulsivo.",
+    "good": "Te disculpas reconociendo que actuaste desde el impulso, no la reflexión.",
+    "bad": "Te disculpas pero agregas 'igual no necesito explicar cada castigo'."
+  },
+  {
+    "q": "Te burlaste de su sensibilidad al ruido o a cierta comida frente a otros.",
+    "good": "Te disculpas reconociendo que expusiste algo genuinamente difícil para él/ella.",
+    "bad": "Te disculpas pero dices 'no era para tomárselo tan a pecho'."
+  },
+  {
+    "q": "Insististe en un comportamiento 'normal' en público durante una salida familiar.",
+    "good": "Te disculpas reconociendo que le pediste ocultar su forma natural de estar.",
+    "bad": "Te disculpas pero agregas 'en público hay que comportarse distinto, es así'."
+  },
+  {
+    "q": "Confundiste su máscara social en la escuela con que 'todo estaba bien'.",
+    "good": "Te disculpas reconociendo que no viste el esfuerzo real detrás de su calma.",
+    "bad": "Te disculpas pero dices 'si no dijiste nada, cómo iba a saberlo'."
+  },
+  {
+    "q": "Minimizaste su crisis frente a la familia extendida en una celebración.",
+    "good": "Te disculpas reconociendo que restarle importancia frente a otros no ayudó.",
+    "bad": "Te disculpas pero justificas que 'no era el momento de darle tanta atención'."
+  },
+  {
+    "q": "Hablaste mal de tu ex pareja frente a tu hijo/a en medio de una discusión.",
+    "good": "Te disculpas reconociendo que lo/la pusiste en medio de un conflicto ajeno.",
+    "bad": "Te disculpas pero agregas 'igual tenía que saber cómo son las cosas'."
+  },
+  {
+    "q": "Cancelaste una adaptación acordada porque 'venía una visita' a la casa.",
+    "good": "Te disculpas reconociendo que priorizaste la comodidad de la visita.",
+    "bad": "Te disculpas pero dices 'por una vez no pasaba nada quitarla'."
+  },
+  {
+    "q": "Forzaste que comiera algo fuera de su lista de alimentos seguros en una cena.",
+    "good": "Te disculpas reconociendo que ignoraste una necesidad real por la incomodidad social.",
+    "bad": "Te disculpas pero agregas 'igual tenía que probar de todo como los demás'."
+  },
+  {
+    "q": "Usaste su diagnóstico como insulto en medio de una discusión acalorada.",
+    "good": "Te disculpas reconociendo el daño profundo de usar eso como arma.",
+    "bad": "Te disculpas pero justificas que 'se dijeron cosas de ambos lados'."
+  },
+  {
+    "q": "Amenazaste con dejarlo/a en el supermercado durante una crisis pública.",
+    "good": "Te disculpas reconociendo que esa amenaza fue dañina aunque no la cumplieras.",
+    "bad": "Te disculpas pero aclaras 'nunca lo hubiera hecho de verdad, tranquilo/a'."
+  },
+  {
+    "q": "Lo/la comparaste negativamente con la facilidad social de su hermano/a en una fiesta.",
+    "good": "Te disculpas nombrando el peso de esa comparación en un momento tan expuesto.",
+    "bad": "Te disculpas pero dices 'solo señalaba una diferencia real entre ustedes'."
+  },
+  {
+    "q": "Asumiste que buscaba atención al tener una crisis en casa.",
+    "good": "Te disculpas reconociendo que dudaste de una necesidad real.",
+    "bad": "Te disculpas pero agregas 'aun así, a veces sí lo hace para llamar la atención'."
+  },
+  {
+    "q": "Le exigiste 'verse normal' para las fotos de un evento familiar importante.",
+    "good": "Te disculpas reconociendo que priorizaste la imagen sobre su comodidad.",
+    "bad": "Te disculpas pero dices 'eran solo unos minutos, no era tanto pedir'."
+  },
+  {
+    "q": "No respetaste su necesidad de silencio durante una espera larga en el hospital.",
+    "good": "Te disculpas reconociendo que ignoraste una señal clara de sobrecarga.",
+    "bad": "Te disculpas pero agregas 'todos estábamos incómodos ahí, no solo tú'."
+  },
+  {
+    "q": "Asumiste que evitaba la escuela por flojera, no por un agobio real.",
+    "good": "Te disculpas reconociendo que no consideraste una razón genuina detrás.",
+    "bad": "Te disculpas pero insistes en que 'igual debería hacer más esfuerzo'."
+  },
+  {
+    "q": "No preguntaste antes de cambiar su rutina de vacaciones por tu conveniencia.",
+    "good": "Te disculpas reconociendo que el cambio repentino generó el conflicto.",
+    "bad": "Te disculpas pero dices 'en vacaciones hay que ser más flexible, sin más'."
+  },
+  {
+    "q": "Te burlaste de su objeto de apoyo (auriculares, muñeco) frente a sus amigos.",
+    "good": "Te disculpas reconociendo que expusiste algo que le da seguridad real.",
+    "bad": "Te disculpas pero agregas 'ya está grande para andar con eso igual'."
+  },
+  {
+    "q": "Asumiste que fingía para evitar una tarea escolar difícil.",
+    "good": "Te disculpas reconociendo que no consideraste la dificultad real detrás.",
+    "bad": "Te disculpas pero dices 'aun así, inventa excusas seguido'."
+  },
+  {
+    "q": "No defendiste a tu hijo/a adulto/a joven ante un comentario despectivo de un conocido.",
+    "good": "Te disculpas reconociendo que tu silencio también le dolió en ese momento.",
+    "bad": "Te disculpas pero justificas que 'no quisiste hacer una escena por poco'."
+  },
+  {
+    "q": "Improvisaste un cambio de planes en medio de unas vacaciones sin anticiparle nada.",
+    "good": "Te disculpas reconociendo que la falta de anticipación causó la crisis.",
+    "bad": "Te disculpas pero agregas 'hay que saber improvisar en un viaje, sin más'."
+  },
+  {
+    "q": "Comparaste desfavorablemente su desempeño con el de sus compañeros frente a un maestro.",
+    "good": "Te disculpas reconociendo el impacto de esa comparación frente a una autoridad.",
+    "bad": "Te disculpas pero dices 'era para que viera dónde mejorar, nada más'."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Construir Resiliencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #6366f1;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #6366f1, #6366f1cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #6366f1cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <span>Bienestar Parental</span>
+    </span>
+    <h1>🌱 Construir Resiliencia</h1>
+    <p>Sostener el rol parental a lo largo del tiempo, con altibajos.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 80</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "construir-resiliencia";
+const SITUACIONES = [
+  {
+    "q": "Tuviste una semana muy difícil con varias crisis seguidas.",
+    "good": "Reconoces que las semanas difíciles no definen todo el proceso a largo plazo.",
+    "bad": "Sientes que 'todo está fallando' basándote solo en la semana difícil."
+  },
+  {
+    "q": "Un día sientes que retrocediste en algo que ya habían logrado.",
+    "good": "Entiendes que los retrocesos son parte normal de un proceso no lineal.",
+    "bad": "Sientes que 'todo el esfuerzo fue en vano' por un solo retroceso."
+  },
+  {
+    "q": "Comparas tu progreso actual con el de hace un año.",
+    "good": "Reconoces los avances reales, aunque no sean lineales ni constantes.",
+    "bad": "Te enfocas solo en lo que sigue igual, ignorando los avances logrados."
+  },
+  {
+    "q": "Sientes que un mismo conflicto se repite una y otra vez.",
+    "good": "Reconoces que cada repetición es una oportunidad más de ajuste, no un fracaso total.",
+    "bad": "Sientes que 'nunca vas a poder resolverlo' ante cada repetición."
+  },
+  {
+    "q": "Un profesional te da una noticia difícil sobre el proceso de tu hijo/a.",
+    "good": "Te das tiempo para procesar la noticia sin perder la perspectiva de largo plazo.",
+    "bad": "Reaccionas con desesperanza total ante la noticia difícil."
+  },
+  {
+    "q": "Sientes que otras familias 'lo tienen más fácil' que la tuya.",
+    "good": "Reconoces que cada familia enfrenta sus propios desafíos invisibles.",
+    "bad": "Te comparas constantemente, alimentando un sentido de injusticia agotador."
+  },
+  {
+    "q": "Después de un mal día, sientes ganas de rendirte con cierta estrategia.",
+    "good": "Te das un descanso sin abandonar la estrategia completamente, evaluando después con calma.",
+    "bad": "Abandonas por completo la estrategia tras un solo mal día."
+  },
+  {
+    "q": "Notas que necesitas ajustar tus expectativas de tiempo para ciertos logros.",
+    "good": "Aceptas un ritmo más largo sin perder la confianza en el proceso.",
+    "bad": "Te frustras porque 'ya debería haber avanzado más para esta altura'."
+  },
+  {
+    "q": "Sientes que la crianza de tu hijo/a te ha cambiado como persona.",
+    "good": "Reconoces ese cambio como parte de un crecimiento propio, no solo como pérdida.",
+    "bad": "Solo ves lo que 'perdiste' sin reconocer ningún crecimiento propio."
+  },
+  {
+    "q": "Un mal momento te hace dudar de si estás haciendo bien las cosas.",
+    "good": "Reconoces la duda como parte normal del proceso, sin que defina tu capacidad real.",
+    "bad": "Dejas que esa duda puntual se convierta en una creencia fija sobre ti."
+  },
+  {
+    "q": "Sientes que necesitas celebrar más los pequeños logros del camino.",
+    "good": "Te das el espacio de reconocer y celebrar avances pequeños regularmente.",
+    "bad": "Solo consideras válidos los grandes logros, ignorando los pequeños avances."
+  },
+  {
+    "q": "Un familiar te pregunta cómo haces para sostener el proceso en el tiempo.",
+    "good": "Reflexionas y compartes honestamente tanto los recursos como las dificultades reales.",
+    "bad": "Presentas una imagen idealizada que no refleja el esfuerzo real que implica."
+  },
+  {
+    "q": "Sientes que un enfoque que antes funcionaba ya no funciona igual.",
+    "good": "Aceptas que los enfoques necesitan evolucionar con el crecimiento de tu hijo/a.",
+    "bad": "Insistes en el mismo enfoque exacto, frustrándote porque 'ya no funciona'."
+  },
+  {
+    "q": "Un día sientes que no tienes fuerzas para seguir adaptándote a tantos cambios.",
+    "good": "Reconoces el cansancio sin que eso signifique que no puedas continuar mañana.",
+    "bad": "Sientes que ese cansancio puntual define tu capacidad de sostener el proceso."
+  },
+  {
+    "q": "Notas que necesitas redefinir qué significa 'ir bien' para tu familia.",
+    "good": "Ajustas esa definición según el bienestar real vivido, no según estándares externos.",
+    "bad": "Mantienes una definición externa de éxito que no encaja con tu realidad."
+  },
+  {
+    "q": "Sientes miedo por el futuro a largo plazo de tu hijo/a.",
+    "good": "Reconoces el miedo sin dejar que paralice las acciones concretas de hoy.",
+    "bad": "Dejas que el miedo al futuro te impida disfrutar o actuar en el presente."
+  },
+  {
+    "q": "Un mal periodo te hace cuestionar si elegiste bien ciertas decisiones pasadas.",
+    "good": "Reconoces que tomaste las mejores decisiones posibles con la información que tenías.",
+    "bad": "Te castigas por decisiones pasadas juzgándolas con información que no tenías entonces."
+  },
+  {
+    "q": "Sientes que necesitas más herramientas para sostener el proceso a largo plazo.",
+    "good": "Buscas activamente más formación, apoyo o comunidad para nutrir tu resiliencia.",
+    "bad": "Esperas que la resiliencia 'aparezca sola' sin buscar ningún recurso adicional."
+  },
+  {
+    "q": "Un logro pequeño de tu hijo/a te emociona profundamente.",
+    "good": "Te permites disfrutar plenamente ese momento como parte del camino recorrido.",
+    "bad": "Minimizas la emoción porque 'falta mucho camino por recorrer todavía'."
+  },
+  {
+    "q": "Sientes que necesitas reconectar con la razón original por la que sostienes este esfuerzo.",
+    "good": "Te das un momento para recordar el vínculo y el amor que sostiene el proceso.",
+    "bad": "Sigues en automático sin reconectar nunca con el sentido profundo del esfuerzo."
+  },
+  {
+    "q": "Empieza el año escolar y aparece un retroceso inesperado en la adaptación.",
+    "good": "Reconoces que los inicios de etapa pueden traer ajustes temporales.",
+    "bad": "Sientes que 'todo el progreso del año anterior se perdió'."
+  },
+  {
+    "q": "Una técnica que aprendiste en terapia no funciona como esperabas.",
+    "good": "La ajustas o pruebas otra sin sentir que fue un fracaso total.",
+    "bad": "Sientes que 'nada de lo que intentas funciona nunca'."
+  },
+  {
+    "q": "Ves contenido en redes sociales de otras familias que parecen tener todo resuelto.",
+    "good": "Reconoces que las redes muestran solo una parte editada de la realidad.",
+    "bad": "Te comparas negativamente asumiendo que tu proceso va peor."
+  },
+  {
+    "q": "Tu hijo/a no alcanza un hito en la edad que otros niños lo alcanzan.",
+    "good": "Confías en su propio ritmo de desarrollo sin usar la edad como única medida.",
+    "bad": "Sientes alarma desproporcionada solo por la diferencia de edad."
+  },
+  {
+    "q": "Un hermano/a alcanza un logro que tu hijo/a con perfil distinto aún no alcanza.",
+    "good": "Reconoces que cada camino tiene su propio ritmo, sin comparar linealmente.",
+    "bad": "Sientes que eso confirma que 'algo está mal' con el proceso de tu hijo/a."
+  },
+  {
+    "q": "Una enfermedad de tu hijo/a provoca un retroceso temporal en logros ya alcanzados.",
+    "good": "Entiendes que el retroceso durante la enfermedad es esperable y temporal.",
+    "bad": "Sientes pánico pensando que el logro se perdió para siempre."
+  },
+  {
+    "q": "Un terapeuta cambia la recomendación que llevaban meses siguiendo.",
+    "good": "Confías en que ajustar el rumbo es parte normal del proceso.",
+    "bad": "Sientes que todo el tiempo invertido en el enfoque anterior fue en vano."
+  },
+  {
+    "q": "Deben cambiar a tu hijo/a de colegio en medio del año escolar.",
+    "good": "Reconoces que la adaptación llevará tiempo, sin perder la confianza en el proceso.",
+    "bad": "Sientes que este cambio arruinará todo el progreso logrado hasta ahora."
+  },
+  {
+    "q": "Un imprevisto económico reduce temporalmente el acceso a ciertas terapias.",
+    "good": "Buscas alternativas sin sentir que el proceso se detiene por completo.",
+    "bad": "Sientes que todo el progreso depende únicamente de esa terapia puntual."
+  },
+  {
+    "q": "Un cambio grande en la rutina familiar altera temporalmente los avances logrados.",
+    "good": "Confías en que la rutina puede reconstruirse con el tiempo.",
+    "bad": "Sientes que el cambio de rutina borra por completo lo avanzado."
+  },
+  {
+    "q": "Las fiestas de fin de año traen un retroceso conductual temporal.",
+    "good": "Reconoces que la sobreestimulación de la temporada explica el retroceso puntual.",
+    "bad": "Sientes que ese retroceso revela que 'nunca aprendió nada realmente'."
+  },
+  {
+    "q": "Tu hijo/a empieza un nuevo grado y siente ansiedad ante el cambio.",
+    "good": "Confías en que, como en transiciones pasadas, logrará adaptarse con tiempo.",
+    "bad": "Sientes que esta transición será distinta y fracasará, sin base real para creerlo."
+  },
+  {
+    "q": "Un familiar duda abiertamente del enfoque que has elegido para tu hijo/a.",
+    "good": "Sostienes tu confianza en el proceso basada en la evidencia que has visto.",
+    "bad": "Dejas que esa duda externa te haga abandonar un enfoque que sí funciona."
+  },
+  {
+    "q": "Debes explicar de nuevo la situación de tu hijo/a a un profesor nuevo cada año.",
+    "good": "Ves esa repetición como parte esperable del proceso, no como una carga inútil.",
+    "bad": "Sientes agotamiento y desesperanza por tener que 'empezar de cero' cada vez."
+  },
+  {
+    "q": "Tu hijo/a rechaza de golpe una terapia que antes disfrutaba.",
+    "good": "Entiendes que los intereses cambian y buscas ajustar el enfoque con calma.",
+    "bad": "Sientes que ese rechazo puntual significa que todo el trabajo previo se perdió."
+  },
+  {
+    "q": "El costo económico de sostener los apoyos a largo plazo te desanima.",
+    "good": "Buscas alternativas de financiamiento sin perder de vista el valor del proceso.",
+    "bad": "Sientes que nunca podrás sostener el esfuerzo necesario en el tiempo."
+  },
+  {
+    "q": "Sientes que necesitas encontrar una comunidad de otros padres que entiendan tu proceso.",
+    "good": "Buscas activamente espacios o grupos de apoyo entre pares.",
+    "bad": "Sigues sintiéndote solo/a sin buscar ninguna comunidad de apoyo."
+  },
+  {
+    "q": "Sacrificaste tu carrera profesional para sostener el proceso de tu hijo/a.",
+    "good": "Redefines el éxito propio incluyendo ese sacrificio como parte de un propósito mayor.",
+    "bad": "Sientes que perdiste tu vida entera sin ningún sentido a cambio."
+  },
+  {
+    "q": "Se acerca el aniversario de un momento difícil, como un diagnóstico.",
+    "good": "Permites que resurjan emociones sin que definan tu estado actual.",
+    "bad": "Dejas que el aniversario arruine por completo tu ánimo del día."
+  },
+  {
+    "q": "Notas un pequeño logro que pasó desapercibido en medio de una semana difícil.",
+    "good": "Te detienes a reconocerlo, aunque la semana en general fue dura.",
+    "bad": "Ignoras el pequeño logro por estar enfocado/a solo en lo difícil."
+  },
+  {
+    "q": "Necesitas paciencia porque una habilidad aprendida en terapia aún no se generaliza en casa.",
+    "good": "Confías en que la generalización llega con más tiempo y práctica.",
+    "bad": "Sientes que la habilidad 'no sirvió de nada' si no se ve en todos los contextos aún."
+  },
+  {
+    "q": "Comparas el camino de dos hijos/as con perfiles distintos dentro de la misma familia.",
+    "good": "Reconoces que cada camino tiene su propio ritmo y forma, sin jerarquizarlos.",
+    "bad": "Sientes que uno de los caminos 'va peor' solo por ser diferente."
+  },
+  {
+    "q": "Un viaje familiar se complica por una crisis inesperada de tu hijo/a.",
+    "good": "Ajustas el plan sin que arruine tu confianza en los avances logrados hasta ahora.",
+    "bad": "Sientes que el viaje 'confirma' que nunca podrán salir tranquilos."
+  },
+  {
+    "q": "Llega un nuevo hermano/a a la familia y el proceso de adaptación se complejiza.",
+    "good": "Reconoces que ese ajuste llevará tiempo, como otros ajustes anteriores.",
+    "bad": "Sientes que la llegada del nuevo hermano/a arruinará todo el progreso anterior."
+  },
+  {
+    "q": "Dos profesionales distintos te dan opiniones contradictorias sobre el proceso.",
+    "good": "Confías en tu propio criterio, informado por la experiencia acumulada.",
+    "bad": "Sientes una desesperanza total al no tener una respuesta única y clara."
+  },
+  {
+    "q": "Iniciar tu propio proceso terapéutico te ayuda a ver tu rol con más perspectiva.",
+    "good": "Reconoces ese trabajo personal como parte activa de tu resiliencia.",
+    "bad": "Sientes que necesitar ese apoyo propio es una señal de debilidad."
+  },
+  {
+    "q": "Revisas cómo se comunicaba tu hijo/a hace un par de años comparado con hoy.",
+    "good": "Reconoces el avance real, aunque el camino no haya sido lineal.",
+    "bad": "Solo notas lo que aún falta, sin reconocer el avance ya logrado."
+  },
+  {
+    "q": "El progreso se estanca después de un periodo de avances notorios.",
+    "good": "Entiendes que los estancamientos son parte normal del proceso, no un retroceso real.",
+    "bad": "Sientes pánico pensando que el progreso se detuvo para siempre."
+  },
+  {
+    "q": "Se acerca el paso de primaria a secundaria y te preocupa cómo lo vivirá tu hijo/a.",
+    "good": "Confías en la capacidad de adaptación mostrada en transiciones anteriores.",
+    "bad": "Anticipas un fracaso seguro sin ninguna base concreta para creerlo."
+  },
+  {
+    "q": "Tu hijo/a enfrenta miedo antes de un procedimiento médico necesario.",
+    "good": "Sostienes la calma confiando en que podrán atravesarlo juntos como antes.",
+    "bad": "Te desesperas anticipadamente, transmitiendo ese miedo a tu hijo/a."
+  },
+  {
+    "q": "Te rechazan una solicitud de ayuda económica para terapias de tu hijo/a.",
+    "good": "Buscas otras vías de apoyo sin perder de vista el objetivo a largo plazo.",
+    "bad": "Sientes que ese rechazo significa que nunca podrán costear el proceso necesario."
+  },
+  {
+    "q": "Un hijo/a de un conocido alcanza visiblemente un logro que el tuyo aún no alcanza.",
+    "good": "Reconoces que los caminos son distintos, sin que eso reste valor al tuyo.",
+    "bad": "Sientes que eso confirma que tu hijo/a 'se está quedando atrás'."
+  },
+  {
+    "q": "Notas explícitamente el patrón de 'dos pasos adelante, uno atrás' en el proceso.",
+    "good": "Nombras ese patrón como parte esperable del progreso, no como un fracaso.",
+    "bad": "Cada paso atrás te hace sentir que todo el proceso se derrumba."
+  },
+  {
+    "q": "Dudas de tu propio método de crianza tras leer un debate acalorado en internet.",
+    "good": "Contrastas esa opinión con tu propia experiencia acumulada antes de cambiar algo.",
+    "bad": "Cambias de método bruscamente solo por la presión de una discusión online."
+  },
+  {
+    "q": "Sientes ganas de abandonar una nueva estrategia después de que fallara una sola vez.",
+    "good": "Le das más tiempo antes de descartarla definitivamente.",
+    "bad": "La abandonas de inmediato tras el primer intento fallido."
+  },
+  {
+    "q": "Llega el aniversario de varios años sosteniendo el mismo esfuerzo constante.",
+    "good": "Te detienes a reconocer la constancia como un logro en sí mismo.",
+    "bad": "Minimizas ese esfuerzo sostenido porque 'aún falta mucho por lograr'."
+  },
+  {
+    "q": "Revisas fotos o un diario de los primeros días del proceso con tu hijo/a.",
+    "good": "Usas esas fotos para reconocer el camino recorrido con perspectiva real.",
+    "bad": "Solo sientes tristeza por lo difícil que fue, sin ver el crecimiento logrado."
+  },
+  {
+    "q": "Las necesidades de tu hijo/a cambian de nuevo al entrar en la pubertad.",
+    "good": "Confías en tu capacidad de adaptarte, como lo has hecho en etapas anteriores.",
+    "bad": "Sientes que nunca terminarás de 'resolver' las necesidades de tu hijo/a."
+  },
+  {
+    "q": "Mientras más aprendes sobre neurodivergencia, más ajustas tu visión del futuro.",
+    "good": "Ves ese ajuste continuo como parte sana del proceso, no como un error pasado.",
+    "bad": "Te culpas por no haber sabido antes lo que sabes ahora."
+  },
+  {
+    "q": "Un informe escolar poco útil o genérico te genera dudas sobre el proceso.",
+    "good": "Contrastas ese informe con la evidencia que sí conoces de cerca.",
+    "bad": "Dejas que un informe puntual defina tu percepción de todo el proceso."
+  },
+  {
+    "q": "Enfrentan visitas médicas repetidas que se sienten agotadoras en el tiempo.",
+    "good": "Reconoces el desgaste sin que eso signifique que el proceso no vale la pena.",
+    "bad": "Sientes que cada visita confirma que 'todo va cada vez peor'."
+  },
+  {
+    "q": "Notas avances lentos pero reales en las habilidades sociales de tu hijo/a.",
+    "good": "Confías en el progreso incremental, aunque sea gradual y no siempre visible.",
+    "bad": "Descartas el avance por no ser tan rápido como esperabas."
+  },
+  {
+    "q": "Un comentario familiar en una reunión navideña juzga las diferencias de tu hijo/a.",
+    "good": "Sostienes tu propia perspectiva construida con la experiencia real vivida.",
+    "bad": "Dejas que ese comentario puntual erosione tu confianza en el proceso."
+  },
+  {
+    "q": "Tu hijo/a tiene un colapso público en un evento grande e importante.",
+    "good": "Recuerdas que un evento puntual no borra todo el progreso logrado hasta ahora.",
+    "bad": "Sientes que ese colapso arruina la percepción de todo el proceso."
+  },
+  {
+    "q": "Un plan que diseñaste con cuidado no funciona como esperabas.",
+    "good": "Lo tomas como información útil para ajustar, no como un fracaso definitivo.",
+    "bad": "Sientes que fallar en el plan significa que fallaste como padre/madre."
+  },
+  {
+    "q": "Practicas activamente la gratitud como forma de sostener tu propia resiliencia.",
+    "good": "Reconoces esa práctica como una herramienta válida y la sostienes en el tiempo.",
+    "bad": "Descartas la gratitud como 'algo superficial que no cambia nada real'."
+  },
+  {
+    "q": "Sientes cansancio pero decides seguir mostrándote presente para tu hijo/a.",
+    "good": "Reconoces que seguir mostrándote presente, aun cansado/a, es parte de la resiliencia.",
+    "bad": "Sientes que el cansancio de hoy invalida todo tu esfuerzo anterior."
+  },
+  {
+    "q": "Un profesional con quien llevaban tiempo trabajando se jubila o cambia de rol.",
+    "good": "Confías en que el nuevo profesional podrá construir sobre lo ya avanzado.",
+    "bad": "Sientes que deben 'empezar todo el proceso de cero' con el cambio."
+  },
+  {
+    "q": "Llevan meses en lista de espera para acceder a un servicio necesario.",
+    "good": "Sostienes la esperanza mientras buscas alternativas temporales disponibles.",
+    "bad": "Sientes que la espera significa que el apoyo nunca llegará."
+  },
+  {
+    "q": "Confías en tu propio criterio por sobre un consejo bien intencionado pero no informado.",
+    "good": "Sostienes tu decisión basada en el conocimiento real de tu hijo/a.",
+    "bad": "Dudas de tu criterio solo por la insistencia de quien te aconseja."
+  },
+  {
+    "q": "Atraviesan una disputa larga y desgastante por servicios de apoyo escolar (PIE, IEP).",
+    "good": "Reconoces el desgaste de la disputa sin que eso defina el valor del esfuerzo.",
+    "bad": "Sientes que la dificultad del proceso significa que no vale la pena seguir luchando."
+  },
+  {
+    "q": "Termina un año particularmente difícil para toda la familia.",
+    "good": "Reconoces el cierre del año difícil como una etapa que también puede quedar atrás.",
+    "bad": "Sientes que ese año difícil predice cómo serán todos los años siguientes."
+  },
+  {
+    "q": "Reflexionas sobre una fortaleza inesperada que descubriste en ti mismo/a durante el proceso.",
+    "good": "Reconoces esa fortaleza como parte real de tu crecimiento personal.",
+    "bad": "Minimizas esa fortaleza asumiendo que 'cualquiera haría lo mismo'."
+  },
+  {
+    "q": "Notas que ya no te alteras tanto ante situaciones que antes te desbordaban.",
+    "good": "Reconoces ese cambio como evidencia real de tu propio crecimiento.",
+    "bad": "No notas ese cambio, enfocándote solo en lo que aún cuesta."
+  },
+  {
+    "q": "Un familiar pregunta si 'ya se solucionó' la situación de tu hijo/a.",
+    "good": "Explicas con calma que el proceso no es lineal ni tiene un punto final fijo.",
+    "bad": "Sientes frustración por no tener una respuesta definitiva que dar."
+  },
+  {
+    "q": "Sientes que debes reconstruir la confianza en un enfoque después de un tropiezo.",
+    "good": "Le das tiempo al enfoque antes de juzgarlo completamente por un tropiezo puntual.",
+    "bad": "Descartas el enfoque completo tras el primer tropiezo notorio."
+  },
+  {
+    "q": "Revisas viejas metas terapéuticas y notas cuántas ya se cumplieron con el tiempo.",
+    "good": "Te permites reconocer ese progreso acumulado con orgullo genuino.",
+    "bad": "Solo te enfocas en las metas que aún faltan por cumplir."
+  },
+  {
+    "q": "Sientes que necesitas ajustar tu propia definición de lo que es 'un buen día'.",
+    "good": "Redefines esa medida según el bienestar real vivido, no según un estándar externo.",
+    "bad": "Sigues midiendo los días con una vara que no encaja con tu realidad actual."
+  },
+  {
+    "q": "Un pequeño gesto de tu hijo/a te recuerda por qué sostienes este esfuerzo.",
+    "good": "Te permites emocionarte y nutrir tu resiliencia con ese recuerdo.",
+    "bad": "Minimizas el gesto asumiendo que 'no cambia nada de lo difícil'."
+  },
+  {
+    "q": "Te preguntas si vale la pena seguir invirtiendo tanto esfuerzo en el proceso.",
+    "good": "Reconectas con el propósito profundo detrás de ese esfuerzo sostenido.",
+    "bad": "Dejas que la duda puntual te haga considerar abandonar el proceso por completo."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Transiciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ef4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #ef4444, #ef4444cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #ef4444cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Vida Cotidiana Compartida</span>
+    </span>
+    <h1>🔄 Transiciones</h1>
+    <p>Anticipar y suavizar cambios de actividad, lugar o plan.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "transiciones";
+const SITUACIONES = [
+  {
+    "q": "Debes interrumpir el juego de tu hijo/a para ir al colegio.",
+    "good": "Le avisas con anticipación (10, 5, 2 minutos) antes del cambio.",
+    "bad": "Interrumpes el juego de golpe sin previo aviso."
+  },
+  {
+    "q": "Van a cambiar de actividad en medio de una tarde tranquila.",
+    "good": "Usas una señal clara y anticipada para preparar el cambio.",
+    "bad": "Cambias de actividad abruptamente esperando que se adapte al instante."
+  },
+  {
+    "q": "Tu hijo/a debe dejar la pantalla para cenar.",
+    "good": "Le das un aviso previo con tiempo concreto para terminar lo que hace.",
+    "bad": "Apagas el dispositivo de inmediato sin aviso previo."
+  },
+  {
+    "q": "Cambian de lugar de vacaciones a mitad de semana.",
+    "good": "Anticipas el cambio con fotos o descripciones del nuevo lugar.",
+    "bad": "Informas el cambio de lugar el mismo día sin preparación."
+  },
+  {
+    "q": "Tu hijo/a debe pasar del recreo a la clase.",
+    "good": "Usa una rutina de transición conocida (canción, señal) que ya practicaron.",
+    "bad": "Espera que el cambio de recreo a clase sea automático sin apoyo."
+  },
+  {
+    "q": "Un plan familiar cambia de horario a último momento.",
+    "good": "Le explicas el cambio apenas lo sabes, dando tiempo para procesarlo.",
+    "bad": "Le informas el cambio justo cuando ya deberían estar saliendo."
+  },
+  {
+    "q": "Tu hijo/a debe dejar una actividad divertida para hacer una tarea menos preferida.",
+    "good": "Ofreces un puente claro entre ambas actividades con tiempo de aviso.",
+    "bad": "Exiges el cambio inmediato sin transición ni aviso."
+  },
+  {
+    "q": "Cambian de casa o habitación durante una mudanza.",
+    "good": "Preparan juntos el cambio con anticipación, mostrando el nuevo espacio antes.",
+    "bad": "Realizan el cambio de golpe el día de la mudanza sin preparación previa."
+  },
+  {
+    "q": "Tu hijo/a debe pasar de estar en casa a salir de compras.",
+    "good": "Anticipas la salida con tiempo y describe qué encontrarán en el lugar.",
+    "bad": "Anuncias la salida de imprevisto justo antes de partir."
+  },
+  {
+    "q": "Terminó una actividad de vacaciones y deben moverse a la siguiente.",
+    "good": "Das una cuenta regresiva clara antes de cada cambio de actividad.",
+    "bad": "Cambian de actividad sin ningún aviso ni transición."
+  },
+  {
+    "q": "Tu hijo/a debe cambiar de una clase a otra en el colegio.",
+    "good": "Coordinas con el colegio apoyos visuales o señales para esa transición.",
+    "bad": "Asumes que el colegio maneja la transición sin necesidad de apoyo extra."
+  },
+  {
+    "q": "Cambia el plan de quién los recoge del colegio hoy.",
+    "good": "Le avisas con tiempo quién irá a buscarlo/a y qué esperar.",
+    "bad": "Cambia la persona sin avisar, generando sorpresa al salir."
+  },
+  {
+    "q": "Tu hijo/a debe dejar de jugar con un amigo para volver a casa.",
+    "good": "Anuncias el tiempo restante con anticipación antes de partir.",
+    "bad": "Interrumpes el juego social abruptamente sin previo aviso."
+  },
+  {
+    "q": "Cambia el menú de la cena respecto a lo esperado.",
+    "good": "Le avisas el cambio de menú con tiempo para procesarlo.",
+    "bad": "Presenta el cambio de comida como sorpresa en la mesa."
+  },
+  {
+    "q": "Tu hijo/a debe pasar de una actividad en casa a dormir.",
+    "good": "Usan una rutina de transición nocturna conocida y predecible.",
+    "bad": "Exige que se duerma de inmediato tras una actividad estimulante."
+  },
+  {
+    "q": "Cambian de rutina de fin de semana a rutina escolar el domingo por la noche.",
+    "good": "Preparan juntos la transición con tiempo, revisando lo que viene la próxima semana.",
+    "bad": "No preparan nada y esperan que el lunes fluya solo."
+  },
+  {
+    "q": "Tu hijo/a debe cambiar de actividad en medio de una crisis de atención.",
+    "good": "Esperas un momento de calma antes de proponer el cambio de actividad.",
+    "bad": "Fuerzas el cambio en medio de su concentración intensa sin aviso."
+  },
+  {
+    "q": "Cambia el clima y deben modificar el plan de salida.",
+    "good": "Explicas el cambio de plan con anticipación y ofreces una alternativa clara.",
+    "bad": "Cambia el plan sin explicación, generando confusión y frustración."
+  },
+  {
+    "q": "Tu hijo/a debe pasar de estar con la familia extendida a irse a casa.",
+    "good": "Anuncias la salida con tiempo y un ritual breve de despedida.",
+    "bad": "Anuncias que ya se van de forma repentina sin aviso previo."
+  },
+  {
+    "q": "Cambia el orden de las actividades de un evento especial.",
+    "good": "Actualizas el itinerario visual o verbal con el nuevo orden a tiempo.",
+    "bad": "Cambia el orden sin comunicarlo, generando desconcierto durante el evento."
+  },
+  {
+    "q": "Tu hijo/a debe despertar para ir al colegio.",
+    "good": "Enciendes la luz gradualmente y le das unos minutos antes de levantarse.",
+    "bad": "Lo/la despiertas de golpe encendiendo la luz y gritando que se apure."
+  },
+  {
+    "q": "Deben bajar del auto al llegar a casa tras un paseo.",
+    "good": "Le avisas que en unos minutos llegarán y podrá terminar lo que hace.",
+    "bad": "Le exiges bajar del auto de inmediato sin darle tiempo de prepararse."
+  },
+  {
+    "q": "Debes dejarlo/a en el colegio en la mañana.",
+    "good": "Practican una despedida breve y predecible cada día.",
+    "bad": "Te vas abruptamente sin ritual de despedida, generando angustia."
+  },
+  {
+    "q": "Tu hijo/a pasa de un fin de semana en casa de un progenitor a la del otro.",
+    "good": "Preparan con anticipación qué llevar y qué esperar en el cambio.",
+    "bad": "Se hace el cambio sin aviso ni preparación previa."
+  },
+  {
+    "q": "Termina el receso de verano y empieza el colegio.",
+    "good": "Retoman gradualmente horarios de sueño y rutina días antes de empezar.",
+    "bad": "Esperan hasta la noche anterior para retomar cualquier rutina escolar."
+  },
+  {
+    "q": "Debe pasar de la sala de espera al consultorio médico.",
+    "good": "Le explicas qué pasará paso a paso antes de entrar.",
+    "bad": "Lo/la llevan al consultorio sin explicar qué va a pasar ahí."
+  },
+  {
+    "q": "Termina de jugar videojuegos y debe hacer la tarea.",
+    "good": "Le avisas con tiempo el momento en que deberá guardar el juego.",
+    "bad": "Apagas el juego de inmediato sin ningún aviso previo."
+  },
+  {
+    "q": "Debe pasar de una materia a otra dentro de la misma clase.",
+    "good": "El profesor usa una señal clara para anunciar el cambio de tema.",
+    "bad": "Se espera que note el cambio de tema sin ninguna señal."
+  },
+  {
+    "q": "Termina el baño y debe ir a dormir.",
+    "good": "Siguen el mismo orden de pasos cada noche para que sea predecible.",
+    "bad": "Cambian el orden de los pasos cada noche sin avisar."
+  },
+  {
+    "q": "Se termina una fiesta de cumpleaños y deben irse.",
+    "good": "Le avisas con anticipación cuánto tiempo queda antes de partir.",
+    "bad": "Anuncias que ya se van justo quitándole el juguete de las manos."
+  },
+  {
+    "q": "Vuelven de casa de los abuelos a la propia casa.",
+    "good": "Preparan una despedida breve y anticipan el regreso con calma.",
+    "bad": "Se van de repente sin darle oportunidad de despedirse."
+  },
+  {
+    "q": "Termina la práctica deportiva y debe subir al auto.",
+    "good": "Le avisas cuánto tiempo falta para el final del entrenamiento.",
+    "bad": "Lo/la sacas de la práctica abruptamente en cuanto llegas."
+  },
+  {
+    "q": "Es el primer día en un colegio nuevo.",
+    "good": "Visitan el lugar antes y hablan de qué esperar el primer día.",
+    "bad": "Lo/la llevan el primer día sin ninguna preparación previa."
+  },
+  {
+    "q": "Termina el recreo y debe volver a rendir una prueba.",
+    "good": "Le dan unos minutos de transición antes de empezar la prueba.",
+    "bad": "Se espera que pase del recreo directo a la prueba sin transición."
+  },
+  {
+    "q": "Está solo/a en casa y llega el momento de reunirse con la familia.",
+    "good": "Le avisas con tiempo que la cena o reunión está por comenzar.",
+    "bad": "Lo/la interrumpes de golpe exigiendo que baje de inmediato."
+  },
+  {
+    "q": "Cambia el terapeuta o profesional que lo atiende.",
+    "good": "Preparan la transición con una sesión de presentación previa si es posible.",
+    "bad": "Cambian de profesional sin explicarle el motivo ni presentarlo antes."
+  },
+  {
+    "q": "Cambia la persona que lo cuida después del colegio.",
+    "good": "Le presentas a la nueva persona con anticipación antes del cambio.",
+    "bad": "La nueva persona aparece sin previo aviso el día del cambio."
+  },
+  {
+    "q": "Se va un invitado que estuvo de visita en casa.",
+    "good": "Anticipas la despedida y le das espacio para procesarla.",
+    "bad": "El invitado se va de repente sin que puedan despedirse con calma."
+  },
+  {
+    "q": "Debe dejar de jugar en el parque para hacer un mandado.",
+    "good": "Le avisas con tiempo antes de salir del parque.",
+    "bad": "Lo/la sacas del parque sin aviso justo cuando está más entretenido/a."
+  },
+  {
+    "q": "Toma un vuelo temprano y debe despertar de madrugada.",
+    "good": "Preparan la noche anterior y le explican el horario especial con tiempo.",
+    "bad": "Lo/la despiertan de golpe de madrugada sin haberlo hablado antes."
+  },
+  {
+    "q": "Está profundamente concentrado/a en su interés especial y debe comer.",
+    "good": "Le avisas con varios minutos de anticipación antes de interrumpir.",
+    "bad": "Interrumpes su concentración de golpe exigiendo que venga a comer ya."
+  },
+  {
+    "q": "Pasan de jugar adentro a salir al patio por cambio de clima.",
+    "good": "Le explicas el cambio de plan y qué van a hacer en su lugar.",
+    "bad": "Cambian de actividad sin explicación, generando confusión."
+  },
+  {
+    "q": "Llueve y deben cambiar de actividad al aire libre a una en interior.",
+    "good": "Anticipas el cambio mostrando la alternativa antes de que llueva.",
+    "bad": "Cancelan la actividad de golpe sin ofrecer alternativa clara."
+  },
+  {
+    "q": "Tiene un día con un profesor sustituto en el colegio.",
+    "good": "Le avisas la noche anterior o en la mañana sobre el cambio.",
+    "bad": "Se entera del cambio de profesor sin ningún aviso previo."
+  },
+  {
+    "q": "Cambian de mesa o de lugar en un restaurante.",
+    "good": "Le explicas brevemente por qué cambian de lugar antes de moverse.",
+    "bad": "Los mueven de mesa sin explicación, generando resistencia."
+  },
+  {
+    "q": "Llegan a un hotel o lugar desconocido durante un viaje.",
+    "good": "Le muestras fotos o describes el lugar antes de llegar.",
+    "bad": "Llegan al lugar nuevo sin ninguna preparación previa."
+  },
+  {
+    "q": "Termina una película o programa que estaba viendo con atención.",
+    "good": "Avisas cuánto falta para el final antes de apagar la pantalla.",
+    "bad": "Apagas la pantalla de golpe en medio del programa."
+  },
+  {
+    "q": "Termina una videollamada con un familiar o amigo.",
+    "good": "Le avisas unos minutos antes de que la llamada deba terminar.",
+    "bad": "Cortas la llamada abruptamente sin previo aviso."
+  },
+  {
+    "q": "Despierta de una siesta y debe prepararse para la cena.",
+    "good": "Lo/la despiertas con suavidad, dándole unos minutos para ubicarse.",
+    "bad": "Lo/la levantas de golpe exigiendo que se siente a cenar ya."
+  },
+  {
+    "q": "Cambia de niñera o cuidador de forma temporal.",
+    "good": "Presentas a la nueva persona con tiempo antes de que quede a cargo.",
+    "bad": "La nueva persona llega y se queda a cargo sin ninguna presentación previa."
+  },
+  {
+    "q": "Termina la práctica de un instrumento y debe pasar a otra actividad.",
+    "good": "Le avisas con anticipación el cambio de actividad que viene.",
+    "bad": "Interrumpes la práctica musical sin ningún aviso previo."
+  },
+  {
+    "q": "Termina la temporada de una actividad extracurricular.",
+    "good": "Conversan con anticipación sobre el cierre y lo que viene después.",
+    "bad": "La actividad simplemente termina sin que se hable del cambio."
+  },
+  {
+    "q": "Cambia el clima y debe usar ropa distinta a la esperada.",
+    "good": "Le explicas el cambio de clima y por qué cambia la ropa con tiempo.",
+    "bad": "Le cambias la ropa a último momento sin darle ninguna explicación."
+  },
+  {
+    "q": "Empieza su primer día de trabajo o práctica laboral.",
+    "good": "Conversan con anticipación sobre qué esperar en ese primer día.",
+    "bad": "Lo/la envías al primer día sin ninguna preparación previa."
+  },
+  {
+    "q": "Debe pasar del transporte público a caminar el resto del trayecto.",
+    "good": "Le explicas la ruta completa con anticipación antes de salir.",
+    "bad": "Cambia de medio de transporte sin haberlo explicado antes."
+  },
+  {
+    "q": "Tiene una cita con el dentista después de estar tranquilo/a en casa.",
+    "good": "Le explicas con tiempo qué va a pasar en la consulta.",
+    "bad": "Lo/la llevas sin ninguna preparación justo antes de la cita."
+  },
+  {
+    "q": "Va a la peluquería y debe dejar de hacer lo que estaba haciendo.",
+    "good": "Le avisas con tiempo cuándo deben salir hacia la peluquería.",
+    "bad": "Lo/la interrumpes de golpe para llevarlo a la peluquería."
+  },
+  {
+    "q": "Pasan por seguridad en un aeropuerto.",
+    "good": "Le explicas el proceso paso a paso antes de llegar al control.",
+    "bad": "Lo/la llevas por el control sin explicar qué va a suceder ahí."
+  },
+  {
+    "q": "Hay un simulacro de incendio inesperado en el colegio.",
+    "good": "El colegio anticipa los simulacros con aviso previo cuando es posible.",
+    "bad": "El simulacro ocurre sin ninguna preparación previa para tu hijo/a."
+  },
+  {
+    "q": "Cambian de planes por una necesidad urgente de un hermano.",
+    "good": "Le explicas el cambio de planes en cuanto lo sabes, con calma.",
+    "bad": "Cambian los planes sin ninguna explicación, generando confusión."
+  },
+  {
+    "q": "Llega a una reunión familiar con muchas personas presentes.",
+    "good": "Le avisas con anticipación quiénes estarán y qué esperar del evento.",
+    "bad": "Lo/la llevas a la reunión sin ninguna preparación previa."
+  },
+  {
+    "q": "Termina una visita a familiares y deben volver a casa.",
+    "good": "Anuncias la salida con tiempo y un ritual breve de despedida.",
+    "bad": "Anuncias que ya se van de forma repentina sin aviso previo."
+  },
+  {
+    "q": "Pasan de una actividad en equipo a otra durante la clase de educación física.",
+    "good": "El profesor da una señal clara antes de cada cambio de actividad.",
+    "bad": "Se espera que cambie de actividad sin ninguna señal previa."
+  },
+  {
+    "q": "Cambia el formato de una clase a virtual de un día para otro.",
+    "good": "Le explicas el cambio con anticipación y qué necesitará para la clase.",
+    "bad": "Se entera del cambio de formato justo al momento de la clase."
+  },
+  {
+    "q": "Termina un día de campamento de verano y vuelve a casa.",
+    "good": "Preparan la transición conversando sobre cómo fue el día antes de la rutina nocturna.",
+    "bad": "Se espera que retome la rutina de casa sin ningún espacio de transición."
+  },
+  {
+    "q": "Debe acostarse más temprano de lo habitual por un evento al día siguiente.",
+    "good": "Le explicas con anticipación por qué cambia la hora de dormir.",
+    "bad": "Le exiges dormir antes sin ninguna explicación del cambio."
+  },
+  {
+    "q": "Pasa de hacer la tarea en computador a hacerla en papel por un cambio de indicación.",
+    "good": "Le explicas el cambio de formato con tiempo antes de empezar.",
+    "bad": "Le cambias el formato de la tarea sin avisarle con anticipación."
+  },
+  {
+    "q": "Despierta de una siesta larga y ya es hora de cenar.",
+    "good": "Lo/la despiertas gradualmente dándole tiempo para ubicarse.",
+    "bad": "Lo/la sientas a cenar de inmediato apenas despierta."
+  },
+  {
+    "q": "Termina una sesión de terapia y debe volver a la rutina normal.",
+    "good": "Le das unos minutos de transición antes de retomar otra actividad.",
+    "bad": "Espera que retome la actividad siguiente de inmediato sin transición."
+  },
+  {
+    "q": "Sale de un episodio de crisis o desregulación hacia una actividad tranquila.",
+    "good": "Esperas que esté más calmado/a antes de proponer cualquier cambio.",
+    "bad": "Le exiges pasar a otra actividad mientras aún está alterado/a."
+  },
+  {
+    "q": "Se mudan a otra ciudad y debe cambiar de casa por completo.",
+    "good": "Preparan la mudanza con visitas previas o fotos del nuevo lugar.",
+    "bad": "La mudanza ocurre sin ninguna preparación anticipada para él/ella."
+  },
+  {
+    "q": "Vuelve al colegio después de estar enfermo/a varios días.",
+    "good": "Conversan con anticipación sobre qué esperar el día de vuelta.",
+    "bad": "Lo/la envía al colegio sin preparar la vuelta después de la ausencia."
+  },
+  {
+    "q": "Cambia de salón o de puesto asignado en la clase.",
+    "good": "Le explicas el cambio con anticipación si tienes esa información.",
+    "bad": "Se entera del cambio de puesto el mismo día sin previo aviso."
+  },
+  {
+    "q": "Termina la temporada de un deporte y empieza otro distinto.",
+    "good": "Conversan con tiempo sobre el cambio de deporte y qué esperar.",
+    "bad": "Lo inscriben en el deporte nuevo sin conversarlo previamente."
+  },
+  {
+    "q": "Cambia de colegio o de guardería a una edad temprana.",
+    "good": "Visitan el lugar nuevo antes y hablan de lo que encontrará.",
+    "bad": "Lo llevan al lugar nuevo el primer día sin ninguna visita previa."
+  },
+  {
+    "q": "Termina de escuchar un cuento antes de dormir y debe apagar la luz.",
+    "good": "Siguen la misma secuencia de pasos cada noche antes de apagar la luz.",
+    "bad": "Apagas la luz de golpe apenas termina el cuento."
+  },
+  {
+    "q": "Pasa de una sala de un museo a otra durante una visita.",
+    "good": "Le avisas con anticipación que van a pasar a la siguiente sala.",
+    "bad": "Lo mueve de sala sin ningún aviso mientras está concentrado/a."
+  },
+  {
+    "q": "Debe irse antes de que termine una celebración familiar.",
+    "good": "Le avisas con tiempo que deberán irse antes del final.",
+    "bad": "Anuncia la salida de repente justo en el momento más animado."
+  },
+  {
+    "q": "Hacen varios mandados seguidos en una misma salida.",
+    "good": "Le explicas el orden de los lugares que visitarán antes de salir.",
+    "bad": "Van de un lugar a otro sin explicarle el plan de la salida."
+  },
+  {
+    "q": "Debe entrar a la piscina o actividad acuática.",
+    "good": "Le das tiempo para prepararse mentalmente antes de entrar al agua.",
+    "bad": "Lo mete al agua de golpe sin darle tiempo de prepararse."
+  },
+  {
+    "q": "Debe salir de la piscina cuando está disfrutando el momento.",
+    "good": "Le avisas con anticipación cuánto tiempo le queda en el agua.",
+    "bad": "Lo saca del agua de inmediato sin ningún aviso previo."
+  },
+  {
+    "q": "Tiene su primera cita con un médico nuevo.",
+    "good": "Le explicas con anticipación quién es y qué esperar de la consulta.",
+    "bad": "Lo lleva a la consulta nueva sin ninguna preparación previa."
+  },
+  {
+    "q": "Va a dormir por primera vez en casa de un amigo.",
+    "good": "Preparan juntos qué llevar y qué esperar de la experiencia.",
+    "bad": "Lo deja en la casa del amigo sin haber conversado antes qué esperar."
+  },
+  {
+    "q": "Sale de una reunión grande y debe volver a un auto silencioso.",
+    "good": "Le das espacio de silencio o descompresión en el camino a casa.",
+    "bad": "Le exige seguir conversando activamente en el camino de regreso."
+  },
+  {
+    "q": "Cambia de una actividad a otra durante una fiesta de cumpleaños.",
+    "good": "Le avisas con tiempo cada cambio de juego o actividad en la fiesta.",
+    "bad": "Cambian de actividad en la fiesta sin ningún aviso previo."
+  },
+  {
+    "q": "Vuelve al colegio después de un fin de semana largo.",
+    "good": "Conversan el domingo por la noche sobre lo que viene la próxima semana.",
+    "bad": "Espera que el lunes fluya solo sin ninguna preparación previa."
+  },
+  {
+    "q": "Empieza una nueva unidad o materia en el colegio.",
+    "good": "Le explicas con anticipación qué cambios trae la nueva unidad.",
+    "bad": "Se entera de la nueva materia sin ninguna preparación previa."
+  },
+  {
+    "q": "Cambia el horario por el inicio del horario de verano.",
+    "good": "Ajustan gradualmente los horarios de sueño en los días previos.",
+    "bad": "Aplican el cambio de hora de golpe sin ningún ajuste previo."
+  },
+  {
+    "q": "Hay un corte de electricidad que interrumpe su rutina habitual.",
+    "good": "Explicas la situación con calma y ofreces una alternativa mientras se resuelve.",
+    "bad": "Dejas que la interrupción genere caos sin ninguna explicación."
+  },
+  {
+    "q": "Cambia de habitación dentro de la misma casa.",
+    "good": "Prepara el cambio mostrándole el nuevo espacio con anticipación.",
+    "bad": "Le cambia de habitación sin ninguna preparación previa."
+  },
+  {
+    "q": "Termina de jugar con amigos en la calle y debe entrar a casa.",
+    "good": "Le avisas con tiempo antes de que deba despedirse de sus amigos.",
+    "bad": "Lo llama a entrar de golpe sin ningún aviso previo."
+  },
+  {
+    "q": "Pasa de estar en un ambiente ruidoso a uno silencioso de golpe.",
+    "good": "Le das unos minutos de transición antes de esperar que se adapte.",
+    "bad": "Espera que se adapte al silencio de inmediato sin transición."
+  },
+  {
+    "q": "Debe dejar una actividad grupal para atender una necesidad individual.",
+    "good": "Le explicas el motivo del cambio antes de sacarlo de la actividad.",
+    "bad": "Lo saca de la actividad grupal sin ninguna explicación."
+  },
+  {
+    "q": "Cambia el lugar de encuentro con el otro progenitor a último momento.",
+    "good": "Le explicas el cambio en cuanto lo sabes, con la mayor anticipación posible.",
+    "bad": "Se entera del cambio de lugar justo en el momento del encuentro."
+  },
+  {
+    "q": "Termina de usar la tableta y debe alistarse para salir.",
+    "good": "Le avisas con varios minutos de anticipación antes de que deba dejarla.",
+    "bad": "Le quita la tableta de las manos sin ningún aviso previo."
+  },
+  {
+    "q": "Pasa del recreo a una actividad que requiere mucha concentración.",
+    "good": "Le da un momento breve de transición antes de exigir concentración.",
+    "bad": "Espera que pase del recreo a concentrarse de inmediato sin transición."
+  },
+  {
+    "q": "Debe cambiar de plan porque el lugar reservado está cerrado.",
+    "good": "Le explica el cambio con calma y ofrece una alternativa concreta.",
+    "bad": "Cambia de plan sin explicación, generando frustración y confusión."
+  },
+  {
+    "q": "Termina una llamada telefónica importante y debe volver a la rutina.",
+    "good": "Le da unos minutos antes de pedirle que retome otra actividad.",
+    "bad": "Le exige retomar la actividad de inmediato al colgar la llamada."
+  },
+  {
+    "q": "Pasa de estar de vacaciones a la rutina de trabajo o estudio en casa.",
+    "good": "Preparan juntos el regreso gradual días antes de que termine el descanso.",
+    "bad": "Espera que retome la rutina de golpe el primer día después de volver."
+  },
+  {
+    "q": "Cambia el itinerario de un evento especial por causas de último momento.",
+    "good": "Actualiza el plan y se lo explica con calma en cuanto lo sabe.",
+    "bad": "Cambia el itinerario sin comunicarlo, generando desconcierto en el evento."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

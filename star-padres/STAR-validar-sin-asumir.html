@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Validar sin Asumir</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #8b5cf6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #8b5cf6, #8b5cf6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #8b5cf6, #8b5cf6cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+      <span>Comunicación Bidireccional</span>
+    </span>
+    <h1>💬 Validar sin Asumir</h1>
+    <p>"No entiendo completamente, pero creo que esto es importante para ti."</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "validar-sin-asumir";
+const SITUACIONES = [
+  {
+    "q": "Tu hijo/a se altera por algo que a ti te parece insignificante.",
+    "good": "Le dices que aunque no lo entiendas del todo, ves que es importante para él/ella.",
+    "bad": "Le dices que 'no es para tanto' y minimizas su reacción."
+  },
+  {
+    "q": "Expresa un malestar que no logras identificar la causa.",
+    "good": "Reconoces que hay algo real ahí, aunque aún no sepas exactamente qué.",
+    "bad": "Asumes una causa sin confirmar y actúas según esa suposición."
+  },
+  {
+    "q": "Tu hijo/a insiste en que algo 'se siente mal' sin más explicación.",
+    "good": "Confías en su percepción y le preguntas más para entender juntos.",
+    "bad": "Le dices que está imaginando cosas."
+  },
+  {
+    "q": "Se resiste a algo que parece simple para ti.",
+    "good": "Le comunicas que confías en que hay una razón, aunque no la veas aún.",
+    "bad": "Asumes que solo está siendo difícil a propósito."
+  },
+  {
+    "q": "Tu hijo/a llora por un cambio de planes pequeño.",
+    "good": "Validas que el cambio le afecta, sin juzgar la magnitud de su reacción.",
+    "bad": "Le dices que está exagerando por algo tan simple."
+  },
+  {
+    "q": "Te dice que un lugar 'se siente raro' y no quiere entrar.",
+    "good": "Le tomas la palabra y buscas juntos qué le genera esa sensación.",
+    "bad": "Lo obligas a entrar diciendo que 'no hay nada raro'."
+  },
+  {
+    "q": "Expresa que un sonido específico 'le duele'.",
+    "good": "Aceptas la experiencia como real para él/ella, aunque tú no la sientas igual.",
+    "bad": "Le dices que 'no puede doler' un sonido."
+  },
+  {
+    "q": "Tu hijo/a se resiste a un plan que tú preparaste con ilusión.",
+    "good": "Reconoces su malestar sin necesidad de que coincida con tu expectativa.",
+    "bad": "Le haces sentir culpable por no compartir tu entusiasmo."
+  },
+  {
+    "q": "Dice que algo 'no se siente correcto' sin poder explicar por qué.",
+    "good": "Le das espacio para que lo procese, validando que confías en su percepción.",
+    "bad": "Exiges una explicación lógica inmediata o lo descartas."
+  },
+  {
+    "q": "Tu hijo/a rechaza una comida que antes le gustaba.",
+    "good": "Aceptas que algo cambió para él/ella sin cuestionar su honestidad.",
+    "bad": "Le dices que 'antes le gustaba' así que debe seguir gustándole."
+  },
+  {
+    "q": "Se queja de una prenda de ropa que a ti te parece cómoda.",
+    "good": "Reconoces que su experiencia sensorial es distinta a la tuya.",
+    "bad": "Insistes en que 'se ve bien' así que debe sentirse bien."
+  },
+  {
+    "q": "Tu hijo/a dice que se siente 'observado' en un lugar público.",
+    "good": "Validas su sensación de incomodidad sin necesidad de confirmarla objetivamente.",
+    "bad": "Le dices que 'nadie lo está mirando' de forma tajante."
+  },
+  {
+    "q": "Expresa ansiedad por un evento que a ti te parece sencillo.",
+    "good": "Reconoces que su nivel de ansiedad es válido para su experiencia.",
+    "bad": "Le dices que 'no hay nada que temer' sin más."
+  },
+  {
+    "q": "Tu hijo/a se queja de cansancio después de una actividad corta.",
+    "good": "Aceptas que su gasto de energía puede ser distinto al tuyo.",
+    "bad": "Le dices que 'no puede estar cansado' tan rápido."
+  },
+  {
+    "q": "Dice que un compañero 'lo trata distinto' sin evidencia clara para ti.",
+    "good": "Tomas en serio su percepción y exploras juntos qué está pasando.",
+    "bad": "Descartas su percepción porque tú no ves ese trato."
+  },
+  {
+    "q": "Tu hijo/a se siente incómodo/a en una reunión social que parece agradable.",
+    "good": "Validas que el ambiente puede sentirse distinto para él/ella.",
+    "bad": "Le dices que 'está siendo antisocial sin razón'."
+  },
+  {
+    "q": "Expresa que necesita irse de un lugar 'ya' sin dar motivo claro.",
+    "good": "Confías en la urgencia que expresa y actúas para ayudarlo/a.",
+    "bad": "Le pides una justificación completa antes de moverte."
+  },
+  {
+    "q": "Tu hijo/a dice que algo 'le da miedo' que a ti te parece inofensivo.",
+    "good": "Validas el miedo como real para su experiencia particular.",
+    "bad": "Le dices que 'eso no da miedo a nadie'."
+  },
+  {
+    "q": "Se queja de que algo 'huele mal' y tú no percibes nada.",
+    "good": "Reconoces que su sensibilidad olfativa puede ser distinta a la tuya.",
+    "bad": "Le dices que 'no huele a nada' de forma cortante."
+  },
+  {
+    "q": "Tu hijo/a insiste en que necesita hacer algo de cierta manera específica.",
+    "good": "Le preguntas qué hay detrás de esa necesidad antes de negarte.",
+    "bad": "Le dices que 'está siendo demasiado rígido' sin explorar más."
+  },
+  {
+    "q": "Tu hijo/a de 4 años dice que su peluche 'está triste' hoy.",
+    "good": "Le sigues la idea y le preguntas qué cree que necesita el peluche.",
+    "bad": "Le dices que 'los peluches no sienten nada' de forma tajante."
+  },
+  {
+    "q": "Tu hijo/a adolescente dice que una canción 'le pesa' sin poder explicar más.",
+    "good": "Aceptas que la música le genera algo real, aunque no lo entiendas del todo.",
+    "bad": "Le dices que 'es solo una canción' restándole importancia."
+  },
+  {
+    "q": "Tu hijo/a insiste en que la luz de su cuarto 'es demasiado fuerte' de noche.",
+    "good": "Confías en su percepción y buscas juntos una solución (regulador, cortina).",
+    "bad": "Le dices que 'la luz siempre fue así' sin considerar su experiencia."
+  },
+  {
+    "q": "Tu hijo/a de primaria dice que no quiere sentarse 'en esa silla' del salón.",
+    "good": "Le preguntas qué le incomoda de esa silla en particular.",
+    "bad": "Le dices que 'es una silla igual a las demás' y lo obligas."
+  },
+  {
+    "q": "Tu hijo/a adulto joven expresa que un ambiente laboral 'se siente tóxico' sin evidencia clara para ti.",
+    "good": "Validas su percepción y le preguntas qué situaciones concretas lo generan.",
+    "bad": "Le dices que 'está exagerando' sin explorar su experiencia."
+  },
+  {
+    "q": "Tu hijo/a dice que una tela específica 'le pica' aunque a ti te parezca suave.",
+    "good": "Reconoces que su piel puede percibir texturas distinto a la tuya.",
+    "bad": "Le dices que 'no puede picar, es tela suave' y lo ignoras."
+  },
+  {
+    "q": "Tu hijo/a preadolescente comenta que se siente 'vigilado/a' en el aula.",
+    "good": "Validas su sensación y exploras juntos qué la provoca.",
+    "bad": "Le dices que 'nadie lo está vigilando' de forma cortante."
+  },
+  {
+    "q": "Tu hijo/a expresa que un lugar de vacaciones 'no le gustó nada' aunque parecía disfrutarlo.",
+    "good": "Aceptas que su experiencia interna puede ser distinta a lo que mostró.",
+    "bad": "Le dices que 'se veía feliz, no puede ser cierto' y lo descartas."
+  },
+  {
+    "q": "Tu hijo/a dice que 'algo cambió' en la relación con un amigo, sin poder precisar qué.",
+    "good": "Le das espacio para procesar esa sensación sin exigir una explicación exacta.",
+    "bad": "Le dices que 'está imaginando cosas' sin explorar más."
+  },
+  {
+    "q": "Tu hijo/a de 6 años dice que el agua de la piscina 'se siente distinta' hoy.",
+    "good": "Confías en su percepción sensorial aunque no notes la diferencia.",
+    "bad": "Le dices que 'el agua es la misma de siempre' y lo ignoras."
+  },
+  {
+    "q": "Tu hijo/a adolescente comenta que un profesor 'tiene favoritos' en la clase.",
+    "good": "Tomas en serio su percepción y le preguntas qué observó concretamente.",
+    "bad": "Le dices que 'seguro lo imagina' sin considerar su punto de vista."
+  },
+  {
+    "q": "Tu hijo/a expresa que se siente 'fuera de lugar' en las reuniones familiares grandes.",
+    "good": "Validas esa sensación sin necesidad de que coincida con tu propia experiencia.",
+    "bad": "Le dices que 'es su familia, debería sentirse cómodo' sin escuchar más."
+  },
+  {
+    "q": "Tu hijo/a insiste en que un olor en la casa nueva 'es muy fuerte', aunque tú no lo notes.",
+    "good": "Aceptas que su olfato puede captar algo que el tuyo no percibe.",
+    "bad": "Le dices que 'no hay ningún olor' de forma cortante."
+  },
+  {
+    "q": "Tu hijo/a preadolescente dice que sintió que 'lo miraron feo' en el colegio.",
+    "good": "Validas su percepción y exploras juntos la situación específica.",
+    "bad": "Le dices que 'seguro no fue nada' sin indagar más."
+  },
+  {
+    "q": "Tu hijo/a expresa miedo a un objeto cotidiano (una máscara, un muñeco) que a ti no te parece amenazante.",
+    "good": "Aceptas que su miedo es real para su experiencia, sin descalificarlo.",
+    "bad": "Le dices que 'eso no da miedo a nadie' de forma tajante."
+  },
+  {
+    "q": "Tu hijo/a dice que 'algo anda mal' en la familia, sin poder identificar qué exactamente.",
+    "good": "Reconoces que puede estar percibiendo una tensión real y le das espacio para hablar.",
+    "bad": "Le dices que 'no pasa nada' cuando en realidad sí hay tensión."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que la etiqueta de su ropa 'le molesta muchísimo'.",
+    "good": "Confías en su sensibilidad sensorial y buscas cortarla o cambiar la prenda.",
+    "bad": "Le dices que 'no puede molestar tanto una etiqueta' y lo ignoras."
+  },
+  {
+    "q": "Tu hijo/a adulto joven expresa que se siente 'invisible' en su grupo de amigos actual.",
+    "good": "Validas ese sentimiento y le preguntas qué lo lleva a sentirse así.",
+    "bad": "Le dices que 'seguro lo quieren igual' sin explorar su experiencia."
+  },
+  {
+    "q": "Tu hijo/a dice que un juego en el recreo 'no se sintió justo', sin poder explicar bien por qué.",
+    "good": "Le das espacio para procesarlo, validando que hay algo real detrás.",
+    "bad": "Le exiges una explicación lógica inmediata o descartas su queja."
+  },
+  {
+    "q": "Tu hijo/a expresa que la voz de cierto adulto 'le resulta insoportable' de escuchar.",
+    "good": "Aceptas que su percepción auditiva es distinta y buscas reducir la exposición.",
+    "bad": "Le dices que 'no puede ser tan sensible' con la voz de alguien."
+  },
+  {
+    "q": "Tu hijo/a preadolescente dice que sintió 'algo raro' en el ambiente de una fiesta.",
+    "good": "Validas la sensación y le preguntas qué notó específicamente.",
+    "bad": "Le dices que 'la fiesta estaba bien' sin considerar su percepción."
+  },
+  {
+    "q": "Tu hijo/a insiste en que necesita revisar la puerta varias veces antes de dormir.",
+    "good": "Le preguntas qué hay detrás de esa necesidad antes de decirle que pare.",
+    "bad": "Le dices que 'es una tontería revisar tantas veces' sin explorar más."
+  },
+  {
+    "q": "Tu hijo/a dice que el uniforme escolar 'se siente distinto' desde que lo lavaron con otro jabón.",
+    "good": "Confías en su percepción sensorial y consideras volver al jabón anterior.",
+    "bad": "Le dices que 'es la misma ropa de siempre' y lo descartas."
+  },
+  {
+    "q": "Tu hijo/a adolescente expresa que sintió 'energía negativa' en un lugar específico.",
+    "good": "Validas que percibió algo incómodo, sin necesidad de explicarlo racionalmente.",
+    "bad": "Le dices que 'eso no existe' descartando su experiencia por completo."
+  },
+  {
+    "q": "Tu hijo/a dice que un compañero 'habla distinto' con él/ella que con los demás.",
+    "good": "Tomas en serio su observación y exploras juntos qué está notando.",
+    "bad": "Le dices que 'está imaginando cosas' sin considerar su percepción."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que la comida 'sabe distinta' aunque sea la misma receta de siempre.",
+    "good": "Aceptas que su percepción del sabor puede variar y le preguntas qué nota diferente.",
+    "bad": "Le dices que 'es la misma comida de siempre' de forma tajante."
+  },
+  {
+    "q": "Tu hijo/a expresa que se siente 'atrapado/a' en una rutina que antes disfrutaba.",
+    "good": "Validas ese cambio de sentir sin cuestionar por qué antes le gustaba.",
+    "bad": "Le dices que 'antes le encantaba, no puede haber cambiado' así de rápido."
+  },
+  {
+    "q": "Tu hijo/a preadolescente dice que un espacio del colegio 'le da mala espina'.",
+    "good": "Confías en su intuición y exploras juntos qué le genera esa sensación.",
+    "bad": "Le dices que 'no hay nada de qué preocuparse ahí' sin indagar."
+  },
+  {
+    "q": "Tu hijo/a insiste en que necesita que las cosas estén en un orden específico para sentirse bien.",
+    "good": "Reconoces que ese orden le da seguridad, sin llamarlo exageración.",
+    "bad": "Le dices que 'no importa el orden' y lo desordenas sin avisar."
+  },
+  {
+    "q": "Tu hijo/a adulto joven expresa que un comentario de un familiar 'le dolió' aunque parecía inocente.",
+    "good": "Validas que el impacto fue real para él/ella, más allá de la intención del comentario.",
+    "bad": "Le dices que 'no era para tanto, seguro no quiso ofender'."
+  },
+  {
+    "q": "Tu hijo/a dice que 'algo se siente distinto' en su cuerpo, sin lograr describirlo bien.",
+    "good": "Tomas en serio la señal corporal y buscas juntos más información.",
+    "bad": "Le dices que 'seguro no es nada' sin explorar más su sensación."
+  },
+  {
+    "q": "Tu hijo/a de primaria expresa que un peinado nuevo 'le molesta toda la cabeza'.",
+    "good": "Confías en su sensibilidad y buscas un peinado más cómodo para él/ella.",
+    "bad": "Le dices que 'se ve bien así' ignorando su molestia física."
+  },
+  {
+    "q": "Tu hijo/a insiste en que prefiere comer siempre lo mismo, y tú te preocupas por eso.",
+    "good": "Validas que esa previsibilidad le da seguridad, sin forzar variedad de golpe.",
+    "bad": "Le dices que 'tiene que comer variado como todos' sin explorar el porqué."
+  },
+  {
+    "q": "Tu hijo/a adolescente expresa que se siente 'juzgado/a' por su forma de vestir en el colegio.",
+    "good": "Validas su percepción y le preguntas qué situaciones concretas se lo hicieron sentir así.",
+    "bad": "Le dices que 'nadie lo está juzgando' sin considerar su experiencia."
+  },
+  {
+    "q": "Tu hijo/a dice que el ruido del ventilador 'no lo deja pensar'.",
+    "good": "Aceptas que su percepción auditiva es distinta y buscas una alternativa.",
+    "bad": "Le dices que 'es un ruido mínimo' y lo dejas encendido igual."
+  },
+  {
+    "q": "Tu hijo/a preadolescente insiste en que 'algo cambió' en cómo lo tratan sus abuelos.",
+    "good": "Tomas en serio su observación y exploras con calma qué percibió.",
+    "bad": "Le dices que 'seguro no cambió nada' sin indagar más."
+  },
+  {
+    "q": "Tu hijo/a expresa que necesita que le expliquen todo antes de un cambio, aunque parezca simple.",
+    "good": "Reconoces esa necesidad de información como legítima, no como capricho.",
+    "bad": "Le dices que 'no necesita tanta explicación para algo tan simple'."
+  },
+  {
+    "q": "Tu hijo/a dice que un chiste que otros encuentran gracioso a él/ella 'le incomodó'.",
+    "good": "Validas su incomodidad sin necesidad de que coincida con la reacción del grupo.",
+    "bad": "Le dices que 'es solo un chiste, no seas exagerado/a'."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que su mochila 'pesa distinto' cada día.",
+    "good": "Confías en su percepción del peso y revisan juntos el contenido.",
+    "bad": "Le dices que 'pesa lo mismo de siempre' sin revisar nada."
+  },
+  {
+    "q": "Tu hijo/a adulto joven expresa que sintió 'un mal presentimiento' antes de un evento.",
+    "good": "Validas su intuición sin necesidad de que se confirme racionalmente.",
+    "bad": "Le dices que 'eso no significa nada' descartando su percepción."
+  },
+  {
+    "q": "Tu hijo/a dice que la temperatura de un cuarto 'está helada' cuando a ti te parece templada.",
+    "good": "Aceptas que su termorregulación puede ser distinta y ajustas el ambiente.",
+    "bad": "Le dices que 'no hace tanto frío' sin considerar su sensación."
+  },
+  {
+    "q": "Tu hijo/a preadolescente insiste en que un amigo 'ya no es el mismo' últimamente.",
+    "good": "Tomas en serio su percepción del cambio y exploras juntos qué nota.",
+    "bad": "Le dices que 'está viendo cosas que no existen' sin indagar."
+  },
+  {
+    "q": "Tu hijo/a expresa que se siente 'raro/a' con su propio cuerpo en esta etapa.",
+    "good": "Validas que esa sensación es parte de un proceso real, sin minimizarla.",
+    "bad": "Le dices que 'es normal, no le des tanta importancia' cerrando el tema."
+  },
+  {
+    "q": "Tu hijo/a dice que el sonido de cierto electrodoméstico 'le lastima los oídos'.",
+    "good": "Confías en su experiencia sensorial y buscas reducir ese sonido.",
+    "bad": "Le dices que 'no puede lastimar, es un ruido normal'."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que 'algo se ve distinto' en su cuarto tras una limpieza.",
+    "good": "Validas que notó un cambio real en su entorno y le preguntas qué es.",
+    "bad": "Le dices que 'no cambió nada' sin revisar lo que percibió."
+  },
+  {
+    "q": "Tu hijo/a adolescente expresa que sintió que 'lo excluyeron a propósito' de un plan grupal.",
+    "good": "Validas su percepción y exploras juntos qué evidencia tiene.",
+    "bad": "Le dices que 'seguro fue sin intención' sin escuchar su punto de vista."
+  },
+  {
+    "q": "Tu hijo/a dice que un masaje o abrazo 'duele' aunque se aplique con suavidad.",
+    "good": "Confías en su umbral sensorial distinto y ajustas el contacto físico.",
+    "bad": "Le dices que 'no puede doler, es solo un abrazo suave'."
+  },
+  {
+    "q": "Tu hijo/a preadolescente insiste en que un profesor 'cambió su forma de tratarlo/a'.",
+    "good": "Tomas en serio la observación y consideras indagar en el colegio.",
+    "bad": "Le dices que 'seguro lo imagina' sin considerar la posibilidad."
+  },
+  {
+    "q": "Tu hijo/a expresa que 'algo no se siente bien' respecto a una persona nueva en la familia.",
+    "good": "Validas esa intuición sin forzarlo a confiar de inmediato en esa persona.",
+    "bad": "Le dices que 'tiene que confiar porque es de la familia'."
+  },
+  {
+    "q": "Tu hijo/a dice que las luces de navidad 'son demasiado intensas' para él/ella.",
+    "good": "Confías en su sensibilidad visual y ajustas la intensidad o cantidad.",
+    "bad": "Le dices que 'a todos les gustan las luces' ignorando su molestia."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que 'siente que algo va a salir mal' antes de un evento.",
+    "good": "Validas su ansiedad anticipatoria sin descartarla como infundada.",
+    "bad": "Le dices que 'no tiene sentido pensar eso' cerrando el tema."
+  },
+  {
+    "q": "Tu hijo/a adulto joven expresa que un grupo de estudio 'no se siente seguro' para participar.",
+    "good": "Validas esa sensación y le preguntas qué la genera específicamente.",
+    "bad": "Le dices que 'está exagerando, es solo estudiar' sin explorar más."
+  },
+  {
+    "q": "Tu hijo/a dice que 'algo cambió' en el sabor de su comida favorita.",
+    "good": "Confías en su percepción del sabor, aunque la receta sea la misma.",
+    "bad": "Le dices que 'es imposible que haya cambiado' sin más."
+  },
+  {
+    "q": "Tu hijo/a preadolescente insiste en que una prenda nueva 'se siente pesada' aunque sea liviana.",
+    "good": "Aceptas que su percepción del peso en la piel puede ser distinta.",
+    "bad": "Le dices que 'es súper liviana' ignorando lo que siente."
+  },
+  {
+    "q": "Tu hijo/a expresa que sintió 'algo extraño' al entrar a una casa nueva.",
+    "good": "Validas esa sensación sin necesidad de identificar una causa lógica.",
+    "bad": "Le dices que 'no hay nada extraño ahí' de forma cortante."
+  },
+  {
+    "q": "Tu hijo/a dice que el silencio de la casa 'se siente pesado' cuando está solo/a un rato.",
+    "good": "Confías en su experiencia del ambiente y le ofreces compañía o ruido suave.",
+    "bad": "Le dices que 'el silencio no puede sentirse pesado' descartándolo."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que 'algo picó' aunque no encuentres marca visible.",
+    "good": "Confías en su sensación corporal y revisas con calma junto a él/ella.",
+    "bad": "Le dices que 'no hay nada, está imaginando' sin revisar nada."
+  },
+  {
+    "q": "Tu hijo/a adolescente expresa que se siente 'diferente' a sus compañeros de forma que le pesa.",
+    "good": "Validas ese sentimiento sin apresurarte a decir que 'todos se sienten así'.",
+    "bad": "Le dices rápido que es normal, cerrando la conversación sin explorar más."
+  },
+  {
+    "q": "Tu hijo/a dice que un episodio de una serie 'lo dejó mal' aunque a ti te pareciera liviano.",
+    "good": "Validas el impacto que tuvo en él/ella, independiente de tu propia percepción.",
+    "bad": "Le dices que 'era solo una serie, no exageres'."
+  },
+  {
+    "q": "Tu hijo/a preadolescente insiste en que 'algo distinto' pasa con su cuerpo que le preocupa.",
+    "good": "Tomas en serio su preocupación y buscan información juntos o consultan a un profesional.",
+    "bad": "Le dices que 'no le pasa nada' sin considerar la posibilidad."
+  },
+  {
+    "q": "Tu hijo/a expresa que un lugar de vacaciones 'se sintió abrumador' aunque a la familia le encantó.",
+    "good": "Validas su experiencia distinta sin forzarlo a compartir el entusiasmo general.",
+    "bad": "Le dices que 'a todos les encantó, no entiendo por qué a ti no'."
+  },
+  {
+    "q": "Tu hijo/a dice que 'algo no cuadra' en una explicación que le diste sobre una regla.",
+    "good": "Revisas junto a él/ella la explicación para ver si hay una inconsistencia real.",
+    "bad": "Le dices que 'no cuestione todo' sin revisar tu propia explicación."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que necesita dormir con la puerta en cierta posición exacta.",
+    "good": "Reconoces que esa configuración le da seguridad, sin llamarlo capricho.",
+    "bad": "Le dices que 'no importa cómo quede la puerta' y la dejas como quieras."
+  },
+  {
+    "q": "Tu hijo/a adulto joven expresa que un consejo bienintencionado 'le hizo sentir peor'.",
+    "good": "Validas ese efecto, aunque la intención detrás fuera buena.",
+    "bad": "Le dices que 'era para ayudarte, no te lo tomes así'."
+  },
+  {
+    "q": "Tu hijo/a dice que 'algo huele distinto' en la ropa recién lavada.",
+    "good": "Confías en su sensibilidad olfativa y consideras cambiar el detergente.",
+    "bad": "Le dices que 'huele igual de siempre' sin considerar su percepción."
+  },
+  {
+    "q": "Tu hijo/a preadolescente insiste en que un familiar 'lo trata distinto' que a sus primos.",
+    "good": "Tomas en serio su percepción y exploras juntos ejemplos concretos.",
+    "bad": "Le dices que 'todos son tratados igual' sin explorar su experiencia."
+  },
+  {
+    "q": "Tu hijo/a expresa que se siente 'incómodo/a' usando cierto tipo de calzado nuevo.",
+    "good": "Confías en su sensación y buscan una alternativa más cómoda juntos.",
+    "bad": "Le dices que 'ya se va a acostumbrar' sin considerar cambiarlo."
+  },
+  {
+    "q": "Tu hijo/a dice que 'siente que algo va a pasar' antes de una mudanza, con angustia real.",
+    "good": "Validas la angustia anticipatoria y le das información concreta disponible.",
+    "bad": "Le dices que 'no tiene por qué sentir eso' descartando la emoción."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que un juguete roto 'todavía se siente especial' para guardarlo.",
+    "good": "Respetas ese vínculo emocional con el objeto, sin apurar a tirarlo.",
+    "bad": "Le dices que 'está roto, no sirve para nada' y lo descartas."
+  },
+  {
+    "q": "Tu hijo/a adolescente expresa que sintió 'tensión' en una conversación familiar que a ti te pareció normal.",
+    "good": "Validas que percibió algo real, aunque tú no lo hayas notado igual.",
+    "bad": "Le dices que 'todo estaba tranquilo, no sé de qué hablas'."
+  },
+  {
+    "q": "Tu hijo/a dice que 'algo se siente distinto' en su relación con un hermano/a últimamente.",
+    "good": "Tomas en serio esa percepción y exploras juntos qué está cambiando.",
+    "bad": "Le dices que 'todo sigue igual' sin considerar su experiencia."
+  },
+  {
+    "q": "Tu hijo/a preadolescente insiste en que necesita revisar sus tareas varias veces antes de entregar.",
+    "good": "Reconoces que esa necesidad de certeza es real para él/ella, sin apurar el proceso.",
+    "bad": "Le dices que 'una revisión basta' sin considerar su necesidad."
+  },
+  {
+    "q": "Tu hijo/a expresa que un cambio de clima 'le afecta el ánimo' de forma notoria.",
+    "good": "Validas esa conexión entre clima y estado de ánimo sin descartarla.",
+    "bad": "Le dices que 'el clima no tiene nada que ver con el ánimo'."
+  },
+  {
+    "q": "Tu hijo/a dice que 'algo se siente injusto' en una regla familiar, sin poder argumentarlo del todo.",
+    "good": "Le das espacio para procesar esa sensación y exploras el tema juntos después.",
+    "bad": "Le dices que 'las reglas no se cuestionan' cerrando la conversación."
+  },
+  {
+    "q": "Tu hijo/a de primaria insiste en que 'algo raro' pasa con un amigo imaginario que menciona.",
+    "good": "Aceptas ese mundo interno como parte válida de su desarrollo, sin ridiculizarlo.",
+    "bad": "Le dices que 'eso no existe' descalificando su experiencia interna."
+  },
+  {
+    "q": "Tu hijo/a adulto joven expresa que sintió 'un límite cruzado' en una conversación con un familiar.",
+    "good": "Validas que su límite es legítimo, aunque el familiar no lo haya notado.",
+    "bad": "Le dices que 'seguro no fue su intención, no te pongas así'."
+  },
+  {
+    "q": "Tu hijo/a dice que un abrazo grupal en una despedida 'se sintió demasiado' para él/ella.",
+    "good": "Validas que la intensidad del contacto físico grupal puede abrumarlo, sin exigir que participe igual que otros.",
+    "bad": "Le dices que 'era solo cariño, no exageres' restando importancia a su malestar."
+  },
+  {
+    "q": "Tu hijo/a preadolescente insiste en que 'algo no está bien' con un plan familiar, sin poder justificarlo con datos.",
+    "good": "Tomas en serio su intuición y revisan juntos los detalles del plan.",
+    "bad": "Le dices que 'no tiene fundamento' sin considerar su percepción."
+  },
+  {
+    "q": "Tu hijo/a expresa que una silla de ruedas o andador ajeno 'le da curiosidad, no miedo', y tú asumes lo contrario.",
+    "good": "Le preguntas qué siente realmente en vez de asumir su reacción.",
+    "bad": "Le apartas rápidamente asumiendo que le da miedo sin confirmarlo."
+  },
+  {
+    "q": "Tu hijo/a de primaria dice que 'se siente distinto' un día en que en apariencia todo está normal.",
+    "good": "Confías en que algo real está pasando, aunque no sea evidente para ti.",
+    "bad": "Le dices que 'no puede sentirse distinto sin motivo' y lo ignoras."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

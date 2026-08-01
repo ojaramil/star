@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Identificar Diferencias Neurológicas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #3b82f6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #3b82f6, #3b82f6cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #3b82f6cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      <span>Comprender la Neurodivergencia</span>
+    </span>
+    <h1>🧠 Identificar Diferencias Neurológicas</h1>
+    <p>Comprender procesamiento, atención, funciones ejecutivas y comunicación.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "identificar-diferencias-neurologicas";
+const SITUACIONES = [
+  {
+    "q": "Tu hijo/a tarda mucho más que sus hermanos en terminar la tarea.",
+    "good": "Reconoces que su ritmo de procesamiento es distinto y ajustas expectativas de tiempo.",
+    "bad": "Lo comparas con sus hermanos y le dices que se esfuerce más."
+  },
+  {
+    "q": "Da instrucciones de tres pasos y solo hace el primero.",
+    "good": "Entiendes que la memoria de trabajo puede saturarse y das un paso a la vez.",
+    "bad": "Repites la instrucción completa cada vez más fuerte."
+  },
+  {
+    "q": "Tu hijo/a se distrae fácilmente durante la cena familiar.",
+    "good": "Sabes que sostener atención en ambientes con múltiples estímulos le cuesta más.",
+    "bad": "Lo regañas por 'no prestar atención nunca'."
+  },
+  {
+    "q": "No logra empezar una tarea aunque sabe cómo hacerla.",
+    "good": "Reconoces una dificultad de inicio ejecutivo y lo ayudas a arrancar juntos.",
+    "bad": "Le dices que es puro flojera y lo dejas solo con la tarea."
+  },
+  {
+    "q": "Tu hijo/a habla de forma muy literal y no capta el sarcasmo.",
+    "good": "Ajustas tu lenguaje para ser más directo y claro con él/ella.",
+    "bad": "Te burlas de que 'nunca entiende las bromas'."
+  },
+  {
+    "q": "Se hiperconcentra en un tema y no nota que lo llamas.",
+    "good": "Reconoces que su atención funciona distinto, no que te ignora.",
+    "bad": "Le apagas el interés bruscamente para obligarlo a responder."
+  },
+  {
+    "q": "Olvida llevar sus cosas al colegio a pesar de recordatorios.",
+    "good": "Entiendes que la organización ejecutiva necesita apoyos externos (listas, rutinas visuales).",
+    "bad": "Lo culpas de ser 'despistado a propósito'."
+  },
+  {
+    "q": "Tu hijo/a necesita más tiempo para responder una pregunta.",
+    "good": "Le das espacio de silencio sin apresurarlo a contestar.",
+    "bad": "Respondes por él/ella o repites la pregunta impaciente."
+  },
+  {
+    "q": "Se equivoca de nuevo en algo que ya se le explicó varias veces.",
+    "good": "Consideras que la generalización de aprendizajes puede tardar más y repites con paciencia.",
+    "bad": "Le dices que 'nunca aprende' y te frustras visiblemente."
+  },
+  {
+    "q": "Tu hijo/a cambia de tema abruptamente en una conversación.",
+    "good": "Reconoces que su asociación de ideas funciona distinto y sigues el hilo con curiosidad.",
+    "bad": "Lo corriges por 'no seguir la conversación como debería'."
+  },
+  {
+    "q": "No nota cuándo terminó su turno de hablar y sigue hablando.",
+    "good": "Le enseñas con calma señales concretas para identificar el cambio de turno.",
+    "bad": "Lo callas abruptamente delante de otros."
+  },
+  {
+    "q": "Tu hijo/a necesita rutinas exactas para funcionar bien en la mañana.",
+    "good": "Entiendes que la previsibilidad reduce la carga cognitiva, no es capricho.",
+    "bad": "Le dices que 'es demasiado exigente' con los horarios."
+  },
+  {
+    "q": "Se le dificulta planear los pasos para un proyecto escolar.",
+    "good": "Lo ayudas a dividir el proyecto en pasos pequeños, apoyando la función ejecutiva.",
+    "bad": "Le dices que se organice solo, 'ya tiene edad'."
+  },
+  {
+    "q": "Tu hijo/a repite palabras o frases de programas que le gustan.",
+    "good": "Reconoces la ecolalia como parte de su comunicación y respondes con interés.",
+    "bad": "Le dices que deje de hablar 'raro'."
+  },
+  {
+    "q": "No identifica cuándo alguien está aburrido de escucharlo.",
+    "good": "Le das después, en privado, señales concretas para reconocer el desinterés ajeno.",
+    "bad": "Lo avergüenzas delante de otros diciéndole que 'aburre a todos'."
+  },
+  {
+    "q": "Tu hijo/a necesita moverse constantemente mientras estudia.",
+    "good": "Permites el movimiento (pelota, balanceo) como apoyo a su concentración.",
+    "bad": "Le exiges quedarse quieto para poder estudiar 'bien'."
+  },
+  {
+    "q": "Confunde el orden de los días de la semana en la rutina.",
+    "good": "Usas un calendario visual para apoyar su organización temporal.",
+    "bad": "Le dices que 'ya debería saberlo' a su edad."
+  },
+  {
+    "q": "Tu hijo/a se pierde en instrucciones verbales largas.",
+    "good": "Acompañas la instrucción con apoyos visuales o la divides en partes.",
+    "bad": "Repites la instrucción larga cada vez más rápido."
+  },
+  {
+    "q": "Necesita anticipación de varios días para un cambio de plan.",
+    "good": "Le avisas con tiempo y usas apoyos visuales de la nueva rutina.",
+    "bad": "Le avisas al último momento y esperas que se adapte rápido."
+  },
+  {
+    "q": "Tu hijo/a procesa mejor la información escrita que la hablada.",
+    "good": "Le das instrucciones por escrito o con dibujos cuando es posible.",
+    "bad": "Insistes en explicarle todo solo de forma oral y rápida."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a tarda mucho más que sus hermanos en terminar la tarea.",
+    "good": "Bajas la demanda inmediata y reconoces que su ritmo de procesamiento es distinto y ajustas expectativas de tiempo.",
+    "bad": "Aceleras la situación y lo comparas con sus hermanos y le dices que se esfuerce más."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: da instrucciones de tres pasos y solo hace el primero.",
+    "good": "Bajas la demanda inmediata y entiendes que la memoria de trabajo puede saturarse y das un paso a la vez.",
+    "bad": "Aceleras la situación y repites la instrucción completa cada vez más fuerte."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a se distrae fácilmente durante la cena familiar.",
+    "good": "Bajas la demanda inmediata y sabes que sostener atención en ambientes con múltiples estímulos le cuesta más.",
+    "bad": "Aceleras la situación y lo regañas por 'no prestar atención nunca'."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: no logra empezar una tarea aunque sabe cómo hacerla.",
+    "good": "Bajas la demanda inmediata y reconoces una dificultad de inicio ejecutivo y lo ayudas a arrancar juntos.",
+    "bad": "Aceleras la situación y le dices que es puro flojera y lo dejas solo con la tarea."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a habla de forma muy literal y no capta el sarcasmo.",
+    "good": "Bajas la demanda inmediata y ajustas tu lenguaje para ser más directo y claro con él/ella.",
+    "bad": "Aceleras la situación y te burlas de que 'nunca entiende las bromas'."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: se hiperconcentra en un tema y no nota que lo llamas.",
+    "good": "Bajas la demanda inmediata y reconoces que su atención funciona distinto, no que te ignora.",
+    "bad": "Aceleras la situación y le apagas el interés bruscamente para obligarlo a responder."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: olvida llevar sus cosas al colegio a pesar de recordatorios.",
+    "good": "Bajas la demanda inmediata y entiendes que la organización ejecutiva necesita apoyos externos (listas, rutinas visuales).",
+    "bad": "Aceleras la situación y lo culpas de ser 'despistado a propósito'."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a necesita más tiempo para responder una pregunta.",
+    "good": "Bajas la demanda inmediata y le das espacio de silencio sin apresurarlo a contestar.",
+    "bad": "Aceleras la situación y respondes por él/ella o repites la pregunta impaciente."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: se equivoca de nuevo en algo que ya se le explicó varias veces.",
+    "good": "Bajas la demanda inmediata y consideras que la generalización de aprendizajes puede tardar más y repites con paciencia.",
+    "bad": "Aceleras la situación y le dices que 'nunca aprende' y te frustras visiblemente."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a cambia de tema abruptamente en una conversación.",
+    "good": "Bajas la demanda inmediata y reconoces que su asociación de ideas funciona distinto y sigues el hilo con curiosidad.",
+    "bad": "Aceleras la situación y lo corriges por 'no seguir la conversación como debería'."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: no nota cuándo terminó su turno de hablar y sigue hablando.",
+    "good": "Bajas la demanda inmediata y le enseñas con calma señales concretas para identificar el cambio de turno.",
+    "bad": "Aceleras la situación y lo callas abruptamente delante de otros."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a necesita rutinas exactas para funcionar bien en la mañana.",
+    "good": "Bajas la demanda inmediata y entiendes que la previsibilidad reduce la carga cognitiva, no es capricho.",
+    "bad": "Aceleras la situación y le dices que 'es demasiado exigente' con los horarios."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: se le dificulta planear los pasos para un proyecto escolar.",
+    "good": "Bajas la demanda inmediata y lo ayudas a dividir el proyecto en pasos pequeños, apoyando la función ejecutiva.",
+    "bad": "Aceleras la situación y le dices que se organice solo, 'ya tiene edad'."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a repite palabras o frases de programas que le gustan.",
+    "good": "Bajas la demanda inmediata y reconoces la ecolalia como parte de su comunicación y respondes con interés.",
+    "bad": "Aceleras la situación y le dices que deje de hablar 'raro'."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: no identifica cuándo alguien está aburrido de escucharlo.",
+    "good": "Bajas la demanda inmediata y le das después, en privado, señales concretas para reconocer el desinterés ajeno.",
+    "bad": "Aceleras la situación y lo avergüenzas delante de otros diciéndole que 'aburre a todos'."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a necesita moverse constantemente mientras estudia.",
+    "good": "Bajas la demanda inmediata y permites el movimiento (pelota, balanceo) como apoyo a su concentración.",
+    "bad": "Aceleras la situación y le exiges quedarse quieto para poder estudiar 'bien'."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: confunde el orden de los días de la semana en la rutina.",
+    "good": "Bajas la demanda inmediata y usas un calendario visual para apoyar su organización temporal.",
+    "bad": "Aceleras la situación y le dices que 'ya debería saberlo' a su edad."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a se pierde en instrucciones verbales largas.",
+    "good": "Bajas la demanda inmediata y acompañas la instrucción con apoyos visuales o la divides en partes.",
+    "bad": "Aceleras la situación y repites la instrucción larga cada vez más rápido."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: necesita anticipación de varios días para un cambio de plan.",
+    "good": "Bajas la demanda inmediata y le avisas con tiempo y usas apoyos visuales de la nueva rutina.",
+    "bad": "Aceleras la situación y le avisas al último momento y esperas que se adapte rápido."
+  },
+  {
+    "q": "En una mañana con poco tiempo antes de salir, cuando tu hijo/a ya muestra señales de saturación: tu hijo/a procesa mejor la información escrita que la hablada.",
+    "good": "Bajas la demanda inmediata y le das instrucciones por escrito o con dibujos cuando es posible.",
+    "bad": "Aceleras la situación y insistes en explicarle todo solo de forma oral y rápida."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a tarda mucho más que sus hermanos en terminar la tarea.",
+    "good": "Consideras la carga acumulada y reconoces que su ritmo de procesamiento es distinto y ajustas expectativas de tiempo.",
+    "bad": "Ignoras el cansancio acumulado y lo comparas con sus hermanos y le dices que se esfuerce más."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: da instrucciones de tres pasos y solo hace el primero.",
+    "good": "Consideras la carga acumulada y entiendes que la memoria de trabajo puede saturarse y das un paso a la vez.",
+    "bad": "Ignoras el cansancio acumulado y repites la instrucción completa cada vez más fuerte."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a se distrae fácilmente durante la cena familiar.",
+    "good": "Consideras la carga acumulada y sabes que sostener atención en ambientes con múltiples estímulos le cuesta más.",
+    "bad": "Ignoras el cansancio acumulado y lo regañas por 'no prestar atención nunca'."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: no logra empezar una tarea aunque sabe cómo hacerla.",
+    "good": "Consideras la carga acumulada y reconoces una dificultad de inicio ejecutivo y lo ayudas a arrancar juntos.",
+    "bad": "Ignoras el cansancio acumulado y le dices que es puro flojera y lo dejas solo con la tarea."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a habla de forma muy literal y no capta el sarcasmo.",
+    "good": "Consideras la carga acumulada y ajustas tu lenguaje para ser más directo y claro con él/ella.",
+    "bad": "Ignoras el cansancio acumulado y te burlas de que 'nunca entiende las bromas'."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: se hiperconcentra en un tema y no nota que lo llamas.",
+    "good": "Consideras la carga acumulada y reconoces que su atención funciona distinto, no que te ignora.",
+    "bad": "Ignoras el cansancio acumulado y le apagas el interés bruscamente para obligarlo a responder."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: olvida llevar sus cosas al colegio a pesar de recordatorios.",
+    "good": "Consideras la carga acumulada y entiendes que la organización ejecutiva necesita apoyos externos (listas, rutinas visuales).",
+    "bad": "Ignoras el cansancio acumulado y lo culpas de ser 'despistado a propósito'."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a necesita más tiempo para responder una pregunta.",
+    "good": "Consideras la carga acumulada y le das espacio de silencio sin apresurarlo a contestar.",
+    "bad": "Ignoras el cansancio acumulado y respondes por él/ella o repites la pregunta impaciente."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: se equivoca de nuevo en algo que ya se le explicó varias veces.",
+    "good": "Consideras la carga acumulada y consideras que la generalización de aprendizajes puede tardar más y repites con paciencia.",
+    "bad": "Ignoras el cansancio acumulado y le dices que 'nunca aprende' y te frustras visiblemente."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a cambia de tema abruptamente en una conversación.",
+    "good": "Consideras la carga acumulada y reconoces que su asociación de ideas funciona distinto y sigues el hilo con curiosidad.",
+    "bad": "Ignoras el cansancio acumulado y lo corriges por 'no seguir la conversación como debería'."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: no nota cuándo terminó su turno de hablar y sigue hablando.",
+    "good": "Consideras la carga acumulada y le enseñas con calma señales concretas para identificar el cambio de turno.",
+    "bad": "Ignoras el cansancio acumulado y lo callas abruptamente delante de otros."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a necesita rutinas exactas para funcionar bien en la mañana.",
+    "good": "Consideras la carga acumulada y entiendes que la previsibilidad reduce la carga cognitiva, no es capricho.",
+    "bad": "Ignoras el cansancio acumulado y le dices que 'es demasiado exigente' con los horarios."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: se le dificulta planear los pasos para un proyecto escolar.",
+    "good": "Consideras la carga acumulada y lo ayudas a dividir el proyecto en pasos pequeños, apoyando la función ejecutiva.",
+    "bad": "Ignoras el cansancio acumulado y le dices que se organice solo, 'ya tiene edad'."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a repite palabras o frases de programas que le gustan.",
+    "good": "Consideras la carga acumulada y reconoces la ecolalia como parte de su comunicación y respondes con interés.",
+    "bad": "Ignoras el cansancio acumulado y le dices que deje de hablar 'raro'."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: no identifica cuándo alguien está aburrido de escucharlo.",
+    "good": "Consideras la carga acumulada y le das después, en privado, señales concretas para reconocer el desinterés ajeno.",
+    "bad": "Ignoras el cansancio acumulado y lo avergüenzas delante de otros diciéndole que 'aburre a todos'."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a necesita moverse constantemente mientras estudia.",
+    "good": "Consideras la carga acumulada y permites el movimiento (pelota, balanceo) como apoyo a su concentración.",
+    "bad": "Ignoras el cansancio acumulado y le exiges quedarse quieto para poder estudiar 'bien'."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: confunde el orden de los días de la semana en la rutina.",
+    "good": "Consideras la carga acumulada y usas un calendario visual para apoyar su organización temporal.",
+    "bad": "Ignoras el cansancio acumulado y le dices que 'ya debería saberlo' a su edad."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a se pierde en instrucciones verbales largas.",
+    "good": "Consideras la carga acumulada y acompañas la instrucción con apoyos visuales o la divides en partes.",
+    "bad": "Ignoras el cansancio acumulado y repites la instrucción larga cada vez más rápido."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: necesita anticipación de varios días para un cambio de plan.",
+    "good": "Consideras la carga acumulada y le avisas con tiempo y usas apoyos visuales de la nueva rutina.",
+    "bad": "Ignoras el cansancio acumulado y le avisas al último momento y esperas que se adapte rápido."
+  },
+  {
+    "q": "Después de una jornada escolar exigente, cuando la familia espera que participe como siempre: tu hijo/a procesa mejor la información escrita que la hablada.",
+    "good": "Consideras la carga acumulada y le das instrucciones por escrito o con dibujos cuando es posible.",
+    "bad": "Ignoras el cansancio acumulado y insistes en explicarle todo solo de forma oral y rápida."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a tarda mucho más que sus hermanos en terminar la tarea.",
+    "good": "Proteges su necesidad real y reconoces que su ritmo de procesamiento es distinto y ajustas expectativas de tiempo.",
+    "bad": "Priorizas la expectativa de los demás y lo comparas con sus hermanos y le dices que se esfuerce más."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: da instrucciones de tres pasos y solo hace el primero.",
+    "good": "Proteges su necesidad real y entiendes que la memoria de trabajo puede saturarse y das un paso a la vez.",
+    "bad": "Priorizas la expectativa de los demás y repites la instrucción completa cada vez más fuerte."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a se distrae fácilmente durante la cena familiar.",
+    "good": "Proteges su necesidad real y sabes que sostener atención en ambientes con múltiples estímulos le cuesta más.",
+    "bad": "Priorizas la expectativa de los demás y lo regañas por 'no prestar atención nunca'."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: no logra empezar una tarea aunque sabe cómo hacerla.",
+    "good": "Proteges su necesidad real y reconoces una dificultad de inicio ejecutivo y lo ayudas a arrancar juntos.",
+    "bad": "Priorizas la expectativa de los demás y le dices que es puro flojera y lo dejas solo con la tarea."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a habla de forma muy literal y no capta el sarcasmo.",
+    "good": "Proteges su necesidad real y ajustas tu lenguaje para ser más directo y claro con él/ella.",
+    "bad": "Priorizas la expectativa de los demás y te burlas de que 'nunca entiende las bromas'."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: se hiperconcentra en un tema y no nota que lo llamas.",
+    "good": "Proteges su necesidad real y reconoces que su atención funciona distinto, no que te ignora.",
+    "bad": "Priorizas la expectativa de los demás y le apagas el interés bruscamente para obligarlo a responder."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: olvida llevar sus cosas al colegio a pesar de recordatorios.",
+    "good": "Proteges su necesidad real y entiendes que la organización ejecutiva necesita apoyos externos (listas, rutinas visuales).",
+    "bad": "Priorizas la expectativa de los demás y lo culpas de ser 'despistado a propósito'."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a necesita más tiempo para responder una pregunta.",
+    "good": "Proteges su necesidad real y le das espacio de silencio sin apresurarlo a contestar.",
+    "bad": "Priorizas la expectativa de los demás y respondes por él/ella o repites la pregunta impaciente."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: se equivoca de nuevo en algo que ya se le explicó varias veces.",
+    "good": "Proteges su necesidad real y consideras que la generalización de aprendizajes puede tardar más y repites con paciencia.",
+    "bad": "Priorizas la expectativa de los demás y le dices que 'nunca aprende' y te frustras visiblemente."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a cambia de tema abruptamente en una conversación.",
+    "good": "Proteges su necesidad real y reconoces que su asociación de ideas funciona distinto y sigues el hilo con curiosidad.",
+    "bad": "Priorizas la expectativa de los demás y lo corriges por 'no seguir la conversación como debería'."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: no nota cuándo terminó su turno de hablar y sigue hablando.",
+    "good": "Proteges su necesidad real y le enseñas con calma señales concretas para identificar el cambio de turno.",
+    "bad": "Priorizas la expectativa de los demás y lo callas abruptamente delante de otros."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a necesita rutinas exactas para funcionar bien en la mañana.",
+    "good": "Proteges su necesidad real y entiendes que la previsibilidad reduce la carga cognitiva, no es capricho.",
+    "bad": "Priorizas la expectativa de los demás y le dices que 'es demasiado exigente' con los horarios."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: se le dificulta planear los pasos para un proyecto escolar.",
+    "good": "Proteges su necesidad real y lo ayudas a dividir el proyecto en pasos pequeños, apoyando la función ejecutiva.",
+    "bad": "Priorizas la expectativa de los demás y le dices que se organice solo, 'ya tiene edad'."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a repite palabras o frases de programas que le gustan.",
+    "good": "Proteges su necesidad real y reconoces la ecolalia como parte de su comunicación y respondes con interés.",
+    "bad": "Priorizas la expectativa de los demás y le dices que deje de hablar 'raro'."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: no identifica cuándo alguien está aburrido de escucharlo.",
+    "good": "Proteges su necesidad real y le das después, en privado, señales concretas para reconocer el desinterés ajeno.",
+    "bad": "Priorizas la expectativa de los demás y lo avergüenzas delante de otros diciéndole que 'aburre a todos'."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a necesita moverse constantemente mientras estudia.",
+    "good": "Proteges su necesidad real y permites el movimiento (pelota, balanceo) como apoyo a su concentración.",
+    "bad": "Priorizas la expectativa de los demás y le exiges quedarse quieto para poder estudiar 'bien'."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: confunde el orden de los días de la semana en la rutina.",
+    "good": "Proteges su necesidad real y usas un calendario visual para apoyar su organización temporal.",
+    "bad": "Priorizas la expectativa de los demás y le dices que 'ya debería saberlo' a su edad."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a se pierde en instrucciones verbales largas.",
+    "good": "Proteges su necesidad real y acompañas la instrucción con apoyos visuales o la divides en partes.",
+    "bad": "Priorizas la expectativa de los demás y repites la instrucción larga cada vez más rápido."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: necesita anticipación de varios días para un cambio de plan.",
+    "good": "Proteges su necesidad real y le avisas con tiempo y usas apoyos visuales de la nueva rutina.",
+    "bad": "Priorizas la expectativa de los demás y le avisas al último momento y esperas que se adapte rápido."
+  },
+  {
+    "q": "En una visita familiar o social, cuando otras personas opinan sobre cómo debería comportarse: tu hijo/a procesa mejor la información escrita que la hablada.",
+    "good": "Proteges su necesidad real y le das instrucciones por escrito o con dibujos cuando es posible.",
+    "bad": "Priorizas la expectativa de los demás y insistes en explicarle todo solo de forma oral y rápida."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a tarda mucho más que sus hermanos en terminar la tarea.",
+    "good": "Haces explícito el cambio y reconoces que su ritmo de procesamiento es distinto y ajustas expectativas de tiempo.",
+    "bad": "Tratas el cambio como algo menor y lo comparas con sus hermanos y le dices que se esfuerce más."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: da instrucciones de tres pasos y solo hace el primero.",
+    "good": "Haces explícito el cambio y entiendes que la memoria de trabajo puede saturarse y das un paso a la vez.",
+    "bad": "Tratas el cambio como algo menor y repites la instrucción completa cada vez más fuerte."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a se distrae fácilmente durante la cena familiar.",
+    "good": "Haces explícito el cambio y sabes que sostener atención en ambientes con múltiples estímulos le cuesta más.",
+    "bad": "Tratas el cambio como algo menor y lo regañas por 'no prestar atención nunca'."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: no logra empezar una tarea aunque sabe cómo hacerla.",
+    "good": "Haces explícito el cambio y reconoces una dificultad de inicio ejecutivo y lo ayudas a arrancar juntos.",
+    "bad": "Tratas el cambio como algo menor y le dices que es puro flojera y lo dejas solo con la tarea."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a habla de forma muy literal y no capta el sarcasmo.",
+    "good": "Haces explícito el cambio y ajustas tu lenguaje para ser más directo y claro con él/ella.",
+    "bad": "Tratas el cambio como algo menor y te burlas de que 'nunca entiende las bromas'."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: se hiperconcentra en un tema y no nota que lo llamas.",
+    "good": "Haces explícito el cambio y reconoces que su atención funciona distinto, no que te ignora.",
+    "bad": "Tratas el cambio como algo menor y le apagas el interés bruscamente para obligarlo a responder."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: olvida llevar sus cosas al colegio a pesar de recordatorios.",
+    "good": "Haces explícito el cambio y entiendes que la organización ejecutiva necesita apoyos externos (listas, rutinas visuales).",
+    "bad": "Tratas el cambio como algo menor y lo culpas de ser 'despistado a propósito'."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a necesita más tiempo para responder una pregunta.",
+    "good": "Haces explícito el cambio y le das espacio de silencio sin apresurarlo a contestar.",
+    "bad": "Tratas el cambio como algo menor y respondes por él/ella o repites la pregunta impaciente."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: se equivoca de nuevo en algo que ya se le explicó varias veces.",
+    "good": "Haces explícito el cambio y consideras que la generalización de aprendizajes puede tardar más y repites con paciencia.",
+    "bad": "Tratas el cambio como algo menor y le dices que 'nunca aprende' y te frustras visiblemente."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a cambia de tema abruptamente en una conversación.",
+    "good": "Haces explícito el cambio y reconoces que su asociación de ideas funciona distinto y sigues el hilo con curiosidad.",
+    "bad": "Tratas el cambio como algo menor y lo corriges por 'no seguir la conversación como debería'."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: no nota cuándo terminó su turno de hablar y sigue hablando.",
+    "good": "Haces explícito el cambio y le enseñas con calma señales concretas para identificar el cambio de turno.",
+    "bad": "Tratas el cambio como algo menor y lo callas abruptamente delante de otros."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a necesita rutinas exactas para funcionar bien en la mañana.",
+    "good": "Haces explícito el cambio y entiendes que la previsibilidad reduce la carga cognitiva, no es capricho.",
+    "bad": "Tratas el cambio como algo menor y le dices que 'es demasiado exigente' con los horarios."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: se le dificulta planear los pasos para un proyecto escolar.",
+    "good": "Haces explícito el cambio y lo ayudas a dividir el proyecto en pasos pequeños, apoyando la función ejecutiva.",
+    "bad": "Tratas el cambio como algo menor y le dices que se organice solo, 'ya tiene edad'."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a repite palabras o frases de programas que le gustan.",
+    "good": "Haces explícito el cambio y reconoces la ecolalia como parte de su comunicación y respondes con interés.",
+    "bad": "Tratas el cambio como algo menor y le dices que deje de hablar 'raro'."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: no identifica cuándo alguien está aburrido de escucharlo.",
+    "good": "Haces explícito el cambio y le das después, en privado, señales concretas para reconocer el desinterés ajeno.",
+    "bad": "Tratas el cambio como algo menor y lo avergüenzas delante de otros diciéndole que 'aburre a todos'."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a necesita moverse constantemente mientras estudia.",
+    "good": "Haces explícito el cambio y permites el movimiento (pelota, balanceo) como apoyo a su concentración.",
+    "bad": "Tratas el cambio como algo menor y le exiges quedarse quieto para poder estudiar 'bien'."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: confunde el orden de los días de la semana en la rutina.",
+    "good": "Haces explícito el cambio y usas un calendario visual para apoyar su organización temporal.",
+    "bad": "Tratas el cambio como algo menor y le dices que 'ya debería saberlo' a su edad."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a se pierde en instrucciones verbales largas.",
+    "good": "Haces explícito el cambio y acompañas la instrucción con apoyos visuales o la divides en partes.",
+    "bad": "Tratas el cambio como algo menor y repites la instrucción larga cada vez más rápido."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: necesita anticipación de varios días para un cambio de plan.",
+    "good": "Haces explícito el cambio y le avisas con tiempo y usas apoyos visuales de la nueva rutina.",
+    "bad": "Tratas el cambio como algo menor y le avisas al último momento y esperas que se adapte rápido."
+  },
+  {
+    "q": "Durante un cambio inesperado de rutina, cuando necesita más previsibilidad para regularse: tu hijo/a procesa mejor la información escrita que la hablada.",
+    "good": "Haces explícito el cambio y le das instrucciones por escrito o con dibujos cuando es posible.",
+    "bad": "Tratas el cambio como algo menor y insistes en explicarle todo solo de forma oral y rápida."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STAR Padres · Autonomía Gradual</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --border: #e2e8f0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --dominio-color: #ef4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .icon-sm { width: 1em; height: 1em; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .nav {
+    background: white;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--orange); }
+
+  .nav-back-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .header {
+    background: linear-gradient(135deg, #ef4444, #ef4444cc);
+    color: white;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .header-container { max-width: 800px; margin: 0 auto; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+  .stats-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .stat-item.highlight { background: var(--orange-light); color: var(--orange); }
+
+  .progress-container { flex: 1; max-width: 300px; min-width: 200px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #ef4444cc); width: 0%; transition: width 0.5s ease; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+  .situation-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .situation-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .situation-title { font-size: 18px; font-weight: 700; color: var(--dominio-color); display: flex; align-items: center; gap: 8px; }
+  .situation-number { background: var(--bg-secondary); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .situation-body { padding: 24px; }
+  .situation-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border-left: 4px solid var(--dominio-color); }
+
+  .options-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .options-grid { display: grid; gap: 12px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .option-btn:hover { border-color: var(--dominio-color); background: var(--bg-secondary); transform: translateY(-2px); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .feedback { margin-top: 20px; padding: 16px 20px; border-radius: 12px; font-weight: 600; display: none; align-items: center; gap: 12px; }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--green-light); color: #166534; }
+  .feedback.incorrect { background: var(--red-light); color: #991b1b; }
+  .feedback-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feedback.correct .feedback-icon { background: var(--green); color: white; }
+  .feedback.incorrect .feedback-icon { background: var(--red); color: white; }
+
+  .difficulty-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .difficulty-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .difficulty-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .difficulty-tag { padding: 10px 16px; background: white; border: 2px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .difficulty-tag:hover { border-color: #94a3b8; }
+  .difficulty-tag.active { border-color: var(--dominio-color); background: var(--bg-secondary); color: var(--dominio-color); }
+
+  .controls-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; }
+  .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .control-btn { flex: 1; min-width: 120px; padding: 14px 20px; background: var(--bg-secondary); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .control-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+  .control-btn.primary { background: var(--orange); color: white; }
+  .control-btn.primary:hover { background: #ea580c; }
+
+  .tip-box { margin-top: 16px; padding: 14px 18px; background: var(--orange-light); border-radius: 10px; font-size: 13px; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+  .footer { text-align: center; padding: 30px 24px; font-size: 13px; color: var(--text-muted); }
+
+  @media (max-width: 640px) {
+    .stats-bar { padding: 12px 16px; gap: 8px; }
+    .stat-item { padding: 6px 12px; font-size: 12px; }
+    .situation-body { padding: 16px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .controls-grid { flex-direction: column; }
+    .control-btn { min-width: 100%; }
+  }
+
+  @media (min-width: 640px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="star-shared.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <span class="nav-back-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></span>
+    <span>Volver al inicio</span>
+  </a>
+  <div class="nav-logo">STAR<span>·</span>Padres</div>
+</nav>
+
+<header class="header">
+  <div class="header-container">
+    <span class="header-badge">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Vida Cotidiana Compartida</span>
+    </span>
+    <h1>🪜 Autonomía Gradual</h1>
+    <p>Ceder control paso a paso, respetando el ritmo del hijo/a.</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item" id="counter">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>1 / 100</span>
+  </div>
+  <div class="stat-item highlight" id="scoreKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <span>0 puntos</span>
+  </div>
+  <div class="stat-item" id="accKpi">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>0% aciertos</span>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">Progreso de sesión</div>
+    <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="situation-card">
+    <div class="situation-header">
+      <span class="situation-title"><svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Situación</span>
+      <span class="situation-number" id="caseNum">Caso #1</span>
+    </div>
+    <div class="situation-body" id="screen"></div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-grid">
+      <button class="control-btn" id="prev">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Anterior</span>
+      </button>
+      <button class="control-btn primary" id="next">
+        <span>Siguiente</span>
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        <span>Mezclar</span>
+      </button>
+      <button class="control-btn" id="reset">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span>Reiniciar</span>
+      </button>
+    </div>
+    <div class="tip-box">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+      <span>Consejo: aplica esta habilidad en una situación real esta semana y registra cómo te funcionó.</span>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>STAR Padres · Diseño paralelo a STAR ND · Un proyecto del ecosistema STAR</p>
+</footer>
+
+<script>
+const HABILIDAD_KEY = "autonomia-gradual";
+const SITUACIONES = [
+  {
+    "q": "Tu hijo/a quiere preparar su propio desayuno simple.",
+    "good": "Le enseñas los pasos y permites que lo intente con supervisión ligera.",
+    "bad": "Lo haces tú por completo porque 'es más rápido y seguro'."
+  },
+  {
+    "q": "Quiere elegir su propia ropa para el día.",
+    "good": "Le das opciones dentro de un rango apropiado y respetas su elección.",
+    "bad": "Eliges tú la ropa sin darle espacio de decisión."
+  },
+  {
+    "q": "Tu hijo/a quiere caminar solo/a un tramo corto y conocido hasta la escuela.",
+    "good": "Evalúas el riesgo real y permites el intento con acuerdos claros de seguridad.",
+    "bad": "Le niegas la posibilidad sin evaluar si realmente está listo/a."
+  },
+  {
+    "q": "Quiere manejar su propio dinero de la mesada.",
+    "good": "Le das autonomía progresiva con acompañamiento y revisión periódica.",
+    "bad": "Controlas cada gasto sin darle ningún margen de decisión."
+  },
+  {
+    "q": "Tu hijo/a quiere hacer una llamada telefónica importante por sí mismo/a.",
+    "good": "Lo/la preparas con anticipación y permites que lo intente, disponible si necesita ayuda.",
+    "bad": "Haces la llamada tú mismo/a para 'evitar errores'."
+  },
+  {
+    "q": "Quiere organizar su propio espacio de estudio.",
+    "good": "Le das libertad de organización, ofreciendo sugerencias solo si las pide.",
+    "bad": "Reorganizas el espacio a tu manera sin considerar la suya."
+  },
+  {
+    "q": "Tu hijo/a quiere resolver un conflicto menor con un amigo sin tu intervención.",
+    "good": "Le das la oportunidad de intentarlo, observando de cerca sin intervenir de inmediato.",
+    "bad": "Intervienes de inmediato resolviendo el conflicto por él/ella."
+  },
+  {
+    "q": "Quiere encargarse de una tarea doméstica nueva.",
+    "good": "Le enseñas el proceso paso a paso y permites que la asuma gradualmente.",
+    "bad": "Le asignas la tarea pero sigues haciéndola tú 'para que quede bien'."
+  },
+  {
+    "q": "Tu hijo/a quiere planear una salida simple con un amigo.",
+    "good": "Lo/la apoyas en la planificación sin tomar el control total del plan.",
+    "bad": "Planeas tú toda la salida sin dejarle espacio de decisión."
+  },
+  {
+    "q": "Quiere administrar su propio horario de tareas escolares.",
+    "good": "Le das autonomía con revisiones periódicas de apoyo, no control constante.",
+    "bad": "Supervisas cada minuto de su tiempo de estudio sin darle margen."
+  },
+  {
+    "q": "Tu hijo/a quiere ir solo/a a comprar algo pequeño en una tienda cercana.",
+    "good": "Evalúas el contexto real y permites el intento con acuerdos previos.",
+    "bad": "Le niegas la salida asumiendo que no podrá manejarlo sin evaluar realmente."
+  },
+  {
+    "q": "Quiere preparar su mochila para un campamento escolar.",
+    "good": "Le das una lista guía y permite que él/ella arme la mochila.",
+    "bad": "Preparas tú la mochila completa sin involucrarlo en el proceso."
+  },
+  {
+    "q": "Tu hijo/a quiere tomar decisiones sobre su propio tratamiento o terapia.",
+    "good": "Lo/la incluyes progresivamente en las decisiones según su edad y comprensión.",
+    "bad": "Decides todo por él/ella sin incluir su opinión en el proceso."
+  },
+  {
+    "q": "Quiere manejar su propio despertador y rutina matutina.",
+    "good": "Le das la responsabilidad con un plan de respaldo si algo falla al inicio.",
+    "bad": "Sigues despertándolo/a tú cada mañana sin darle la oportunidad de intentarlo."
+  },
+  {
+    "q": "Tu hijo/a quiere elegir sus propias actividades extraescolares.",
+    "good": "Le das la decisión final tras explorar opciones juntos.",
+    "bad": "Eliges tú las actividades basándote en lo que 'es mejor para su futuro'."
+  },
+  {
+    "q": "Quiere resolver un problema técnico simple (configurar un dispositivo) por sí mismo/a.",
+    "good": "Le das tiempo para intentarlo antes de ofrecer ayuda directa.",
+    "bad": "Resuelves el problema de inmediato sin darle la oportunidad de intentarlo."
+  },
+  {
+    "q": "Tu hijo/a quiere participar en la decisión de un cambio familiar importante.",
+    "good": "Le das información apropiada para su edad y consideras su opinión.",
+    "bad": "Tomas la decisión sin informarlo ni considerar su perspectiva."
+  },
+  {
+    "q": "Quiere manejar su propia agenda de citas médicas simples.",
+    "good": "Lo/la vas incluyendo gradualmente en el manejo de su propia agenda.",
+    "bad": "Manejas tú todas las citas sin involucrarlo en el proceso."
+  },
+  {
+    "q": "Tu hijo/a quiere cocinar una receta sencilla solo/a.",
+    "good": "Supervisas la seguridad básica pero le dejas ejecutar la receta.",
+    "bad": "Cocinas tú mientras él/ella solo observa, sin dejarlo participar activamente."
+  },
+  {
+    "q": "Quiere tomar el transporte público solo/a en una ruta ya practicada juntos.",
+    "good": "Evalúas si está preparado/a y permites el intento con un plan de contingencia.",
+    "bad": "Le niegas la posibilidad indefinidamente sin volver a evaluar su progreso."
+  },
+  {
+    "q": "Quiere hacer su propia cama cada mañana.",
+    "good": "Le enseñas el proceso y permites que lo haga a su manera, aunque no quede perfecto.",
+    "bad": "Rehaces la cama tú mismo/a porque 'no quedó bien hecha'."
+  },
+  {
+    "q": "Quiere lavar su propia ropa por primera vez.",
+    "good": "Le enseñas el uso de la lavadora y permites que lo intente solo/a.",
+    "bad": "Lavas tú su ropa porque 'puede arruinar algo'."
+  },
+  {
+    "q": "Quiere empacar su propia maleta para un viaje.",
+    "good": "Le das una lista guía y permites que decida qué llevar.",
+    "bad": "Empacas tú la maleta completa sin dejarlo participar."
+  },
+  {
+    "q": "Quiere elegir su propio corte de cabello o peinado.",
+    "good": "Respetas su elección dentro de opciones razonables.",
+    "bad": "Impones el corte que a ti te parece apropiado."
+  },
+  {
+    "q": "Quiere encargarse de su higiene personal sin supervisión constante.",
+    "good": "Le das el espacio y solo intervienes si realmente lo necesita.",
+    "bad": "Supervisas cada paso de su higiene personal sin darle privacidad."
+  },
+  {
+    "q": "Quiere quedarse solo/a en casa por un rato corto.",
+    "good": "Evalúas su preparación real y permites el intento con acuerdos claros.",
+    "bad": "Le niegas la posibilidad sin evaluar si está realmente listo/a."
+  },
+  {
+    "q": "Quiere usar la estufa para preparar algo simple.",
+    "good": "Le enseñas las normas de seguridad y permites que lo haga con supervisión ligera.",
+    "bad": "Le prohíbes usar la estufa indefinidamente sin enseñarle nunca cómo hacerlo con seguridad."
+  },
+  {
+    "q": "Quiere ir en bicicleta solo/a a un lugar cercano conocido.",
+    "good": "Evalúas la ruta y permites el intento con acuerdos de seguridad.",
+    "bad": "Le niegas el permiso sin volver a evaluar su capacidad real."
+  },
+  {
+    "q": "Quiere manejar sus propias redes sociales de forma apropiada para su edad.",
+    "good": "Acuerdas límites claros y le das autonomía dentro de ellos.",
+    "bad": "Revisas cada mensaje y publicación sin darle ningún margen de privacidad."
+  },
+  {
+    "q": "Consigue su primer trabajo de medio tiempo.",
+    "good": "Lo/la apoyas para organizar su propio horario y responsabilidades.",
+    "bad": "Te involucras en cada detalle de su trabajo como si fuera tuyo."
+  },
+  {
+    "q": "Quiere abrir su propia cuenta bancaria.",
+    "good": "Lo acompañas en el proceso pero le das el manejo de su propia cuenta.",
+    "bad": "Manejas tú la cuenta a su nombre sin darle acceso real."
+  },
+  {
+    "q": "Quiere decidir su propia hora de dormir dentro de un rango razonable.",
+    "good": "Acuerdan un rango y le permites decidir dentro de esos límites.",
+    "bad": "Impones la misma hora exacta sin considerar su edad o necesidad."
+  },
+  {
+    "q": "Quiere elegir sus propias amistades sin que las apruebes una por una.",
+    "good": "Confías en su criterio y solo intervienes ante señales reales de riesgo.",
+    "bad": "Evalúas y cuestionas cada amistad nueva que menciona."
+  },
+  {
+    "q": "Tiene un desacuerdo con un amigo y quiere resolverlo por su cuenta.",
+    "good": "Le das espacio para intentarlo, disponible solo si lo necesita.",
+    "bad": "Intervienes de inmediato hablando tú con el amigo o sus padres."
+  },
+  {
+    "q": "Quiere organizar su propio horario de estudio para un examen.",
+    "good": "Le das autonomía con una revisión breve de apoyo, no control total.",
+    "bad": "Supervisas cada minuto de su tiempo de estudio."
+  },
+  {
+    "q": "Quiere llamar él/ella mismo/a para pedir una cita médica.",
+    "good": "Lo preparas con la información necesaria y permites que haga la llamada.",
+    "bad": "Haces tú la llamada para 'que salga bien'."
+  },
+  {
+    "q": "Quiere pedir su propia comida en un restaurante.",
+    "good": "Le permites hablar directamente con el mesero sin intervenir.",
+    "bad": "Pides tú por él/ella sin darle la oportunidad de hacerlo."
+  },
+  {
+    "q": "Tiene dos actividades que chocan en el mismo horario y debe decidir.",
+    "good": "Le ayudas a pensar las opciones pero deja que decida cuál priorizar.",
+    "bad": "Decides tú cuál actividad debe elegir sin consultarlo."
+  },
+  {
+    "q": "Quiere manejar su propio límite de tiempo de pantallas.",
+    "good": "Acuerdan un marco y confías en que él/ella lo autorregule.",
+    "bad": "Controlas cada minuto de pantalla sin darle ningún margen de autogestión."
+  },
+  {
+    "q": "Quiere ayudar a hacer las compras del supermercado con una lista.",
+    "good": "Le das la lista y permites que elija y compare productos.",
+    "bad": "Haces tú las compras mientras él/ella solo observa."
+  },
+  {
+    "q": "Empieza a practicar para obtener su licencia de conducir.",
+    "good": "Lo acompañas en las prácticas dándole cada vez más responsabilidad al volante.",
+    "bad": "Le criticas cada movimiento sin dejarlo ganar confianza al conducir."
+  },
+  {
+    "q": "Quiere ahorrar para una meta personal con su propio dinero.",
+    "good": "Lo apoyas a planificar el ahorro sin controlar cada decisión de gasto.",
+    "bad": "Decides tú en qué debe gastar o ahorrar su propio dinero."
+  },
+  {
+    "q": "Quiere opinar sobre qué carrera o estudios seguir en el futuro.",
+    "good": "Escuchas su interés real y lo apoyas a explorar opciones.",
+    "bad": "Decides tú la carrera que debe seguir sin considerar su interés."
+  },
+  {
+    "q": "Se encarga completamente del cuidado de una mascota que pidió.",
+    "good": "Le das la responsabilidad total con apoyo disponible si lo necesita.",
+    "bad": "Terminas haciendo tú las tareas de la mascota 'para que no le falte nada'."
+  },
+  {
+    "q": "Quiere elegir un psicólogo o terapeuta que le genere más confianza.",
+    "good": "Le das voz en la elección dentro de opciones viables.",
+    "bad": "Eliges tú al profesional sin considerar su comodidad o preferencia."
+  },
+  {
+    "q": "Tiene un conflicto con un profesor y quiere hablarlo él/ella mismo/a.",
+    "good": "Lo preparas para la conversación y permites que la tenga primero.",
+    "bad": "Vas tú directamente a hablar con el profesor sin dejarlo intentarlo."
+  },
+  {
+    "q": "Quiere participar activamente en su reunión escolar de seguimiento.",
+    "good": "Lo incluyes en la reunión y le das espacio para expresar sus necesidades.",
+    "bad": "Asistes a la reunión y decides todo sin incluir su voz."
+  },
+  {
+    "q": "Quiere preparar su propio almuerzo para llevar al colegio.",
+    "good": "Le enseñas opciones simples y permite que arme su propio almuerzo.",
+    "bad": "Preparas tú el almuerzo cada día sin involucrarlo en la elección."
+  },
+  {
+    "q": "Quiere decidir cuántas actividades extraescolares asumir este semestre.",
+    "good": "Conversan sobre su energía real y le das la decisión final.",
+    "bad": "Decides tú la cantidad de actividades sin considerar su carga real."
+  },
+  {
+    "q": "Quiere organizar completamente su propio cuarto sin tu intervención.",
+    "good": "Le das libertad total dentro de acuerdos básicos de higiene.",
+    "bad": "Reorganizas su cuarto a tu manera cuando él/ella no está."
+  },
+  {
+    "q": "Quiere ir al cine con amigos sin la compañía de un adulto.",
+    "good": "Evalúas el contexto real y permites el intento con acuerdos claros.",
+    "bad": "Le niegas el permiso asumiendo riesgos sin evaluarlos realmente."
+  },
+  {
+    "q": "Quiere dormir en casa de un amigo por primera vez.",
+    "good": "Conversan los acuerdos necesarios y permites la experiencia.",
+    "bad": "Le niegas la posibilidad de forma indefinida sin volver a evaluarlo."
+  },
+  {
+    "q": "Quiere encargarse de tomar su propia medicación diaria.",
+    "good": "Le das un sistema de apoyo y supervisión decreciente en el tiempo.",
+    "bad": "Le das tú la medicación cada día sin enseñarle a manejarla solo/a."
+  },
+  {
+    "q": "Quiere usar un cajero automático por su cuenta.",
+    "good": "Le enseñas el proceso y permite que lo intente con supervisión cercana al inicio.",
+    "bad": "Usas tú el cajero por él/ella para 'evitar errores'."
+  },
+  {
+    "q": "Quiere hacer una compra en línea por su cuenta.",
+    "good": "Lo acompañas la primera vez y luego permites que lo haga solo/a.",
+    "bad": "Haces tú todas las compras en línea sin involucrarlo en el proceso."
+  },
+  {
+    "q": "Quiere cocinar una comida completa para la familia.",
+    "good": "Supervisas la seguridad básica pero le dejas planificar y ejecutar el menú.",
+    "bad": "Terminas cocinando tú la mayor parte 'para que salga bien'."
+  },
+  {
+    "q": "Nota un conflicto entre amigos y quiere mediar por su cuenta.",
+    "good": "Le das la oportunidad de intentarlo, disponible si lo necesita.",
+    "bad": "Intervienes de inmediato resolviendo el conflicto entre los amigos."
+  },
+  {
+    "q": "Quiere elegir sus propias prácticas espirituales o de creencias en la adolescencia.",
+    "good": "Respetas su proceso de exploración personal.",
+    "bad": "Le impones tus propias creencias sin dejarlo explorar las suyas."
+  },
+  {
+    "q": "Cuida a un hermano menor por un rato corto.",
+    "good": "Le das instrucciones claras y confías en su capacidad de manejarlo.",
+    "bad": "Supervisas cada segundo sin darle margen real de responsabilidad."
+  },
+  {
+    "q": "Quiere decidir si participa o no en una reunión familiar.",
+    "good": "Consideras su opinión y negocian según la importancia del evento.",
+    "bad": "Le exiges asistir sin considerar su preferencia en absoluto."
+  },
+  {
+    "q": "Quiere negociar su propia hora de llegada los fines de semana.",
+    "good": "Acuerdan un margen razonable según su edad y responsabilidad.",
+    "bad": "Impones la misma hora de llegada sin revisar si corresponde a su edad."
+  },
+  {
+    "q": "Quiere administrar un presupuesto propio para sus salidas.",
+    "good": "Le das un monto y confías en cómo decide distribuirlo.",
+    "bad": "Controlas cada gasto de su salida sin darle margen de decisión."
+  },
+  {
+    "q": "Quiere ayudar a planear parte del itinerario de un viaje familiar.",
+    "good": "Le das espacio real para proponer y decidir actividades del viaje.",
+    "bad": "Planeas tú todo el itinerario sin considerar su interés."
+  },
+  {
+    "q": "Prefiere comunicarse por mensajes de texto en vez de llamadas.",
+    "good": "Respetas su forma de comunicación preferida sin insistir en la tuya.",
+    "bad": "Le exiges llamar por teléfono porque 'es lo correcto'."
+  },
+  {
+    "q": "Quiere manejar sus propias pausas sensoriales en el colegio sin pedir permiso cada vez.",
+    "good": "Acuerdas con el colegio un sistema que le dé esa autonomía.",
+    "bad": "Exiges que pida permiso cada vez, sin darle ningún margen de autogestión."
+  },
+  {
+    "q": "Quiere pedir él/ella mismo/a las adaptaciones que necesita en clase.",
+    "good": "Lo preparas para comunicarse directamente con el profesor.",
+    "bad": "Hablas tú siempre con el profesor sin dejarlo participar en el proceso."
+  },
+  {
+    "q": "Recibe una llamada de servicio al cliente que debe resolver él/ella mismo/a.",
+    "good": "Le das la oportunidad de manejar la llamada con tu apoyo cercano.",
+    "bad": "Tomas tú el teléfono de inmediato sin dejarlo intentarlo primero."
+  },
+  {
+    "q": "Quiere encargarse del mantenimiento de sus propios dispositivos electrónicos.",
+    "good": "Le enseñas lo básico y permites que lo resuelva por su cuenta.",
+    "bad": "Resuelves tú cada problema técnico sin darle la oportunidad de aprender."
+  },
+  {
+    "q": "Quiere hacer trabajo de jardinería o mantenimiento exterior por su cuenta.",
+    "good": "Le enseñas lo necesario y confías en que lo haga a su manera.",
+    "bad": "Supervisas cada movimiento corrigiendo constantemente su método."
+  },
+  {
+    "q": "Quiere manejar su propio calendario de recordatorios en el celular.",
+    "good": "Lo ayudas a configurarlo pero le dejas el manejo diario.",
+    "bad": "Le recuerdas tú todo verbalmente sin dejarlo usar su propio sistema."
+  },
+  {
+    "q": "Quiere iniciar conversaciones con personas nuevas en un evento social.",
+    "good": "Lo animas a intentarlo, estando cerca solo como apoyo si lo necesita.",
+    "bad": "Hablas tú por él/ella cada vez que conoce a alguien nuevo."
+  },
+  {
+    "q": "Quiere postularse a su primer empleo por su cuenta.",
+    "good": "Lo apoyas revisando el proceso si lo pide, sin hacerlo por él/ella.",
+    "bad": "Haces tú la solicitud de empleo en su nombre."
+  },
+  {
+    "q": "Debe llenar un formulario o papeleo importante por su cuenta.",
+    "good": "Lo acompañas para resolver dudas pero deja que él/ella lo complete.",
+    "bad": "Llenas tú el formulario completo sin involucrarlo en el proceso."
+  },
+  {
+    "q": "Quiere decidir qué y cuánto comer en las comidas familiares.",
+    "good": "Confías en su criterio dentro de opciones saludables disponibles.",
+    "bad": "Controlas cada porción y elección de comida que hace."
+  },
+  {
+    "q": "Quiere elegir sus propios libros o contenidos de lectura.",
+    "good": "Respetas su elección aunque no sea la que tú habrías elegido.",
+    "bad": "Le impones las lecturas que a ti te parecen apropiadas."
+  },
+  {
+    "q": "Quiere desarrollar un proyecto personal relacionado con su interés especial.",
+    "good": "Le das tiempo y recursos para explorarlo a su manera.",
+    "bad": "Rediriges el proyecto hacia lo que a ti te parece más 'productivo'."
+  },
+  {
+    "q": "Quiere intentar una actividad nueva sin que lo acompañes la primera vez.",
+    "good": "Evalúas el contexto y permites el intento con un plan de respaldo.",
+    "bad": "Insistes en acompañarlo siempre, sin darle nunca la oportunidad de ir solo/a."
+  },
+  {
+    "q": "Tiene un conflicto con un hermano que quiere resolver sin tu mediación.",
+    "good": "Les das espacio para intentarlo antes de intervenir.",
+    "bad": "Intervienes de inmediato resolviendo tú el conflicto entre hermanos."
+  },
+  {
+    "q": "Quiere hacer las compras de sus propios útiles escolares.",
+    "good": "Le das el presupuesto y permite que elija según sus necesidades.",
+    "bad": "Compras tú los útiles sin llevarlo ni considerar su elección."
+  },
+  {
+    "q": "Pierde algo importante y quiere buscarlo por su cuenta antes de pedir ayuda.",
+    "good": "Le das tiempo para intentar resolverlo antes de intervenir.",
+    "bad": "Buscas tú el objeto de inmediato sin dejarlo intentarlo primero."
+  },
+  {
+    "q": "Quiere organizar su tiempo de la mañana sin que se lo recuerdes.",
+    "good": "Confías en que use alarmas o recordatorios propios, disponible si falla al inicio.",
+    "bad": "Le recuerdas cada paso de la mañana sin darle espacio de autogestión."
+  },
+  {
+    "q": "Quiere elegir el horario de sus propias citas médicas dentro de lo posible.",
+    "good": "Lo incluyes en la decisión del horario que más le acomode.",
+    "bad": "Agendas tú las citas sin considerar su disponibilidad u opinión."
+  },
+  {
+    "q": "Quiere participar activamente en decidir el contenido de las sesiones de terapia familiar.",
+    "good": "Le das espacio para expresar qué temas le gustaría abordar.",
+    "bad": "Decides tú los temas de terapia sin incluir su perspectiva."
+  },
+  {
+    "q": "Quiere manejar sus propias contraseñas y cuentas digitales de forma segura.",
+    "good": "Le enseñas buenas prácticas de seguridad y confías en su manejo.",
+    "bad": "Controlas todas sus contraseñas sin darle ninguna privacidad digital."
+  },
+  {
+    "q": "Quiere planear su propia celebración de cumpleaños.",
+    "good": "Le das espacio real de decisión sobre cómo quiere celebrar.",
+    "bad": "Organizas tú la celebración según lo que a ti te parece mejor."
+  },
+  {
+    "q": "Quiere elegir en qué actividad de voluntariado participar.",
+    "good": "Respetas su elección aunque no sea la que tú hubieras sugerido.",
+    "bad": "Lo inscribes en la actividad de voluntariado que tú prefieres."
+  },
+  {
+    "q": "Reconoce que necesita una pausa y quiere pedirla él/ella mismo/a.",
+    "good": "Confías en su capacidad de identificar y comunicar esa necesidad.",
+    "bad": "Decides tú cuándo necesita una pausa sin dejarlo pedirla."
+  },
+  {
+    "q": "Quiere encargarse del mantenimiento de su propio equipo deportivo.",
+    "good": "Le enseñas lo básico y confías en que lo mantenga por su cuenta.",
+    "bad": "Revisas y mantienes tú el equipo sin involucrarlo en el proceso."
+  },
+  {
+    "q": "Quiere negociar directamente con un hermano el reparto de una tarea.",
+    "good": "Le das espacio para negociar antes de intervenir como mediador/a.",
+    "bad": "Decides tú el reparto de la tarea entre ambos sin dejarlos negociar."
+  },
+  {
+    "q": "Como joven adulto, quiere decidir dónde vivir.",
+    "good": "Apoyas su proceso de decisión aunque no coincida con lo que esperabas.",
+    "bad": "Insistes en que la única opción válida es la que tú prefieres."
+  },
+  {
+    "q": "Quiere organizar su propio transporte hacia su primer trabajo.",
+    "good": "Lo acompañas a explorar opciones y confías en que elija la mejor para él/ella.",
+    "bad": "Decides tú cómo debe transportarse sin considerar su preferencia."
+  },
+  {
+    "q": "Habla de dar un paso hacia vivir de forma más independiente.",
+    "good": "Conversan juntos los pasos graduales hacia esa independencia.",
+    "bad": "Rechazas la idea de plano sin considerar un proceso gradual."
+  },
+  {
+    "q": "Quiere hablar directamente con su médico sobre su propio tratamiento.",
+    "good": "Lo preparas y le das espacio para expresarse en la consulta.",
+    "bad": "Hablas tú siempre con el médico sin dejarlo participar en la conversación."
+  },
+  {
+    "q": "Quiere definir sus propias metas financieras a futuro.",
+    "good": "Lo apoyas a pensar en metas realistas según su situación.",
+    "bad": "Le impones tus propias metas financieras sin considerar las suyas."
+  },
+  {
+    "q": "Quiere desarrollar un pequeño emprendimiento relacionado con su interés.",
+    "good": "Lo apoyas con recursos básicos y confías en su iniciativa.",
+    "bad": "Tomas el control del proyecto porque 'lo harías mejor tú'."
+  },
+  {
+    "q": "Olvida un compromiso importante y debe asumir la responsabilidad.",
+    "good": "Le permites enfrentar la consecuencia natural y aprender de ella.",
+    "bad": "Resuelves tú la situación para que no enfrente ninguna consecuencia."
+  },
+  {
+    "q": "Quiere decidir cómo usar su tiempo libre del fin de semana.",
+    "good": "Le das autonomía real sobre cómo distribuir ese tiempo.",
+    "bad": "Llenas tú su fin de semana de actividades sin consultarlo."
+  },
+  {
+    "q": "Quiere resolver un malentendido con un profesor sin que intervengas primero.",
+    "good": "Le das la oportunidad de intentarlo, disponible como respaldo.",
+    "bad": "Contactas al profesor de inmediato sin dejarlo intentar resolverlo primero."
+  },
+  {
+    "q": "Quiere elegir su propio médico o especialista de confianza.",
+    "good": "Consideras su preferencia real al elegir al profesional.",
+    "bad": "Eliges tú al especialista sin preguntar su opinión o comodidad."
+  },
+  {
+    "q": "Quiere manejar la relación con su propia audiencia en línea si crea contenido.",
+    "good": "Acuerdan límites de seguridad y confías en su manejo dentro de ellos.",
+    "bad": "Controlas cada publicación y comentario sin darle ningún margen de autonomía."
+  }
+];
+
+let order = [...Array(SITUACIONES.length).keys()];
+let idx = 0;
+let puntos = 0;
+let intentos = 0;
+const dificultad = {};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(i, total) {
+  document.getElementById("counter").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>${i + 1} / ${total}</span>`;
+  const acc = intentos ? Math.round((puntos / intentos) * 100) : 0;
+  document.getElementById("scoreKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>${puntos} puntos</span>`;
+  document.getElementById("accKpi").innerHTML = `<svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="3"/></svg><span>${acc}% aciertos</span>`;
+  document.getElementById("bar").style.width = ((i + 1) / total * 100) + "%";
+  document.getElementById("caseNum").textContent = `Caso #${i + 1}`;
+  guardarProgresoActual();
+}
+
+function render() {
+  const pos = order[idx];
+  const item = SITUACIONES[pos];
+  if (!item) return;
+
+  const options = Math.random() > 0.5
+    ? [{ t: item.good, ok: true }, { t: item.bad, ok: false }]
+    : [{ t: item.bad, ok: false }, { t: item.good, ok: true }];
+
+  const difSel = dificultad[pos] || null;
+
+  document.getElementById("screen").innerHTML = `
+    <div class="situation-text">${item.q}</div>
+    <div class="options-title">Elige la mejor respuesta:</div>
+    <div class="options-grid">
+      <button class="option-btn" data-ok="${options[0].ok ? '1' : '0'}">${options[0].t}</button>
+      <button class="option-btn" data-ok="${options[1].ok ? '1' : '0'}">${options[1].t}</button>
+    </div>
+    <div id="fb" class="feedback">
+      <div class="feedback-icon"></div>
+      <div class="feedback-text"></div>
+    </div>
+    <div class="difficulty-section">
+      <div class="difficulty-title">💭 ¿Cómo te resultó esta situación? (opcional)</div>
+      <div class="difficulty-tags">
+        <span class="difficulty-tag ${difSel === 'verde' ? 'active' : ''}" data-dif="verde"><svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Fácil</span>
+        <span class="difficulty-tag ${difSel === 'amarillo' ? 'active' : ''}" data-dif="amarillo"><svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Requiere práctica</span>
+        <span class="difficulty-tag ${difSel === 'rojo' ? 'active' : ''}" data-dif="rojo"><svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg> Difícil</span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll("#screen .option-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#screen .option-btn").forEach(btn => btn.disabled = true);
+      intentos++;
+      const ok = b.getAttribute("data-ok") === "1";
+      const fb = document.getElementById("fb");
+      const fbIcon = fb.querySelector(".feedback-icon");
+      const fbText = fb.querySelector(".feedback-text");
+
+      if (ok) {
+        puntos++;
+        b.classList.add("correct");
+        fb.className = "feedback correct show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        fbText.textContent = "Buena elección: fortalece la relación en lugar de forzarla.";
+        setTimeout(() => next(), 1200);
+      } else {
+        b.classList.add("incorrect");
+        document.querySelectorAll("#screen .option-btn").forEach(btn => {
+          if (btn.getAttribute("data-ok") === "1") btn.classList.add("correct");
+        });
+        fb.className = "feedback incorrect show";
+        fbIcon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+        fbText.textContent = "Reflexiona: la respuesta que fortalece la relación está resaltada en verde.";
+      }
+      setProgress(idx, SITUACIONES.length);
+    });
+  });
+
+  document.querySelectorAll("#screen .difficulty-tag").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#screen .difficulty-tag").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      dificultad[pos] = t.getAttribute("data-dif");
+      guardarProgresoActual();
+    });
+  });
+
+  setProgress(idx, SITUACIONES.length);
+}
+
+function next() { idx = (idx + 1) % SITUACIONES.length; render(); }
+function prev() { idx = (idx - 1 + SITUACIONES.length) % SITUACIONES.length; render(); }
+function reshuffle() { order = shuffle([...order]); idx = 0; puntos = 0; intentos = 0; for (const k in dificultad) delete dificultad[k]; render(); }
+function resetAll() { idx = 0; puntos = 0; intentos = 0; order = [...Array(SITUACIONES.length).keys()]; for (const k in dificultad) delete dificultad[k]; render(); }
+
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("prev").addEventListener("click", prev);
+document.getElementById("shuffle").addEventListener("click", reshuffle);
+document.getElementById("reset").addEventListener("click", resetAll);
+
+function guardarProgresoActual() {
+  guardarProgresoHabilidad(HABILIDAD_KEY, {
+    completadas: idx + 1,
+    puntos: puntos,
+    intentos: intentos,
+    porcentaje: intentos ? Math.round((puntos / intentos) * 100) : 0,
+    dificultad: { ...dificultad }
+  });
+}
+
+function cargarProgresoGuardado() {
+  const saved = cargarProgresoHabilidad(HABILIDAD_KEY);
+  if (saved) {
+    if (saved.puntos) puntos = saved.puntos;
+    if (saved.intentos) intentos = saved.intentos;
+    if (saved.dificultad) Object.assign(dificultad, saved.dificultad);
+  }
+}
+
+cargarProgresoGuardado();
+render();
+</script>
+</body>
+</html>
